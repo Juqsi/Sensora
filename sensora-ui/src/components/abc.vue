@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { LineChart } from '@/components/ui/chart-line'
+import { LineChart } from './ui/chart-line/index.ts'
 
 const data = [
   {
@@ -270,9 +270,9 @@ const data = [
     :categories="['Export Growth Rate', 'Import Growth Rate']"
     :data="data"
     :y-formatter="
-      (tick, i) => {
+      (tick: any, i: number) => {
         return typeof tick === 'number'
-          ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
+          ? `$ ${i} ${new Intl.NumberFormat('us').format(tick).toString()}`
           : ''
       }
     "

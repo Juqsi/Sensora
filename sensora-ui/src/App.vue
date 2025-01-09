@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import Hallo from './components/hallo.vue'
+import HelloWorld from '@/components/HelloWorld.vue'
+import Hallo from '@/components/hallo.vue'
 </script>
 
 <template>
