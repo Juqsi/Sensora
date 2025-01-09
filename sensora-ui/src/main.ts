@@ -1,5 +1,5 @@
 import './assets/index.css'
-//import './assets/main.css'
+import './assets/main.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { createOnyx } from 'sit-onyx'
@@ -10,8 +10,8 @@ import onyxDeDE from 'sit-onyx/locales/de-DE.json'
 import enUS from './i18n/locales/en-US.json'
 import deDE from './i18n/locales/de-DE.json'
 
-//import 'sit-onyx/style.css'
-//import 'sit-onyx/global.css'
+import 'sit-onyx/style.css'
+import 'sit-onyx/global.css'
 import App from './App.vue'
 import router from './router'
 

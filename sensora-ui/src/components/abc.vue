@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import { LineChart } from './ui/chart-line/index.ts'
 
+const chartColors = ['var(--primary)', 'var(--secondary)']
 const data = [
   {
     year: 1970,
     'Export Growth Rate': 2.04,
     'Import Growth Rate': 1.53,
+    abc: 1.53,
   },
   {
     year: 1971,
@@ -261,13 +263,15 @@ const data = [
     year: 2021,
     'Export Growth Rate': 0.82,
     'Import Growth Rate': 2.51,
+    abc: 2.51,
   },
 ]
 </script>
 
 <template>
   <LineChart
-    :categories="['Export Growth Rate', 'Import Growth Rate']"
+    :categories="['Export Growth Rate', 'Import Growth Rate', 'abc']"
+    :colors="chartColors"
     :data="data"
     :y-formatter="
       (tick: any, i: number) => {
@@ -278,4 +282,9 @@ const data = [
     "
     index="year"
   />
+  <div className="absolute left-6 right-6 top-12 space-y-4">
+    <Skeleton className="h-2 w-3/4 bg-gray-300 rounded-full" />
+    <Skeleton className="h-2 w-1/2 bg-gray-300 rounded-full" />
+    <Skeleton className="h-2 w-2/3 bg-gray-300 rounded-full" />
+  </div>
 </template>

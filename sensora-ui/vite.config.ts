@@ -1,7 +1,6 @@
 import vue from '@vitejs/plugin-vue'
 import tailwind from 'tailwindcss'
 import { defineConfig } from 'vite'
-import vueDevTools from 'vite-plugin-vue-devtools'
 import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
@@ -10,7 +9,7 @@ export default defineConfig({
       plugins: [tailwind()],
     },
   },
-  plugins: [vue(),vueDevTools()],
+  plugins: [vue()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
