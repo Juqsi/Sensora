@@ -1,4 +1,19 @@
 {
-  "greeting": "Hello",
-  "farewell": "Goodbye"
+  "login": {
+    "SignIn": "Sign In",
+    "SignInInfo": "Enter your email below to login to your account",
+    "ForgotPassword": "Forgot your password?",
+    "DontHaveAccount": "Don't have an account?",
+    "SignInWithA": "Sign in with A",
+    "SignUp": "Sign Up",
+    "SignUpInfo": "Enter your information to create an account",
+    "FirstName": "First name",
+    "LastName": "Last name",
+    "Email": "Email",
+    "Password": "Password",
+    "CreateAccount": "Create Account",
+    "AlreadyHaveAccount": "Already have an account?",
+    "SignUpWithA": "Sign up with A",
+    "Or": "or"
+  }
 }

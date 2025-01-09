@@ -1,91 +1,78 @@
-@import "sit-onyx/style.css";
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-    :root {
-        --background: var(--onyx-color-base-neutral-100);
-        --foreground: var(--onyx-color-text-icons-neutral-intense);
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
-        --muted: var(--onyx-color-text-icons-neutral-soft);
-        --muted-foreground: var(--onyx-color-component-cta-disabled);
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-        --popover: var(--onyx-color-component-focus-neutral);
-        --popover-foreground: var(--onyx-color-text-icons-neutral-intense);
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-        --card: var(--onyx-color-text-icons-neutral-inverted);
-        --card-foreground: var(--onyx-color-base-neutral-900);
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
 
-        --border: var(--onyx-color-component-border-neutral);
-        --input: var(--onyx-color-base-neutral-300);
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
 
-        --primary: var(--onyx-color-base-primary-500);
-        --primary-foreground: var(--onyx-color-text-icons-primary-medium);
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
 
-        --secondary: var(--onyx-color-base-primary-300);
-        --secondary-foreground: var(--onyx-color-text-icons-primary-soft);
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
-        --accent: var(--onyx-color-base-primary-200);
-        --accent-foreground: var(--onyx-color-text-icons-primary-soft);
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
-        --destructive: var(--onyx-color-base-danger-500);
-        --destructive-foreground: var(--onyx-color-base-neutral-100);
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
 
-        --ring: var(--onyx-color-base-primary-500);
+    --ring: 222.2 84% 4.9%;
 
-        --radius: 0.5rem;
+    --radius: 0.5rem;
+  }
 
-        /* Chart Colors */
-        --vis-tooltip-background-color: none !important;
-        --vis-tooltip-border-color: none !important;
-        --vis-tooltip-text-color: none !important;
-        --vis-tooltip-shadow-color: none !important;
-        --vis-tooltip-backdrop-filter: none !important;
-        --vis-tooltip-padding: none !important;
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
 
-        --vis-text-color: var(--foreground);
-    }
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
 
-    .dark {
-        --background: var(--onyx-color-base-neutral-900);
-        --foreground: var(--onyx-color-base-neutral-100);
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
 
-        --muted: var(--onyx-color-base-neutral-700);
-        --muted-foreground: var(--onyx-color-base-neutral-400);
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
 
-        --popover: var(--onyx-color-base-neutral-800);
-        --popover-foreground: var(--onyx-color-base-neutral-100);
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
 
-        --card: var(--onyx-color-base-neutral-800);
-        --card-foreground: var(--onyx-color-base-neutral-100);
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
 
-        --border: var(--onyx-color-base-neutral-700);
-        --input: var(--onyx-color-base-neutral-700);
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
 
-        --primary: var(--onyx-color-base-primary-700);
-        --primary-foreground: var(--onyx-color-base-neutral-100);
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
 
-        --secondary: var(--onyx-color-base-primary-600);
-        --secondary-foreground: var(--onyx-color-base-neutral-100);
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
 
-        --accent: var(--onyx-color-base-primary-200);
-        --accent-foreground: var(--onyx-color-base-neutral-100);
-
-        --destructive: var(--onyx-color-base-danger-700);
-        --destructive-foreground: var(--onyx-color-base-neutral-100);
-
-        --ring: var(--onyx-color-base-primary-700);
-    }
+    --ring: 212.7 26.8% 83.9%;
+  }
 }
 
 @layer base {
-    * {
-        @apply border-border;
-    }
-
-    body {
-        @apply bg-background text-foreground;
-    }
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

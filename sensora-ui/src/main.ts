@@ -18,7 +18,7 @@ import router from './router'
 
 const i18n = createI18n({
   legacy: false,
-  locale: 'de-DE', // Standardsprache
+  locale: 'en-US', // Standardsprache
   messages: {
     'de-DE': deDE,
     'en-US': enUS,
