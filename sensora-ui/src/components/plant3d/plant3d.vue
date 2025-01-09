@@ -39,10 +39,6 @@ onMounted(() => {
   loader.load("/models3d/plant.glb", (gltf) => {
     scene.add(gltf.scene);
 
-    // Berechne den Mittelpunkt des Modells und setze es als Zielpunkt
-    const bbox = new THREE.Box3().setFromObject(gltf.scene);
-    const center = bbox.getCenter(new THREE.Vector3());
-
     // Zielpunkt explizit setzen
     const targetPosition = new THREE.Vector3(0, 4, 0); // Beispielzielpunkt: (0, 4, 0)
     controls.target.copy(targetPosition); // Setzt das Ziel explizit
