@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { LineChart } from './ui/chart-line/index.ts'
 
-const chartColors = ['var(--primary)', 'var(--secondary)']
+const chartColors = ['var(--primary)', 'var(--secondary)', 'var(--destructive)']
 const data = [
   {
     year: 1970,
@@ -13,6 +13,7 @@ const data = [
     year: 1971,
     'Export Growth Rate': 1.96,
     'Import Growth Rate': 1.58,
+    abc: 1.48,
   },
   {
     year: 1972,
@@ -269,9 +270,27 @@ const data = [
 </script>
 
 <template>
+  <div class="relative w-full h-full bg-gray-100 dark:bg-gray-800 rounded-md animate-pulse">
+    <!-- Y-Achse -->
+    <div
+      class="absolute left-4 top-4 bottom-4 w-6 bg-gradient-to-b from-gray-200 to-transparent"
+    ></div>
+
+    <!-- X-Achse -->
+    <div
+      class="absolute left-4 right-4 bottom-4 h-6 bg-gradient-to-r from-gray-200 to-transparent"
+    ></div>
+
+    <!-- Dummy-Linien (Platzhalter für Diagrammlinien) -->
+    <div class="absolute left-6 right-6 top-12 space-y-4">
+      <div class="h-2 w-3/4 bg-gray-300 rounded-full"></div>
+      <div class="h-2 w-1/2 bg-gray-300 rounded-full"></div>
+      <div class="h-2 w-2/3 bg-gray-300 rounded-full"></div>
+    </div>
+  </div>
   <LineChart
     :categories="['Export Growth Rate', 'Import Growth Rate', 'abc']"
-    :colors="chartColors"
+    :colors="['blue', 'pink', 'orange', 'red']"
     :data="data"
     :y-formatter="
       (tick: any, i: number) => {
@@ -282,9 +301,4 @@ const data = [
     "
     index="year"
   />
-  <div className="absolute left-6 right-6 top-12 space-y-4">
-    <Skeleton className="h-2 w-3/4 bg-gray-300 rounded-full" />
-    <Skeleton className="h-2 w-1/2 bg-gray-300 rounded-full" />
-    <Skeleton className="h-2 w-2/3 bg-gray-300 rounded-full" />
-  </div>
 </template>

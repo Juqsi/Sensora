@@ -45,8 +45,6 @@
         --vis-tooltip-backdrop-filter: none !important;
         --vis-tooltip-padding: none !important;
 
-        --vis-primary-color: var(--onyx-color-base-primary-500);
-        --vis-secondary-color: var(--onyx-color-base-success-700);
         --vis-text-color: var(--foreground);
     }
 
