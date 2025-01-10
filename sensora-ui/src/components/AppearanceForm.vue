@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useTheme } from '@/composables/useTheme'
+import { Theme, useTheme } from '@/composables/useTheme'
 import {
   FormControl,
   FormDescription,
@@ -9,43 +9,22 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { toTypedSchema } from '@vee-validate/zod'
-import { useForm } from 'vee-validate'
 import { toast } from 'vue-sonner'
-import * as z from 'zod'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-
 const { theme, setTheme, setOSTheme } = useTheme()
 
-const appearanceFormSchema = toTypedSchema(
-  z.object({
-    theme: z.enum(['light', 'dark', 'os'], {
-      required_error: 'Please select a theme.',
-    }),
-  }),
-)
-
-const { handleSubmit } = useForm({
-  validationSchema: appearanceFormSchema,
-  initialValues: {
-    theme: theme.value,
-  },
-})
-
-const onSubmit = handleSubmit((values) => {
-  if (values.theme === 'os') {
+const onThemeChange = (theme: string) => {
+  if (theme === 'os') {
     const success = setOSTheme()
     if (success) toast.success(t('appearance.SetToOS'))
   } else {
-    const success = setTheme(values.theme)
-    if (success)
-      toast.success(t(`appearance.SwitchTo${values.theme === 'dark' ? 'Dark' : 'Light'}Mode`))
+    const success = setTheme(theme as Theme.Dark | Theme.Light)
+    if (success) toast.success(t(`appearance.SwitchTo${theme === 'dark' ? 'Dark' : 'Light'}Mode`))
   }
-})
+}
 </script>
 
 <template>
@@ -57,14 +36,19 @@ const onSubmit = handleSubmit((values) => {
   </div>
   <Separator />
 
-  <form @submit.prevent="onSubmit">
+  <form>
     <FormField v-slot="{ componentField }" name="theme" type="radio">
       <FormItem class="space-y-1">
         <FormLabel>{{ t('appearance.ThemeLabel') }}</FormLabel>
         <FormDescription> {{ t('appearance.ThemeDescription') }}</FormDescription>
         <FormMessage />
 
-        <RadioGroup class="grid max-w-md grid-cols-3 gap-8 pt-2" v-bind="componentField">
+        <RadioGroup
+          :value="theme"
+          class="grid max-w-md grid-cols-3 gap-8 pt-2"
+          v-bind="componentField"
+          @update:modelValue="onThemeChange"
+        >
           <FormItem>
             <FormLabel class="[&:has([data-state=checked])>div]:border-primary">
               <FormControl>
@@ -148,11 +132,5 @@ const onSubmit = handleSubmit((values) => {
         </RadioGroup>
       </FormItem>
     </FormField>
-
-    <div class="flex justify-start">
-      <Button type="submit">
-        {{ t('appearance.UpdatePreferences') }}
-      </Button>
-    </div>
   </form>
 </template>

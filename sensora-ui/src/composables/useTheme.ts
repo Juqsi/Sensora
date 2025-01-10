@@ -1,26 +1,37 @@
 import { ref } from 'vue'
 
-export function useTheme() {
-  const theme = ref<'light' | 'dark' | 'os'>(
-    (localStorage.getItem('theme') as 'light' | 'dark' | 'os' | null) ?? getOSPreference(),
-  )
+export enum Theme {
+  Light = 'light',
+  Dark = 'dark',
+  OS = 'os',
+}
 
-  function getOSPreference(): 'light' | 'dark' {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+export function useTheme() {
+  const theme = ref<Theme>(getInitialTheme())
+
+  function getInitialTheme(): Theme {
+    const storedTheme = localStorage.getItem('theme') as Theme | null
+    return storedTheme && Object.values(Theme).includes(storedTheme)
+      ? storedTheme
+      : getOSPreference()
   }
 
-  function applyTheme(themeValue: 'light' | 'dark') {
+  function getOSPreference(): Theme.Light | Theme.Dark {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? Theme.Dark : Theme.Light
+  }
+
+  function applyTheme(themeValue: Theme.Light | Theme.Dark) {
     const html = document.documentElement
-    if (themeValue === 'dark') {
-      html.classList.add('dark')
-      html.classList.remove('light')
+    if (themeValue === Theme.Dark) {
+      html.classList.add(Theme.Dark)
+      html.classList.remove(Theme.Light)
     } else {
-      html.classList.add('light')
-      html.classList.remove('dark')
+      html.classList.add(Theme.Light)
+      html.classList.remove(Theme.Dark)
     }
   }
 
-  function setTheme(newTheme: 'light' | 'dark'): boolean {
+  function setTheme(newTheme: Theme.Light | Theme.Dark): boolean {
     if (theme.value !== newTheme) {
       theme.value = newTheme
       localStorage.setItem('theme', newTheme)
@@ -31,23 +42,21 @@ export function useTheme() {
   }
 
   function setOSTheme(): boolean {
-    if (localStorage.getItem('theme') === 'os') {
+    if (theme.value === Theme.OS) {
       return false
     }
     const osTheme = getOSPreference()
-    if (theme.value !== osTheme) {
-      theme.value = osTheme
-      localStorage.setItem('theme', 'os')
-      applyTheme(osTheme)
-    }
+    theme.value = Theme.OS
+    localStorage.setItem('theme', Theme.OS)
+    applyTheme(osTheme)
     return true
   }
 
-  if (theme.value !== 'os') {
+  if (theme.value !== Theme.OS) {
     applyTheme(theme.value)
   } else {
     applyTheme(getOSPreference())
   }
 
-  return { theme, setTheme, setOSTheme }
+  return { Theme, theme, setTheme, setOSTheme }
 }
