@@ -15,5 +15,18 @@
     "AlreadyHaveAccount": "Already have an account?",
     "SignUpWithA": "Sign up with A",
     "Or": "or"
+  },
+  "appearance": {
+    "Title": "Appearance",
+    "Description": "Customize the appearance of the app.",
+    "ThemeLabel": "Theme",
+    "ThemeDescription": "Select the theme for the App.",
+    "Light": "Light",
+    "Dark": "Dark",
+    "OSPreference": "Operating system",
+    "SetToOS": "Appearance set to OS preference",
+    "SwitchToDarkMode": "Appearance switched to Dark Mode",
+    "SwitchToLightMode": "Appearance switched to Light Mode",
+    "UpdatePreferences": "Update preferences"
   }
 }

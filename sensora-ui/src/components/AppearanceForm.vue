@@ -15,6 +15,9 @@ import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import { toast } from 'vue-sonner'
 import * as z from 'zod'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const { theme, setTheme, setOSTheme } = useTheme()
 
@@ -35,20 +38,20 @@ const { handleSubmit } = useForm({
 
 const onSubmit = handleSubmit((values) => {
   if (values.theme === 'os') {
-    setOSTheme() // Setze das OS-Theme
-    toast.success(`Appearance set to OS preference`)
+    setOSTheme()
+    toast.success(t('appearance.SetToOS'))
   } else {
-    setTheme(values.theme) // Globales Theme setzen
-    toast.success(`Appearance switched to ${values.theme === 'dark' ? 'Dark Mode' : 'Light Mode'}`)
+    setTheme(values.theme)
+    toast.success(t(`appearance.SwitchTo${values.theme === 'dark' ? 'Dark' : 'Light'}Mode`))
   }
 })
 </script>
 
 <template>
   <div>
-    <h3 class="text-lg font-medium">Appearance</h3>
+    <h3 class="text-lg font-medium">{{ t('appearance.Title') }}</h3>
     <p class="text-sm text-muted-foreground">
-      Customize the appearance of the app. Automatically switch between day and night themes.
+      {{ t('appearance.Description') }}
     </p>
   </div>
   <Separator />
@@ -56,8 +59,8 @@ const onSubmit = handleSubmit((values) => {
   <form @submit.prevent="onSubmit">
     <FormField v-slot="{ componentField }" name="theme" type="radio">
       <FormItem class="space-y-1">
-        <FormLabel>Theme</FormLabel>
-        <FormDescription> Select the theme for the dashboard.</FormDescription>
+        <FormLabel>{{ t('appearance.ThemeLabel') }}</FormLabel>
+        <FormDescription> {{ t('appearance.ThemeDescription') }}</FormDescription>
         <FormMessage />
 
         <RadioGroup class="grid max-w-md grid-cols-3 gap-8 pt-2" v-bind="componentField">
@@ -82,7 +85,9 @@ const onSubmit = handleSubmit((values) => {
                   </div>
                 </div>
               </div>
-              <span class="block w-full p-2 text-center font-normal"> Light </span>
+              <span class="block w-full p-2 text-center font-normal">{{
+                t('appearance.Light')
+              }}</span>
             </FormLabel>
           </FormItem>
           <FormItem>
@@ -108,7 +113,9 @@ const onSubmit = handleSubmit((values) => {
                   </div>
                 </div>
               </div>
-              <span class="block w-full p-2 text-center font-normal"> Dark </span>
+              <span class="block w-full p-2 text-center font-normal">{{
+                t('appearance.Dark')
+              }}</span>
             </FormLabel>
           </FormItem>
           <FormItem>
@@ -132,7 +139,9 @@ const onSubmit = handleSubmit((values) => {
                   </div>
                 </div>
               </div>
-              <span class="block w-full p-2 text-center font-normal"> OS preference </span>
+              <span class="block w-full p-2 text-center font-normal">{{
+                t('appearance.OSPreference')
+              }}</span>
             </FormLabel>
           </FormItem>
         </RadioGroup>
@@ -140,7 +149,7 @@ const onSubmit = handleSubmit((values) => {
     </FormField>
 
     <div class="flex justify-start">
-      <Button type="submit"> Update preferences</Button>
+      <Button type="submit">{{ t('appearance.UpdatePreferences') }}</Button>
     </div>
   </form>
 </template>
