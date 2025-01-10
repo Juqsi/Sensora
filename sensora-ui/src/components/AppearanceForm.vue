@@ -96,7 +96,7 @@ const onSubmit = handleSubmit((values) => {
                 <RadioGroupItem class="sr-only" value="dark" />
               </FormControl>
               <div
-                class="items-center rounded-md border-2 border-muted bg-popover p-1 hover:bg-accent hover:text-accent-foreground"
+                class="items-center rounded-md border-2 border-muted bg-popover p-1 hover:border-accent hover:text-accent-foreground"
               >
                 <div class="space-y-2 rounded-sm bg-slate-950 p-2">
                   <div class="space-y-2 rounded-md bg-slate-800 p-2 shadow-sm">
@@ -149,7 +149,9 @@ const onSubmit = handleSubmit((values) => {
     </FormField>
 
     <div class="flex justify-start">
-      <Button type="submit">{{ t('appearance.UpdatePreferences') }}</Button>
+      <Button type="submit">
+        {{ t('appearance.UpdatePreferences') }}
+      </Button>
     </div>
   </form>
 </template>
