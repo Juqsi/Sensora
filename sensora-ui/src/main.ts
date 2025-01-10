@@ -15,6 +15,7 @@ import 'sit-onyx/style.css'
 //import 'sit-onyx/global.css'
 import App from './App.vue'
 import router from './router'
+import { useTheme } from './composables/useTheme'
 
 const i18n = createI18n({
   legacy: false,
@@ -32,6 +33,9 @@ const onyx = createOnyx({
   },
 })
 const app = createApp(App)
+
+const { theme } = useTheme()
+app.provide('theme', theme)
 
 app.use(createPinia())
 app.use(router)

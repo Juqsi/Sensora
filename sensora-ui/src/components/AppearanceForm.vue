@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useTheme } from '@/composables/useTheme'
 import {
   FormControl,
   FormDescription,
@@ -15,10 +16,11 @@ import { useForm } from 'vee-validate'
 import { toast } from 'vue-sonner'
 import * as z from 'zod'
 
-// Schema für die Formulardaten
+const { theme, setTheme, setOSTheme } = useTheme()
+
 const appearanceFormSchema = toTypedSchema(
   z.object({
-    theme: z.enum(['light', 'dark'], {
+    theme: z.enum(['light', 'dark', 'os'], {
       required_error: 'Please select a theme.',
     }),
   }),
@@ -27,19 +29,17 @@ const appearanceFormSchema = toTypedSchema(
 const { handleSubmit } = useForm({
   validationSchema: appearanceFormSchema,
   initialValues: {
-    theme: 'light',
+    theme: theme.value,
   },
 })
 
 const onSubmit = handleSubmit((values) => {
-  const html = document.documentElement
-
-  if (values.theme === 'dark' && !html.classList.contains('dark')) {
-    html.classList.add('dark')
-    toast.success('Appearance Switched')
-  } else if (values.theme === 'light' && html.classList.contains('dark')) {
-    html.classList.remove('dark')
-    toast.success('Appearance Switched')
+  if (values.theme === 'os') {
+    setOSTheme() // Setze das OS-Theme
+    toast.success(`Appearance set to OS preference`)
+  } else {
+    setTheme(values.theme) // Globales Theme setzen
+    toast.success(`Appearance switched to ${values.theme === 'dark' ? 'Dark Mode' : 'Light Mode'}`)
   }
 })
 </script>
@@ -60,7 +60,7 @@ const onSubmit = handleSubmit((values) => {
         <FormDescription> Select the theme for the dashboard.</FormDescription>
         <FormMessage />
 
-        <RadioGroup class="grid max-w-md grid-cols-2 gap-8 pt-2" v-bind="componentField">
+        <RadioGroup class="grid max-w-md grid-cols-3 gap-8 pt-2" v-bind="componentField">
           <FormItem>
             <FormLabel class="[&:has([data-state=checked])>div]:border-primary">
               <FormControl>
@@ -69,8 +69,8 @@ const onSubmit = handleSubmit((values) => {
               <div class="items-center rounded-md border-2 border-muted p-1 hover:border-accent">
                 <div class="space-y-2 rounded-sm bg-[#ecedef] p-2">
                   <div class="space-y-2 rounded-md bg-white p-2 shadow-sm">
-                    <div class="h-2 w-20 rounded-lg bg-[#ecedef]" />
-                    <div class="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
+                    <div class="h-2 w-20 rounded-lg max-w-full bg-[#ecedef]" />
+                    <div class="h-2 w-[100px] rounded-lg max-w-full bg-[#ecedef]" />
                   </div>
                   <div class="flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm">
                     <div class="h-4 w-4 rounded-full bg-[#ecedef]" />
@@ -95,8 +95,8 @@ const onSubmit = handleSubmit((values) => {
               >
                 <div class="space-y-2 rounded-sm bg-slate-950 p-2">
                   <div class="space-y-2 rounded-md bg-slate-800 p-2 shadow-sm">
-                    <div class="h-2 w-20 rounded-lg bg-slate-400" />
-                    <div class="h-2 w-[100px] rounded-lg bg-slate-400" />
+                    <div class="h-2 w-20 max-w-full rounded-lg bg-slate-400" />
+                    <div class="h-2 w-[100px] max-w-full rounded-lg bg-slate-400" />
                   </div>
                   <div class="flex items-center space-x-2 rounded-md bg-slate-800 p-2 shadow-sm">
                     <div class="h-4 w-4 rounded-full bg-slate-400" />
@@ -109,6 +109,30 @@ const onSubmit = handleSubmit((values) => {
                 </div>
               </div>
               <span class="block w-full p-2 text-center font-normal"> Dark </span>
+            </FormLabel>
+          </FormItem>
+          <FormItem>
+            <FormLabel class="[&:has([data-state=checked])>div]:border-primary">
+              <FormControl>
+                <RadioGroupItem class="sr-only" value="os" />
+              </FormControl>
+              <div class="items-center rounded-md border-2 border-muted p-1 hover:border-accent">
+                <div class="space-y-2 rounded-sm bg-gray-300 p-2">
+                  <div class="space-y-2 rounded-md bg-white p-2 shadow-sm">
+                    <div class="h-2 w-20 rounded-lg max-w-full bg-gray-400" />
+                    <div class="h-2 w-[100px] rounded-lg max-w-full bg-gray-400" />
+                  </div>
+                  <div class="flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm">
+                    <div class="h-4 w-4 rounded-full bg-gray-400" />
+                    <div class="h-2 w-[100px] rounded-lg bg-gray-400" />
+                  </div>
+                  <div class="flex items-center space-x-2 rounded-md bg-white p-2 shadow-sm">
+                    <div class="h-4 w-4 rounded-full bg-gray-400" />
+                    <div class="h-2 w-[100px] rounded-lg bg-gray-400" />
+                  </div>
+                </div>
+              </div>
+              <span class="block w-full p-2 text-center font-normal"> OS preference </span>
             </FormLabel>
           </FormItem>
         </RadioGroup>
