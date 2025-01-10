@@ -20,21 +20,27 @@ export function useTheme() {
     }
   }
 
-  function setTheme(newTheme: 'light' | 'dark') {
+  function setTheme(newTheme: 'light' | 'dark'): boolean {
     if (theme.value !== newTheme) {
       theme.value = newTheme
       localStorage.setItem('theme', newTheme)
       applyTheme(newTheme)
+      return true
     }
+    return false
   }
 
-  function setOSTheme() {
+  function setOSTheme(): boolean {
+    if (localStorage.getItem('theme') === 'os') {
+      return false
+    }
     const osTheme = getOSPreference()
     if (theme.value !== osTheme) {
       theme.value = osTheme
-      localStorage.removeItem('theme')
+      localStorage.setItem('theme', 'os')
       applyTheme(osTheme)
     }
+    return true
   }
 
   if (theme.value !== 'os') {

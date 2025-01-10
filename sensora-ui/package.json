@@ -27,6 +27,7 @@
     "@vueuse/core": "^12.3.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "flag-icon-css": "^4.1.7",
     "install": "^0.13.0",
     "lucide-react": "^0.469.0",
     "lucide-vue-next": "^0.469.0",

@@ -28,5 +28,16 @@
     "SwitchToDarkMode": "Appearance switched to Dark Mode",
     "SwitchToLightMode": "Appearance switched to Light Mode",
     "UpdatePreferences": "Update preferences"
+  },
+  "language": {
+    "LanguageSelectionTitle": "Select Your Language",
+    "LanguageSelectionDescription": "Please choose your preferred language.",
+    "LanguageLabel": "Language",
+    "LanguageDescription": "Select a language.",
+    "English": "English",
+    "German": "German",
+    "SetToEnglish": "Language set to English.",
+    "SetToGerman": "Language set to German.",
+    "UpdateLanguage": "Update Language"
   }
 }

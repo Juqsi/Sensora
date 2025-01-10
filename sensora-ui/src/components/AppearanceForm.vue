@@ -38,11 +38,12 @@ const { handleSubmit } = useForm({
 
 const onSubmit = handleSubmit((values) => {
   if (values.theme === 'os') {
-    setOSTheme()
-    toast.success(t('appearance.SetToOS'))
+    const success = setOSTheme()
+    if (success) toast.success(t('appearance.SetToOS'))
   } else {
-    setTheme(values.theme)
-    toast.success(t(`appearance.SwitchTo${values.theme === 'dark' ? 'Dark' : 'Light'}Mode`))
+    const success = setTheme(values.theme)
+    if (success)
+      toast.success(t(`appearance.SwitchTo${values.theme === 'dark' ? 'Dark' : 'Light'}Mode`))
   }
 })
 </script>

@@ -1,5 +1,43 @@
 {
-  "register": {
-    "SignUp": "Registrieren"
+  "login": {
+    "SignIn": "Anmelden",
+    "SignInInfo": "Geben Sie Ihre E-Mail-Adresse ein, um sich in Ihrem Konto anzumelden",
+    "ForgotPassword": "Passwort vergessen?",
+    "DontHaveAccount": "Haben Sie noch kein Konto?",
+    "SignInWithA": "Melden Sie sich mit A an",
+    "SignUp": "Registrieren",
+    "SignUpInfo": "Geben Sie Ihre Daten ein, um ein Konto zu erstellen",
+    "FirstName": "Vorname",
+    "LastName": "Nachname",
+    "Email": "E-Mail",
+    "Password": "Passwort",
+    "CreateAccount": "Konto erstellen",
+    "AlreadyHaveAccount": "Haben Sie bereits ein Konto?",
+    "SignUpWithA": "Registrieren Sie sich mit A",
+    "Or": "oder"
+  },
+  "appearance": {
+    "Title": "Erscheinungsbild",
+    "Description": "Passen Sie das Erscheinungsbild der App an.",
+    "ThemeLabel": "Thema",
+    "ThemeDescription": "Wählen Sie das Thema für die App.",
+    "Light": "Hell",
+    "Dark": "Dunkel",
+    "OSPreference": "Betriebssystem",
+    "SetToOS": "Erscheinungsbild auf Betriebssystem-Voreinstellung gesetzt",
+    "SwitchToDarkMode": "Erscheinungsbild auf Dunkelmodus umgeschaltet",
+    "SwitchToLightMode": "Erscheinungsbild auf Hellmodus umgeschaltet",
+    "UpdatePreferences": "Einstellungen aktualisieren"
+  },
+  "language": {
+    "LanguageSelectionTitle": "Wählen Sie Ihre Sprache",
+    "LanguageSelectionDescription": "Bitte wählen Sie die bevorzugte Sprache.",
+    "LanguageLabel": "Sprache",
+    "LanguageDescription": "Wählen Sie eine Sprache aus.",
+    "English": "Englisch",
+    "German": "Deutsch",
+    "SetToEnglish": "Sprache auf Englisch gesetzt.",
+    "SetToGerman": "Sprache auf Deutsch gesetzt.",
+    "UpdateLanguage": "Sprache aktualisieren"
   }
 }

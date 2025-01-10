@@ -15,11 +15,15 @@ import 'sit-onyx/style.css'
 //import 'sit-onyx/global.css'
 import App from './App.vue'
 import router from './router'
+
+import { getLanguage } from './composables/useLanguage'
 import { useTheme } from './composables/useTheme'
+
+const lang = getLanguage()
 
 const i18n = createI18n({
   legacy: false,
-  locale: 'en-US', // Standardsprache
+  locale: lang,
   messages: {
     'de-DE': deDE,
     'en-US': enUS,
@@ -32,6 +36,7 @@ const onyx = createOnyx({
     messages: { 'de-DE': onyxDeDE },
   },
 })
+
 const app = createApp(App)
 
 const { theme } = useTheme()
