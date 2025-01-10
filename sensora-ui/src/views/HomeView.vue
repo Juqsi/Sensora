@@ -1,11 +1,5 @@
-<script lang="ts" setup>
-import TheWelcome from '../components/TheWelcome.vue'
-import Abc from '../components/abc.vue'
-</script>
+<script lang="ts" setup></script>
 
 <template>
-  <main>
-    <TheWelcome />
-    <abc />
-  </main>
+  <main></main>
 </template>
