@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import 'flag-icon-css/css/flag-icons.min.css'
 
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   FormControl,
@@ -11,48 +12,24 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Button } from '@/components/ui/button'
 import { toast } from 'vue-sonner'
-import { toTypedSchema } from '@vee-validate/zod'
-import { useForm } from 'vee-validate'
-import * as z from 'zod'
 import { getLanguage, SupportedLanguages } from '@/composables/useLanguage.ts'
 
 const { t, locale } = useI18n()
 
-const languageFormSchema = toTypedSchema(
-  z.object({
-    language: z.enum(
-      Object.values(SupportedLanguages) as [SupportedLanguages, ...SupportedLanguages[]],
-      {
-        required_error: 'Please select a language.',
-      },
-    ),
-  }),
-)
+// Initial selected language
+const selectedLanguage = ref<SupportedLanguages>(getLanguage())
 
-const { handleSubmit } = useForm({
-  validationSchema: languageFormSchema,
-  initialValues: {
-    language: getLanguage(),
-  },
-})
+// Watch for changes in selected language and update immediately
+watch(selectedLanguage, (newLanguage) => {
+  if (locale.value === newLanguage) return
 
-const onSubmit = handleSubmit((values) => {
-  const language: SupportedLanguages = values.language as SupportedLanguages
+  localStorage.setItem('language', newLanguage)
+  locale.value = newLanguage
 
-  const oldLanguage = getLanguage()
-  if (oldLanguage === language) {
-    return
-  }
-  localStorage.setItem('language', language)
-  locale.value = language
-
-  if (language === 'en-US') {
-    toast.success(t('language.SetToEnglish'))
-  } else {
-    toast.success(t('language.SetToGerman'))
-  }
+  toast.success(
+    newLanguage === SupportedLanguages.EN ? t('language.SetToEnglish') : t('language.SetToGerman'),
+  )
 })
 </script>
 
@@ -65,14 +42,18 @@ const onSubmit = handleSubmit((values) => {
   </div>
   <Separator />
 
-  <form @submit.prevent="onSubmit">
+  <form>
     <FormField v-slot="{ componentField }" name="language" type="radio">
       <FormItem class="space-y-1">
         <FormLabel>{{ t('language.LanguageLabel') }}</FormLabel>
         <FormDescription> {{ t('language.LanguageDescription') }}</FormDescription>
         <FormMessage />
 
-        <RadioGroup class="grid max-w-md grid-cols-2 gap-8 pt-2" v-bind="componentField">
+        <RadioGroup
+          v-model="selectedLanguage"
+          class="grid max-w-md grid-cols-2 gap-8 pt-2"
+          v-bind="componentField"
+        >
           <FormItem>
             <FormLabel class="[&:has([data-state=checked])>div]:border-primary">
               <FormControl>
@@ -119,11 +100,5 @@ const onSubmit = handleSubmit((values) => {
         </RadioGroup>
       </FormItem>
     </FormField>
-
-    <div class="flex justify-start">
-      <Button type="submit">
-        {{ t('language.UpdateLanguage') }}
-      </Button>
-    </div>
   </form>
 </template>
