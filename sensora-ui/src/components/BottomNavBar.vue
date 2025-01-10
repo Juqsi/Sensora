@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-// Importiere die Lucide-Icons
-import { CircuitBoard, Flower2, HomeIcon, UserIcon } from 'lucide-vue-next'
+import { CircuitBoard, Flower2, HomeIcon } from 'lucide-vue-next'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 </script>
 
 <template>
@@ -38,7 +38,13 @@ import { CircuitBoard, Flower2, HomeIcon, UserIcon } from 'lucide-vue-next'
           class="flex flex-col items-center"
           to="/profile"
         >
-          <UserIcon class="w-6 h-6" />
+          <Avatar class="w-6 h-6">
+            <AvatarImage
+              alt="Justus Siegert"
+              src="https://avatars.githubusercontent.com/u/91261422?v=4&size=64"
+            />
+            <AvatarFallback>JS</AvatarFallback>
+          </Avatar>
         </router-link>
       </div>
     </div>
