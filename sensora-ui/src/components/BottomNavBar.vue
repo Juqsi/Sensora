@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 // Importiere die Lucide-Icons
-import { HeartIcon, HomeIcon, SearchIcon, UserIcon } from 'lucide-vue-next'
+import { CircuitBoard, Flower2, HomeIcon, UserIcon } from 'lucide-vue-next'
 </script>
 
 <template>
@@ -18,19 +18,19 @@ import { HeartIcon, HomeIcon, SearchIcon, UserIcon } from 'lucide-vue-next'
         </router-link>
 
         <router-link
-          :class="{ 'text-primary': $route.path === '/search' }"
+          :class="{ 'text-primary': $route.path === '/sensors' }"
           class="flex flex-col items-center"
-          to="/search"
+          to="/sensors"
         >
-          <SearchIcon class="w-6 h-6" />
+          <CircuitBoard class="w-6 h-6" />
         </router-link>
 
         <router-link
-          :class="{ 'text-primary': $route.path === '/favorites' }"
+          :class="{ 'text-primary': $route.path === '/flowers' }"
           class="flex flex-col items-center"
-          to="/favorites"
+          to="/flowers"
         >
-          <HeartIcon class="w-6 h-6" />
+          <Flower2 class="w-6 h-6" />
         </router-link>
 
         <router-link
