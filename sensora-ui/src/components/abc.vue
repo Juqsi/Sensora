@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { LineChart } from './ui/chart-line/index.ts'
 
-const chartColors = ['var(--primary)', 'var(--secondary)', 'var(--destructive)']
 const data = [
   {
     year: 1970,

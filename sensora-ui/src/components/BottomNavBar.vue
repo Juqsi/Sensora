@@ -6,7 +6,7 @@ import { HeartIcon, HomeIcon, SearchIcon, UserIcon } from 'lucide-vue-next'
 <template>
   <div class="h-screen flex flex-col justify-between bg-background">
     <div
-      class="fixed bottom-0 left-0 right-0 border-muted-background border-t-2 mx-auto w-full bg-background rounded-lg shadow-lg p-4"
+      class="fixed bottom-0 left-0 right-0 border-muted-background border-t-2 mx-auto w-full bg-background shadow-lg p-3"
     >
       <div class="grid grid-cols-4 gap-4">
         <router-link
