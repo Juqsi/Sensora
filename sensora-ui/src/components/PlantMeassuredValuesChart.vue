@@ -1,18 +1,17 @@
 <script lang="ts" setup>
-import { LineChart } from './ui/chart-line/index.ts'
+import { LineChart } from '@/components/ui/chart-line'
+import CustomChartTooltip from '@/components/ui/chart-line/CustomChartTooltip.vue'
 
 const data = [
   {
     year: 1970,
     'Export Growth Rate': 2.04,
     'Import Growth Rate': 1.53,
-    abc: 1.53,
   },
   {
     year: 1971,
     'Export Growth Rate': 1.96,
     'Import Growth Rate': 1.58,
-    abc: 1.48,
   },
   {
     year: 1972,
@@ -263,7 +262,6 @@ const data = [
     year: 2021,
     'Export Growth Rate': 0.82,
     'Import Growth Rate': 2.51,
-    abc: 2.51,
   },
 ]
 </script>
@@ -271,12 +269,14 @@ const data = [
 <template>
   <LineChart
     :categories="['Export Growth Rate', 'Import Growth Rate']"
-    :colors="['blue', 'pink', 'orange', 'red']"
+    :colors="['#3B82F6', '#F59E0B']"
+    :custom-tooltip="CustomChartTooltip"
     :data="data"
+    :show-y-axis="false"
     :y-formatter="
-      (tick: any, i: number) => {
+      (tick, i) => {
         return typeof tick === 'number'
-          ? `$ ${i} ${new Intl.NumberFormat('us').format(tick).toString()}`
+          ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
           : ''
       }
     "

@@ -11,6 +11,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion/index.ts'
+import PlantMeassuredValuesChart from '@/components/PlantMeassuredValuesChart.vue'
 
 const defaultValue = 'item-1'
 
@@ -73,6 +74,7 @@ const accordionItems = [
     </TabsList>
     <TabsContent value="values">
       <MeasuredTiles />
+      <PlantMeassuredValuesChart />
     </TabsContent>
     <TabsContent value="infos">
       <Accordion :default-value="defaultValue" class="w-full" collapsible type="single">

@@ -91,7 +91,7 @@ function handleLegendItemClick(d: BulletLegendItemInterface, i: number) {
           }"
           :color="colors[i]"
           :curve-type="curveType"
-          :x="(_d: Data, i: number) => i"
+          :x="(d: Data, i: number) => i"
           :y="(d: Data) => d[category]"
         />
       </template>
@@ -101,7 +101,7 @@ function handleLegendItemClick(d: BulletLegendItemInterface, i: number) {
         :grid-line="false"
         :tick-format="xFormatter ?? ((v: number) => data[v]?.[index])"
         :tick-line="false"
-        tick-text-color="var(--vis-text-color)"
+        tick-text-color="hsl(var(--vis-text-color))"
         type="x"
       />
       <VisAxis
@@ -115,7 +115,7 @@ function handleLegendItemClick(d: BulletLegendItemInterface, i: number) {
         :grid-line="showGridLine"
         :tick-format="yFormatter"
         :tick-line="false"
-        tick-text-color="var(--vis-text-color)"
+        tick-text-color="hsl(var(--vis-text-color))"
         type="y"
       />
 
