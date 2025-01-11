@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 </script>
 
 <template>
-  <div class="h-screen flex flex-col justify-between bg-background">
+  <div class="h-10 flex-col justify-between bg-background">
     <div
       class="fixed bottom-0 left-0 right-0 border-muted-background border-t-2 mx-auto w-full bg-background shadow-lg p-3"
     >
@@ -33,12 +33,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
           <Flower2 class="w-6 h-6" />
         </router-link>
 
-        <router-link
-          :class="{ 'text-primary': $route.path === '/profile' }"
-          class="flex flex-col items-center"
-          to="/profile"
-        >
-          <Avatar class="w-6 h-6">
+        <router-link class="flex flex-col items-center" to="/profile">
+          <Avatar
+            :class="{ 'border-solid border-2 border-primary': $route.path === '/profile' }"
+            class="w-6 h-6"
+          >
             <AvatarImage
               alt="Justus Siegert"
               src="https://avatars.githubusercontent.com/u/91261422?v=4&size=64"

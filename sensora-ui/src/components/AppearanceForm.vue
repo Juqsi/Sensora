@@ -44,6 +44,7 @@ const onThemeChange = (theme: string) => {
         <FormMessage />
 
         <RadioGroup
+          :default-value="theme"
           :value="theme"
           class="grid max-w-md grid-cols-3 gap-8 pt-2"
           v-bind="componentField"
@@ -124,7 +125,7 @@ const onThemeChange = (theme: string) => {
                   </div>
                 </div>
               </div>
-              <span class="block w-full p-2 text-center font-normal">{{
+              <span class="block w-full p-2 text-center font-normal break-words">{{
                 t('appearance.OSPreference')
               }}</span>
             </FormLabel>

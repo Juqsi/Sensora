@@ -1,11 +1,9 @@
 <script lang="ts" setup>
-import Appearance from '@/components/AppearanceForm.vue'
-import LanguageForm from '@/components/LanguageForm.vue'
+import Profile from '@/components/Profile.vue'
 </script>
 
 <template>
-  <Appearance />
-  <LanguageForm />
+  <Profile />
 </template>
 
 <style scoped></style>

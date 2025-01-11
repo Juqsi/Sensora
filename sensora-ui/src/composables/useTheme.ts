@@ -7,9 +7,9 @@ export enum Theme {
 }
 
 export function useTheme() {
-  const theme = ref<Theme>(getInitialTheme())
+  const theme = ref<Theme>(getTheme())
 
-  function getInitialTheme(): Theme {
+  function getTheme(): Theme {
     const storedTheme = localStorage.getItem('theme') as Theme | null
     return storedTheme && Object.values(Theme).includes(storedTheme)
       ? storedTheme

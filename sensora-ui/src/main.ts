@@ -3,6 +3,7 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import piniaPersist from 'pinia-plugin-persistedstate'
 import { createOnyx } from 'sit-onyx'
 import { createI18n } from 'vue-i18n'
 
@@ -42,7 +43,10 @@ const app = createApp(App)
 const { theme } = useTheme()
 app.provide('theme', theme)
 
-app.use(createPinia())
+const pinia = createPinia()
+pinia.use(piniaPersist)
+app.use(pinia)
+
 app.use(router)
 
 app.use(i18n).use(onyx).mount('#app')
