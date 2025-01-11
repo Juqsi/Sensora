@@ -26,9 +26,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
         </router-link>
 
         <router-link
-          :class="{ 'text-primary': $route.path === '/flowers' }"
+          :class="{ 'text-primary': $route.path === '/plants' }"
           class="flex flex-col items-center"
-          to="/flowers"
+          to="/plants"
         >
           <Flower2 class="w-6 h-6" />
         </router-link>
