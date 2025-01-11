@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Settings } from 'lucide-vue-next'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Avatar } from '@/components/ui/avatar'
+import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button/index.ts'
 </script>
 <template>
@@ -9,8 +9,12 @@ import { Button } from '@/components/ui/button/index.ts'
     <CardHeader>
       <div class="flex items-center justify-between w-full">
         <div class="flex items-center space-x-4">
-          <Avatar>
-            <AvatarImage src="https://avatars.githubusercontent.com/u/91261422?v=4&size=64" />
+          <Avatar shape="circle" size="sm">
+            <AvatarImage
+              alt="Justus Siegert"
+              class="ml-3"
+              src="https://avatars.githubusercontent.com/u/91261422?v=4"
+            />
             <AvatarFallback>JS</AvatarFallback>
           </Avatar>
           <div>
