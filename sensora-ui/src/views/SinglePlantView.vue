@@ -125,9 +125,11 @@ const activeData = computed(() => values[activeKey.value] || [])
             <CardDescription> Seit X Tagen dabei</CardDescription>
           </div>
         </div>
-        <Button size="icon" variant="ghost">
-          <Settings />
-        </Button>
+        <router-link to="/plant/123/settings">
+          <Button size="icon" variant="ghost">
+            <Settings />
+          </Button>
+        </router-link>
       </div>
     </CardHeader>
   </Card>
