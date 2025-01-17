@@ -10,7 +10,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <div class="h-screen flex items-center justify-center bg-muted">
+  <div class="flex items-center justify-center">
     <Card class="mx-auto max-w-sm w-full">
       <CardHeader>
         <CardTitle class="text-xl">{{ t('login.SignUp') }}</CardTitle>

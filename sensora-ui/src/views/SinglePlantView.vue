@@ -3,7 +3,7 @@ import Plant3d from '@/components/plant3d/plant3d.vue'
 import MeasuredTiles from '@/components/MeasuredTiles.vue'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs/index.ts'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Settings } from 'lucide-vue-next'
+import { ChevronLeft, Settings } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import {
   Accordion,
@@ -12,6 +12,8 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion/index.ts'
 import PlantMeassuredValuesChart from '@/components/PlantMeassuredValuesChart.vue'
+import { computed, ref } from 'vue'
+import { measuredValues } from '@/composables/useMeasuredValues.ts'
 
 const defaultValue = 'item-1'
 
@@ -47,6 +49,63 @@ const accordionItems = [
       'Aloe Vera thrives in bright, indirect sunlight but can also tolerate some direct sunlight. It should not be placed in dark, low-light areas.',
   },
 ]
+const values = {
+  temperature: [
+    {
+      year: 1970,
+      'Export Growth Rate': 2.04,
+      'Import Growth Rate': 1.53,
+    },
+    {
+      year: 1971,
+      'Export Growth Rate': 1.96,
+      'Import Growth Rate': 1.58,
+    },
+  ],
+  soilMoisture: [
+    {
+      year: 1970,
+      'Export Growth Rate': 3.04,
+      'Import Growth Rate': 4.53,
+    },
+    {
+      year: 1971,
+      'Export Growth Rate': 1.96,
+      'Import Growth Rate': 1.58,
+    },
+  ],
+  brightness: [
+    {
+      year: 1970,
+      'Export Growth Rate': 3.04,
+      'Import Growth Rate': 4.53,
+    },
+    {
+      year: 1971,
+      'Export Growth Rate': 1.96,
+      'Import Growth Rate': 1.58,
+    },
+  ],
+  humidity: [
+    {
+      year: 1970,
+      'Export Growth Rate': 3.04,
+      'Import Growth Rate': 4.53,
+    },
+    {
+      year: 1971,
+      'Export Growth Rate': 1.96,
+      'Import Growth Rate': 1.58,
+    },
+  ],
+}
+
+const activeKey = ref<measuredValues>(measuredValues.temperature)
+
+const updateActiveKey = (key: measuredValues) => {
+  activeKey.value = key
+}
+const activeData = computed(() => values[activeKey.value] || [])
 </script>
 
 <template>
@@ -54,6 +113,13 @@ const accordionItems = [
     <CardHeader>
       <div class="flex items-center justify-between w-full">
         <div class="flex items-center space-x-4">
+          <Button
+            class="text-muted-foreground hover:text-primary flex items-center space-x-2"
+            size="icon"
+            variant="ghost"
+          >
+            <chevron-left />
+          </Button>
           <div>
             <CardTitle>Pflanze Berta</CardTitle>
             <CardDescription> Seit X Tagen dabei</CardDescription>
@@ -73,8 +139,8 @@ const accordionItems = [
       <TabsTrigger value="infos"> Infos</TabsTrigger>
     </TabsList>
     <TabsContent value="values">
-      <MeasuredTiles />
-      <PlantMeassuredValuesChart />
+      <MeasuredTiles @updateActiveKey="updateActiveKey" />
+      <PlantMeassuredValuesChart :data="activeData" />
     </TabsContent>
     <TabsContent value="infos">
       <Accordion :default-value="defaultValue" class="w-full" collapsible type="single">

@@ -33,16 +33,15 @@ import {
             <Input id="name" placeholder="Name of your project" />
           </div>
           <div class="flex flex-col space-y-1.5">
-            <Label for="framework">Framework</Label>
+            <Label for="framework">Object</Label>
             <Select>
               <SelectTrigger id="framework">
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent position="popper">
-                <SelectItem value="nuxt"> Nuxt </SelectItem>
-                <SelectItem value="next"> Next.js </SelectItem>
-                <SelectItem value="sveltekit"> SvelteKit </SelectItem>
-                <SelectItem value="astro"> Astro </SelectItem>
+                <SelectItem value="plant"> Plant</SelectItem>
+                <SelectItem value="sensor"> Sensor </SelectItem>
+                <SelectItem value="group"> Group </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -51,7 +50,7 @@ import {
     </CardContent>
     <CardFooter class="flex justify-between px-6 pb-6">
       <Button variant="outline"> Cancel </Button>
-      <Button>Deploy</Button>
+      <Button>Create</Button>
     </CardFooter>
   </Card>
 </template>
