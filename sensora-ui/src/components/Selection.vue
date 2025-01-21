@@ -32,6 +32,7 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils.ts'
 import { useI18n } from 'vue-i18n'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 const { t } = useI18n()
 
@@ -48,12 +49,13 @@ const showNewTeamDialog = ref(false)
 const newTeamName = ref('')
 const selectedGroup = ref('')
 
-const selectEntity = (groupId: string, entityId: string) => {
-  emit('update:selectedEntity', groupId, entityId)
+const selectEntity = (entityId: { label: string; value: string }) => {
+  emit('update:selectedEntity', entityId)
   open.value = false
 }
 
 const onCreateNewTeam = () => {
+  //TODO glaube darunter ist Falsch das ist das ausgewählte und nciht die Felder des poUpForms
   emit('createEntity', { name: newTeamName.value, group: selectedGroup.value })
   showNewTeamDialog.value = false
   newTeamName.value = ''
@@ -94,7 +96,7 @@ const onCreateNewTeam = () => {
                 :key="entity.value"
                 :value="entity.label"
                 class="text-sm"
-                @select="selectEntity(group.value, entity.value)"
+                @select="selectEntity(entity)"
               >
                 <Avatar class="mr-2 h-5 w-5">
                   <AvatarImage

@@ -72,7 +72,7 @@ function createRoom() {}
     </CardHeader>
     <CardContent class="grid gap-6">
       <div class="grid gap-2">
-        <Label for="subject">{{ t('plant.seattings.NameOfPlant') }}</Label>
+        <Label for="subject">{{ t('plant.settings.NameOfPlant') }}</Label>
         <Input id="subject" placeholder="Name der Pflanze" />
       </div>
       <div class="grid gap-4">
