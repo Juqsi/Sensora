@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { defineProps, ref } from 'vue'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,16 +19,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog/index.ts'
-
+} from '@/components/ui/dialog'
 import { CheckIcon, ChevronDown, PlusCircle } from 'lucide-vue-next'
-
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover/index.ts'
-
-import { useI18n } from 'vue-i18n'
-
 import {
   Select,
   SelectContent,
@@ -35,48 +28,37 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-
-import { cn } from '@/lib/utils'
-
-import { ref } from 'vue'
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils.ts'
+import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-//Prefix for reuse als Parameter späte rübergeben mit selection options
-const prefix = 'prefix'
+const props = defineProps<{
+  groups: { label: string; value: string; entity: { label: string; value: string }[] }[]
+  selectedEntity: { label: string; value: string }
+  prefix: string
+}>()
 
-const groups = [
-  {
-    label: 'Gruppe 1',
-    value: 'uuid-1 der Gruppe',
-    rooms: [
-      {
-        label: 'Raum 1',
-        value: 'uuid-1 des Raums',
-      },
-    ],
-  },
-  {
-    label: 'Gruppe 2',
-    value: 'uuid-2 der Gruppe',
-    rooms: [
-      {
-        label: 'Raum 1',
-        value: 'uuid-2 des Raums',
-      },
-      {
-        label: 'Raum 2',
-        value: 'uuid-3 des Raums',
-      },
-    ],
-  },
-]
-
-type Team = (typeof groups)[number]['rooms'][number]
+const emit = defineEmits(['update:selectedEntity', 'createEntity'])
 
 const open = ref(false)
 const showNewTeamDialog = ref(false)
-const selectedTeam = ref<Team>(groups[0].rooms[0])
+const newTeamName = ref('')
+const selectedGroup = ref('')
+
+const selectEntity = (groupId: string, entityId: string) => {
+  emit('update:selectedEntity', groupId, entityId)
+  open.value = false
+}
+
+const onCreateNewTeam = () => {
+  emit('createEntity', { name: newTeamName.value, group: selectedGroup.value })
+  showNewTeamDialog.value = false
+  newTeamName.value = ''
+  selectedGroup.value = ''
+}
 </script>
 
 <template>
@@ -92,47 +74,42 @@ const selectedTeam = ref<Team>(groups[0].rooms[0])
         >
           <Avatar class="mr-2 h-5 w-5">
             <AvatarImage
-              :alt="selectedTeam.label"
-              :src="`https://avatar.vercel.sh/${selectedTeam.value}.png`"
+              :alt="props.selectedEntity.label"
+              :src="`https://avatar.vercel.sh/${props.selectedEntity.value}.png`"
             />
             <AvatarFallback>R</AvatarFallback>
           </Avatar>
-          {{ selectedTeam.label }}
+          {{ props.selectedEntity.label }}
           <ChevronDown class="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent class="p-0 min-w-full">
         <Command>
-          <CommandInput :placeholder="t(prefix + '.selection.Search')" />
+          <CommandInput :placeholder="t(props.prefix + '.selection.Search')" />
           <CommandEmpty>No xxxx found.</CommandEmpty>
           <CommandList>
-            <CommandGroup v-for="group in groups" :key="group.label" :heading="group.label">
+            <CommandGroup v-for="group in props.groups" :key="group.label" :heading="group.label">
               <CommandItem
-                v-for="team in group.rooms"
-                :key="team.value"
-                :value="team.label"
+                v-for="entity in group.entity"
+                :key="entity.value"
+                :value="entity.label"
                 class="text-sm"
-                @select="
-                  () => {
-                    selectedTeam = team
-                    open = false
-                  }
-                "
+                @select="selectEntity(group.value, entity.value)"
               >
                 <Avatar class="mr-2 h-5 w-5">
                   <AvatarImage
-                    :alt="team.label"
-                    :src="`https://avatar.vercel.sh/${team.value}.png`"
+                    :alt="entity.label"
+                    :src="`https://avatar.vercel.sh/${entity.value}.png`"
                     class="grayscale"
                   />
                   <AvatarFallback>R</AvatarFallback>
                 </Avatar>
-                {{ team.label }}
+                {{ entity.label }}
                 <CheckIcon
                   :class="
                     cn(
                       'ml-auto h-4 w-4',
-                      selectedTeam.value === team.value ? 'opacity-100' : 'opacity-0',
+                      props.selectedEntity.value === entity.value ? 'opacity-100' : 'opacity-0',
                     )
                   "
                 />
@@ -143,17 +120,9 @@ const selectedTeam = ref<Team>(groups[0].rooms[0])
           <CommandList>
             <CommandGroup>
               <DialogTrigger as-child>
-                <CommandItem
-                  value="create-team"
-                  @select="
-                    () => {
-                      open = false
-                      showNewTeamDialog = true
-                    }
-                  "
-                >
+                <CommandItem value="12" @select="showNewTeamDialog = true">
                   <PlusCircle class="mr-2 h-5 w-5" />
-                  {{ t(prefix + '.selection.NewEntity') }}
+                  {{ t(props.prefix + '.selection.NewEntity') }}
                 </CommandItem>
               </DialogTrigger>
             </CommandGroup>
@@ -161,33 +130,35 @@ const selectedTeam = ref<Team>(groups[0].rooms[0])
         </Command>
       </PopoverContent>
     </Popover>
+
     <DialogContent>
       <DialogHeader>
-        <DialogTitle>{{ t(prefix + '.selection.NewEntityTitle') }}</DialogTitle>
-        <DialogDescription> {{ t(prefix + '.selection.NewEntitySubtitle') }}</DialogDescription>
+        <DialogTitle>{{ t(props.prefix + '.selection.NewEntityTitle') }}</DialogTitle>
+        <DialogDescription
+          >{{ t(props.prefix + '.selection.NewEntitySubtitle') }}
+        </DialogDescription>
       </DialogHeader>
       <div>
         <div class="space-y-4 py-2 pb-4">
           <div class="space-y-2">
-            <Label for="name"> {{ t(prefix + '.selection.Entity') }} </Label>
-            <Input id="name" :placeholder="t(prefix + '.selection.EntityPlaceholder')" />
+            <Label for="name">{{ t(props.prefix + '.selection.Entity') }}</Label>
+            <Input
+              id="name"
+              v-model="newTeamName"
+              :placeholder="t(props.prefix + '.selection.EntityPlaceholder')"
+            />
           </div>
           <div class="space-y-2">
-            <Label for="plan"> {{ t(prefix + '.selection.NewEntitySelectionGroup') }} </Label>
-            <Select>
+            <Label for="group">{{ t(props.prefix + '.selection.NewEntitySelectionGroup') }}</Label>
+            <Select v-model="selectedGroup">
               <SelectTrigger>
                 <SelectValue
-                  :placeholder="t(prefix + '.selection.NewEntitySelectionGroupPlaceholder')"
+                  :placeholder="t(props.prefix + '.selection.NewEntitySelectionGroupPlaceholder')"
                 />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem
-                  v-for="group in groups"
-                  :key="group.label"
-                  :heading="group.label"
-                  :value="group.value"
-                >
-                  <span class="font-medium">{{ group.label }}</span>
+                <SelectItem v-for="group in props.groups" :key="group.value" :value="group.value">
+                  {{ group.label }}
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -196,9 +167,11 @@ const selectedTeam = ref<Team>(groups[0].rooms[0])
       </div>
       <DialogFooter>
         <Button variant="outline" @click="showNewTeamDialog = false">
-          {{ t(prefix + '.selection.NewEntityCancle') }}
+          {{ t(props.prefix + '.selection.NewEntityCancel') }}
         </Button>
-        <Button type="submit"> {{ t(prefix + '.selection.NewEntityCreate') }}</Button>
+        <Button type="submit" @click="onCreateNewTeam">
+          {{ t(props.prefix + '.selection.NewEntityCreate') }}
+        </Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>
