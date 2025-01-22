@@ -1,11 +1,9 @@
 <script lang="ts" setup>
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ChevronLeft } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
 import { useI18n } from 'vue-i18n'
-import { Button } from '@/components/ui/button'
 
 const { t } = useI18n()
 </script>
@@ -13,15 +11,6 @@ const { t } = useI18n()
 <template>
   <Card class="w-full">
     <CardHeader class="w-full flex flex-row space-x-4">
-      <!-- Zurück-Button nur, wenn nicht in der Hauptansicht -->
-      <Button
-        class="text-muted-foreground hover:text-primary flex items-center space-x-2"
-        size="icon"
-        variant="ghost"
-      >
-        <ChevronLeft />
-      </Button>
-
       <CardTitle>{{ t('plants.Title') }}</CardTitle>
     </CardHeader>
 

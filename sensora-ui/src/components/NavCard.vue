@@ -8,7 +8,7 @@ import { ChevronLeft } from 'lucide-vue-next'
 const router = useRouter()
 
 defineProps({
-  title: String,
+  title: { type: String, required: true },
   subTitle: String,
 })
 
