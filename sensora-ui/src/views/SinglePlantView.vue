@@ -15,6 +15,10 @@ import PlantMeassuredValuesChart from '@/components/PlantMeassuredValuesChart.vu
 import { computed, ref } from 'vue'
 import { measuredValues } from '@/composables/useMeasuredValues.ts'
 
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 const defaultValue = 'item-1'
 
 const accordionItems = [
@@ -117,6 +121,7 @@ const activeData = computed(() => values[activeKey.value] || [])
             class="text-muted-foreground hover:text-primary flex items-center space-x-2"
             size="icon"
             variant="ghost"
+            @click="router.back()"
           >
             <chevron-left />
           </Button>
