@@ -85,7 +85,7 @@ const onCreateNewTeam = () => {
           <ChevronDown class="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent class="p-0 min-w-full">
+      <PopoverContent class="p-0 w-[var(--radix-popper-anchor-width)]">
         <Command>
           <CommandInput :placeholder="t(props.prefix + '.selection.Search')" />
           <CommandEmpty>No xxxx found.</CommandEmpty>
@@ -133,41 +133,39 @@ const onCreateNewTeam = () => {
       </PopoverContent>
     </Popover>
 
-    <DialogContent>
+    <DialogContent class="w-screen">
       <DialogHeader>
         <DialogTitle>{{ t(props.prefix + '.selection.NewEntityTitle') }}</DialogTitle>
-        <DialogDescription
-          >{{ t(props.prefix + '.selection.NewEntitySubtitle') }}
+        <DialogDescription>
+          {{ t(props.prefix + '.selection.NewEntitySubtitle') }}
         </DialogDescription>
       </DialogHeader>
-      <div>
-        <div class="space-y-4 py-2 pb-4">
-          <div class="space-y-2">
-            <Label for="name">{{ t(props.prefix + '.selection.Entity') }}</Label>
-            <Input
-              id="name"
-              v-model="newTeamName"
-              :placeholder="t(props.prefix + '.selection.EntityPlaceholder')"
-            />
-          </div>
-          <div class="space-y-2">
-            <Label for="group">{{ t(props.prefix + '.selection.NewEntitySelectionGroup') }}</Label>
-            <Select v-model="selectedGroup">
-              <SelectTrigger>
-                <SelectValue
-                  :placeholder="t(props.prefix + '.selection.NewEntitySelectionGroupPlaceholder')"
-                />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem v-for="group in props.groups" :key="group.value" :value="group.value">
-                  {{ group.label }}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+      <div class="space-y-2">
+        <div class="space-y-2">
+          <Label for="name">{{ t(props.prefix + '.selection.Entity') }}</Label>
+          <Input
+            id="name"
+            v-model="newTeamName"
+            :placeholder="t(props.prefix + '.selection.EntityPlaceholder')"
+          />
+        </div>
+        <div class="space-y-2">
+          <Label for="group">{{ t(props.prefix + '.selection.NewEntitySelectionGroup') }}</Label>
+          <Select v-model="selectedGroup">
+            <SelectTrigger>
+              <SelectValue
+                :placeholder="t(props.prefix + '.selection.NewEntitySelectionGroupPlaceholder')"
+              />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem v-for="group in props.groups" :key="group.value" :value="group.value">
+                {{ group.label }}
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
-      <DialogFooter>
+      <DialogFooter class="flex justify-between gap-4">
         <Button variant="outline" @click="showNewTeamDialog = false">
           {{ t(props.prefix + '.selection.NewEntityCancel') }}
         </Button>
