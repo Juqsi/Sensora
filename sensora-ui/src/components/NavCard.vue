@@ -18,22 +18,27 @@ const { t } = useI18n()
 <template>
   <Card class="w-full">
     <CardHeader>
-      <div class="flex items-center space-x-4">
-        <Button
-          class="text-muted-foreground hover:text-primary flex items-center space-x-2"
-          size="icon"
-          variant="ghost"
-          @click="router.back()"
-        >
-          <chevron-left />
-        </Button>
-        <div>
-          <CardTitle>{{ t(title ?? '') }}</CardTitle>
-          <CardDescription>{{ t(subTitle ?? '') }}</CardDescription>
+      <div class="flex justify-between w-full">
+        <div class="flex items-center justify-start space-x-4">
+          <Button
+            class="text-muted-foreground hover:text-primary flex items-center space-x-2"
+            size="icon"
+            variant="ghost"
+            @click="router.back()"
+          >
+            <chevron-left />
+          </Button>
+          <div>
+            <CardTitle>{{ title }}</CardTitle>
+            <CardDescription>{{ subTitle }}</CardDescription>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <slot name="TitleRight" />
         </div>
       </div>
     </CardHeader>
-    <slot></slot>
+    <slot />
   </Card>
 </template>
 

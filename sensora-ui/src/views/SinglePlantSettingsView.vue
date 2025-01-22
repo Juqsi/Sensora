@@ -7,14 +7,7 @@ Notiz
 Zimmer
 Sensor - wenn vergeben mit pop up von a nach b moven? und bei Liste bei auswahl frei extra icon bzw benutzt icon
  */
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { CardContent, CardFooter } from '@/components/ui/card'
 import { Label } from '@/components/ui/label/index.ts'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input/index.ts'
@@ -23,7 +16,7 @@ import { useI18n } from 'vue-i18n'
 import Selection from '@/components/Selection.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { ChevronLeft } from 'lucide-vue-next'
+import NavCard from '@/components/NavCard.vue'
 
 const router = useRouter()
 
@@ -69,23 +62,7 @@ function createRoom() {}
 </script>
 
 <template>
-  <Card class="w-full">
-    <CardHeader>
-      <div class="flex items-center space-x-4">
-        <Button
-          class="text-muted-foreground hover:text-primary flex items-center space-x-2"
-          size="icon"
-          variant="ghost"
-          @click="router.back()"
-        >
-          <chevron-left />
-        </Button>
-        <div>
-          <CardTitle>{{ t('plant.settings.Title') }}</CardTitle>
-          <CardDescription>{{ t('plant.settings.SubTitle') }}</CardDescription>
-        </div>
-      </div>
-    </CardHeader>
+  <NavCard :sub-title="t('plant.settings.SubTitle')" :title="t('plant.settings.Title')">
     <CardContent class="grid gap-6">
       <div class="grid gap-2">
         <Label for="subject">{{ t('plant.settings.NameOfPlant') }}</Label>
@@ -127,7 +104,7 @@ function createRoom() {}
       <Button variant="ghost" @click="router.back()"> Cancel</Button>
       <Button>Submit</Button>
     </CardFooter>
-  </Card>
+  </NavCard>
 </template>
 
 <style scoped></style>

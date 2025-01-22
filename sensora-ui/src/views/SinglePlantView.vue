@@ -2,8 +2,7 @@
 import Plant3d from '@/components/plant3d/plant3d.vue'
 import MeasuredTiles from '@/components/MeasuredTiles.vue'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs/index.ts'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ChevronLeft, Settings } from 'lucide-vue-next'
+import { Settings } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import {
   Accordion,
@@ -16,6 +15,7 @@ import { computed, ref } from 'vue'
 import { measuredValues } from '@/composables/useMeasuredValues.ts'
 
 import { useRouter } from 'vue-router'
+import NavCard from '@/components/NavCard.vue'
 
 const router = useRouter()
 
@@ -113,31 +113,15 @@ const activeData = computed(() => values[activeKey.value] || [])
 </script>
 
 <template>
-  <Card class="w-full">
-    <CardHeader>
-      <div class="flex items-center justify-between w-full">
-        <div class="flex items-center space-x-4">
-          <Button
-            class="text-muted-foreground hover:text-primary flex items-center space-x-2"
-            size="icon"
-            variant="ghost"
-            @click="router.back()"
-          >
-            <chevron-left />
-          </Button>
-          <div>
-            <CardTitle>Pflanze Berta</CardTitle>
-            <CardDescription> Seit X Tagen dabei</CardDescription>
-          </div>
-        </div>
-        <router-link to="/plant/123/settings">
-          <Button size="icon" variant="ghost">
-            <Settings />
-          </Button>
-        </router-link>
-      </div>
-    </CardHeader>
-  </Card>
+  <NavCard sub-title="Geht es gut" title="Pflanze Berta">
+    <template #TitleRight>
+      <router-link to="/plant/123/settings">
+        <Button size="icon" variant="ghost">
+          <Settings />
+        </Button>
+      </router-link>
+    </template>
+  </NavCard>
 
   <Plant3d />
   <Tabs class="w-full" default-value="values">
