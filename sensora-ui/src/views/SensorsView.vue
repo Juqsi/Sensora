@@ -118,6 +118,27 @@ import SensorViewRow from '@/components/SensorViewRow.vue'
                   room="Room 1"
                   sensor="Sensor 1"
                 />
+                <SensorViewRow
+                  badge="active"
+                  group="Group 1"
+                  name="Sensor 1"
+                  room="Room 1"
+                  sensor="Sensor 1"
+                />
+                <SensorViewRow
+                  badge="inactive"
+                  group="Group 1"
+                  name="Sensor 1"
+                  room="Room 1"
+                  sensor="Sensor 1"
+                />
+                <SensorViewRow
+                  badge="unknown"
+                  group="Group 1"
+                  name="Sensor 1"
+                  room="Room 1"
+                  sensor="Sensor 1"
+                />
               </TableBody>
             </Table>
           </CardContent>

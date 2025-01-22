@@ -12,7 +12,7 @@ import { MoreHorizontal } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
 
 const status = {
-  active: { label: 'hallo', value: 'default' },
+  active: { label: 'active', value: 'default' },
   inactive: { label: 'inactive', value: 'secondary' },
   unknown: { label: 'unknown', value: 'outline' },
   error: { label: 'error', value: 'destructive' },
