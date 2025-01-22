@@ -33,13 +33,11 @@ const router = createRouter({
       path: '/plant/:id',
       name: 'plantX',
       component: () => import('../views/SinglePlantView.vue'),
-      meta: { transition: 'slide-left' },
     },
     {
       path: '/plant/:id/settings',
       name: 'plantXSettings',
       component: () => import('../views/SinglePlantSettingsView.vue'),
-      meta: { transition: 'slide-left' },
     },
     {
       path: '/plants',

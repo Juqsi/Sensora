@@ -1,0 +1,40 @@
+<script lang="ts" setup>
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { ChevronLeft } from 'lucide-vue-next'
+
+const router = useRouter()
+
+defineProps({
+  title: String,
+  subTitle: String,
+})
+
+const { t } = useI18n()
+</script>
+
+<template>
+  <Card class="w-full">
+    <CardHeader>
+      <div class="flex items-center space-x-4">
+        <Button
+          class="text-muted-foreground hover:text-primary flex items-center space-x-2"
+          size="icon"
+          variant="ghost"
+          @click="router.back()"
+        >
+          <chevron-left />
+        </Button>
+        <div>
+          <CardTitle>{{ t(title ?? '') }}</CardTitle>
+          <CardDescription>{{ t(subTitle ?? '') }}</CardDescription>
+        </div>
+      </div>
+    </CardHeader>
+    <slot></slot>
+  </Card>
+</template>
+
+<style scoped></style>

@@ -42,8 +42,8 @@ const { t } = useI18n()
         </div>
       </router-link>
 
-      <separator></separator>
-      <router-link to="/plant/123">
+      <separator />
+      <router-link v-for="x in 100" :to="'/plant/' + x">
         <div
           class="-mx-2 flex cursor-pointer items-start space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
         >
