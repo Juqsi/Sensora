@@ -19,16 +19,16 @@ import {
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table/index.ts'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { CircleUser, File, ListFilter, PlusCircle, Search } from 'lucide-vue-next'
+import { ListFilter, PlusCircle, Search } from 'lucide-vue-next'
 import SensorViewRow from '@/components/SensorViewRow.vue'
 </script>
 
 <template>
   <div class="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
     <header
-      class="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"
+      class="w-full top-0 z-30 h-14 items-center gap-4 border-b bg-background sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"
     >
-      <div class="relative ml-auto flex-1 md:grow-0">
+      <div class="relative w-full ml-auto flex-1 md:grow-0">
         <Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
           class="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
@@ -36,31 +36,13 @@ import SensorViewRow from '@/components/SensorViewRow.vue'
           type="search"
         />
       </div>
-      <DropdownMenu>
-        <DropdownMenuTrigger as-child>
-          <Button class="rounded-full" size="icon" variant="secondary">
-            <CircleUser class="h-5 w-5" />
-            <span class="sr-only">Toggle user menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
     </header>
-    <main class="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-      <Tabs default-value="all">
+    <main class="grid flex-1 items-start gap-4 sm:px-6 sm:py-0 md:gap-8">
+      <Tabs default-value="plants">
         <div class="flex items-center">
-          <TabsList>
-            <TabsTrigger value="all"> All</TabsTrigger>
-            <TabsTrigger value="active"> Active</TabsTrigger>
-            <TabsTrigger value="draft"> Draft</TabsTrigger>
-            <TabsTrigger class="hidden sm:flex" value="archived"> Archived</TabsTrigger>
+          <TabsList class="my-2">
+            <TabsTrigger value="plants">Plants</TabsTrigger>
+            <TabsTrigger value="sensors">Sensors</TabsTrigger>
           </TabsList>
           <div class="ml-auto flex items-center gap-2">
             <DropdownMenu>
@@ -74,17 +56,15 @@ import SensorViewRow from '@/components/SensorViewRow.vue'
                 <DropdownMenuLabel>Filter by</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem checked> Active</DropdownMenuItem>
-                <DropdownMenuItem>Draft</DropdownMenuItem>
-                <DropdownMenuItem> Archived</DropdownMenuItem>
+                <DropdownMenuItem>Error</DropdownMenuItem>
+                <DropdownMenuItem> Inactive</DropdownMenuItem>
+                <DropdownMenuItem> Unknown</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button class="h-7 gap-1" size="sm" variant="outline">
-              <File class="h-3.5 w-3.5" />
-              <span class="sr-only sm:not-sr-only sm:whitespace-nowrap"> Export </span>
-            </Button>
+
             <Button class="h-7 gap-1" size="sm">
               <PlusCircle class="h-3.5 w-3.5" />
-              <span class="sr-only sm:not-sr-only sm:whitespace-nowrap"> Add Product </span>
+              <span class="sr-only sm:not-sr-only sm:whitespace-nowrap"> Add Plant </span>
             </Button>
           </div>
         </div>
