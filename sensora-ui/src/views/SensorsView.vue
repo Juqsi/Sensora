@@ -112,6 +112,7 @@ import SensorViewRow from '@/components/SensorViewRow.vue'
               </TableHeader>
               <TableBody>
                 <SensorViewRow
+                  v-for="x in 100"
                   badge="error"
                   group="Group 1"
                   name="Sensor 1"
