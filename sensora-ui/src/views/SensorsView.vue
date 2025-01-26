@@ -11,9 +11,7 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
@@ -21,6 +19,49 @@ import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ListFilter, PlusCircle, Search } from 'lucide-vue-next'
 import SensorViewRow from '@/components/SensorViewRow.vue'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Checkbox } from '@/components/ui/checkbox'
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod'
+import { z } from 'zod'
+
+const filter = [
+  {
+    id: 'active',
+    label: 'active',
+  },
+  {
+    id: 'error',
+    label: 'error',
+  },
+
+  {
+    id: 'inactive',
+    label: 'inactive',
+  },
+  {
+    id: 'unknown',
+    label: 'unknown',
+  },
+] as const
+
+const formSchema = toTypedSchema(
+  z.object({
+    items: z.array(z.string()).refine((value) => value.some((item) => item), {
+      message: 'You have to select at least one item.',
+    }),
+  }),
+)
+const { handleSubmit, values } = useForm({
+  validationSchema: formSchema,
+  initialValues: {
+    items: ['error', 'active', 'inactive', 'unknown'],
+  },
+})
+
+const handleCheckboxChange = () => {
+  console.log('Current selected items:', values.items)
+}
 </script>
 
 <template>
@@ -30,11 +71,7 @@ import SensorViewRow from '@/components/SensorViewRow.vue'
     >
       <div class="relative w-full ml-auto flex-1 md:grow-0">
         <Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input
-          class="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
-          placeholder="Search..."
-          type="search"
-        />
+        <Input class="w-full rounded-lg bg-background pl-8" placeholder="Search..." type="search" />
       </div>
     </header>
     <main class="grid flex-1 items-start gap-4 sm:px-6 sm:py-0 md:gap-8">
@@ -54,11 +91,39 @@ import SensorViewRow from '@/components/SensorViewRow.vue'
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Filter by</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem checked> Active</DropdownMenuItem>
-                <DropdownMenuItem>Error</DropdownMenuItem>
-                <DropdownMenuItem> Inactive</DropdownMenuItem>
-                <DropdownMenuItem> Unknown</DropdownMenuItem>
+                <form class="px-2">
+                  <FormField name="items">
+                    <FormItem>
+                      <FormField
+                        v-for="item in filter"
+                        :key="item.id"
+                        v-slot="{ value, handleChange }"
+                        :unchecked-value="false"
+                        :value="item.id"
+                        name="items"
+                        type="checkbox"
+                      >
+                        <FormItem class="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              :checked="value.includes(item.id)"
+                              @update:checked="
+                                (checked) => {
+                                  handleChange(checked)
+                                  handleCheckboxChange()
+                                }
+                              "
+                            />
+                          </FormControl>
+                          <FormLabel class="font-normal">
+                            {{ item.label }}
+                          </FormLabel>
+                        </FormItem>
+                      </FormField>
+                      <FormMessage />
+                    </FormItem>
+                  </FormField>
+                </form>
               </DropdownMenuContent>
             </DropdownMenu>
 
