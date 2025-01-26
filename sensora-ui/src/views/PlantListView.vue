@@ -91,7 +91,7 @@ const deleteEntry = () => {
 </script>
 
 <template>
-  <div class="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+  <div class="flex flex-col sm:gap-4 sm:py-4 sm:pl-14 w-full">
     <header
       class="w-full top-0 z-30 h-14 items-center gap-4 border-b bg-background sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"
     >
@@ -120,13 +120,13 @@ const deleteEntry = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Tabs default-value="plants">
-        <div class="flex items-center">
+      <Tabs class="overflow-hidden" default-value="plants">
+        <div class="flex items-center w-full justify-between">
           <TabsList class="my-2">
             <TabsTrigger value="plants">Plants</TabsTrigger>
             <TabsTrigger value="sensors">Sensors</TabsTrigger>
           </TabsList>
-          <div class="ml-auto flex items-center gap-2">
+          <div class="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger as-child>
                 <Button class="h-7 gap-1" size="sm" variant="outline">
@@ -183,15 +183,15 @@ const deleteEntry = () => {
             <CardTitle>Plants</CardTitle>
             <CardDescription> Manage your Plants</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent class="p-3">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead class="hidden w-[100px] sm:table-cell">
+                  <TableHead class="w-[100px] sm:table-cell">
                     <span class="sr-only">img</span>
                   </TableHead>
                   <TableHead>Name</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead class="text-center max-w-fit">Status</TableHead>
                   <TableHead class="hidden md:table-cell"> Group</TableHead>
                   <TableHead class="hidden md:table-cell"> Room</TableHead>
                   <TableHead class="hidden md:table-cell"> Sensor</TableHead>
@@ -201,16 +201,6 @@ const deleteEntry = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <SensorViewRow
-                  v-for="x in 100"
-                  id="123"
-                  badge="error"
-                  group="Group 1"
-                  name="Sensor 1"
-                  room="Room 1"
-                  sensor="Sensor 1"
-                  @delete="openDeleteEntryDialog('id')"
-                />
                 <SensorViewRow
                   id="123"
                   badge="active"
@@ -236,6 +226,16 @@ const deleteEntry = () => {
                   name="Sensor 1"
                   room="Room 1"
                   sensor="Sensor 1"
+                  @delete="openDeleteEntryDialog('id')"
+                />
+                <SensorViewRow
+                  v-for="x in 100"
+                  id="123"
+                  badge="error"
+                  group="Group 1 2348932894 9ß23849ß234 "
+                  name="Pflanze 1ewrewrwerwe wrwerwerwe "
+                  room="Room 1 428478937894 23u42i3u4 3840 "
+                  sensor="Sensor 1234234234324 234234234 234234234  "
                   @delete="openDeleteEntryDialog('id')"
                 />
               </TableBody>

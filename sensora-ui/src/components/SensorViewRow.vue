@@ -38,7 +38,7 @@ defineEmits(['delete'])
 
 <template>
   <TableRow>
-    <TableCell class="hidden sm:table-cell">
+    <TableCell class="sm:table-cell">
       <img
         alt="Product image"
         class="aspect-square rounded-md object-cover"
@@ -47,9 +47,11 @@ defineEmits(['delete'])
         width="64"
       />
     </TableCell>
-    <TableCell class="font-medium"> {{ name }}</TableCell>
+    <TableCell class="overflow-hidden font-medium"> {{ name }}</TableCell>
     <TableCell>
-      <Badge :variant="status[badge].value"> {{ status[badge].label }}</Badge>
+      <Badge :variant="status[badge].value" class="w-full justify-center">
+        {{ status[badge].label }}
+      </Badge>
     </TableCell>
     <TableCell class="hidden md:table-cell"> {{ group }}</TableCell>
     <TableCell class="hidden md:table-cell"> {{ room }}</TableCell>
