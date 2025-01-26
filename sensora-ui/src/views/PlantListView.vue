@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -24,6 +24,17 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import { z } from 'zod'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog/index.ts'
+import { ref } from 'vue'
 
 const filter = [
   {
@@ -60,7 +71,22 @@ const { handleSubmit, values } = useForm({
 })
 
 const handleCheckboxChange = () => {
+  console.log(buttonVariants)
   console.log('Current selected items:', values.items)
+}
+
+const alertDialog = ref(false)
+const deleteEntryId = ref<string>('')
+
+const openDeleteEntryDialog = (id: string) => {
+  deleteEntryId.value = id
+  alertDialog.value = true
+}
+const deleteEntry = () => {
+  alertDialog.value = false
+  console.log('Deleting entry with id:', deleteEntryId.value)
+  deleteEntryId.value = ''
+  //TODO delete entry
 }
 </script>
 
@@ -75,6 +101,25 @@ const handleCheckboxChange = () => {
       </div>
     </header>
     <main class="grid flex-1 items-start gap-4 sm:px-6 sm:py-0 md:gap-8">
+      <AlertDialog :open="alertDialog">
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete your plant and remove all
+              related data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel @click="((alertDialog = false), (deleteEntryId = ''))">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction variant="destructive" @click="deleteEntry">
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <Tabs default-value="plants">
         <div class="flex items-center">
           <TabsList class="my-2">
@@ -164,6 +209,7 @@ const handleCheckboxChange = () => {
                   name="Sensor 1"
                   room="Room 1"
                   sensor="Sensor 1"
+                  @delete="openDeleteEntryDialog('id')"
                 />
                 <SensorViewRow
                   id="123"
@@ -172,6 +218,7 @@ const handleCheckboxChange = () => {
                   name="Sensor 1"
                   room="Room 1"
                   sensor="Sensor 1"
+                  @delete="openDeleteEntryDialog('id')"
                 />
                 <SensorViewRow
                   id="123"
@@ -180,6 +227,7 @@ const handleCheckboxChange = () => {
                   name="Sensor 1"
                   room="Room 1"
                   sensor="Sensor 1"
+                  @delete="openDeleteEntryDialog('id')"
                 />
                 <SensorViewRow
                   id="123"
@@ -188,6 +236,7 @@ const handleCheckboxChange = () => {
                   name="Sensor 1"
                   room="Room 1"
                   sensor="Sensor 1"
+                  @delete="openDeleteEntryDialog('id')"
                 />
               </TableBody>
             </Table>

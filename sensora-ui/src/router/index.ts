@@ -35,7 +35,7 @@ const router = createRouter({
       component: () => import('../views/SinglePlantView.vue'),
     },
     {
-      path: '/plant/:id/settings',
+      path: '/plant/:id/edit',
       name: 'plantXSettings',
       component: () => import('../views/SinglePlantSettingsView.vue'),
     },
@@ -47,7 +47,7 @@ const router = createRouter({
     {
       path: '/sensors',
       name: 'sensors',
-      component: () => import('../views/SensorsView.vue'),
+      component: () => import('../views/PlantListView.vue'),
     },
   ],
 })

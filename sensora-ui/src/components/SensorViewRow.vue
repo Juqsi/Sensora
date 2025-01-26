@@ -10,15 +10,6 @@ import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { MoreHorizontal } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
 
 const status = {
   active: { label: 'active', value: 'default' },
@@ -41,6 +32,8 @@ defineProps({
   room: { type: String, required: true },
   sensor: { type: String, required: true },
 })
+
+defineEmits(['delete'])
 </script>
 
 <template>
@@ -74,28 +67,7 @@ defineProps({
           <router-link to="/plant/123/edit">
             <DropdownMenuItem>Edit</DropdownMenuItem>
           </router-link>
-          <AlertDialog>
-            <AlertDialogTrigger as-child>
-              <DropdownMenuItem> Delete</DropdownMenuItem>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete your Plant and remove
-                  all data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>
-                  <Button variant="outline"> Cancel</Button>
-                </AlertDialogCancel>
-                <AlertDialogAction>
-                  <Button variant="destructive">Delete</Button>
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <DropdownMenuItem @click="$emit('delete')"> Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </TableCell>
