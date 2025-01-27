@@ -187,7 +187,7 @@ const deleteEntry = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead class="w-[100px] sm:table-cell">
+                  <TableHead class="hidden w-[100px] sm:table-cell">
                     <span class="sr-only">img</span>
                   </TableHead>
                   <TableHead>Name</TableHead>
@@ -208,6 +208,7 @@ const deleteEntry = () => {
                   name="Sensor 1"
                   room="Room 1"
                   sensor="Sensor 1"
+                  url="/plant/123"
                   @delete="openDeleteEntryDialog('id')"
                 />
                 <SensorViewRow
@@ -217,6 +218,7 @@ const deleteEntry = () => {
                   name="Sensor 1"
                   room="Room 1"
                   sensor="Sensor 1"
+                  url="/plant/123"
                   @delete="openDeleteEntryDialog('id')"
                 />
                 <SensorViewRow
@@ -226,6 +228,7 @@ const deleteEntry = () => {
                   name="Sensor 1"
                   room="Room 1"
                   sensor="Sensor 1"
+                  url="/plant/123"
                   @delete="openDeleteEntryDialog('id')"
                 />
                 <SensorViewRow
@@ -236,6 +239,7 @@ const deleteEntry = () => {
                   name="Pflanze 1ewrewrwerwe wrwerwerwe "
                   room="Room 1 428478937894 23u42i3u4 3840 "
                   sensor="Sensor 1234234234324 234234234 234234234  "
+                  url="/plant/123"
                   @delete="openDeleteEntryDialog('id')"
                 />
               </TableBody>

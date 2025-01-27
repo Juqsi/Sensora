@@ -23,6 +23,7 @@ type StatusKey = keyof typeof status
 defineProps({
   name: { type: String, required: true },
   id: { type: String, required: true },
+  url: { type: String, required: true },
   img: { type: String, required: false },
   badge: {
     type: Object as () => StatusKey,
@@ -38,24 +39,44 @@ defineEmits(['delete'])
 
 <template>
   <TableRow>
-    <TableCell class="sm:table-cell">
-      <img
-        alt="Product image"
-        class="aspect-square rounded-md object-cover"
-        height="64"
-        src="https://www.svgrepo.com/show/508699/landscape-placeholder.svg"
-        width="64"
-      />
+    <TableCell class="hidden sm:table-cell">
+      <router-link :to="url">
+        <img
+          alt="Product image"
+          class="aspect-square rounded-md object-cover"
+          height="64"
+          src="https://www.svgrepo.com/show/508699/landscape-placeholder.svg"
+          width="64"
+        />
+      </router-link>
     </TableCell>
-    <TableCell class="overflow-hidden font-medium"> {{ name }}</TableCell>
+    <TableCell class="overflow-hidden font-medium">
+      <router-link :to="url">
+        {{ name }}
+      </router-link>
+    </TableCell>
     <TableCell>
-      <Badge :variant="status[badge].value" class="w-full justify-center">
-        {{ status[badge].label }}
-      </Badge>
+      <router-link :to="url">
+        <Badge :variant="status[badge].value" class="w-full justify-center">
+          {{ status[badge].label }}
+        </Badge>
+      </router-link>
     </TableCell>
-    <TableCell class="hidden md:table-cell"> {{ group }}</TableCell>
-    <TableCell class="hidden md:table-cell"> {{ room }}</TableCell>
-    <TableCell class="hidden md:table-cell"> {{ sensor }}</TableCell>
+    <TableCell class="hidden md:table-cell">
+      <router-link :to="url">
+        {{ group }}
+      </router-link>
+    </TableCell>
+    <TableCell class="hidden md:table-cell">
+      <router-link :to="url">
+        {{ room }}
+      </router-link>
+    </TableCell>
+    <TableCell class="hidden md:table-cell">
+      <router-link :to="url">
+        {{ sensor }}
+      </router-link>
+    </TableCell>
     <TableCell>
       <DropdownMenu>
         <DropdownMenuTrigger as-child>
