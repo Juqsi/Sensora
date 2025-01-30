@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import TemperatureConfig from '@/components/TemperatureConfig.vue'
 import TestDia from '@/components/testDia.vue'
+import Test from '@/views/test.vue'
 </script>
 
 <template>
@@ -21,4 +22,6 @@ import TestDia from '@/components/testDia.vue'
   </router-link>
 
   <TestDia />
+
+  <Test />
 </template>

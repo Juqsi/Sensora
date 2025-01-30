@@ -49,6 +49,11 @@ const router = createRouter({
       name: 'sensors',
       component: () => import('../views/PlantListView.vue'),
     },
+    {
+      path: '/setupAccount',
+      name: 'Setup Account',
+      component: () => import('../views/SetupAccountStepperView.vue'),
+    },
   ],
 })
 
