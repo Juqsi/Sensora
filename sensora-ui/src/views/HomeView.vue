@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import TemperatureConfig from '@/components/TemperatureConfig.vue'
 import TestDia from '@/components/testDia.vue'
-import Test from '@/views/test.vue'
+import SetupAccountStepperView from '@/views/SetupAccountStepperView.vue'
 </script>
 
 <template>
@@ -23,5 +23,5 @@ import Test from '@/views/test.vue'
 
   <TestDia />
 
-  <Test />
+  <SetupAccountStepperView />
 </template>

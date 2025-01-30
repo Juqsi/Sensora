@@ -10,9 +10,17 @@ import {
 import { Check, Circle, Dot } from 'lucide-vue-next'
 import { ref, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
+import LoginStep from '@/components/RegistrationStepper/LoginStep.vue'
 
 const { t } = useI18n()
 const stepIndex = ref(1)
+
+const nextStep = () => {
+  console.log('hier')
+  if (stepIndex.value < 3) {
+    stepIndex.value++
+  }
+}
 
 const steps = [
   {
@@ -83,7 +91,7 @@ const steps = [
         </div>
       </div>
 
-      <component :is="step.component" v-if="index + 1 == stepIndex" />
+      <component :is="step.component" :nextStep="nextStep" v-if="index + 1 == stepIndex" />
     </StepperItem>
   </Stepper>
 </template>
