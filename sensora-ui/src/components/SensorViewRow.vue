@@ -24,6 +24,7 @@ defineProps({
   name: { type: String, required: true },
   id: { type: String, required: true },
   url: { type: String, required: true },
+  badgeUrl: { type: String, required: true },
   img: { type: String, required: false },
   badge: {
     type: Object as () => StatusKey,
@@ -51,12 +52,12 @@ defineEmits(['delete'])
       </router-link>
     </TableCell>
     <TableCell class="overflow-hidden font-medium">
-      <router-link :to="url">
+      <router-link :to="url" class="block w-full h-full">
         {{ name }}
       </router-link>
     </TableCell>
     <TableCell>
-      <router-link :to="url">
+      <router-link :to="badgeUrl">
         <Badge :variant="status[badge].value" class="w-full justify-center">
           {{ status[badge].label }}
         </Badge>

@@ -204,6 +204,7 @@ const deleteEntry = () => {
                 <SensorViewRow
                   id="123"
                   badge="active"
+                  badge-url="/sensor/123"
                   group="Group 1"
                   name="Sensor 1"
                   room="Room 1"
@@ -214,6 +215,7 @@ const deleteEntry = () => {
                 <SensorViewRow
                   id="123"
                   badge="inactive"
+                  badge-url="/sensor/123"
                   group="Group 1"
                   name="Sensor 1"
                   room="Room 1"
@@ -224,6 +226,7 @@ const deleteEntry = () => {
                 <SensorViewRow
                   id="123"
                   badge="unknown"
+                  badge-url="/sensor/123"
                   group="Group 1"
                   name="Sensor 1"
                   room="Room 1"
@@ -232,9 +235,10 @@ const deleteEntry = () => {
                   @delete="openDeleteEntryDialog('id')"
                 />
                 <SensorViewRow
-                  v-for="x in 100"
+                  v-for="x in 10"
                   id="123"
                   badge="error"
+                  badge-url="/sensor/123"
                   group="Group 1 2348932894 9ß23849ß234 "
                   name="Pflanze 1ewrewrwerwe wrwerwerwe "
                   room="Room 1 428478937894 23u42i3u4 3840 "
