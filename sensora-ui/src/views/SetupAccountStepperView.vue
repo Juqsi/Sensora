@@ -66,7 +66,7 @@ const steps = [
           <Button
             :variant="state === 'completed' || state === 'active' ? 'default' : 'outline'"
             size="icon"
-            class="z-10 rounded-full shrink-0"
+            class="rounded-full shrink-0"
             :class="[state === 'active' && 'ring-2 ring-ring ring-offset-2 ring-offset-background']"
           >
             <Check v-if="state === 'completed'" class="size-5" />

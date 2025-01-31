@@ -4,9 +4,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 </script>
 
 <template>
-  <div class="h-10 flex-col justify-between bg-background">
+  <div class="h-10 flex-col justify-between bg-background z-[9999999999] bg-blue-400">
     <div
-      class="fixed bottom-0 left-0 right-0 border-muted-background border-t-2 mx-auto w-full bg-background shadow-lg p-3"
+      class="z-[9999999] fixed bottom-0 left-0 right-0 border-muted-background border-t-2 mx-auto w-full bg-background shadow-lg p-3"
     >
       <div class="grid grid-cols-4 gap-4">
         <router-link
