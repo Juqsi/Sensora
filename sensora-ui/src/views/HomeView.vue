@@ -1,27 +1,31 @@
 <script lang="ts" setup>
-import TemperatureConfig from '@/components/TemperatureConfig.vue'
-import TestDia from '@/components/testDia.vue'
-import SetupAccountStepperView from '@/views/SetupAccountStepperView.vue'
+import HomeCard from '@/components/HomeCard.vue'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { CirclePlus } from 'lucide-vue-next'
 </script>
 
 <template>
-  <temperature-config />
-  <router-link
-    :class="{ 'text-primary': $route.path === '/' }"
-    class="flex flex-col items-center"
-    to="/signin"
-  >
-    singin
-  </router-link>
-  <router-link
-    :class="{ 'text-primary': $route.path === '/' }"
-    class="flex flex-col items-center"
-    to="/signup"
-  >
-    signup
-  </router-link>
-
-  <TestDia />
-
-  <SetupAccountStepperView />
+  <div class="w-full flex justify-between">
+    <div>
+      <h1 class="font-bold text-2xl">Hello Justus 👋</h1>
+      <p class="text-sm text-muted-foreground">Overview of all rooms</p>
+    </div>
+    <Avatar>
+      <AvatarImage
+        alt="Justus Siegert"
+        src="https://avatars.githubusercontent.com/u/91261422?v=4&size=64"
+      />
+      <AvatarFallback>JS</AvatarFallback>
+    </Avatar>
+  </div>
+  <div class="w-full mt-2">
+    <div class="flex justify-between items-center">
+      <h3 class="text-lg my-2">Zimmer 1</h3>
+      <Button aria-label="Zimmer Hinzufügen" variant="default" size="icon"><CirclePlus /></Button>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <HomeCard v-for="x in 10"></HomeCard>
+    </div>
+  </div>
 </template>
