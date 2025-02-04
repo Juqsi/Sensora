@@ -1,8 +1,9 @@
-//
-// Created by lukas on 03.02.2025.
-//
+#ifndef WIFI_MANAGER_H
+#define WIFI_MANAGER_H
 
-#ifndef APP_TEMPLATE_WIFI_MANAGER_H
-#define APP_TEMPLATE_WIFI_MANAGER_H
+#include "esp_event.h"
 
-#endif //APP_TEMPLATE_WIFI_MANAGER_H
+void wifi_init(void);
+void wifi_event_handler(void *arg, esp_event_base_t event_base, long event_id, void *event_data);
+
+#endif // WIFI_MANAGER_H

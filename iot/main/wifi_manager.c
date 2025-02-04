@@ -1,61 +1,146 @@
-#include <stdio.h>
-#include "esp_wifi.h"
-#include "esp_event.h"
-#include "nvs_flash.h"
+#include "wifi_manager.h"
 #include "esp_log.h"
+#include "esp_wifi.h"
+#include "led_control.h"
 #include "wifi_provisioning/manager.h"
 #include "wifi_provisioning/scheme_softap.h"
-#include "driver/gpio.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
+#include "esp_http_server.h"
+#include <string.h>
 
-#define LED_GPIO GPIO_NUM_2  // Integrierte LED des ESP32 (meist GPIO 2)
+static const char *TAG = "wifi_manager";
 
-static const char *TAG = "app";
-static TaskHandle_t blink_task_handle = NULL;
 
-// LED Steuerung
-void led_on() {
-	gpio_set_level(LED_GPIO, 1);
+// Handler für das Formular auf der Web-Oberfläche
+esp_err_t root_get_handler(httpd_req_t *req) {
+	const char *resp_str = "<html><body><h1>Wi-Fi Setup</h1>"
+						   "<form method='POST' action='/connect'>"
+						   "SSID: <input type='text' name='ssid'><br>"
+						   "Password: <input type='password' name='password'><br>"
+						   "<input type='submit' value='Connect'>"
+						   "</form></body></html>";
+	httpd_resp_send(req, resp_str, HTTPD_RESP_USE_STRLEN);
+	return ESP_OK;
 }
 
-void led_off() {
-	gpio_set_level(LED_GPIO, 0);
+// Handler für die POST-Anfrage, um die Wi-Fi-Daten zu empfangen
+esp_err_t connect_post_handler(httpd_req_t *req) {
+	char ssid[64] = { 0 };
+	char password[64] = { 0 };
+
+	// Erhalte die Länge der Anfrage
+	size_t buf_len = req->content_len;
+	if (buf_len > 0) {
+		// Puffer für die Anfrage
+		char *buf = malloc(buf_len + 1); // +1 für null-terminierte Zeichenkette
+		if (buf == NULL) {
+			ESP_LOGE(TAG, "Failed to allocate memory for request buffer");
+			return ESP_ERR_NO_MEM;
+		}
+
+		// Empfange die POST-Daten
+		int ret = httpd_req_recv(req, buf, buf_len);
+		if (ret <= 0) {
+			ESP_LOGE(TAG, "Failed to receive POST data");
+			free(buf);
+			return ESP_FAIL;
+		}
+
+		// Null-terminiere den empfangenen Datenpuffer
+		buf[ret] = '\0';
+
+		// Analysiere die POST-Daten, um die SSID und das Passwort zu extrahieren
+		sscanf(buf, "ssid=%63s&password=%63s", ssid, password);
+		free(buf); // Puffer freigeben
+	}
+
+	ESP_LOGI(TAG, "SSID: %s, Password: %s", ssid, password);
+
+	// Speichern der Wi-Fi-Credentials und Konfiguration des Wi-Fi-Modus
+	wifi_config_t wifi_config = { 0 };
+	strncpy((char *)wifi_config.sta.ssid, ssid, sizeof(wifi_config.sta.ssid));
+	strncpy((char *)wifi_config.sta.password, password, sizeof(wifi_config.sta.password));
+
+	// Setze Wi-Fi im STA-Modus
+	ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
+	ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config));
+	ESP_ERROR_CHECK(esp_wifi_start());
+
+	// Schließe den SoftAP-Modus und stoppe Provisioning
+	wifi_prov_mgr_deinit();
+
+	// Antwort zurück an den Webbrowser
+	const char *resp_str = "<html><body><h1>Connecting...</h1></body></html>";
+	httpd_resp_send(req, resp_str, HTTPD_RESP_USE_STRLEN);
+
+	return ESP_OK;
 }
 
-void led_blink_task(void *pvParameter) {
-	while (1) {
-		led_on();
-		vTaskDelay(pdMS_TO_TICKS(500));
-		led_off();
-		vTaskDelay(pdMS_TO_TICKS(500));
+/*esp_err_t test_handler(httpd_req_t *req) {
+	httpd_resp_send(req, "Hello, World!", HTTPD_RESP_USE_STRLEN);
+	return ESP_OK;
+}*/
+
+// HTTP-Server initialisieren
+void start_http_server() {
+	httpd_handle_t server = NULL;
+	httpd_config_t config = HTTPD_DEFAULT_CONFIG();
+
+	// Start des Servers
+	if (httpd_start(&server, &config) == ESP_OK) {
+		ESP_LOGI(TAG, "HTTP server started");
+
+		// URI für das Formular
+		httpd_uri_t root_uri = {
+			.uri = "/",
+			.method = HTTP_GET,
+			.handler = root_get_handler,
+			.user_ctx = NULL
+		};
+		ESP_ERROR_CHECK(httpd_register_uri_handler(server, &root_uri));
+
+		// URI für das Verarbeiten der POST-Daten
+		httpd_uri_t connect_uri = {
+			.uri = "/connect",
+			.method = HTTP_POST,
+			.handler = connect_post_handler,
+			.user_ctx = NULL
+		};
+		ESP_ERROR_CHECK(httpd_register_uri_handler(server, &connect_uri));
+
+		/*httpd_uri_t test_uri = {
+			.uri = "/",
+			.method = HTTP_GET,
+			.handler = test_handler,
+			.user_ctx = NULL
+		};
+		httpd_register_uri_handler(server, &test_uri);*/
+	} else {
+		ESP_LOGE(TAG, "Failed to start HTTP server");
 	}
 }
 
-// Ereignis-Handler
-static void event_handler(void *arg, esp_event_base_t event_base, int event_id, void *event_data) {
+void start_http_server_task(void *pvParameter) {
+	start_http_server();
+	vTaskDelete(NULL);
+}
+
+void wifi_event_handler(void *arg, esp_event_base_t event_base, long event_id, void *event_data) {
 	if (event_base == WIFI_PROV_EVENT) {
 		switch (event_id) {
-		case WIFI_PROV_START:
-			ESP_LOGI(TAG, "Provisioning started");
-			xTaskCreate(led_blink_task, "led_blink_task", 1024, NULL, 5, &blink_task_handle);
-			break;
-
-		case WIFI_PROV_CRED_SUCCESS:
-			ESP_LOGI(TAG, "Provisioning successful");
-			if (blink_task_handle) {
-				vTaskDelete(blink_task_handle);
-				blink_task_handle = NULL;
-			}
-			led_on();
-			break;
-
-		case WIFI_PROV_END:
-			ESP_LOGI(TAG, "Provisioning ended");
-			break;
-
-		default:
-			break;
+			case WIFI_PROV_START:
+				ESP_LOGI(TAG, "Provisioning started");
+				led_blink_start();
+				break;
+			case WIFI_PROV_CRED_SUCCESS:
+				ESP_LOGI(TAG, "Provisioning successful");
+				led_blink_stop();
+				led_on();
+				break;
+			case WIFI_PROV_END:
+				ESP_LOGI(TAG, "Provisioning ended");
+				break;
+			default:
+				break;
 		}
 	}
 	else if (event_base == WIFI_EVENT) {
@@ -71,42 +156,49 @@ static void event_handler(void *arg, esp_event_base_t event_base, int event_id, 
 	}
 	else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
 		ESP_LOGI(TAG, "Connected to Wi-Fi, got IP");
-		if (blink_task_handle) {
-			vTaskDelete(blink_task_handle);
-			blink_task_handle = NULL;
-		}
+		led_blink_stop();
 		led_on();
 	}
 }
 
-void app1_main(void) {
-	// Initialisierung von NVS
-	esp_err_t ret = nvs_flash_init();
-	if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-		ESP_ERROR_CHECK(nvs_flash_erase());
-		ret = nvs_flash_init();
-	}
-	ESP_ERROR_CHECK(ret);
-
-	// Initialisierung der LED
-	gpio_pad_select_gpio(LED_GPIO);
-	gpio_set_direction(LED_GPIO, GPIO_MODE_OUTPUT);
-	led_off();
-
+void wifi_init(void) {
 	// Initialisierung des Netzwerks
 	ESP_ERROR_CHECK(esp_netif_init());
 	ESP_ERROR_CHECK(esp_event_loop_create_default());
+
+	// Erstellen der Standard-Netzwerkschnittstellen (AP und STA)
+	esp_netif_create_default_wifi_ap();
 	esp_netif_create_default_wifi_sta();
 
+	// Wi-Fi-Config für den SoftAP-Modus
+	wifi_config_t wifi_ap_config = {
+		.ap = {
+			.ssid = "Sensora",              // SSID des AP
+			.ssid_len = strlen("Sensora"),
+			.password = "setup123",           // Passwort für den AP
+			.max_connection = 4,              // Maximal 4 Verbindungen
+			.authmode = WIFI_AUTH_WPA2_PSK,   // WPA2 Verschlüsselung
+		},
+	};
+
+	// Wi-Fi Initialisierung
 	wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
 	ESP_ERROR_CHECK(esp_wifi_init(&cfg));
 
-	// Registrierung des Ereignishandlers
-	ESP_ERROR_CHECK(esp_event_handler_register(WIFI_PROV_EVENT, ESP_EVENT_ANY_ID, &event_handler, NULL));
-	ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &event_handler, NULL));
-	ESP_ERROR_CHECK(esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &event_handler, NULL));
+	// Setze den Wi-Fi Modus auf AP + STA
+	ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));
 
-	// Überprüfung auf gespeicherte Provisionierung
+	// Setze die AP-Config
+	ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_AP, &wifi_ap_config));
+
+	// Registrierung des Ereignishandlers
+	ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, NULL));
+	ESP_ERROR_CHECK(esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &wifi_event_handler, NULL));
+	ESP_ERROR_CHECK(esp_event_handler_register(WIFI_PROV_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, NULL));
+
+	ESP_ERROR_CHECK(esp_wifi_start());	// Erstelle AP
+
+	// Provisioning starten, falls noch keine Wi-Fi-Verbindung konfiguriert ist
 	bool provisioned = false;
 	ESP_ERROR_CHECK(wifi_prov_mgr_is_provisioned(&provisioned));
 
@@ -117,11 +209,13 @@ void app1_main(void) {
 			.scheme_event_handler = WIFI_PROV_EVENT_HANDLER_NONE
 		};
 		ESP_ERROR_CHECK(wifi_prov_mgr_init(config));
-		ESP_ERROR_CHECK(wifi_prov_mgr_start_provisioning(WIFI_PROV_SECURITY_1, "pop", "PROV_1234", NULL));
+		ESP_ERROR_CHECK(wifi_prov_mgr_start_provisioning(WIFI_PROV_SECURITY_1, "pop", "Sensora", NULL));
+
+		// HTTP-Server wird in einem neuen Task gestartet
+		xTaskCreate(start_http_server_task, "http_server_task", 4096, NULL, 10, NULL);
 	} else {
 		// Verbindung mit gespeicherten Daten im STA-Modus
 		ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
-		ESP_ERROR_CHECK(esp_wifi_start());
+		ESP_ERROR_CHECK(esp_wifi_start());  // Stelle die Verbindung her
 	}
 }
-
