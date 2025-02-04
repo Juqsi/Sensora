@@ -1,0 +1,8 @@
+//
+// Created by lukas on 03.02.2025.
+//
+
+#ifndef APP_TEMPLATE_WIFI_MANAGER_H
+#define APP_TEMPLATE_WIFI_MANAGER_H
+
+#endif //APP_TEMPLATE_WIFI_MANAGER_H
