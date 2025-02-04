@@ -18,7 +18,7 @@ import {
 
 <template>
   <Card>
-    <CardHeader class="text-md">Pflanze Berta</CardHeader>
+    <CardHeader class="text-lg">Pflanze Berta</CardHeader>
     <CardContent>
       <div class="grid gap-4 grid-cols-4">
         <div class="grid gap-2 iconWithLabel">
@@ -39,7 +39,7 @@ import {
         </div>
       </div>
     </CardContent>
-    <card-footer>
+    <card-footer class="gap-0.5">
       <Badge variant="destructive"> <WifiOff /></Badge>
       <Badge variant="destructive"> <TriangleAlert /></Badge>
       <Badge variant="destructive"> <Stethoscope /></Badge>

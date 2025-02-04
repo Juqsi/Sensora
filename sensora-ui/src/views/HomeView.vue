@@ -24,9 +24,9 @@ const tips: Tip[] = [
 </script>
 
 <template>
-  <div class="w-full flex justify-between">
+  <div class="w-full flex justify-between mt-4">
     <div>
-      <h1 class="font-bold text-2xl">Hello Justus 👋</h1>
+      <h1 class="font-bold text-3xl">Hello Justus 👋</h1>
       <p class="text-sm text-muted-foreground">Overview of all rooms</p>
     </div>
     <Avatar>
@@ -39,7 +39,7 @@ const tips: Tip[] = [
   </div>
 
   <div class="w-full my-2">
-    <h2 class="text-lg my-2">Tipps</h2>
+    <h2 class="text-xl my-2 font-medium">Tipps</h2>
     <ScrollArea class="w-screen ml-[calc(-50vw+50%)] xl:w-full xl:ml-0">
       <div class="flex p-4 space-x-4 w-max">
         <div v-for="tip in tips" :key="tip.id" class="w-[80vw] shrink-1 xl:max-w-4xl">
@@ -59,7 +59,7 @@ const tips: Tip[] = [
 
   <div class="w-full mt-2">
     <div class="flex justify-between items-center">
-      <h3 class="text-lg my-2">Zimmer 1</h3>
+      <h3 class="text-xl my-2 font-medium">Zimmer 1</h3>
       <Button aria-label="Zimmer Hinzufügen" variant="default" size="icon"><CirclePlus /></Button>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
