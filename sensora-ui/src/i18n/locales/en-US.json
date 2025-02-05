@@ -23,7 +23,7 @@
     "ThemeDescription": "Select the theme for the App.",
     "Light": "Light",
     "Dark": "Dark",
-    "OSPreference": "Operating system",
+    "OSPreference": "Device",
     "SetToOS": "Appearance set to OS preference",
     "SwitchToDarkMode": "Appearance switched to Dark Mode",
     "SwitchToLightMode": "Appearance switched to Light Mode",

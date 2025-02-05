@@ -20,7 +20,7 @@ const { t } = useI18n()
       <div
         class="-mx-2 flex items-center space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
       >
-        <CirclePlus class="" />
+        <CirclePlus class="mt-px h-5 w-5" />
         <div class="space-y-1">
           <p class="text-md text-center leading-none">
             {{ t('profile.AddDevice') }}
@@ -30,7 +30,7 @@ const { t } = useI18n()
       <div
         class="-mx-2 flex items-center space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
       >
-        <UsersRound class="" />
+        <UsersRound class="mt-px h-5 w-5" />
         <div class="space-y-1">
           <p class="text-md text-center leading-none">
             {{ t('profile.Group') }}
@@ -46,7 +46,7 @@ const { t } = useI18n()
       <div
         class="-mx-2 flex items-enter space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
       >
-        <MessageCircleQuestion class="" />
+        <MessageCircleQuestion class="mt-px h-5 w-5" />
         <div class="space-y-1">
           <p class="text-md leading-none">{{ t('profile.FAQ') }}</p>
         </div>
@@ -54,7 +54,7 @@ const { t } = useI18n()
       <div
         class="-mx-2 flex items-center space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
       >
-        <Info class="" />
+        <Info class="mt-px h-5 w-5" />
         <div class="space-y-1">
           <p class="text-md leading-none">{{ t('profile.AboutUs') }}</p>
         </div>
@@ -62,7 +62,7 @@ const { t } = useI18n()
       <div
         class="-mx-2 flex items-center space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
       >
-        <ShieldHalf class="" />
+        <ShieldHalf class="mt-px h-5 w-5" />
         <div class="space-y-1">
           <p class="text-md leading-none">{{ t('profile.Privacy') }}</p>
         </div>
@@ -75,7 +75,7 @@ const { t } = useI18n()
       <div
         class="-mx-2 flex items-center space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
       >
-        <LogOut class="" />
+        <LogOut class="mt-px h-5 w-5" />
         <div class="space-y-1">
           <p class="text-md leading-none">{{ t('profile.Logout') }}</p>
         </div>

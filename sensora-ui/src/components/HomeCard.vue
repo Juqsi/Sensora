@@ -2,18 +2,7 @@
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import {
-  CloudHail,
-  Droplet,
-  Siren,
-  SquareActivity,
-  Stethoscope,
-  Sun,
-  Thermometer,
-  TriangleAlert,
-  WifiOff,
-  Wrench,
-} from 'lucide-vue-next'
+import { CloudHail, Droplet, SquareActivity, Sun, Thermometer } from 'lucide-vue-next'
 </script>
 
 <template>
@@ -40,11 +29,6 @@ import {
       </div>
     </CardContent>
     <card-footer class="gap-0.5">
-      <Badge variant="destructive"> <WifiOff /></Badge>
-      <Badge variant="destructive"> <TriangleAlert /></Badge>
-      <Badge variant="destructive"> <Stethoscope /></Badge>
-      <Badge variant="destructive"> <Siren /></Badge>
-      <Badge variant="destructive"><Wrench /></Badge>
       <Badge variant="outline"><SquareActivity /></Badge>
     </card-footer>
   </Card>
