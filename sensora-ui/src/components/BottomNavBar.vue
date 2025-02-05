@@ -1,11 +1,29 @@
 <script lang="ts" setup>
 import { CircuitBoard, Flower2, HomeIcon } from 'lucide-vue-next'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+
+const isKeyboardOpen = ref(false)
+let initialHeight = window.innerHeight // Speichert die ursprüngliche Höhe
+
+const checkKeyboard = () => {
+  isKeyboardOpen.value = window.innerHeight < initialHeight * 0.75
+}
+
+onMounted(() => {
+  initialHeight = window.innerHeight // Speichert die Höhe beim Start
+  window.addEventListener('resize', checkKeyboard)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', checkKeyboard)
+})
 </script>
 
 <template>
   <div class="h-10 flex-col justify-between bg-background">
     <div
+      :class="{ hidden: isKeyboardOpen }"
       class="fixed bottom-0 left-0 right-0 border-muted-background border-t-2 mx-auto w-full bg-background shadow-lg p-3"
     >
       <div class="grid grid-cols-4 gap-4">
