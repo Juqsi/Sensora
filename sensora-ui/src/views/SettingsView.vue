@@ -50,32 +50,32 @@ const switchView = (view: Views) => {
       <!-- Hauptansicht -->
       <template v-if="activeView === 'main'">
         <div
-          class="-mx-2 flex cursor-pointer items-start space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
+          class="-mx-2 flex cursor-pointer items-center space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
           @click="switchView(Views.ACCOUNT)"
         >
           <Lock class="mt-px h-5 w-5" />
           <div class="space-y-1">
-            <p class="text-sm font-medium leading-none">Account</p>
+            <p class="text-md font-medium leading-none">Account</p>
             <p class="text-sm text-muted-foreground">Name, Username and Password</p>
           </div>
         </div>
         <div
-          class="-mx-2 flex items-start space-x-4 rounded-md p-2 hover:bg-accent hover:text-accent-foreground transition-all"
+          class="-mx-2 flex items-center space-x-4 rounded-md p-2 hover:bg-accent hover:text-accent-foreground transition-all"
           @click="switchView(Views.LANGUAGE)"
         >
           <Languages class="mt-px h-5 w-5" />
           <div class="space-y-1">
-            <p class="text-sm font-medium leading-none">Language</p>
+            <p class="text-md font-medium leading-none">Language</p>
             <p class="text-sm text-muted-foreground">Only mentions and comments.</p>
           </div>
         </div>
         <div
-          class="-mx-2 flex items-start space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
+          class="-mx-2 flex items-center space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
           @click="switchView(Views.APPEARANCE)"
         >
-          <SunMoon class="" />
+          <SunMoon class="mt-px h-5 w-5" />
           <div class="space-y-1">
-            <p class="text-sm font-medium leading-none">Appearance</p>
+            <p class="text-md font-medium leading-none">Appearance</p>
             <p class="text-sm text-muted-foreground">Turn off all notifications.</p>
           </div>
         </div>

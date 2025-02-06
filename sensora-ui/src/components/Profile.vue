@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button/index.ts'
           </Avatar>
           <div>
             <CardTitle>Justus Siegert</CardTitle>
-            <CardDescription> Seit X Tagen dabei</CardDescription>
+            <CardDescription>kontakt@justus-siegert.de</CardDescription>
           </div>
         </div>
         <router-link to="/settings">
