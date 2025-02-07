@@ -5,7 +5,6 @@ import { Badge } from '@/components/ui/badge'
 import {
   CloudHail,
   Droplet,
-  SquareActivity,
   Sun,
   Thermometer,
   Siren,
@@ -15,7 +14,10 @@ import {
 } from 'lucide-vue-next'
 
 defineProps({
-  error: boolean,
+  connectionLost: Boolean,
+  alert: Boolean,
+  siren: Boolean,
+  wrench: Boolean,
 })
 </script>
 
@@ -40,12 +42,10 @@ defineProps({
           <Droplet id="water" />
           <Label for="light">10</Label>
         </div>
-      </div>
-      <div v-if="error" class="grid gap-4 grid-cols-2">
-        <Badge variant="destructive"> <WifiOff /></Badge>
-        <Badge variant="destructive"> <TriangleAlert /></Badge>
-        <Badge variant="destructive"> <Siren /></Badge>
-        <Badge variant="destructive"><Wrench /></Badge>
+        <Badge v-if="connectionLost" variant="destructive"> <WifiOff /></Badge>
+        <Badge v-if="alert" variant="destructive"> <TriangleAlert /></Badge>
+        <Badge v-if="siren" variant="destructive"> <Siren /></Badge>
+        <Badge v-if="wrench" variant="destructive"><Wrench /></Badge>
       </div>
     </CardContent>
   </Card>

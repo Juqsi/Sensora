@@ -63,7 +63,13 @@ const tips: Tip[] = [
       <Button aria-label="Zimmer Hinzufügen" variant="default" size="icon"><CirclePlus /></Button>
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <HomeCard v-for="x in 10" has-error="true"></HomeCard>
+      <HomeCard
+        v-for="x in 10"
+        :wrench="x % 3 == 0"
+        :siren="x % 4 == 0"
+        :alert="x % 5 == 0"
+        :co="x % 3 == 0"
+      ></HomeCard>
     </div>
   </div>
 </template>
