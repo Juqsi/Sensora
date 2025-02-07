@@ -54,6 +54,11 @@ const router = createRouter({
       name: 'Setup Account',
       component: () => import('../views/SetupAccountStepperView.vue'),
     },
+    {
+      path: '/groups',
+      name: 'Groups',
+      component: () => import('../views/GroupView.vue'),
+    },
   ],
 })
 

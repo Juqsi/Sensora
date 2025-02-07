@@ -36,7 +36,7 @@ defineProps({
         </div>
         <div class="grid gap-2 iconWithLabel">
           <Sun id="light" />
-          <Label for="light">100</Label>
+          <Label for="light">10</Label>
         </div>
         <div class="grid gap-2 iconWithLabel">
           <Droplet id="water" />

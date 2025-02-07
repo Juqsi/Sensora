@@ -115,7 +115,7 @@ const activeData = computed(() => values[activeKey.value] || [])
 <template>
   <NavCard sub-title="Geht es gut" title="Pflanze Berta">
     <template #TitleRight>
-      <router-link to="/plant/123/settings">
+      <router-link to="/plant/123/edit">
         <Button size="icon" variant="ghost">
           <Settings />
         </Button>

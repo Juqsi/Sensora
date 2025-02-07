@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { CircuitBoard, Flower2, HomeIcon } from 'lucide-vue-next'
+import { CircuitBoard, Flower2, HomeIcon, Users } from 'lucide-vue-next'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 
@@ -36,19 +36,19 @@ onBeforeUnmount(() => {
         </router-link>
 
         <router-link
-          :class="{ 'text-primary': $route.path === '/sensors' }"
-          class="flex flex-col items-center"
-          to="/sensors"
-        >
-          <CircuitBoard class="w-6 h-6" />
-        </router-link>
-
-        <router-link
           :class="{ 'text-primary': $route.path === '/plants' }"
           class="flex flex-col items-center"
           to="/plants"
         >
           <Flower2 class="w-6 h-6" />
+        </router-link>
+
+        <router-link
+          :class="{ 'text-primary': $route.path === '/groups' }"
+          class="flex flex-col items-center"
+          to="/groups"
+        >
+          <Users class="w-6 h-6" />
         </router-link>
 
         <router-link class="flex flex-col items-center" to="/profile">
