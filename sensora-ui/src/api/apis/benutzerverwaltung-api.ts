@@ -1,7 +1,7 @@
 import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
 import {Configuration} from '@/api/configuration'
 import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import type {InlineResponse2001, InlineResponse2002, User, UserBody} from '@/api/models'
+import type {User, UserBody} from '@/api/models'
 
 /**
  * BenutzerverwaltungApi - axios parameter creator
@@ -228,9 +228,7 @@ export const BenutzerverwaltungApiFp = function (configuration?: Configuration) 
     async userPatch(
       body: UserBody,
       options?: AxiosRequestConfig,
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<InlineResponse2002>>
-    > {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<User>>> {
       const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator(
         configuration,
       ).userPatch(body, options)
@@ -252,9 +250,7 @@ export const BenutzerverwaltungApiFp = function (configuration?: Configuration) 
     async userUserIdGet(
       userId: string,
       options?: AxiosRequestConfig,
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<InlineResponse2001>>
-    > {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<User>>> {
       const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator(
         configuration,
       ).userUserIdGet(userId, options)
@@ -297,10 +293,7 @@ export const BenutzerverwaltungApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userPatch(
-      body: UserBody,
-      options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<InlineResponse2002>> {
+    async userPatch(body: UserBody, options?: AxiosRequestConfig): Promise<AxiosResponse<User>> {
       return BenutzerverwaltungApiFp(configuration)
         .userPatch(body, options)
         .then((request) => request(axios, basePath))
@@ -354,7 +347,7 @@ export class BenutzerverwaltungApi extends BaseAPI {
   public async userPatch(
     body: UserBody,
     options?: AxiosRequestConfig,
-  ): Promise<AxiosResponse<InlineResponse2002>> {
+  ): Promise<AxiosResponse<User>> {
     return BenutzerverwaltungApiFp(this.configuration)
       .userPatch(body, options)
       .then((request) => request(this.axios, this.basePath))
@@ -371,7 +364,7 @@ export class BenutzerverwaltungApi extends BaseAPI {
   public async userUserIdGet(
     userId: string,
     options?: AxiosRequestConfig,
-  ): Promise<AxiosResponse<InlineResponse2001>> {
+  ): Promise<AxiosResponse<User>> {
     return BenutzerverwaltungApiFp(this.configuration)
       .userUserIdGet(userId, options)
       .then((request) => request(this.axios, this.basePath))

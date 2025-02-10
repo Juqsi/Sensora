@@ -1,9 +1,9 @@
-import globalAxios, { type AxiosResponse, type AxiosInstance, type AxiosRequestConfig } from 'axios'
-import { Configuration } from '@/api/configuration'
+import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
+import {Configuration} from '@/api/configuration'
 
-import { BASE_PATH, type RequestArgs, BaseAPI, RequiredError } from '@/api/base'
-import { type Controller } from '@/api/models'
-import { type InlineResponse20011 } from '@/api/models'
+import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
+import {type Controller} from '@/api/models'
+
 /**
  * GerteverwaltungApi - axios parameter creator
  * @export
@@ -147,9 +147,7 @@ export const GerteverwaltungApiFp = function (configuration?: Configuration) {
     async deviceDeviceIdGet(
       deviceId: string,
       options?: AxiosRequestConfig,
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<InlineResponse20011>>
-    > {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Controller>>> {
       const localVarAxiosArgs = await GerteverwaltungApiAxiosParamCreator(
         configuration,
       ).deviceDeviceIdGet(deviceId, options)
@@ -205,7 +203,7 @@ export const GerteverwaltungApiFactory = function (
     async deviceDeviceIdGet(
       deviceId: string,
       options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<InlineResponse20011>> {
+    ): Promise<AxiosResponse<Controller>> {
       return GerteverwaltungApiFp(configuration)
         .deviceDeviceIdGet(deviceId, options)
         .then((request) => request(axios, basePath))
@@ -244,11 +242,12 @@ export class GerteverwaltungApi extends BaseAPI {
   public async deviceDeviceIdGet(
     deviceId: string,
     options?: AxiosRequestConfig,
-  ): Promise<AxiosResponse<InlineResponse20011>> {
+  ): Promise<AxiosResponse<Controller>> {
     return GerteverwaltungApiFp(this.configuration)
       .deviceDeviceIdGet(deviceId, options)
       .then((request) => request(this.axios, this.basePath))
   }
+
   /**
    * Gibt eine Liste aller verfügbaren Geräte zurück, ohne dass eine Geräte-ID angegeben werden muss. Dies ermöglicht es, alle Sensoren des Systems abzurufen, die zur Überwachung von verschiedenen Geräten  verwendet werden.
    * @summary Alle verfügbaren Geräte anzeigen

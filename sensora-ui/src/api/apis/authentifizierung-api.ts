@@ -1,7 +1,7 @@
 import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
 import {Configuration} from '@/api'
 import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import type {AuthLoginBody, AuthRegisterBody, InlineResponse200, InlineResponse2001,} from '@/api/models'
+import type {AuthLoginBody, AuthRegisterBody} from '@/api/models'
 
 /**
  * AuthentifizierungApi - axios parameter creator
@@ -139,9 +139,7 @@ export const AuthentifizierungApiFp = function (configuration?: Configuration) {
     async authLoginPost(
       body: AuthLoginBody,
       options?: AxiosRequestConfig,
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<InlineResponse200>>
-    > {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<User>>> {
       const localVarAxiosArgs = await AuthentifizierungApiAxiosParamCreator(
         configuration,
       ).authLoginPost(body, options)
@@ -163,9 +161,7 @@ export const AuthentifizierungApiFp = function (configuration?: Configuration) {
     async authRegisterPost(
       body: AuthRegisterBody,
       options?: AxiosRequestConfig,
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<InlineResponse2001>>
-    > {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<User>>> {
       const localVarAxiosArgs = await AuthentifizierungApiAxiosParamCreator(
         configuration,
       ).authRegisterPost(body, options)
@@ -200,7 +196,7 @@ export const AuthentifizierungApiFactory = function (
     async authLoginPost(
       body: AuthLoginBody,
       options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<InlineResponse200>> {
+    ): Promise<AxiosResponse<User>> {
       return AuthentifizierungApiFp(configuration)
         .authLoginPost(body, options)
         .then((request) => request(axios, basePath))
@@ -215,7 +211,7 @@ export const AuthentifizierungApiFactory = function (
     async authRegisterPost(
       body: AuthRegisterBody,
       options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<InlineResponse2001>> {
+    ): Promise<AxiosResponse<User>> {
       return AuthentifizierungApiFp(configuration)
         .authRegisterPost(body, options)
         .then((request) => request(axios, basePath))
@@ -241,7 +237,7 @@ export class AuthentifizierungApi extends BaseAPI {
   public async authLoginPost(
     body: AuthLoginBody,
     options?: AxiosRequestConfig,
-  ): Promise<AxiosResponse<InlineResponse200>> {
+  ): Promise<AxiosResponse<User>> {
     return AuthentifizierungApiFp(this.configuration)
       .authLoginPost(body, options)
       .then((request) => request(this.axios, this.basePath))
@@ -258,7 +254,7 @@ export class AuthentifizierungApi extends BaseAPI {
   public async authRegisterPost(
     body: AuthRegisterBody,
     options?: AxiosRequestConfig,
-  ): Promise<AxiosResponse<InlineResponse2001>> {
+  ): Promise<AxiosResponse<User>> {
     return AuthentifizierungApiFp(this.configuration)
       .authRegisterPost(body, options)
       .then((request) => request(this.axios, this.basePath))

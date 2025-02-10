@@ -1,7 +1,7 @@
 import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
 import {Configuration} from '@/api/configuration'
 import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import type {InlineResponse2007, InlineResponse2008, RoomBody, RoomRoomIdBody} from '@/api/models'
+import type {Room, RoomBody, RoomRoomIdBody} from '@/api/models'
 
 /**
  * RaumverwaltungApi - axios parameter creator
@@ -301,9 +301,7 @@ export const RaumverwaltungApiFp = function (configuration?: Configuration) {
     async roomPost(
       body: RoomBody,
       options?: AxiosRequestConfig,
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<InlineResponse2007>>
-    > {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Room>>> {
       const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator(configuration).roomPost(
         body,
         options,
@@ -348,9 +346,7 @@ export const RaumverwaltungApiFp = function (configuration?: Configuration) {
     async roomRoomIdGet(
       roomId: string,
       options?: AxiosRequestConfig,
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<InlineResponse2008>>
-    > {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Room>>> {
       const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator(
         configuration,
       ).roomRoomIdGet(roomId, options)
@@ -374,9 +370,7 @@ export const RaumverwaltungApiFp = function (configuration?: Configuration) {
       body: RoomRoomIdBody,
       roomId: string,
       options?: AxiosRequestConfig,
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<InlineResponse2008>>
-    > {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Room>>> {
       const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator(
         configuration,
       ).roomRoomIdPatch(body, roomId, options)
@@ -408,10 +402,7 @@ export const RaumverwaltungApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async roomPost(
-      body: RoomBody,
-      options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<InlineResponse2007>> {
+    async roomPost(body: RoomBody, options?: AxiosRequestConfig): Promise<AxiosResponse<Room>> {
       return RaumverwaltungApiFp(configuration)
         .roomPost(body, options)
         .then((request) => request(axios, basePath))
@@ -441,7 +432,7 @@ export const RaumverwaltungApiFactory = function (
     async roomRoomIdGet(
       roomId: string,
       options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<InlineResponse2008>> {
+    ): Promise<AxiosResponse<Room>> {
       return RaumverwaltungApiFp(configuration)
         .roomRoomIdGet(roomId, options)
         .then((request) => request(axios, basePath))
@@ -458,7 +449,7 @@ export const RaumverwaltungApiFactory = function (
       body: RoomRoomIdBody,
       roomId: string,
       options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<InlineResponse2008>> {
+    ): Promise<AxiosResponse<Room>> {
       return RaumverwaltungApiFp(configuration)
         .roomRoomIdPatch(body, roomId, options)
         .then((request) => request(axios, basePath))
@@ -484,7 +475,7 @@ export class RaumverwaltungApi extends BaseAPI {
   public async roomPost(
     body: RoomBody,
     options?: AxiosRequestConfig,
-  ): Promise<AxiosResponse<InlineResponse2007>> {
+  ): Promise<AxiosResponse<Room>> {
     return RaumverwaltungApiFp(this.configuration)
       .roomPost(body, options)
       .then((request) => request(this.axios, this.basePath))
@@ -518,7 +509,7 @@ export class RaumverwaltungApi extends BaseAPI {
   public async roomRoomIdGet(
     roomId: string,
     options?: AxiosRequestConfig,
-  ): Promise<AxiosResponse<InlineResponse2008>> {
+  ): Promise<AxiosResponse<Room>> {
     return RaumverwaltungApiFp(this.configuration)
       .roomRoomIdGet(roomId, options)
       .then((request) => request(this.axios, this.basePath))
@@ -537,7 +528,7 @@ export class RaumverwaltungApi extends BaseAPI {
     body: RoomRoomIdBody,
     roomId: string,
     options?: AxiosRequestConfig,
-  ): Promise<AxiosResponse<InlineResponse2008>> {
+  ): Promise<AxiosResponse<Room>> {
     return RaumverwaltungApiFp(this.configuration)
       .roomRoomIdPatch(body, roomId, options)
       .then((request) => request(this.axios, this.basePath))

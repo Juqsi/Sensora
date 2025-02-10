@@ -1,7 +1,7 @@
-import globalAxios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios'
+import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
 import {Configuration} from '@/api/configuration'
-import {BASE_PATH, BaseAPI, RequestArgs, RequiredError} from '@/api/base'
-import type {InlineResponse20010, InlineResponse2009, PlantBody, PlantPlantIdBody,} from '@/api/models'
+import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
+import type {Plant, PlantBody, PlantPlantIdBody} from '@/api/models'
 
 /**
  * PflanzenverwaltungApi - axios parameter creator
@@ -341,9 +341,7 @@ export const PflanzenverwaltungApiFp = function (configuration?: Configuration) 
       startTime?: Date,
       endTime?: Date,
       options?: AxiosRequestConfig,
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<InlineResponse20010>>
-    > {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Plant>>> {
       const localVarAxiosArgs = await PflanzenverwaltungApiAxiosParamCreator(
         configuration,
       ).plantPlantIdGet(plantId, startTime, endTime, options)
@@ -367,9 +365,7 @@ export const PflanzenverwaltungApiFp = function (configuration?: Configuration) 
       body: PlantPlantIdBody,
       plantId: string,
       options?: AxiosRequestConfig,
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<InlineResponse20010>>
-    > {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Plant>>> {
       const localVarAxiosArgs = await PflanzenverwaltungApiAxiosParamCreator(
         configuration,
       ).plantPlantIdPatch(body, plantId, options)
@@ -391,9 +387,7 @@ export const PflanzenverwaltungApiFp = function (configuration?: Configuration) 
     async plantPost(
       body: PlantBody,
       options?: AxiosRequestConfig,
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<InlineResponse2009>>
-    > {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Plant>>> {
       const localVarAxiosArgs = await PflanzenverwaltungApiAxiosParamCreator(
         configuration,
       ).plantPost(body, options)
@@ -447,7 +441,7 @@ export const PflanzenverwaltungApiFactory = function (
       startTime?: Date,
       endTime?: Date,
       options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<InlineResponse20010>> {
+    ): Promise<AxiosResponse<Plant>> {
       return PflanzenverwaltungApiFp(configuration)
         .plantPlantIdGet(plantId, startTime, endTime, options)
         .then((request) => request(axios, basePath))
@@ -464,7 +458,7 @@ export const PflanzenverwaltungApiFactory = function (
       body: PlantPlantIdBody,
       plantId: string,
       options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<InlineResponse20010>> {
+    ): Promise<AxiosResponse<Plant>> {
       return PflanzenverwaltungApiFp(configuration)
         .plantPlantIdPatch(body, plantId, options)
         .then((request) => request(axios, basePath))
@@ -476,10 +470,7 @@ export const PflanzenverwaltungApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async plantPost(
-      body: PlantBody,
-      options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<InlineResponse2009>> {
+    async plantPost(body: PlantBody, options?: AxiosRequestConfig): Promise<AxiosResponse<Plant>> {
       return PflanzenverwaltungApiFp(configuration)
         .plantPost(body, options)
         .then((request) => request(axios, basePath))
@@ -526,7 +517,7 @@ export class PflanzenverwaltungApi extends BaseAPI {
     startTime?: Date,
     endTime?: Date,
     options?: AxiosRequestConfig,
-  ): Promise<AxiosResponse<InlineResponse20010>> {
+  ): Promise<AxiosResponse<Plant>> {
     return PflanzenverwaltungApiFp(this.configuration)
       .plantPlantIdGet(plantId, startTime, endTime, options)
       .then((request) => request(this.axios, this.basePath))
@@ -545,7 +536,7 @@ export class PflanzenverwaltungApi extends BaseAPI {
     body: PlantPlantIdBody,
     plantId: string,
     options?: AxiosRequestConfig,
-  ): Promise<AxiosResponse<InlineResponse20010>> {
+  ): Promise<AxiosResponse<Plant>> {
     return PflanzenverwaltungApiFp(this.configuration)
       .plantPlantIdPatch(body, plantId, options)
       .then((request) => request(this.axios, this.basePath))
@@ -562,7 +553,7 @@ export class PflanzenverwaltungApi extends BaseAPI {
   public async plantPost(
     body: PlantBody,
     options?: AxiosRequestConfig,
-  ): Promise<AxiosResponse<InlineResponse2009>> {
+  ): Promise<AxiosResponse<Plant>> {
     return PflanzenverwaltungApiFp(this.configuration)
       .plantPost(body, options)
       .then((request) => request(this.axios, this.basePath))
