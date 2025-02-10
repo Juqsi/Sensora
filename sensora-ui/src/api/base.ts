@@ -1,41 +1,16 @@
 import { Configuration } from './configuration'
-import globalAxios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
+import apiClient from './apiClient'
+import type { AxiosRequestConfig } from 'axios'
 
-export const BASE_PATH = 'https://api.maxtar.de/v1'.replace(/\/+$/, '')
+export const BASE_PATH = import.meta.env.VITE_API_BASE || 'https://api.maxtar.de/v1'
 
-/**
- *
- * @export
- */
-export const COLLECTION_FORMATS = {
-  csv: ',',
-  ssv: ' ',
-  tsv: '\t',
-  pipes: '|',
-}
-
-/**
- *
- * @export
- * @interface RequestArgs
- */
-export interface RequestArgs {
-  url: string
-  options: AxiosRequestConfig
-}
-
-/**
- *
- * @export
- * @class BaseAPI
- */
 export class BaseAPI {
   protected configuration: Configuration | undefined
 
   constructor(
     configuration?: Configuration,
     protected basePath: string = BASE_PATH,
-    protected axios: AxiosInstance = globalAxios,
+    protected axios = apiClient, // Nutzt die zentrale Axios-Instanz
   ) {
     if (configuration) {
       this.configuration = configuration
@@ -44,19 +19,19 @@ export class BaseAPI {
   }
 }
 
-/**
- *
- * @export
- * @class RequiredError
- * @extends {Error}
- */
-export class RequiredError extends Error {
-  name: 'RequiredError' = 'RequiredError'
+// RequestArgs manuell definieren
+export interface RequestArgs {
+  url: string
+  options: AxiosRequestConfig
+}
 
+// RequiredError Klasse definieren
+export class RequiredError extends Error {
   constructor(
     public field: string,
     msg?: string,
   ) {
-    super(msg)
+    super(msg || `Required parameter ${field} was null or undefined.`)
+    this.name = 'RequiredError'
   }
 }
