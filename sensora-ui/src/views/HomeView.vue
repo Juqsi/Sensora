@@ -62,7 +62,7 @@ const tips: Tip[] = [
       <h3 class="text-xl my-2 font-medium">Zimmer 1</h3>
       <Button aria-label="Zimmer Hinzufügen" variant="default" size="icon"><CirclePlus /></Button>
     </div>
-    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
       <HomeCard
         v-for="x in 10"
         :wrench="x % 3 == 0"

@@ -1,0 +1,570 @@
+import globalAxios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios'
+import {Configuration} from '@/api/configuration'
+import {BASE_PATH, BaseAPI, RequestArgs, RequiredError} from '@/api/base'
+import type {InlineResponse20010, InlineResponse2009, PlantBody, PlantPlantIdBody,} from '@/api/models'
+
+/**
+ * PflanzenverwaltungApi - axios parameter creator
+ * @export
+ */
+export const PflanzenverwaltungApiAxiosParamCreator = function (configuration?: Configuration) {
+  return {
+    /**
+     * Löscht eine Pflanze aus dem System.
+     * @summary Pflanze löschen
+     * @param {string} plantId Die ID der zu löschenden Pflanze.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    plantPlantIdDelete: async (
+      plantId: string,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'plantId' is not null or undefined
+      if (plantId === null || plantId === undefined) {
+        throw new RequiredError(
+          'plantId',
+          'Required parameter plantId was null or undefined when calling plantPlantIdDelete.',
+        )
+      }
+      const localVarPath = `/plant/{plantId}`.replace(
+        `{${'plantId'}}`,
+        encodeURIComponent(String(plantId)),
+      )
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com')
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+      const localVarRequestOptions: AxiosRequestConfig = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      // authentication bearerAuth required
+      // http bearer authentication required
+      if (configuration && configuration.accessToken) {
+        const accessToken =
+          typeof configuration.accessToken === 'function'
+            ? await configuration.accessToken()
+            : await configuration.accessToken
+        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
+      }
+
+      const query = new URLSearchParams(localVarUrlObj.search)
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key])
+      }
+      for (const key in options.params) {
+        query.set(key, options.params[key])
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString()
+      const headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      }
+
+      return {
+        url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     * Ruft die Pflanzendaten sowie die Sensordaten ab, die im angegebenen Zeitraum liegen.
+     * @summary Pflanze abfragen
+     * @param {string} plantId Die ID der Pflanze, die abgefragt werden soll.
+     * @param {Date} [startTime] Der Startzeitpunkt des Zeitraums, für den die Sensordaten abgerufen werden sollen. Wenn nicht angegeben von vor 24 Stunden.
+     * @param {Date} [endTime] Der Endzeitpunkt des Zeitraums, für den die Sensordaten abgerufen werden sollen. Wenn nicht angegen bis zum aktuellen Zeitpunkt.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    plantPlantIdGet: async (
+      plantId: string,
+      startTime?: Date,
+      endTime?: Date,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'plantId' is not null or undefined
+      if (plantId === null || plantId === undefined) {
+        throw new RequiredError(
+          'plantId',
+          'Required parameter plantId was null or undefined when calling plantPlantIdGet.',
+        )
+      }
+      const localVarPath = `/plant/{plantId}`.replace(
+        `{${'plantId'}}`,
+        encodeURIComponent(String(plantId)),
+      )
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com')
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+      const localVarRequestOptions: AxiosRequestConfig = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      // authentication bearerAuth required
+      // http bearer authentication required
+      if (configuration && configuration.accessToken) {
+        const accessToken =
+          typeof configuration.accessToken === 'function'
+            ? await configuration.accessToken()
+            : await configuration.accessToken
+        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
+      }
+
+      if (startTime !== undefined) {
+        localVarQueryParameter['startTime'] =
+          (startTime as any) instanceof Date ? (startTime as any).toISOString() : startTime
+      }
+
+      if (endTime !== undefined) {
+        localVarQueryParameter['endTime'] =
+          (endTime as any) instanceof Date ? (endTime as any).toISOString() : endTime
+      }
+
+      const query = new URLSearchParams(localVarUrlObj.search)
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key])
+      }
+      for (const key in options.params) {
+        query.set(key, options.params[key])
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString()
+      const headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      }
+
+      return {
+        url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     * Ermöglicht das Aktualisieren von Pflanzendaten.
+     * @summary Pflanze aktualisieren
+     * @param {PlantPlantIdBody} body
+     * @param {string} plantId Die ID der zu aktualisierenden Pflanze.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    plantPlantIdPatch: async (
+      body: PlantPlantIdBody,
+      plantId: string,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'body' is not null or undefined
+      if (body === null || body === undefined) {
+        throw new RequiredError(
+          'body',
+          'Required parameter body was null or undefined when calling plantPlantIdPatch.',
+        )
+      }
+      // verify required parameter 'plantId' is not null or undefined
+      if (plantId === null || plantId === undefined) {
+        throw new RequiredError(
+          'plantId',
+          'Required parameter plantId was null or undefined when calling plantPlantIdPatch.',
+        )
+      }
+      const localVarPath = `/plant/{plantId}`.replace(
+        `{${'plantId'}}`,
+        encodeURIComponent(String(plantId)),
+      )
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com')
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+      const localVarRequestOptions: AxiosRequestConfig = {
+        method: 'PATCH',
+        ...baseOptions,
+        ...options,
+      }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      // authentication bearerAuth required
+      // http bearer authentication required
+      if (configuration && configuration.accessToken) {
+        const accessToken =
+          typeof configuration.accessToken === 'function'
+            ? await configuration.accessToken()
+            : await configuration.accessToken
+        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
+      }
+
+      localVarHeaderParameter['Content-Type'] = 'application/json'
+
+      const query = new URLSearchParams(localVarUrlObj.search)
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key])
+      }
+      for (const key in options.params) {
+        query.set(key, options.params[key])
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString()
+      const headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      }
+      localVarRequestOptions.data = JSON.stringify(body)
+
+      return {
+        url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+        options: localVarRequestOptions,
+      }
+    },
+    /**
+     * Erstellt eine neue Pflanze und verknüpft sie mit einem Raum und einem Sensor.
+     * @summary Pflanze erstellen
+     * @param {PlantBody} body
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    plantPost: async (body: PlantBody, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+      // verify required parameter 'body' is not null or undefined
+      if (body === null || body === undefined) {
+        throw new RequiredError(
+          'body',
+          'Required parameter body was null or undefined when calling plantPost.',
+        )
+      }
+      const localVarPath = `/plant`
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com')
+      let baseOptions
+      if (configuration) {
+        baseOptions = configuration.baseOptions
+      }
+      const localVarRequestOptions: AxiosRequestConfig = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      }
+      const localVarHeaderParameter = {} as any
+      const localVarQueryParameter = {} as any
+
+      // authentication bearerAuth required
+      // http bearer authentication required
+      if (configuration && configuration.accessToken) {
+        const accessToken =
+          typeof configuration.accessToken === 'function'
+            ? await configuration.accessToken()
+            : await configuration.accessToken
+        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
+      }
+
+      localVarHeaderParameter['Content-Type'] = 'application/json'
+
+      const query = new URLSearchParams(localVarUrlObj.search)
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key])
+      }
+      for (const key in options.params) {
+        query.set(key, options.params[key])
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString()
+      const headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {}
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      }
+      localVarRequestOptions.data = JSON.stringify(body)
+
+      return {
+        url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+        options: localVarRequestOptions,
+      }
+    },
+  }
+}
+
+/**
+ * PflanzenverwaltungApi - functional programming interface
+ * @export
+ */
+export const PflanzenverwaltungApiFp = function (configuration?: Configuration) {
+  return {
+    /**
+     * Löscht eine Pflanze aus dem System.
+     * @summary Pflanze löschen
+     * @param {string} plantId Die ID der zu löschenden Pflanze.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async plantPlantIdDelete(
+      plantId: string,
+      options?: AxiosRequestConfig,
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
+      const localVarAxiosArgs = await PflanzenverwaltungApiAxiosParamCreator(
+        configuration,
+      ).plantPlantIdDelete(plantId, options)
+      return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+        const axiosRequestArgs: AxiosRequestConfig = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        }
+        return axios.request(axiosRequestArgs)
+      }
+    },
+    /**
+     * Ruft die Pflanzendaten sowie die Sensordaten ab, die im angegebenen Zeitraum liegen.
+     * @summary Pflanze abfragen
+     * @param {string} plantId Die ID der Pflanze, die abgefragt werden soll.
+     * @param {Date} [startTime] Der Startzeitpunkt des Zeitraums, für den die Sensordaten abgerufen werden sollen. Wenn nicht angegeben von vor 24 Stunden.
+     * @param {Date} [endTime] Der Endzeitpunkt des Zeitraums, für den die Sensordaten abgerufen werden sollen. Wenn nicht angegen bis zum aktuellen Zeitpunkt.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async plantPlantIdGet(
+      plantId: string,
+      startTime?: Date,
+      endTime?: Date,
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<InlineResponse20010>>
+    > {
+      const localVarAxiosArgs = await PflanzenverwaltungApiAxiosParamCreator(
+        configuration,
+      ).plantPlantIdGet(plantId, startTime, endTime, options)
+      return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+        const axiosRequestArgs: AxiosRequestConfig = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        }
+        return axios.request(axiosRequestArgs)
+      }
+    },
+    /**
+     * Ermöglicht das Aktualisieren von Pflanzendaten.
+     * @summary Pflanze aktualisieren
+     * @param {PlantPlantIdBody} body
+     * @param {string} plantId Die ID der zu aktualisierenden Pflanze.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async plantPlantIdPatch(
+      body: PlantPlantIdBody,
+      plantId: string,
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<InlineResponse20010>>
+    > {
+      const localVarAxiosArgs = await PflanzenverwaltungApiAxiosParamCreator(
+        configuration,
+      ).plantPlantIdPatch(body, plantId, options)
+      return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+        const axiosRequestArgs: AxiosRequestConfig = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        }
+        return axios.request(axiosRequestArgs)
+      }
+    },
+    /**
+     * Erstellt eine neue Pflanze und verknüpft sie mit einem Raum und einem Sensor.
+     * @summary Pflanze erstellen
+     * @param {PlantBody} body
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async plantPost(
+      body: PlantBody,
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<InlineResponse2009>>
+    > {
+      const localVarAxiosArgs = await PflanzenverwaltungApiAxiosParamCreator(
+        configuration,
+      ).plantPost(body, options)
+      return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+        const axiosRequestArgs: AxiosRequestConfig = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        }
+        return axios.request(axiosRequestArgs)
+      }
+    },
+  }
+}
+
+/**
+ * PflanzenverwaltungApi - factory interface
+ * @export
+ */
+export const PflanzenverwaltungApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance,
+) {
+  return {
+    /**
+     * Löscht eine Pflanze aus dem System.
+     * @summary Pflanze löschen
+     * @param {string} plantId Die ID der zu löschenden Pflanze.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async plantPlantIdDelete(
+      plantId: string,
+      options?: AxiosRequestConfig,
+    ): Promise<AxiosResponse<void>> {
+      return PflanzenverwaltungApiFp(configuration)
+        .plantPlantIdDelete(plantId, options)
+        .then((request) => request(axios, basePath))
+    },
+    /**
+     * Ruft die Pflanzendaten sowie die Sensordaten ab, die im angegebenen Zeitraum liegen.
+     * @summary Pflanze abfragen
+     * @param {string} plantId Die ID der Pflanze, die abgefragt werden soll.
+     * @param {Date} [startTime] Der Startzeitpunkt des Zeitraums, für den die Sensordaten abgerufen werden sollen. Wenn nicht angegeben von vor 24 Stunden.
+     * @param {Date} [endTime] Der Endzeitpunkt des Zeitraums, für den die Sensordaten abgerufen werden sollen. Wenn nicht angegen bis zum aktuellen Zeitpunkt.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async plantPlantIdGet(
+      plantId: string,
+      startTime?: Date,
+      endTime?: Date,
+      options?: AxiosRequestConfig,
+    ): Promise<AxiosResponse<InlineResponse20010>> {
+      return PflanzenverwaltungApiFp(configuration)
+        .plantPlantIdGet(plantId, startTime, endTime, options)
+        .then((request) => request(axios, basePath))
+    },
+    /**
+     * Ermöglicht das Aktualisieren von Pflanzendaten.
+     * @summary Pflanze aktualisieren
+     * @param {PlantPlantIdBody} body
+     * @param {string} plantId Die ID der zu aktualisierenden Pflanze.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async plantPlantIdPatch(
+      body: PlantPlantIdBody,
+      plantId: string,
+      options?: AxiosRequestConfig,
+    ): Promise<AxiosResponse<InlineResponse20010>> {
+      return PflanzenverwaltungApiFp(configuration)
+        .plantPlantIdPatch(body, plantId, options)
+        .then((request) => request(axios, basePath))
+    },
+    /**
+     * Erstellt eine neue Pflanze und verknüpft sie mit einem Raum und einem Sensor.
+     * @summary Pflanze erstellen
+     * @param {PlantBody} body
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async plantPost(
+      body: PlantBody,
+      options?: AxiosRequestConfig,
+    ): Promise<AxiosResponse<InlineResponse2009>> {
+      return PflanzenverwaltungApiFp(configuration)
+        .plantPost(body, options)
+        .then((request) => request(axios, basePath))
+    },
+  }
+}
+
+/**
+ * PflanzenverwaltungApi - object-oriented interface
+ * @export
+ * @class PflanzenverwaltungApi
+ * @extends {BaseAPI}
+ */
+export class PflanzenverwaltungApi extends BaseAPI {
+  /**
+   * Löscht eine Pflanze aus dem System.
+   * @summary Pflanze löschen
+   * @param {string} plantId Die ID der zu löschenden Pflanze.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PflanzenverwaltungApi
+   */
+  public async plantPlantIdDelete(
+    plantId: string,
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<void>> {
+    return PflanzenverwaltungApiFp(this.configuration)
+      .plantPlantIdDelete(plantId, options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
+  /**
+   * Ruft die Pflanzendaten sowie die Sensordaten ab, die im angegebenen Zeitraum liegen.
+   * @summary Pflanze abfragen
+   * @param {string} plantId Die ID der Pflanze, die abgefragt werden soll.
+   * @param {Date} [startTime] Der Startzeitpunkt des Zeitraums, für den die Sensordaten abgerufen werden sollen. Wenn nicht angegeben von vor 24 Stunden.
+   * @param {Date} [endTime] Der Endzeitpunkt des Zeitraums, für den die Sensordaten abgerufen werden sollen. Wenn nicht angegen bis zum aktuellen Zeitpunkt.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PflanzenverwaltungApi
+   */
+  public async plantPlantIdGet(
+    plantId: string,
+    startTime?: Date,
+    endTime?: Date,
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<InlineResponse20010>> {
+    return PflanzenverwaltungApiFp(this.configuration)
+      .plantPlantIdGet(plantId, startTime, endTime, options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
+  /**
+   * Ermöglicht das Aktualisieren von Pflanzendaten.
+   * @summary Pflanze aktualisieren
+   * @param {PlantPlantIdBody} body
+   * @param {string} plantId Die ID der zu aktualisierenden Pflanze.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PflanzenverwaltungApi
+   */
+  public async plantPlantIdPatch(
+    body: PlantPlantIdBody,
+    plantId: string,
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<InlineResponse20010>> {
+    return PflanzenverwaltungApiFp(this.configuration)
+      .plantPlantIdPatch(body, plantId, options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+
+  /**
+   * Erstellt eine neue Pflanze und verknüpft sie mit einem Raum und einem Sensor.
+   * @summary Pflanze erstellen
+   * @param {PlantBody} body
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PflanzenverwaltungApi
+   */
+  public async plantPost(
+    body: PlantBody,
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<InlineResponse2009>> {
+    return PflanzenverwaltungApiFp(this.configuration)
+      .plantPost(body, options)
+      .then((request) => request(this.axios, this.basePath))
+  }
+}

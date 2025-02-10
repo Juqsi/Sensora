@@ -42,10 +42,10 @@ defineProps({
           <Droplet id="water" />
           <Label for="light">10</Label>
         </div>
-        <Badge v-if="connectionLost" variant="destructive"> <WifiOff /></Badge>
-        <Badge v-if="alert" variant="destructive"> <TriangleAlert /></Badge>
-        <Badge v-if="siren" variant="destructive"> <Siren /></Badge>
-        <Badge v-if="wrench" variant="destructive"><Wrench /></Badge>
+        <Badge class="max-w-fit" v-if="connectionLost" variant="destructive"> <WifiOff /></Badge>
+        <Badge class="max-w-fit" v-if="alert" variant="destructive"> <TriangleAlert /></Badge>
+        <Badge class="max-w-fit" v-if="siren" variant="destructive"> <Siren /></Badge>
+        <Badge class="max-w-fit" v-if="wrench" variant="destructive"><Wrench /></Badge>
       </div>
     </CardContent>
   </Card>
