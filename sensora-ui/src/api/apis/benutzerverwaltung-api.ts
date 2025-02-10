@@ -1,7 +1,7 @@
 import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
 import {Configuration} from '@/api/configuration'
 import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import type {InlineResponse2001, InlineResponse2002, UserBody} from '@/api/models'
+import type {InlineResponse2001, InlineResponse2002, User, UserBody} from '@/api/models'
 
 /**
  * BenutzerverwaltungApi - axios parameter creator
@@ -315,7 +315,7 @@ export const BenutzerverwaltungApiFactory = function (
     async userUserIdGet(
       userId: string,
       options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<InlineResponse2001>> {
+    ): Promise<AxiosResponse<User>> {
       return BenutzerverwaltungApiFp(configuration)
         .userUserIdGet(userId, options)
         .then((request) => request(axios, basePath))

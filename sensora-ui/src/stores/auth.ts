@@ -21,6 +21,7 @@ export const useAuthStore = defineStore('auth', {
       this.token = null
       localStorage.removeItem('token')
       this.isAuthenticated = false
+      //TODO remove all stored data from other stores
     },
   },
 })
