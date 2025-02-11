@@ -4,34 +4,17 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import piniaPersist from 'pinia-plugin-persistedstate'
-import { createI18n } from 'vue-i18n'
-
-import enUS from './i18n/locales/en-US.json'
-import deDE from './i18n/locales/de-DE.json'
-
 import App from './App.vue'
 import router from './router'
 
-import { getLanguage } from './composables/useLanguage'
+import i18n from './i18n'
+
 import { useTheme } from './composables/useTheme'
-import { useAuthStore } from '@/stores/auth.ts'
-import { useUserStore } from '@/stores/user.ts'
+import { useAuthStore } from '@/stores/auth'
 
-const lang = getLanguage()
-
-const i18n = createI18n({
-  legacy: false,
-  locale: lang,
-  messages: {
-    'de-DE': deDE,
-    'en-US': enUS,
-  },
-})
+import { useUserStore } from '@/stores/user'
 
 const app = createApp(App)
-
-const { theme } = useTheme()
-app.provide('theme', theme)
 
 const pinia = createPinia()
 pinia.use(piniaPersist)
@@ -43,6 +26,10 @@ if (authStore.token) {
   userStore.fetchUser()
 }
 
-app.use(router)
+const { theme } = useTheme()
+app.provide('theme', theme)
 
-app.use(i18n).mount('#app')
+app.use(router)
+app.use(i18n)
+
+app.mount('#app')

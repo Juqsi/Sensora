@@ -1,29 +1,44 @@
-import { toast } from 'vue-sonner'
 import { useAuthStore } from '@/stores/auth'
+import { toast } from 'vue-sonner'
+import i18n from '@/i18n'
 
-export function handleApiError(error: any) {
+export function handleApiError(error: any): string {
   const authStore = useAuthStore()
+
+  const t = i18n.global?.t || ((key: string) => key)
 
   if (error.response) {
     const { status, data } = error.response
+    let message = ''
 
     switch (status) {
       case 400:
-        return data.message || 'Ungültige Anfrage!'
+        message = t('errors.badRequest', data) || data.message
+        break
       case 401:
-        toast.error('Sitzung abgelaufen! Bitte erneut einloggen.')
+        message = t('errors.unauthorized')
+        toast.error(message)
         authStore.logout()
-        return 'Nicht autorisiert!'
+        message = t('errors.sessionExpired')
+        break
       case 403:
-        return 'Zugriff verweigert!'
+        message = t('errors.forbidden')
+        break
       case 404:
-        return 'Ressource nicht gefunden!'
+        message = t('errors.notFound')
+        break
       case 500:
-        return 'Interner Serverfehler! Bitte später versuchen.'
+        message = t('errors.serverError')
+        break
       default:
-        return data.message || 'Unbekannter Fehler!'
+        message = t('errors.unknownError') || data.message
     }
+
+    toast.error(message)
+    return message
   } else {
-    return 'Netzwerkfehler! Bitte Internetverbindung prüfen.'
+    const networkError = t('errors.networkError')
+    toast.error(networkError)
+    return networkError
   }
 }
