@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import authApi from '@/api/authApi'
+import type { AuthLoginBody } from '@/api'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -7,7 +8,7 @@ export const useAuthStore = defineStore('auth', {
     isAuthenticated: !!localStorage.getItem('token'),
   }),
   actions: {
-    async login(credentials: { email: string; password: string }) {
+    async login(credentials: AuthLoginBody) {
       try {
         const response = await authApi.authLoginPost(credentials)
         this.token = response.data.token

@@ -4,18 +4,18 @@ import type {Group} from '@/api'
  *
  *
  * @export
- * @interface GroupGroupIdBody
+ * @interface GroupPatchBody
  */
-export interface GroupGroupIdBody extends Group {
+export interface GroupPatchBody extends Group {
   /**
    * @type {any}
-   * @memberof GroupGroupIdBody
+   * @memberof GroupPatchBody
    */
   members?: any
 
   /**
    * @type {any}
-   * @memberof GroupGroupIdBody
+   * @memberof GroupPatchBody
    */
   rooms?: any
 }

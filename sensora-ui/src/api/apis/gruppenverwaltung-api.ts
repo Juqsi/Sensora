@@ -2,7 +2,7 @@ import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResp
 import {Configuration} from '@/api/configuration'
 
 import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import type {Group, GroupGroupIdBody, GroupPostBody} from '@/api/models'
+import type {Group, GroupPatchBody, GroupPostBody} from '@/api/models'
 
 /**
  * GruppenverwaltungApi - axios parameter creator
@@ -271,13 +271,13 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
     /**
      * Überarbeitet eine Gruppe
      * @summary Gruppe bearbeiten
-     * @param {GroupGroupIdBody} body
+     * @param {GroupPatchBody} body
      * @param {string} groupId Die ID der zu bearbeitenden Gruppe.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     groupGroupIdPatch: async (
-      body: GroupGroupIdBody,
+      body: GroupPatchBody,
       groupId: string,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
@@ -579,13 +579,13 @@ export const GruppenverwaltungApiFp = function (configuration?: Configuration) {
     /**
      * Überarbeitet eine Gruppe
      * @summary Gruppe bearbeiten
-     * @param {GroupGroupIdBody} body
+     * @param {GroupPatchBody} body
      * @param {string} groupId Die ID der zu bearbeitenden Gruppe.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async groupGroupIdPatch(
-      body: GroupGroupIdBody,
+      body: GroupPatchBody,
       groupId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Group>>> {
@@ -718,13 +718,13 @@ export const GruppenverwaltungApiFactory = function (
     /**
      * Überarbeitet eine Gruppe
      * @summary Gruppe bearbeiten
-     * @param {GroupGroupIdBody} body
+     * @param {GroupPatchBody} body
      * @param {string} groupId Die ID der zu bearbeitenden Gruppe.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async groupGroupIdPatch(
-      body: GroupGroupIdBody,
+      body: GroupPatchBody,
       groupId: string,
       options?: AxiosRequestConfig,
     ): Promise<AxiosResponse<Group>> {
@@ -841,14 +841,14 @@ export class GruppenverwaltungApi extends BaseAPI {
   /**
    * Überarbeitet eine Gruppe
    * @summary Gruppe bearbeiten
-   * @param {GroupGroupIdBody} body
+   * @param {GroupPatchBody} body
    * @param {string} groupId Die ID der zu bearbeitenden Gruppe.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof GruppenverwaltungApi
    */
   public async groupGroupIdPatch(
-    body: GroupGroupIdBody,
+    body: GroupPatchBody,
     groupId: string,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Group>> {

@@ -1,4 +1,4 @@
-import type {Plant, PlantplantIdSensors} from '@/api'
+import type {Plant, Sensor} from '@/api'
 
 /**
  *
@@ -11,7 +11,7 @@ export interface PlantPatchBody extends Omit<Plant, 'plantId'> {
    * @type {Array<PlantplantIdSensors>}
    * @memberof PlantPatchBody
    */
-  sensors?: Array<PlantplantIdSensors>
+  sensors?: Array<Sensor>
 
   /**
    * Liste von Geräten, die vollständig zugewiesen werden. Alle angeschlossenen Sensoren werden der Pflanze zugeordnet.

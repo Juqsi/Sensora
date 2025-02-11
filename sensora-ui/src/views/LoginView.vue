@@ -5,8 +5,10 @@ import { Separator } from '@/components/ui/separator'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '@/stores/auth.ts'
 
 const { t } = useI18n()
+const auth = useAuthStore()
 </script>
 
 <template>
