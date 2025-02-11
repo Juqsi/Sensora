@@ -1,7 +1,7 @@
 import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
 import {Configuration} from '@/api/configuration'
 import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import type {User, UserBody} from '@/api/models'
+import type {User, UserPatchBody} from '@/api/models'
 
 /**
  * BenutzerverwaltungApi - axios parameter creator
@@ -64,11 +64,14 @@ export const BenutzerverwaltungApiAxiosParamCreator = function (configuration?: 
     /**
      * Bearbeitet einen bereits existierenden Benutzeraccount. Alle gesetzten Felder werden überschrieben. Der Benutzeraccount wird anhand des Auth-Tokens identifiziert. Beim Verändern des Benutzernamens oder der E-Mail, erlischt die Gültigkeit des Auth-Tokens. Das ändern des Passworts ist hier nicht möglich. Wenn die E-Mail geändert wird, muss diese erneut bestätigt werden, bevor der Account weiter benutzt werden kann.
      * @summary Benutzer bearbeiten
-     * @param {UserBody} body
+     * @param {UserPatchBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userPatch: async (body: UserBody, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    userPatch: async (
+      body: UserPatchBody,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
       // verify required parameter 'body' is not null or undefined
       if (body === null || body === undefined) {
         throw new RequiredError(
@@ -221,12 +224,12 @@ export const BenutzerverwaltungApiFp = function (configuration?: Configuration) 
     /**
      * Bearbeitet einen bereits existierenden Benutzeraccount. Alle gesetzten Felder werden überschrieben. Der Benutzeraccount wird anhand des Auth-Tokens identifiziert. Beim Verändern des Benutzernamens oder der E-Mail, erlischt die Gültigkeit des Auth-Tokens. Das ändern des Passworts ist hier nicht möglich. Wenn die E-Mail geändert wird, muss diese erneut bestätigt werden, bevor der Account weiter benutzt werden kann.
      * @summary Benutzer bearbeiten
-     * @param {UserBody} body
+     * @param {UserPatchBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async userPatch(
-      body: UserBody,
+      body: UserPatchBody,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<User>>> {
       const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator(
@@ -289,11 +292,14 @@ export const BenutzerverwaltungApiFactory = function (
     /**
      * Bearbeitet einen bereits existierenden Benutzeraccount. Alle gesetzten Felder werden überschrieben. Der Benutzeraccount wird anhand des Auth-Tokens identifiziert. Beim Verändern des Benutzernamens oder der E-Mail, erlischt die Gültigkeit des Auth-Tokens. Das ändern des Passworts ist hier nicht möglich. Wenn die E-Mail geändert wird, muss diese erneut bestätigt werden, bevor der Account weiter benutzt werden kann.
      * @summary Benutzer bearbeiten
-     * @param {UserBody} body
+     * @param {UserPatchBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userPatch(body: UserBody, options?: AxiosRequestConfig): Promise<AxiosResponse<User>> {
+    async userPatch(
+      body: UserPatchBody,
+      options?: AxiosRequestConfig,
+    ): Promise<AxiosResponse<User>> {
       return BenutzerverwaltungApiFp(configuration)
         .userPatch(body, options)
         .then((request) => request(axios, basePath))
@@ -339,13 +345,13 @@ export class BenutzerverwaltungApi extends BaseAPI {
   /**
    * Bearbeitet einen bereits existierenden Benutzeraccount. Alle gesetzten Felder werden überschrieben. Der Benutzeraccount wird anhand des Auth-Tokens identifiziert. Beim Verändern des Benutzernamens oder der E-Mail, erlischt die Gültigkeit des Auth-Tokens. Das ändern des Passworts ist hier nicht möglich. Wenn die E-Mail geändert wird, muss diese erneut bestätigt werden, bevor der Account weiter benutzt werden kann.
    * @summary Benutzer bearbeiten
-   * @param {UserBody} body
+   * @param {UserPatchBody} body
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof BenutzerverwaltungApi
    */
   public async userPatch(
-    body: UserBody,
+    body: UserPatchBody,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<User>> {
     return BenutzerverwaltungApiFp(this.configuration)

@@ -38,7 +38,7 @@ export interface User {
    * @type {Array<string>}
    * @memberof User
    */
-  groupIds?: Array<string>
+  groupIds: Array<string>
 
   /**
    * @type {string}

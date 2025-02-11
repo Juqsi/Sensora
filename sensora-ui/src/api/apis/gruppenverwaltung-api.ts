@@ -494,9 +494,7 @@ export const GruppenverwaltungApiFp = function (configuration?: Configuration) {
      */
     async groupGet(
       options?: AxiosRequestConfig,
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<Group & any>>>
-    > {
+    ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<Group>>>> {
       const localVarAxiosArgs =
         await GruppenverwaltungApiAxiosParamCreator(configuration).groupGet(options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
@@ -662,7 +660,7 @@ export const GruppenverwaltungApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async groupGet(options?: AxiosRequestConfig): Promise<AxiosResponse<Array<Group & any>>> {
+    async groupGet(options?: AxiosRequestConfig): Promise<AxiosResponse<Array<Group>>> {
       return GruppenverwaltungApiFp(configuration)
         .groupGet(options)
         .then((request) => request(axios, basePath))
@@ -775,7 +773,7 @@ export class GruppenverwaltungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof GruppenverwaltungApi
    */
-  public async groupGet(options?: AxiosRequestConfig): Promise<AxiosResponse<Array<Group & any>>> {
+  public async groupGet(options?: AxiosRequestConfig): Promise<AxiosResponse<Array<Group>>> {
     return GruppenverwaltungApiFp(this.configuration)
       .groupGet(options)
       .then((request) => request(this.axios, this.basePath))
