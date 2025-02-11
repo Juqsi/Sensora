@@ -1,7 +1,7 @@
 import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
 import {Configuration} from '@/api/configuration'
 import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import type {Room, RoomBody, RoomRoomIdBody} from '@/api/models'
+import type {Room, RoomPatchBody, RoomPostBody} from '@/api/models'
 
 /**
  * RaumverwaltungApi - axios parameter creator
@@ -12,11 +12,14 @@ export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Conf
     /**
      * Erstellt einen Raum und fügt ihn einer Gruppe zu.
      * @summary Raum erstellen
-     * @param {RoomBody} body
+     * @param {RoomPostBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    roomPost: async (body: RoomBody, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    roomPost: async (
+      body: RoomPostBody,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
       // verify required parameter 'body' is not null or undefined
       if (body === null || body === undefined) {
         throw new RequiredError(
@@ -207,13 +210,13 @@ export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Conf
     /**
      * Ermöglicht das Aktualisieren der Raumdetails.
      * @summary Raum aktualisieren
-     * @param {RoomRoomIdBody} body
+     * @param {RoomPatchBody} body
      * @param {string} roomId Die ID des zu aktualisierenden Raums.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     roomRoomIdPatch: async (
-      body: RoomRoomIdBody,
+      body: RoomPatchBody,
       roomId: string,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
@@ -294,12 +297,12 @@ export const RaumverwaltungApiFp = function (configuration?: Configuration) {
     /**
      * Erstellt einen Raum und fügt ihn einer Gruppe zu.
      * @summary Raum erstellen
-     * @param {RoomBody} body
+     * @param {RoomPostBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async roomPost(
-      body: RoomBody,
+      body: RoomPostBody,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Room>>> {
       const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator(configuration).roomPost(
@@ -361,13 +364,13 @@ export const RaumverwaltungApiFp = function (configuration?: Configuration) {
     /**
      * Ermöglicht das Aktualisieren der Raumdetails.
      * @summary Raum aktualisieren
-     * @param {RoomRoomIdBody} body
+     * @param {RoomPatchBody} body
      * @param {string} roomId Die ID des zu aktualisierenden Raums.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async roomRoomIdPatch(
-      body: RoomRoomIdBody,
+      body: RoomPatchBody,
       roomId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Room>>> {
@@ -398,11 +401,11 @@ export const RaumverwaltungApiFactory = function (
     /**
      * Erstellt einen Raum und fügt ihn einer Gruppe zu.
      * @summary Raum erstellen
-     * @param {RoomBody} body
+     * @param {RoomPostBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async roomPost(body: RoomBody, options?: AxiosRequestConfig): Promise<AxiosResponse<Room>> {
+    async roomPost(body: RoomPostBody, options?: AxiosRequestConfig): Promise<AxiosResponse<Room>> {
       return RaumverwaltungApiFp(configuration)
         .roomPost(body, options)
         .then((request) => request(axios, basePath))
@@ -440,13 +443,13 @@ export const RaumverwaltungApiFactory = function (
     /**
      * Ermöglicht das Aktualisieren der Raumdetails.
      * @summary Raum aktualisieren
-     * @param {RoomRoomIdBody} body
+     * @param {RoomPatchBody} body
      * @param {string} roomId Die ID des zu aktualisierenden Raums.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async roomRoomIdPatch(
-      body: RoomRoomIdBody,
+      body: RoomPatchBody,
       roomId: string,
       options?: AxiosRequestConfig,
     ): Promise<AxiosResponse<Room>> {
@@ -467,13 +470,13 @@ export class RaumverwaltungApi extends BaseAPI {
   /**
    * Erstellt einen Raum und fügt ihn einer Gruppe zu.
    * @summary Raum erstellen
-   * @param {RoomBody} body
+   * @param {RoomPostBody} body
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof RaumverwaltungApi
    */
   public async roomPost(
-    body: RoomBody,
+    body: RoomPostBody,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Room>> {
     return RaumverwaltungApiFp(this.configuration)
@@ -518,14 +521,14 @@ export class RaumverwaltungApi extends BaseAPI {
   /**
    * Ermöglicht das Aktualisieren der Raumdetails.
    * @summary Raum aktualisieren
-   * @param {RoomRoomIdBody} body
+   * @param {RoomPatchBody} body
    * @param {string} roomId Die ID des zu aktualisierenden Raums.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof RaumverwaltungApi
    */
   public async roomRoomIdPatch(
-    body: RoomRoomIdBody,
+    body: RoomPatchBody,
     roomId: string,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Room>> {

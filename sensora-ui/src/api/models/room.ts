@@ -14,14 +14,14 @@ export interface Room {
    * @memberof Room
    * @example 55197b05-56e7-4923-acb5-3cc1f1ea1fe5
    */
-  groupId?: string
+  groupId: string
 
   /**
    * @type {string}
    * @memberof Room
    * @example Neuer Raum
    */
-  name?: string
+  name: string
 
   /**
    * Eindeutige ID des Raums, unveränderlich
@@ -30,7 +30,7 @@ export interface Room {
    * @memberof Room
    * @example 55197b05-56e7-4923-acb5-3cc1f1ea1fe5
    */
-  rid?: string
+  rid: string
 
   /**
    * Der Besitzer des Raums.
@@ -38,7 +38,7 @@ export interface Room {
    * @type {User}
    * @memberof Room
    */
-  owner?: User
+  owner: User
 
   /**
    * Liste der zugeordneten Pflanzen
@@ -46,5 +46,5 @@ export interface Room {
    * @type {Array<Plant>}
    * @memberof Room
    */
-  plants?: Array<Plant>
+  plants: Array<Plant>
 }
