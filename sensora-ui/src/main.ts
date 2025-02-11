@@ -7,12 +7,11 @@ import piniaPersist from 'pinia-plugin-persistedstate'
 import App from './App.vue'
 import router from './router'
 
-import i18n from './i18n/i18n.ts'
+import i18n from '@/i18n'
 
 import { useTheme } from './composables/useTheme'
-import { useAuthStore } from '@/stores/auth'
-
-import { useUserStore } from '@/stores/user'
+import { useAuthStore } from './stores/auth'
+import { useUserStore } from './stores/user'
 
 const app = createApp(App)
 
@@ -23,7 +22,7 @@ app.use(pinia)
 const authStore = useAuthStore()
 const userStore = useUserStore()
 if (authStore.token) {
-  userStore.fetchUser()
+  await userStore.fetchUser()
 }
 
 const { theme } = useTheme()

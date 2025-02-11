@@ -1,29 +1,32 @@
 import { defineStore } from 'pinia'
-import { useGroupStore } from '@/stores/group'
+import { useGroupStore } from './group'
 import type { Room, RoomPatchBody, RoomPostBody } from '@/api'
 import { RaumverwaltungApiFactory } from '@/api'
 import { handleApiError } from '@/utils/apiErrorHandler'
 import { toast } from 'vue-sonner'
-import i18n from '@/i18n/i18n.ts'
+import i18n from '@/i18n'
 
 import apiClient from '@/api/apiClient'
 
 const roomApi = RaumverwaltungApiFactory(undefined, undefined, apiClient)
 const t = i18n.global?.t || ((key: string) => key)
-const groupStore = useGroupStore()
 
 export const useRoomStore = defineStore('room', {
-  state: () => ({
-    rooms: [] as Room[],
-    loading: false,
-  }),
+  state: () => {
+    const groupStore = useGroupStore()
+    return {
+      rooms: [] as Room[],
+      loading: false,
+      groupStore,
+    }
+  },
 
   actions: {
     async fetchRooms(force = false) {
-      const groups = groupStore.groups
+      const groups = this.groupStore.groups
 
       if (groups.length > 0 && !force) {
-        this.rooms = groupStore.groups.reduce((accumulatedRooms, group) => {
+        this.rooms = this.groupStore.groups.reduce((accumulatedRooms, group) => {
           if (group.rooms) {
             accumulatedRooms.push(...group.rooms)
           }
@@ -32,8 +35,8 @@ export const useRoomStore = defineStore('room', {
         return
       }
 
-      await groupStore.fetchGroups(true)
-      this.rooms = groupStore.groups.reduce((accumulatedRooms, group) => {
+      await this.groupStore.fetchGroups(true)
+      this.rooms = this.groupStore.groups.reduce((accumulatedRooms, group) => {
         if (group.rooms) {
           accumulatedRooms.push(...group.rooms)
         }
@@ -48,7 +51,7 @@ export const useRoomStore = defineStore('room', {
         const response = await roomApi.roomPost(roomData)
         const newRoom = response.data
 
-        const group = groupStore.groups.find((g) => g.gid === groupId)
+        const group = this.groupStore.groups.find((g) => g.gid === groupId)
 
         if (group) {
           group.rooms = [...(group.rooms || []), newRoom]
@@ -69,7 +72,7 @@ export const useRoomStore = defineStore('room', {
       try {
         await roomApi.roomRoomIdDelete(roomId)
 
-        const group = groupStore.groups.find((g) => g.gid === groupId)
+        const group = this.groupStore.groups.find((g) => g.gid === groupId)
         if (group) {
           group.rooms = group.rooms?.filter((room) => room.rid !== roomId)
         }
@@ -91,7 +94,7 @@ export const useRoomStore = defineStore('room', {
         const response = await roomApi.roomRoomIdPatch(roomData, roomId)
         const updatedRoom = response.data
 
-        const group = groupStore.groups.find((g) => g.gid === groupId)
+        const group = this.groupStore.groups.find((g) => g.gid === groupId)
         if (group) {
           group.rooms = group.rooms?.map((room) => (room.rid === roomId ? updatedRoom : room))
         }
@@ -119,7 +122,7 @@ export const useRoomStore = defineStore('room', {
             this.rooms.push(updatedRoom)
           }
 
-          const groups = groupStore.groups
+          const groups = this.groupStore.groups
 
           const group = groups.find((g) => g.gid === updatedRoom.groupId)
           if (group) {

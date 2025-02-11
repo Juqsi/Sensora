@@ -4,7 +4,7 @@ import { GruppenverwaltungApiFactory } from '@/api'
 import apiClient from '@/api/apiClient'
 import { handleApiError } from '@/utils/apiErrorHandler'
 import { toast } from 'vue-sonner'
-import i18n from '@/i18n/i18n.ts'
+import i18n from '@/i18n'
 
 const t = i18n.global?.t || ((key: string) => key)
 

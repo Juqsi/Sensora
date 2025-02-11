@@ -7,12 +7,6 @@ import { useUserStore } from '@/stores/user.ts'
 import { usePlantStore } from '@/stores/plant.ts'
 import { useRoomStore } from '@/stores/room.ts'
 
-const userStore = useUserStore()
-const deviceStore = useDeviceStore()
-const plantStore = usePlantStore()
-const roomStore = useRoomStore()
-const groupStore = useGroupStore()
-
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: localStorage.getItem('token') || null,
@@ -33,6 +27,11 @@ export const useAuthStore = defineStore('auth', {
       this.token = null
       localStorage.removeItem('token')
       this.isAuthenticated = false
+      const userStore = useUserStore()
+      const deviceStore = useDeviceStore()
+      const plantStore = usePlantStore()
+      const roomStore = useRoomStore()
+      const groupStore = useGroupStore()
       userStore.clearData()
       deviceStore.clearData()
       plantStore.clearData()
