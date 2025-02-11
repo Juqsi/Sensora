@@ -1,7 +1,7 @@
 import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
 import {Configuration} from '@/api/configuration'
 import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import type {Plant, PlantBody, PlantPlantIdBody} from '@/api/models'
+import type {Plant, PlantPatchBody, PlantPostBody} from '@/api/models'
 
 /**
  * PflanzenverwaltungApi - axios parameter creator
@@ -158,13 +158,13 @@ export const PflanzenverwaltungApiAxiosParamCreator = function (configuration?: 
     /**
      * Ermöglicht das Aktualisieren von Pflanzendaten.
      * @summary Pflanze aktualisieren
-     * @param {PlantPlantIdBody} body
+     * @param {PlantPatchBody} body
      * @param {string} plantId Die ID der zu aktualisierenden Pflanze.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     plantPlantIdPatch: async (
-      body: PlantPlantIdBody,
+      body: PlantPatchBody,
       plantId: string,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
@@ -236,11 +236,14 @@ export const PflanzenverwaltungApiAxiosParamCreator = function (configuration?: 
     /**
      * Erstellt eine neue Pflanze und verknüpft sie mit einem Raum und einem Sensor.
      * @summary Pflanze erstellen
-     * @param {PlantBody} body
+     * @param {PlantPostBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    plantPost: async (body: PlantBody, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    plantPost: async (
+      body: PlantPostBody,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
       // verify required parameter 'body' is not null or undefined
       if (body === null || body === undefined) {
         throw new RequiredError(
@@ -356,13 +359,13 @@ export const PflanzenverwaltungApiFp = function (configuration?: Configuration) 
     /**
      * Ermöglicht das Aktualisieren von Pflanzendaten.
      * @summary Pflanze aktualisieren
-     * @param {PlantPlantIdBody} body
+     * @param {PlantPatchBody} body
      * @param {string} plantId Die ID der zu aktualisierenden Pflanze.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async plantPlantIdPatch(
-      body: PlantPlantIdBody,
+      body: PlantPatchBody,
       plantId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Plant>>> {
@@ -380,12 +383,12 @@ export const PflanzenverwaltungApiFp = function (configuration?: Configuration) 
     /**
      * Erstellt eine neue Pflanze und verknüpft sie mit einem Raum und einem Sensor.
      * @summary Pflanze erstellen
-     * @param {PlantBody} body
+     * @param {PlantPostBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async plantPost(
-      body: PlantBody,
+      body: PlantPostBody,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Plant>>> {
       const localVarAxiosArgs = await PflanzenverwaltungApiAxiosParamCreator(
@@ -449,13 +452,13 @@ export const PflanzenverwaltungApiFactory = function (
     /**
      * Ermöglicht das Aktualisieren von Pflanzendaten.
      * @summary Pflanze aktualisieren
-     * @param {PlantPlantIdBody} body
+     * @param {PlantPatchBody} body
      * @param {string} plantId Die ID der zu aktualisierenden Pflanze.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async plantPlantIdPatch(
-      body: PlantPlantIdBody,
+      body: PlantPatchBody,
       plantId: string,
       options?: AxiosRequestConfig,
     ): Promise<AxiosResponse<Plant>> {
@@ -466,11 +469,14 @@ export const PflanzenverwaltungApiFactory = function (
     /**
      * Erstellt eine neue Pflanze und verknüpft sie mit einem Raum und einem Sensor.
      * @summary Pflanze erstellen
-     * @param {PlantBody} body
+     * @param {PlantPostBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async plantPost(body: PlantBody, options?: AxiosRequestConfig): Promise<AxiosResponse<Plant>> {
+    async plantPost(
+      body: PlantPostBody,
+      options?: AxiosRequestConfig,
+    ): Promise<AxiosResponse<Plant>> {
       return PflanzenverwaltungApiFp(configuration)
         .plantPost(body, options)
         .then((request) => request(axios, basePath))
@@ -526,14 +532,14 @@ export class PflanzenverwaltungApi extends BaseAPI {
   /**
    * Ermöglicht das Aktualisieren von Pflanzendaten.
    * @summary Pflanze aktualisieren
-   * @param {PlantPlantIdBody} body
+   * @param {PlantPatchBody} body
    * @param {string} plantId Die ID der zu aktualisierenden Pflanze.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PflanzenverwaltungApi
    */
   public async plantPlantIdPatch(
-    body: PlantPlantIdBody,
+    body: PlantPatchBody,
     plantId: string,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Plant>> {
@@ -545,13 +551,13 @@ export class PflanzenverwaltungApi extends BaseAPI {
   /**
    * Erstellt eine neue Pflanze und verknüpft sie mit einem Raum und einem Sensor.
    * @summary Pflanze erstellen
-   * @param {PlantBody} body
+   * @param {PlantPostBody} body
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PflanzenverwaltungApi
    */
   public async plantPost(
-    body: PlantBody,
+    body: PlantPostBody,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Plant>> {
     return PflanzenverwaltungApiFp(this.configuration)
