@@ -8,6 +8,8 @@ import { useI18n } from 'vue-i18n'
 
 const groupApi = GruppenverwaltungApiFactory(undefined, undefined, apiClient)
 
+const { t } = useI18n()
+
 export const useGroupStore = defineStore('group', {
   state: () => ({
     groups: [] as Group[],
@@ -29,7 +31,6 @@ export const useGroupStore = defineStore('group', {
     },
 
     async deleteGroup(groupId: string) {
-      const { t } = useI18n()
       try {
         await groupApi.groupGroupIdDelete(groupId)
         this.groups = this.groups.filter((g) => g.gid !== groupId)
@@ -40,7 +41,6 @@ export const useGroupStore = defineStore('group', {
     },
 
     async removeUserFromGroup(groupId: string, userId: string) {
-      const { t } = useI18n()
       try {
         const response = await groupApi.groupGroupIdKickUserIdDelete(groupId, userId)
         const updatedGroup = response.data
@@ -52,7 +52,6 @@ export const useGroupStore = defineStore('group', {
     },
 
     async leaveGroup(groupId: string) {
-      const { t } = useI18n()
       try {
         await groupApi.groupGroupIdLeaveDelete(groupId)
         this.groups = this.groups.filter((g) => g.gid !== groupId)
@@ -63,7 +62,6 @@ export const useGroupStore = defineStore('group', {
     },
 
     async updateGroup(groupId: string, body: GroupPatchBody) {
-      const { t } = useI18n()
       try {
         const response = await groupApi.groupGroupIdPatch(body, groupId)
         const updatedGroup = response.data
@@ -75,7 +73,6 @@ export const useGroupStore = defineStore('group', {
     },
 
     async joinGroup(token: string) {
-      const { t } = useI18n()
       try {
         const response = await groupApi.groupJoinPatch(token)
         this.groups.push(response.data)
@@ -86,7 +83,6 @@ export const useGroupStore = defineStore('group', {
     },
 
     async createGroup(body: GroupPostBody) {
-      const { t } = useI18n()
       try {
         const response = await groupApi.groupPost(body)
         this.groups.push(response.data)

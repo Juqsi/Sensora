@@ -5,6 +5,8 @@ import type { User, UserPatchBody } from '@/api'
 import { toast } from 'vue-sonner'
 import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
+
 export const useUserStore = defineStore('user', {
   state: () => ({
     user: null as User | null,
@@ -29,7 +31,6 @@ export const useUserStore = defineStore('user', {
     },
 
     async updateUser(data: UserPatchBody) {
-      const { t } = useI18n()
       this.isLoading = true
       this.errorMessage = ''
       try {
@@ -45,7 +46,6 @@ export const useUserStore = defineStore('user', {
     },
 
     async deleteUser() {
-      const { t } = useI18n()
       this.isLoading = true
       this.errorMessage = ''
       try {

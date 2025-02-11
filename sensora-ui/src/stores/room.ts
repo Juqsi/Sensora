@@ -9,6 +9,8 @@ import apiClient from '@/api/apiClient'
 
 const roomApi = RaumverwaltungApiFactory(undefined, undefined, apiClient)
 
+const { t } = useI18n()
+
 export const useRoomStore = defineStore('room', {
   state: () => ({
     rooms: [] as Room[],
@@ -40,7 +42,6 @@ export const useRoomStore = defineStore('room', {
     },
 
     async createRoom(groupId: string, name: string) {
-      const { t } = useI18n()
       this.loading = true
       try {
         const roomData: RoomPostBody = { groupId, name }
@@ -65,7 +66,6 @@ export const useRoomStore = defineStore('room', {
     },
 
     async deleteRoom(roomId: string, groupId: string) {
-      const { t } = useI18n()
       this.loading = true
       try {
         await roomApi.roomRoomIdDelete(roomId)
@@ -86,10 +86,10 @@ export const useRoomStore = defineStore('room', {
       }
     },
 
-    async updateRoom(groupId: string, roomId: string, roomData: RoomPatchBody) {
-      const { t } = useI18n()
+    async updateRoom(groupId: string, roomId: string, name: string) {
       this.loading = true
       try {
+        const roomData: RoomPatchBody = { groupId, name }
         const response = await roomApi.roomRoomIdPatch(roomData, roomId)
         const updatedRoom = response.data
 
