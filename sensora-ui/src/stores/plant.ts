@@ -168,10 +168,68 @@ export const usePlantStore = defineStore('plant', {
       }
     },
 
-    async getPlantDetails(plantId: string) {
+    async getPlantDetails(
+      plantId: string,
+      startTime?: Date,
+      endTime?: Date,
+      force: boolean = false,
+    ) {
       try {
-        const response = await plantApi.plantPlantIdGet(plantId)
-        return response.data
+        const existingPlant = this.plants.find((plant) => plant.plantId === plantId)
+
+        if (force || (existingPlant && startTime && endTime)) {
+          const start = startTime || new Date(0)
+          const end = endTime || new Date()
+
+          // Überprüfe, ob der Zeitraum durch bestehende Messwerte abgedeckt ist
+          const isCovered = existingPlant?.controllers?.some((controller) =>
+            controller.sensors?.some((sensor) =>
+              sensor.values?.some((value) => {
+                const timestamp = new Date(value.timestamp || 0)
+                return timestamp >= start && timestamp <= end
+              }),
+            ),
+          )
+
+          // Wenn der Zeitraum bereits abgedeckt ist und force nicht gesetzt ist, überspringe den API-Aufruf
+          if (isCovered && !force) {
+            return existingPlant
+          }
+        }
+
+        // Wenn der Zeitraum nicht abgedeckt ist oder die Pflanze noch nicht existiert
+        const response = await plantApi.plantPlantIdGet(plantId, startTime, endTime)
+        const updatedPlant = response.data
+
+        // Kombiniere die neuen Sensorwerte mit den bestehenden Werten
+        if (existingPlant) {
+          updatedPlant.controllers?.forEach((controller) => {
+            controller.sensors?.forEach((sensor) => {
+              const existingSensor = existingPlant.controllers
+                ?.find((ctrl) => ctrl.did === controller.did)
+                ?.sensors?.find((existingSensor) => existingSensor.sid === sensor.sid)
+
+              if (existingSensor) {
+                sensor.values?.forEach((newValue) => {
+                  const existingValue = existingSensor.values?.find(
+                    (val) => val.timestamp === newValue.timestamp,
+                  )
+                  if (!existingValue) {
+                    existingSensor.values?.push(newValue)
+                  }
+                })
+              } else {
+                existingPlant.controllers?.push(controller)
+              }
+            })
+          })
+        } else {
+          this.plants.push(updatedPlant)
+          await updateRoomWithPlant(updatedPlant.room, updatedPlant)
+          await updateGroupWithPlant(updatedPlant)
+        }
+
+        return updatedPlant
       } catch (error) {
         handleApiError(error)
         return null
