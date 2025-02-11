@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { Plant, PlantPatchBody, PlantPostBody, PlantTargetValues } from '@/api'
+import type { Plant, PlantPatchBody, PlantPostBody } from '@/api'
 import { PflanzenverwaltungApiFactory } from '@/api'
 import { handleApiError } from '@/utils/apiErrorHandler'
 import { toast } from 'vue-sonner'
@@ -31,7 +31,6 @@ const removePlantFromGroup = (plantId: string) => {
   })
 }
 
-// Helper: Pflanze im Raum aktualisieren
 const updateRoomWithPlant = async (roomId: string, updatedPlant: Plant) => {
   const groupStore = useRoomStore()
   groupStore.rooms.forEach((room) => {
@@ -43,7 +42,6 @@ const updateRoomWithPlant = async (roomId: string, updatedPlant: Plant) => {
   })
 }
 
-// Helper: Pflanze in der Gruppe aktualisieren
 const updateGroupWithPlant = async (updatedPlant: Plant) => {
   const groupStore = useGroupStore()
   groupStore.groups.forEach((group) => {
@@ -97,29 +95,18 @@ export const usePlantStore = defineStore('plant', {
       }, [] as Plant[])
     },
 
-    async createPlant(
-      roomId: string,
-      name: string,
-      plantType?: string,
-      note?: string,
-      targetValues?: PlantTargetValues[],
-    ) {
+    async createPlant(plantData: PlantPostBody) {
       this.loading = true
       try {
-        const plantData: PlantPostBody = {
-          room: roomId,
-          name,
-          plantType,
-          note,
-          targetValues,
-        }
-
         const response = await plantApi.plantPost(plantData)
         const newPlant = response.data
 
         this.plants.push(newPlant)
 
-        await Promise.all([updateRoomWithPlant(roomId, newPlant), updateGroupWithPlant(newPlant)])
+        await Promise.all([
+          updateRoomWithPlant(plantData.room, newPlant),
+          updateGroupWithPlant(newPlant),
+        ])
 
         toast.success(t('plant.created'))
       } catch (error) {
@@ -129,17 +116,25 @@ export const usePlantStore = defineStore('plant', {
       }
     },
 
-    async deletePlant(plantId: string, roomId: string) {
+    async deletePlant(plantId: string) {
       this.loading = true
       try {
         await plantApi.plantPlantIdDelete(plantId)
 
-        this.plants = this.plants.filter((plant) => plant.plantId !== plantId)
+        const plantToDelete = this.plants.find((plant) => plant.plantId === plantId)
 
-        removePlantFromRoom(roomId, plantId)
-        removePlantFromGroup(plantId)
+        if (plantToDelete) {
+          const roomId = plantToDelete.room
 
-        toast.success(t('plant.deleted'))
+          this.plants = this.plants.filter((plant) => plant.plantId !== plantId)
+
+          removePlantFromRoom(roomId, plantId)
+          removePlantFromGroup(plantId)
+
+          toast.success(t('plant.deleted'))
+        } else {
+          toast.error(t('plant.notFound'))
+        }
       } catch (error) {
         handleApiError(error)
       } finally {
