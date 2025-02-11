@@ -12,7 +12,7 @@ export interface Group {
    * @memberof Group
    * @example Home
    */
-  name?: string
+  name: string
 
   /**
    * Eindeutige ID der Gruppe, unveränderlich
@@ -21,7 +21,7 @@ export interface Group {
    * @memberof Group
    * @example 7aa91e15-ba7f-4afb-8b56-f1f8c15642c6
    */
-  gid?: string
+  gid: string
 
   /**
    * @type {string}

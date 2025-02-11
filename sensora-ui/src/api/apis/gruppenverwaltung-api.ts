@@ -2,7 +2,7 @@ import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResp
 import {Configuration} from '@/api/configuration'
 
 import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import type {Group, GroupBody, GroupGroupIdBody} from '@/api/models'
+import type {Group, GroupGroupIdBody, GroupPostBody} from '@/api/models'
 
 /**
  * GruppenverwaltungApi - axios parameter creator
@@ -416,11 +416,14 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
     /**
      * Erstellt eine Gruppe und fügt den aktuellen Benutzer hinzu.
      * @summary Gruppe erstelen
-     * @param {GroupBody} body
+     * @param {GroupPostBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    groupPost: async (body: GroupBody, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    groupPost: async (
+      body: GroupPostBody,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
       // verify required parameter 'body' is not null or undefined
       if (body === null || body === undefined) {
         throw new RequiredError(
@@ -622,12 +625,12 @@ export const GruppenverwaltungApiFp = function (configuration?: Configuration) {
     /**
      * Erstellt eine Gruppe und fügt den aktuellen Benutzer hinzu.
      * @summary Gruppe erstelen
-     * @param {GroupBody} body
+     * @param {GroupPostBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async groupPost(
-      body: GroupBody,
+      body: GroupPostBody,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Group>>> {
       const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator(
@@ -747,11 +750,14 @@ export const GruppenverwaltungApiFactory = function (
     /**
      * Erstellt eine Gruppe und fügt den aktuellen Benutzer hinzu.
      * @summary Gruppe erstelen
-     * @param {GroupBody} body
+     * @param {GroupPostBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async groupPost(body: GroupBody, options?: AxiosRequestConfig): Promise<AxiosResponse<Group>> {
+    async groupPost(
+      body: GroupPostBody,
+      options?: AxiosRequestConfig,
+    ): Promise<AxiosResponse<Group>> {
       return GruppenverwaltungApiFp(configuration)
         .groupPost(body, options)
         .then((request) => request(axios, basePath))
@@ -871,13 +877,13 @@ export class GruppenverwaltungApi extends BaseAPI {
   /**
    * Erstellt eine Gruppe und fügt den aktuellen Benutzer hinzu.
    * @summary Gruppe erstelen
-   * @param {GroupBody} body
+   * @param {GroupPostBody} body
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof GruppenverwaltungApi
    */
   public async groupPost(
-    body: GroupBody,
+    body: GroupPostBody,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Group>> {
     return GruppenverwaltungApiFp(this.configuration)
