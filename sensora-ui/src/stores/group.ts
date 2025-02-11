@@ -92,7 +92,7 @@ export const useGroupStore = defineStore('group', {
       }
     },
 
-    clearGroups() {
+    clearData() {
       this.groups = []
     },
   },

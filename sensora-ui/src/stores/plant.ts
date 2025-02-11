@@ -231,7 +231,7 @@ export const usePlantStore = defineStore('plant', {
       }
     },
 
-    async clearPlants() {
+    clearData() {
       this.plants = []
     },
   },

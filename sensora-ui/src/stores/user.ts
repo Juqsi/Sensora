@@ -60,7 +60,7 @@ export const useUserStore = defineStore('user', {
       }
     },
 
-    clearUserData() {
+    clearData() {
       this.user = null
     },
   },

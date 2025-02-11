@@ -71,5 +71,9 @@ export const useDeviceStore = defineStore('device', {
         this.loading = false
       }
     },
+
+    clearData() {
+      this.devices = []
+    },
   },
 })

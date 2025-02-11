@@ -10,6 +10,7 @@ import apiClient from '@/api/apiClient'
 
 const roomApi = RaumverwaltungApiFactory(undefined, undefined, apiClient)
 const t = i18n.global?.t || ((key: string) => key)
+const groupStore = useGroupStore()
 
 export const useRoomStore = defineStore('room', {
   state: () => ({
@@ -19,7 +20,6 @@ export const useRoomStore = defineStore('room', {
 
   actions: {
     async fetchRooms(force = false) {
-      const groupStore = useGroupStore()
       const groups = groupStore.groups
 
       if (groups.length > 0 && !force) {
@@ -48,7 +48,6 @@ export const useRoomStore = defineStore('room', {
         const response = await roomApi.roomPost(roomData)
         const newRoom = response.data
 
-        const groupStore = useGroupStore()
         const group = groupStore.groups.find((g) => g.gid === groupId)
 
         if (group) {
@@ -70,7 +69,6 @@ export const useRoomStore = defineStore('room', {
       try {
         await roomApi.roomRoomIdDelete(roomId)
 
-        const groupStore = useGroupStore()
         const group = groupStore.groups.find((g) => g.gid === groupId)
         if (group) {
           group.rooms = group.rooms?.filter((room) => room.rid !== roomId)
@@ -93,7 +91,6 @@ export const useRoomStore = defineStore('room', {
         const response = await roomApi.roomRoomIdPatch(roomData, roomId)
         const updatedRoom = response.data
 
-        const groupStore = useGroupStore()
         const group = groupStore.groups.find((g) => g.gid === groupId)
         if (group) {
           group.rooms = group.rooms?.map((room) => (room.rid === roomId ? updatedRoom : room))
@@ -122,7 +119,6 @@ export const useRoomStore = defineStore('room', {
             this.rooms.push(updatedRoom)
           }
 
-          const groupStore = useGroupStore()
           const groups = groupStore.groups
 
           const group = groups.find((g) => g.gid === updatedRoom.groupId)
@@ -146,7 +142,7 @@ export const useRoomStore = defineStore('room', {
       }
     },
 
-    async clearRooms() {
+    clearData() {
       this.rooms = []
     },
   },
