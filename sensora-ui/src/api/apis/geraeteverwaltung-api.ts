@@ -8,7 +8,7 @@ import {type Controller} from '@/api/models'
  * GeraeteverwaltungApi - axios parameter creator
  * @export
  */
-export const GerteverwaltungApiAxiosParamCreator = function (configuration?: Configuration) {
+export const GeraeteverwaltungApiAxiosParamCreator = function (configuration?: Configuration) {
   return {
     /**
      * Gibt die Informationen über ein Gerät zurück, einschließlich der zugehörigen Sensoren und deren Daten.
@@ -135,7 +135,7 @@ export const GerteverwaltungApiAxiosParamCreator = function (configuration?: Con
  * GeraeteverwaltungApi - functional programming interface
  * @export
  */
-export const GerteverwaltungApiFp = function (configuration?: Configuration) {
+export const GeraeteverwaltungApiFp = function (configuration?: Configuration) {
   return {
     /**
      * Gibt die Informationen über ein Gerät zurück, einschließlich der zugehörigen Sensoren und deren Daten.
@@ -148,7 +148,7 @@ export const GerteverwaltungApiFp = function (configuration?: Configuration) {
       deviceId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Controller>>> {
-      const localVarAxiosArgs = await GerteverwaltungApiAxiosParamCreator(
+      const localVarAxiosArgs = await GeraeteverwaltungApiAxiosParamCreator(
         configuration,
       ).deviceDeviceIdGet(deviceId, options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
@@ -171,7 +171,7 @@ export const GerteverwaltungApiFp = function (configuration?: Configuration) {
       (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<Controller & any>>>
     > {
       const localVarAxiosArgs =
-        await GerteverwaltungApiAxiosParamCreator(configuration).devicesGet(options)
+        await GeraeteverwaltungApiAxiosParamCreator(configuration).devicesGet(options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -187,7 +187,7 @@ export const GerteverwaltungApiFp = function (configuration?: Configuration) {
  * GeraeteverwaltungApi - factory interface
  * @export
  */
-export const GerteverwaltungApiFactory = function (
+export const GeraeteverwaltungApiFactory = function (
   configuration?: Configuration,
   basePath?: string,
   axios?: AxiosInstance,
@@ -204,7 +204,7 @@ export const GerteverwaltungApiFactory = function (
       deviceId: string,
       options?: AxiosRequestConfig,
     ): Promise<AxiosResponse<Controller>> {
-      return GerteverwaltungApiFp(configuration)
+      return GeraeteverwaltungApiFp(configuration)
         .deviceDeviceIdGet(deviceId, options)
         .then((request) => request(axios, basePath))
     },
@@ -215,7 +215,7 @@ export const GerteverwaltungApiFactory = function (
      * @throws {RequiredError}
      */
     async devicesGet(options?: AxiosRequestConfig): Promise<AxiosResponse<Array<Controller>>> {
-      return GerteverwaltungApiFp(configuration)
+      return GeraeteverwaltungApiFp(configuration)
         .devicesGet(options)
         .then((request) => request(axios, basePath))
     },
@@ -241,7 +241,7 @@ export class GeraeteverwaltungApi extends BaseAPI {
     deviceId: string,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Controller>> {
-    return GerteverwaltungApiFp(this.configuration)
+    return GeraeteverwaltungApiFp(this.configuration)
       .deviceDeviceIdGet(deviceId, options)
       .then((request) => request(this.axios, this.basePath))
   }
@@ -256,7 +256,7 @@ export class GeraeteverwaltungApi extends BaseAPI {
   public async devicesGet(
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Array<Controller & any>>> {
-    return GerteverwaltungApiFp(this.configuration)
+    return GeraeteverwaltungApiFp(this.configuration)
       .devicesGet(options)
       .then((request) => request(this.axios, this.basePath))
   }
