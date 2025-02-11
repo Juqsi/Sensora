@@ -6,7 +6,7 @@ import { toast } from 'vue-sonner'
 import apiClient from '@/api/apiClient'
 import { useRoomStore } from '@/stores/room'
 import { useGroupStore } from '@/stores/group'
-import i18n from '@/i18n'
+import i18n from '@/i18n/i18n.ts'
 
 const plantApi = PflanzenverwaltungApiFactory(undefined, undefined, apiClient)
 

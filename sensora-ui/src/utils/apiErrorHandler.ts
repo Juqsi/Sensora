@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/stores/auth'
 import { toast } from 'vue-sonner'
-import i18n from '@/i18n'
+import i18n from '@/i18n/i18n.ts'
 
 export function handleApiError(error: any): string {
   const authStore = useAuthStore()

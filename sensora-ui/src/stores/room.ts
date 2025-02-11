@@ -4,7 +4,7 @@ import type { Room, RoomPatchBody, RoomPostBody } from '@/api'
 import { RaumverwaltungApiFactory } from '@/api'
 import { handleApiError } from '@/utils/apiErrorHandler'
 import { toast } from 'vue-sonner'
-import i18n from '@/i18n'
+import i18n from '@/i18n/i18n.ts'
 
 import apiClient from '@/api/apiClient'
 

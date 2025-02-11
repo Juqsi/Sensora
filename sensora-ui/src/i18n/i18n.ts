@@ -1,7 +1,7 @@
 import { createI18n } from 'vue-i18n'
-import enUS from './i18n/locales/en-US.json'
-import deDE from './i18n/locales/de-DE.json'
-import { getLanguage } from './composables/useLanguage'
+import enUS from './locales/en-US.json'
+import deDE from './locales/de-DE.json'
+import { getLanguage } from '../composables/useLanguage.ts'
 
 const lang = getLanguage()
 

@@ -3,7 +3,7 @@ import userApi from '@/api/userApi'
 import { handleApiError } from '@/utils/apiErrorHandler'
 import type { User, UserPatchBody } from '@/api'
 import { toast } from 'vue-sonner'
-import i18n from '@/i18n'
+import i18n from '@/i18n/i18n.ts'
 
 const t = i18n.global?.t || ((key: string) => key)
 
@@ -50,7 +50,7 @@ export const useUserStore = defineStore('user', {
       this.errorMessage = ''
       try {
         await userApi.userDelete()
-        this.clearUserData()
+        this.clearData()
         toast.success(t('user.deleted'))
       } catch (error) {
         this.errorMessage = handleApiError(error)

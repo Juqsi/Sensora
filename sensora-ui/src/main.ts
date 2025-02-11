@@ -7,7 +7,7 @@ import piniaPersist from 'pinia-plugin-persistedstate'
 import App from './App.vue'
 import router from './router'
 
-import i18n from './i18n'
+import i18n from './i18n/i18n.ts'
 
 import { useTheme } from './composables/useTheme'
 import { useAuthStore } from '@/stores/auth'
