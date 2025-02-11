@@ -149,4 +149,7 @@ export const useRoomStore = defineStore('room', {
       this.rooms = []
     },
   },
+  persist: {
+    storage: localStorage,
+  },
 })

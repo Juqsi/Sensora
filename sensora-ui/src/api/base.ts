@@ -2,7 +2,7 @@ import { Configuration } from './configuration'
 import apiClient from './apiClient'
 import type { AxiosRequestConfig } from 'axios'
 
-export const BASE_PATH = import.meta.env.VITE_API_BASE || 'https://api.maxtar.de/v1'
+export const BASE_PATH = import.meta.env.VITE_API_BASE || '' //TODO Domain eintragen
 
 export class BaseAPI {
   protected configuration: Configuration | undefined

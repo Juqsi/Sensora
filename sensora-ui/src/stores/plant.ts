@@ -235,4 +235,7 @@ export const usePlantStore = defineStore('plant', {
       this.plants = []
     },
   },
+  persist: {
+    storage: localStorage,
+  },
 })

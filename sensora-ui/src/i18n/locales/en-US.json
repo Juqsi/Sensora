@@ -48,7 +48,8 @@
     "notFound": "Resource not found!",
     "serverError": "Internal server error! Please try again later.",
     "unknownError": "Unknown error!",
-    "networkError": "Network error! Please check your internet connection."
+    "networkError": "Network error! Please check your internet connection.",
+    "loading": "Loading..."
   },
   "group": {
     "deleted": "Group successfully deleted",

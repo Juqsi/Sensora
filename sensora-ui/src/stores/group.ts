@@ -96,4 +96,7 @@ export const useGroupStore = defineStore('group', {
       this.groups = []
     },
   },
+  persist: {
+    storage: localStorage,
+  },
 })

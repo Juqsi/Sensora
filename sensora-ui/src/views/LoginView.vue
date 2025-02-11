@@ -1,28 +1,65 @@
 <script lang="ts" setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '@/stores/auth.ts'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useI18n } from 'vue-i18n'
-import { useAuthStore } from '@/stores/auth.ts'
+import type { AuthLoginBody } from '@/api'
 
 const { t } = useI18n()
 const auth = useAuthStore()
+const router = useRouter()
+
+// Reaktive Werte für E-Mail und Passwort
+const email = ref('')
+const password = ref('')
+const loading = ref(false)
+const errorMessage = ref<string | null>(null)
+
+// Login-Funktion
+const handleSubmit = async () => {
+  if (!email.value || !password.value) {
+    errorMessage.value = t('login.MissingCredentials')
+    return
+  }
+
+  loading.value = true
+  errorMessage.value = null
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  const isEmail = emailRegex.test(email.value)
+  try {
+    const credentials: AuthLoginBody = {
+      mail: isEmail ? email.value : undefined,
+      username: isEmail ? undefined : email.value,
+      password: password.value,
+    }
+    await auth.login(credentials)
+    router.push({ name: 'home' })
+  } catch (error) {
+    errorMessage.value = t('login.Failed') // Fehlermeldung anzeigen
+  } finally {
+    loading.value = false
+  }
+}
 </script>
 
 <template>
-  <div class="flex items-center justify-center">
+  <div class="flex items-center justify-center min-h-screen">
     <Card class="mx-auto max-w-sm w-full">
       <CardHeader>
         <CardTitle class="text-2xl"> {{ t('login.SignIn') }}</CardTitle>
         <CardDescription> {{ t('login.SignInInfo') }}</CardDescription>
       </CardHeader>
       <CardContent>
-        <div class="grid gap-4">
+        <form class="grid gap-4" @submit.prevent="handleSubmit">
           <div class="grid gap-2">
             <Label for="email">{{ t('login.Email') }}</Label>
-            <Input id="email" placeholder="JoeDoe@sensora.de" required type="email" />
+            <Input id="email" v-model="email" placeholder="JoeDoe@sensora.de" required />
           </div>
           <div class="grid gap-2">
             <div class="flex items-center">
@@ -31,14 +68,22 @@ const auth = useAuthStore()
                 {{ t('login.ForgotPassword') }}
               </a>
             </div>
-            <Input id="password" required type="password" />
+            <Input id="password" v-model="password" required type="password" />
           </div>
-          <Button class="w-full" type="submit">{{ t('login.SignIn') }}</Button>
+
+          <!-- Fehlermeldung anzeigen -->
+          <p v-if="errorMessage" class="text-red-500 text-sm">{{ errorMessage }}</p>
+
+          <Button :disabled="loading" class="w-full" type="submit">
+            <span v-if="loading">{{ t('login.Loading') }}</span>
+            <span v-else>{{ t('login.SignIn') }}</span>
+          </Button>
 
           <Separator :label="t('login.Or')" class="my-4" />
 
           <Button class="w-full" variant="outline">{{ t('login.SignInWithA') }}</Button>
-        </div>
+        </form>
+
         <div class="mt-4 text-center text-sm">
           {{ t('login.DontHaveAccount') }}
           <router-link :to="{ name: 'register' }" class="underline">

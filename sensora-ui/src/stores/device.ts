@@ -76,4 +76,7 @@ export const useDeviceStore = defineStore('device', {
       this.devices = []
     },
   },
+  persist: {
+    storage: localStorage,
+  },
 })
