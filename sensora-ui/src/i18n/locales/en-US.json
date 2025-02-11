@@ -39,5 +39,15 @@
     "SetToEnglish": "Language set to English.",
     "SetToGerman": "Language set to German.",
     "UpdateLanguage": "Update Language"
+  },
+  "errors": {
+    "badRequest": "Invalid request!",
+    "unauthorized": "Session expired! Please log in again.",
+    "sessionExpired": "Unauthorized!",
+    "forbidden": "Access denied!",
+    "notFound": "Resource not found!",
+    "serverError": "Internal server error! Please try again later.",
+    "unknownError": "Unknown error!",
+    "networkError": "Network error! Please check your internet connection."
   }
 }

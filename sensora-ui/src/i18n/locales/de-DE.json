@@ -39,5 +39,15 @@
     "SetToEnglish": "Sprache auf Englisch gesetzt.",
     "SetToGerman": "Sprache auf Deutsch gesetzt.",
     "UpdateLanguage": "Sprache aktualisieren"
+  },
+  "errors": {
+    "badRequest": "Ungültige Anfrage!",
+    "unauthorized": "Sitzung abgelaufen! Bitte erneut einloggen.",
+    "sessionExpired": "Nicht autorisiert!",
+    "forbidden": "Zugriff verweigert!",
+    "notFound": "Ressource nicht gefunden!",
+    "serverError": "Interner Serverfehler! Bitte später versuchen.",
+    "unknownError": "Unbekannter Fehler!",
+    "networkError": "Netzwerkfehler! Bitte Internetverbindung prüfen."
   }
 }
