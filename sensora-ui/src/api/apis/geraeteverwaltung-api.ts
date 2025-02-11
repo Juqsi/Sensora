@@ -5,7 +5,7 @@ import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
 import {type Controller} from '@/api/models'
 
 /**
- * GerteverwaltungApi - axios parameter creator
+ * GeraeteverwaltungApi - axios parameter creator
  * @export
  */
 export const GerteverwaltungApiAxiosParamCreator = function (configuration?: Configuration) {
@@ -132,7 +132,7 @@ export const GerteverwaltungApiAxiosParamCreator = function (configuration?: Con
 }
 
 /**
- * GerteverwaltungApi - functional programming interface
+ * GeraeteverwaltungApi - functional programming interface
  * @export
  */
 export const GerteverwaltungApiFp = function (configuration?: Configuration) {
@@ -184,7 +184,7 @@ export const GerteverwaltungApiFp = function (configuration?: Configuration) {
 }
 
 /**
- * GerteverwaltungApi - factory interface
+ * GeraeteverwaltungApi - factory interface
  * @export
  */
 export const GerteverwaltungApiFactory = function (
@@ -214,9 +214,7 @@ export const GerteverwaltungApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async devicesGet(
-      options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<Array<Controller & any>>> {
+    async devicesGet(options?: AxiosRequestConfig): Promise<AxiosResponse<Array<Controller>>> {
       return GerteverwaltungApiFp(configuration)
         .devicesGet(options)
         .then((request) => request(axios, basePath))
@@ -225,19 +223,19 @@ export const GerteverwaltungApiFactory = function (
 }
 
 /**
- * GerteverwaltungApi - object-oriented interface
+ * GeraeteverwaltungApi - object-oriented interface
  * @export
- * @class GerteverwaltungApi
+ * @class GeraeteverwaltungApi
  * @extends {BaseAPI}
  */
-export class GerteverwaltungApi extends BaseAPI {
+export class GeraeteverwaltungApi extends BaseAPI {
   /**
    * Gibt die Informationen über ein Gerät zurück, einschließlich der zugehörigen Sensoren und deren Daten.
    * @summary Gerät abfragen
    * @param {string} deviceId Die ID des abzufragenden Geräts
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof GerteverwaltungApi
+   * @memberof GeraeteverwaltungApi
    */
   public async deviceDeviceIdGet(
     deviceId: string,
@@ -253,7 +251,7 @@ export class GerteverwaltungApi extends BaseAPI {
    * @summary Alle verfügbaren Geräte anzeigen
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
-   * @memberof GerteverwaltungApi
+   * @memberof GeraeteverwaltungApi
    */
   public async devicesGet(
     options?: AxiosRequestConfig,

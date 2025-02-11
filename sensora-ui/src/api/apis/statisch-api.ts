@@ -128,7 +128,7 @@ export const StatischApiFactory = function (
     async staticsResourceGet(
       resource: string,
       options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<void>> {
+    ): Promise<AxiosResponse<any>> {
       return StatischApiFp(configuration)
         .staticsResourceGet(resource, options)
         .then((request) => request(axios, basePath))
