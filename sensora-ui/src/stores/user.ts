@@ -3,6 +3,7 @@ import userApi from '@/api/userApi'
 import { handleApiError } from '@/utils/apiErrorHandler'
 import type { User, UserPatchBody } from '@/api'
 import { toast } from 'vue-sonner'
+import { useI18n } from 'vue-i18n'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -28,12 +29,13 @@ export const useUserStore = defineStore('user', {
     },
 
     async updateUser(data: UserPatchBody) {
+      const { t } = useI18n()
       this.isLoading = true
       this.errorMessage = ''
       try {
         const response = await userApi.userPatch(data)
         this.user = response.data
-        toast.success('Benutzer aktualisiert!')
+        toast.success(t('user.updated'))
       } catch (error) {
         this.errorMessage = handleApiError(error)
         toast.error(this.errorMessage)
@@ -43,12 +45,13 @@ export const useUserStore = defineStore('user', {
     },
 
     async deleteUser() {
+      const { t } = useI18n()
       this.isLoading = true
       this.errorMessage = ''
       try {
         await userApi.userDelete()
         this.clearUserData()
-        toast.success('Benutzer erfolgreich gelöscht!')
+        toast.success(t('user.deleted'))
       } catch (error) {
         this.errorMessage = handleApiError(error)
         toast.error(this.errorMessage)

@@ -49,5 +49,17 @@
     "serverError": "Internal server error! Please try again later.",
     "unknownError": "Unknown error!",
     "networkError": "Network error! Please check your internet connection."
+  },
+  "group": {
+    "deleted": "Group successfully deleted",
+    "userRemoved": "User was removed",
+    "left": "Successfully left the group",
+    "updated": "Group updated",
+    "joined": "Successfully joined the group",
+    "created": "Group created"
+  },
+  "user": {
+    "updated": "User successfully updated!",
+    "deleted": "User successfully deleted!"
   }
 }

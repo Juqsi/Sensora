@@ -49,5 +49,17 @@
     "serverError": "Interner Serverfehler! Bitte später versuchen.",
     "unknownError": "Unbekannter Fehler!",
     "networkError": "Netzwerkfehler! Bitte Internetverbindung prüfen."
+  },
+  "group": {
+    "deleted": "Gruppe erfolgreich gelöscht",
+    "userRemoved": "Benutzer wurde entfernt",
+    "left": "Gruppe erfolgreich verlassen",
+    "updated": "Gruppe aktualisiert",
+    "joined": "Erfolgreich der Gruppe beigetreten",
+    "created": "Gruppe erstellt"
+  },
+  "user": {
+    "updated": "Benutzer erfolgreich aktualisiert!",
+    "deleted": "Benutzer erfolgreich gelöscht!"
   }
 }
