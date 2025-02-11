@@ -6,10 +6,13 @@ import {type User} from '@/api/models'
  * @export
  * @interface AuthRegisterBody
  */
-export interface AuthRegisterBody extends User {
+export interface AuthRegisterBody extends Omit<User, 'uid'> {
   /**
-   * @type {any}
-   * @memberof AuthRegisterBody
+   * Muss den Passwortrichtlinien entsprechen:    Min. 8 Zeichen,   Max. 100 Zeichen,   Min. 1 Sonderzeichen,   Min. 1 Ziffer,   Min. 1 Großbuchstabe,   Min. 1 Kleinbuchstabe,   Unerlaubte Zeichen: @
+   *
+   * @type {string}
+   * @memberof User
+   * @example Test!1234
    */
-  uid?: any
+  password: string
 }

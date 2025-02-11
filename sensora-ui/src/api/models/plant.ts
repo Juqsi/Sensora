@@ -14,14 +14,14 @@ export interface Plant {
    * @memberof Plant
    * @example 55197b05-56e7-4923-acb5-3cc1f1ea1fe5
    */
-  plantId?: string
+  plantId: string
 
   /**
    * @type {string}
    * @memberof Plant
    * @example Tomatenpflanze
    */
-  name?: string
+  name: string
 
   /**
    * ID des Raumes, dem die Pflanze zugeordnet ist
@@ -30,7 +30,7 @@ export interface Plant {
    * @memberof Plant
    * @example 55197b05-56e7-4923-acb5-3cc1f1ea1fe5
    */
-  room?: string
+  room: string
 
   /**
    * @type {string}

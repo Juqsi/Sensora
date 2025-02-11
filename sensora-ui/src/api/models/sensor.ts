@@ -14,7 +14,7 @@ export interface Sensor {
    * @memberof Sensor
    * @example 55197b05-56e7-4923-acb5-3cc1f1ea1fe5
    */
-  sid?: string
+  sid: string
 
   /**
    * Zeitpunkt, an dem sich der Sensor zuletzt gemeldet hat

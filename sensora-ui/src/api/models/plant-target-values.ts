@@ -12,7 +12,7 @@ export interface PlantTargetValues {
    * @memberof PlantTargetValues
    * @example 33.4
    */
-  value?: number
+  value: number
 
   /**
    * Art des Zielwerts
@@ -21,5 +21,12 @@ export interface PlantTargetValues {
    * @memberof PlantTargetValues
    * @example temperature
    */
-  ilk?: string
+  ilk: ilk
+}
+
+export enum ilk {
+  temperature = 'temperature',
+  soilMoisture = 'soilMoisture',
+  brightness = 'brightness',
+  humidity = 'humidity',
 }

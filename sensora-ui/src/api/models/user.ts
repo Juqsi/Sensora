@@ -12,16 +12,7 @@ export interface User {
    * @memberof User
    * @example testuser
    */
-  username?: string
-
-  /**
-   * Muss den Passwortrichtlinien entsprechen:    Min. 8 Zeichen,   Max. 100 Zeichen,   Min. 1 Sonderzeichen,   Min. 1 Ziffer,   Min. 1 Großbuchstabe,   Min. 1 Kleinbuchstabe,   Unerlaubte Zeichen: @
-   *
-   * @type {string}
-   * @memberof User
-   * @example Test!1234
-   */
-  password?: string
+  username: string
 
   /**
    * Eindeutige E-Mail, kann nicht doppelt vergeben werden
@@ -30,7 +21,7 @@ export interface User {
    * @memberof User
    * @example testuser@sensora.com
    */
-  mail?: string
+  mail: string
 
   /**
    * Eindeutige ID. Verändert sich, wenn `username` oder `mail` geändert wird.
@@ -39,7 +30,7 @@ export interface User {
    * @memberof User
    * @example 7aa91e15-ba7f-4afb-8b56-f1f8c15642c6
    */
-  uid?: string
+  uid: string
 
   /**
    * Liste der Gruppen, denen der User angehört/angehören wird.

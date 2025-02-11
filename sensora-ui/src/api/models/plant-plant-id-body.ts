@@ -6,12 +6,12 @@ import type {Plant, PlantplantIdSensors} from '@/api'
  * @export
  * @interface PlantPlantIdBody
  */
-export interface PlantPlantIdBody extends Plant {
+export interface PlantPlantIdBody extends Omit<Plant, 'plantId'> {
   /**
    * @type {any}
    * @memberof PlantPlantIdBody
    */
-  plantId?: any
+  plantId?: string
 
   /**
    * @type {Array<PlantplantIdSensors>}
@@ -26,10 +26,4 @@ export interface PlantPlantIdBody extends Plant {
    * @memberof PlantPlantIdBody
    */
   assignFullDevice?: Array<string>
-
-  /**
-   * @type {Array<any>}
-   * @memberof PlantPlantIdBody
-   */
-  targetValues?: Array<any>
 }
