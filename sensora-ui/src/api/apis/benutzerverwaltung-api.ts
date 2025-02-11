@@ -145,10 +145,13 @@ export const BenutzerverwaltungApiAxiosParamCreator = function (configuration?: 
           'Required parameter userId was null or undefined when calling userUserIdGet.',
         )
       }
-      const localVarPath = `/user/{userId}`.replace(
+      let localVarPath = `/user/{userId}`.replace(
         `{${'userId'}}`,
         encodeURIComponent(String(userId)),
       )
+      if (userId.length === 0) {
+        localVarPath = localVarPath.substring(0, localVarPath.length - 1)
+      }
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
