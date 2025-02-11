@@ -4,11 +4,11 @@ import { GruppenverwaltungApiFactory } from '@/api'
 import apiClient from '@/api/apiClient'
 import { handleApiError } from '@/utils/apiErrorHandler'
 import { toast } from 'vue-sonner'
-import { useI18n } from 'vue-i18n'
+import i18n from '@/i18n'
+
+const t = i18n.global?.t || ((key: string) => key)
 
 const groupApi = GruppenverwaltungApiFactory(undefined, undefined, apiClient)
-
-const { t } = useI18n()
 
 export const useGroupStore = defineStore('group', {
   state: () => ({

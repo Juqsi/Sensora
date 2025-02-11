@@ -3,13 +3,13 @@ import { useGroupStore } from '@/stores/group'
 import type { Room, RoomPatchBody, RoomPostBody } from '@/api'
 import { RaumverwaltungApiFactory } from '@/api'
 import { handleApiError } from '@/utils/apiErrorHandler'
-import { useI18n } from 'vue-i18n'
 import { toast } from 'vue-sonner'
+import i18n from '@/i18n'
+
 import apiClient from '@/api/apiClient'
 
 const roomApi = RaumverwaltungApiFactory(undefined, undefined, apiClient)
-
-const { t } = useI18n()
+const t = i18n.global?.t || ((key: string) => key)
 
 export const useRoomStore = defineStore('room', {
   state: () => ({

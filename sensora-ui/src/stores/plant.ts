@@ -2,15 +2,15 @@ import { defineStore } from 'pinia'
 import type { Plant, PlantPatchBody, PlantPostBody, PlantTargetValues } from '@/api'
 import { PflanzenverwaltungApiFactory } from '@/api'
 import { handleApiError } from '@/utils/apiErrorHandler'
-import { useI18n } from 'vue-i18n'
 import { toast } from 'vue-sonner'
 import apiClient from '@/api/apiClient'
 import { useRoomStore } from '@/stores/room'
 import { useGroupStore } from '@/stores/group'
+import i18n from '@/i18n'
 
 const plantApi = PflanzenverwaltungApiFactory(undefined, undefined, apiClient)
 
-const { t } = useI18n()
+const t = i18n.global?.t || ((key: string) => key)
 
 const removePlantFromRoom = (roomId: string, plantId: string) => {
   const roomStore = useRoomStore()
