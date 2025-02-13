@@ -1,5 +1,4 @@
 import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
-import { Configuration } from '@/api/configuration'
 import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
 import type { createRoomBody, Room, RoomPatchBody } from '@/api/models'
 
@@ -7,7 +6,7 @@ import type { createRoomBody, Room, RoomPatchBody } from '@/api/models'
  * RaumverwaltungApi - axios parameter creator
  * @export
  */
-export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Configuration) {
+export const RaumverwaltungApiAxiosParamCreator = function () {
   return {
     /**
      * Erstellt einen Raum und fügt ihn einer Gruppe zu.
@@ -31,9 +30,7 @@ export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Conf
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'POST',
         ...baseOptions,
@@ -41,16 +38,6 @@ export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Conf
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       localVarHeaderParameter['Content-Type'] = 'application/json'
 
@@ -97,9 +84,7 @@ export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Conf
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'DELETE',
         ...baseOptions,
@@ -107,16 +92,6 @@ export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Conf
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       const query = new URLSearchParams(localVarUrlObj.search)
       for (const key in localVarQueryParameter) {
@@ -160,9 +135,7 @@ export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Conf
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'GET',
         ...baseOptions,
@@ -170,16 +143,6 @@ export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Conf
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       const query = new URLSearchParams(localVarUrlObj.search)
       for (const key in localVarQueryParameter) {
@@ -235,9 +198,7 @@ export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Conf
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'PATCH',
         ...baseOptions,
@@ -245,16 +206,6 @@ export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Conf
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       localVarHeaderParameter['Content-Type'] = 'application/json'
 
@@ -286,7 +237,7 @@ export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Conf
  * RaumverwaltungApi - functional programming interface
  * @export
  */
-export const RaumverwaltungApiFp = function (configuration?: Configuration) {
+export const RaumverwaltungApiFp = function () {
   return {
     /**
      * Erstellt einen Raum und fügt ihn einer Gruppe zu.
@@ -299,10 +250,7 @@ export const RaumverwaltungApiFp = function (configuration?: Configuration) {
       body: createRoomBody,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Room>>> {
-      const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator(configuration).create(
-        body,
-        options,
-      )
+      const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator().create(body, options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -322,10 +270,7 @@ export const RaumverwaltungApiFp = function (configuration?: Configuration) {
       roomId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
-      const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator(configuration).delete(
-        roomId,
-        options,
-      )
+      const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator().delete(roomId, options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -345,10 +290,7 @@ export const RaumverwaltungApiFp = function (configuration?: Configuration) {
       roomId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Room>>> {
-      const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator(configuration).get(
-        roomId,
-        options,
-      )
+      const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator().get(roomId, options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -370,7 +312,7 @@ export const RaumverwaltungApiFp = function (configuration?: Configuration) {
       roomId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Room>>> {
-      const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator(configuration).update(
+      const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator().update(
         body,
         roomId,
         options,
@@ -390,11 +332,7 @@ export const RaumverwaltungApiFp = function (configuration?: Configuration) {
  * RaumverwaltungApi - factory interface
  * @export
  */
-export const RaumverwaltungApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance,
-) {
+export const RaumverwaltungApiFactory = function (basePath?: string, axios?: AxiosInstance) {
   return {
     /**
      * Erstellt einen Raum und fügt ihn einer Gruppe zu.
@@ -404,7 +342,7 @@ export const RaumverwaltungApiFactory = function (
      * @throws {RequiredError}
      */
     async create(body: createRoomBody, options?: AxiosRequestConfig): Promise<AxiosResponse<Room>> {
-      return RaumverwaltungApiFp(configuration)
+      return RaumverwaltungApiFp()
         .create(body, options)
         .then((request) => request(axios, basePath))
     },
@@ -416,7 +354,7 @@ export const RaumverwaltungApiFactory = function (
      * @throws {RequiredError}
      */
     async delete(roomId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
-      return RaumverwaltungApiFp(configuration)
+      return RaumverwaltungApiFp()
         .delete(roomId, options)
         .then((request) => request(axios, basePath))
     },
@@ -428,7 +366,7 @@ export const RaumverwaltungApiFactory = function (
      * @throws {RequiredError}
      */
     async get(roomId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<Room>> {
-      return RaumverwaltungApiFp(configuration)
+      return RaumverwaltungApiFp()
         .get(roomId, options)
         .then((request) => request(axios, basePath))
     },
@@ -445,7 +383,7 @@ export const RaumverwaltungApiFactory = function (
       roomId: string,
       options?: AxiosRequestConfig,
     ): Promise<AxiosResponse<Room>> {
-      return RaumverwaltungApiFp(configuration)
+      return RaumverwaltungApiFp()
         .update(body, roomId, options)
         .then((request) => request(axios, basePath))
     },
@@ -471,7 +409,7 @@ export class RaumverwaltungApi extends BaseAPI {
     body: createRoomBody,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Room>> {
-    return RaumverwaltungApiFp(this.configuration)
+    return RaumverwaltungApiFp()
       .create(body, options)
       .then((request) => request(this.axios, this.basePath))
   }
@@ -485,7 +423,7 @@ export class RaumverwaltungApi extends BaseAPI {
    * @memberof RaumverwaltungApi
    */
   public async delete(roomId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
-    return RaumverwaltungApiFp(this.configuration)
+    return RaumverwaltungApiFp()
       .delete(roomId, options)
       .then((request) => request(this.axios, this.basePath))
   }
@@ -499,7 +437,7 @@ export class RaumverwaltungApi extends BaseAPI {
    * @memberof RaumverwaltungApi
    */
   public async get(roomId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<Room>> {
-    return RaumverwaltungApiFp(this.configuration)
+    return RaumverwaltungApiFp()
       .get(roomId, options)
       .then((request) => request(this.axios, this.basePath))
   }
@@ -518,7 +456,7 @@ export class RaumverwaltungApi extends BaseAPI {
     roomId: string,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Room>> {
-    return RaumverwaltungApiFp(this.configuration)
+    return RaumverwaltungApiFp()
       .update(body, roomId, options)
       .then((request) => request(this.axios, this.basePath))
   }

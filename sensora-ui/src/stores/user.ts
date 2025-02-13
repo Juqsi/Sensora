@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import userApi from '@/api/userApi'
 import { handleApiError } from '@/utils/apiErrorHandler'
 import type { updateUserBody, User } from '@/api'
+import { userApiClient } from '@/api'
 import { toast } from 'vue-sonner'
 import i18n from '@/i18n'
 
@@ -20,7 +20,7 @@ export const useUserStore = defineStore('user', {
       this.isLoading = true
       this.errorMessage = ''
       try {
-        const response = await userApi.get(userId || '')
+        const response = await userApiClient.get(userId || '')
         this.user = response.data
       } catch (error) {
         this.errorMessage = handleApiError(error)
@@ -34,7 +34,7 @@ export const useUserStore = defineStore('user', {
       this.isLoading = true
       this.errorMessage = ''
       try {
-        const response = await userApi.update(data)
+        const response = await userApiClient.update(data)
         this.user = response.data
         toast.success(t('user.updated'))
       } catch (error) {
@@ -49,7 +49,7 @@ export const useUserStore = defineStore('user', {
       this.isLoading = true
       this.errorMessage = ''
       try {
-        await userApi.delete()
+        await userApiClient.delete()
         this.clearData()
         toast.success(t('user.deleted'))
       } catch (error) {

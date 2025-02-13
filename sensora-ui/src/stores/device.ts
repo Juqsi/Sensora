@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia'
-import { type Controller, GeraeteverwaltungApiFactory } from '@/api'
+import { type Controller, deviceApiClient } from '@/api'
 import { handleApiError } from '@/utils/apiErrorHandler'
 import { toast } from 'vue-sonner'
-
-const geraeteApi = GeraeteverwaltungApiFactory()
 
 export const useDeviceStore = defineStore('device', {
   state: () => ({
@@ -16,7 +14,7 @@ export const useDeviceStore = defineStore('device', {
       this.loading = true
       try {
         if (force || this.devices.length === 0) {
-          const response = await geraeteApi.getList()
+          const response = await deviceApiClient.getList()
           this.devices = response.data
         }
 
@@ -33,7 +31,7 @@ export const useDeviceStore = defineStore('device', {
       this.loading = true
       try {
         if (force || !this.devices.some((d) => d.did === deviceId)) {
-          const response = await geraeteApi.get(deviceId)
+          const response = await deviceApiClient.get(deviceId)
           const device = response.data
 
           const existingDeviceIndex = this.devices.findIndex((d) => d.did === deviceId)
@@ -58,7 +56,7 @@ export const useDeviceStore = defineStore('device', {
     async removeDevice(deviceId: string) {
       this.loading = true
       try {
-        await geraeteApi.get(deviceId)
+        await deviceApiClient.get(deviceId)
 
         this.devices = this.devices.filter((device) => device.did !== deviceId)
 

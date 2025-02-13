@@ -1,5 +1,4 @@
 import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
-import { Configuration } from '@/api/configuration'
 
 import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
 import { type Controller } from '@/api/models'
@@ -8,7 +7,7 @@ import { type Controller } from '@/api/models'
  * GeraeteverwaltungApi - axios parameter creator
  * @export
  */
-export const GeraeteverwaltungApiAxiosParamCreator = function (configuration?: Configuration) {
+export const GeraeteverwaltungApiAxiosParamCreator = function () {
   return {
     /**
      * Gibt die Informationen über ein Gerät zurück, einschließlich der zugehörigen Sensoren und deren Daten.
@@ -32,9 +31,7 @@ export const GeraeteverwaltungApiAxiosParamCreator = function (configuration?: C
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'GET',
         ...baseOptions,
@@ -42,16 +39,6 @@ export const GeraeteverwaltungApiAxiosParamCreator = function (configuration?: C
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       const query = new URLSearchParams(localVarUrlObj.search)
       for (const key in localVarQueryParameter) {
@@ -84,9 +71,7 @@ export const GeraeteverwaltungApiAxiosParamCreator = function (configuration?: C
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'GET',
         ...baseOptions,
@@ -94,16 +79,6 @@ export const GeraeteverwaltungApiAxiosParamCreator = function (configuration?: C
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       const query = new URLSearchParams(localVarUrlObj.search)
       for (const key in localVarQueryParameter) {
@@ -132,7 +107,7 @@ export const GeraeteverwaltungApiAxiosParamCreator = function (configuration?: C
  * GeraeteverwaltungApi - functional programming interface
  * @export
  */
-export const GeraeteverwaltungApiFp = function (configuration?: Configuration) {
+export const GeraeteverwaltungApiFp = function () {
   return {
     /**
      * Gibt die Informationen über ein Gerät zurück, einschließlich der zugehörigen Sensoren und deren Daten.
@@ -145,10 +120,7 @@ export const GeraeteverwaltungApiFp = function (configuration?: Configuration) {
       deviceId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Controller>>> {
-      const localVarAxiosArgs = await GeraeteverwaltungApiAxiosParamCreator(configuration).get(
-        deviceId,
-        options,
-      )
+      const localVarAxiosArgs = await GeraeteverwaltungApiAxiosParamCreator().get(deviceId, options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -168,8 +140,7 @@ export const GeraeteverwaltungApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<Controller & any>>>
     > {
-      const localVarAxiosArgs =
-        await GeraeteverwaltungApiAxiosParamCreator(configuration).getList(options)
+      const localVarAxiosArgs = await GeraeteverwaltungApiAxiosParamCreator().getList(options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -185,11 +156,7 @@ export const GeraeteverwaltungApiFp = function (configuration?: Configuration) {
  * GeraeteverwaltungApi - factory interface
  * @export
  */
-export const GeraeteverwaltungApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance,
-) {
+export const GeraeteverwaltungApiFactory = function (basePath?: string, axios?: AxiosInstance) {
   return {
     /**
      * Gibt die Informationen über ein Gerät zurück, einschließlich der zugehörigen Sensoren und deren Daten.
@@ -199,7 +166,7 @@ export const GeraeteverwaltungApiFactory = function (
      * @throws {RequiredError}
      */
     async get(deviceId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<Controller>> {
-      return GeraeteverwaltungApiFp(configuration)
+      return GeraeteverwaltungApiFp()
         .get(deviceId, options)
         .then((request) => request(axios, basePath))
     },
@@ -210,7 +177,7 @@ export const GeraeteverwaltungApiFactory = function (
      * @throws {RequiredError}
      */
     async getList(options?: AxiosRequestConfig): Promise<AxiosResponse<Array<Controller>>> {
-      return GeraeteverwaltungApiFp(configuration)
+      return GeraeteverwaltungApiFp()
         .getList(options)
         .then((request) => request(axios, basePath))
     },
@@ -236,7 +203,7 @@ export class GeraeteverwaltungApi extends BaseAPI {
     deviceId: string,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Controller>> {
-    return GeraeteverwaltungApiFp(this.configuration)
+    return GeraeteverwaltungApiFp()
       .get(deviceId, options)
       .then((request) => request(this.axios, this.basePath))
   }
@@ -251,7 +218,7 @@ export class GeraeteverwaltungApi extends BaseAPI {
   public async getList(
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Array<Controller & any>>> {
-    return GeraeteverwaltungApiFp(this.configuration)
+    return GeraeteverwaltungApiFp()
       .getList(options)
       .then((request) => request(this.axios, this.basePath))
   }

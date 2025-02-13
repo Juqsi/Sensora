@@ -1,5 +1,4 @@
 import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
-import { Configuration } from '@/api/configuration'
 import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
 import type { updateUserBody, User } from '@/api/models'
 
@@ -7,7 +6,7 @@ import type { updateUserBody, User } from '@/api/models'
  * BenutzerverwaltungApi - axios parameter creator
  * @export
  */
-export const BenutzerverwaltungApiAxiosParamCreator = function (configuration?: Configuration) {
+export const BenutzerverwaltungApiAxiosParamCreator = function () {
   return {
     /**
      * Löscht einen Benutzer und alle seine zugehörigen Daten. Dies kann nicht rückgängig gemacht werden. Das Auth-Token verliert seine Gültigkeit.
@@ -20,9 +19,7 @@ export const BenutzerverwaltungApiAxiosParamCreator = function (configuration?: 
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'DELETE',
         ...baseOptions,
@@ -30,16 +27,6 @@ export const BenutzerverwaltungApiAxiosParamCreator = function (configuration?: 
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       const query = new URLSearchParams(localVarUrlObj.search)
       for (const key in localVarQueryParameter) {
@@ -83,9 +70,7 @@ export const BenutzerverwaltungApiAxiosParamCreator = function (configuration?: 
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'PATCH',
         ...baseOptions,
@@ -93,16 +78,6 @@ export const BenutzerverwaltungApiAxiosParamCreator = function (configuration?: 
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       localVarHeaderParameter['Content-Type'] = 'application/json'
 
@@ -152,9 +127,7 @@ export const BenutzerverwaltungApiAxiosParamCreator = function (configuration?: 
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'GET',
         ...baseOptions,
@@ -162,16 +135,6 @@ export const BenutzerverwaltungApiAxiosParamCreator = function (configuration?: 
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       const query = new URLSearchParams(localVarUrlObj.search)
       for (const key in localVarQueryParameter) {
@@ -200,7 +163,7 @@ export const BenutzerverwaltungApiAxiosParamCreator = function (configuration?: 
  * BenutzerverwaltungApi - functional programming interface
  * @export
  */
-export const BenutzerverwaltungApiFp = function (configuration?: Configuration) {
+export const BenutzerverwaltungApiFp = function () {
   return {
     /**
      * Löscht einen Benutzer und alle seine zugehörigen Daten. Dies kann nicht rückgängig gemacht werden. Das Auth-Token verliert seine Gültigkeit.
@@ -211,8 +174,7 @@ export const BenutzerverwaltungApiFp = function (configuration?: Configuration) 
     async delete(
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
-      const localVarAxiosArgs =
-        await BenutzerverwaltungApiAxiosParamCreator(configuration).delete(options)
+      const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator().delete(options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -232,10 +194,7 @@ export const BenutzerverwaltungApiFp = function (configuration?: Configuration) 
       body: updateUserBody,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<User>>> {
-      const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator(configuration).update(
-        body,
-        options,
-      )
+      const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator().update(body, options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -255,10 +214,7 @@ export const BenutzerverwaltungApiFp = function (configuration?: Configuration) 
       userId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<User>>> {
-      const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator(configuration).get(
-        userId,
-        options,
-      )
+      const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator().get(userId, options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -274,11 +230,7 @@ export const BenutzerverwaltungApiFp = function (configuration?: Configuration) 
  * BenutzerverwaltungApi - factory interface
  * @export
  */
-export const BenutzerverwaltungApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance,
-) {
+export const BenutzerverwaltungApiFactory = function (basePath?: string, axios?: AxiosInstance) {
   return {
     /**
      * Löscht einen Benutzer und alle seine zugehörigen Daten. Dies kann nicht rückgängig gemacht werden. Das Auth-Token verliert seine Gültigkeit.
@@ -287,7 +239,7 @@ export const BenutzerverwaltungApiFactory = function (
      * @throws {RequiredError}
      */
     async delete(options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
-      return BenutzerverwaltungApiFp(configuration)
+      return BenutzerverwaltungApiFp()
         .delete(options)
         .then((request) => request(axios, basePath))
     },
@@ -299,7 +251,7 @@ export const BenutzerverwaltungApiFactory = function (
      * @throws {RequiredError}
      */
     async update(body: updateUserBody, options?: AxiosRequestConfig): Promise<AxiosResponse<User>> {
-      return BenutzerverwaltungApiFp(configuration)
+      return BenutzerverwaltungApiFp()
         .update(body, options)
         .then((request) => request(axios, basePath))
     },
@@ -311,7 +263,7 @@ export const BenutzerverwaltungApiFactory = function (
      * @throws {RequiredError}
      */
     async get(userId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<User>> {
-      return BenutzerverwaltungApiFp(configuration)
+      return BenutzerverwaltungApiFp()
         .get(userId, options)
         .then((request) => request(axios, basePath))
     },
@@ -333,7 +285,7 @@ export class BenutzerverwaltungApi extends BaseAPI {
    * @memberof BenutzerverwaltungApi
    */
   public async delete(options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
-    return BenutzerverwaltungApiFp(this.configuration)
+    return BenutzerverwaltungApiFp()
       .delete(options)
       .then((request) => request(this.axios, this.basePath))
   }
@@ -350,7 +302,7 @@ export class BenutzerverwaltungApi extends BaseAPI {
     body: updateUserBody,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<User>> {
-    return BenutzerverwaltungApiFp(this.configuration)
+    return BenutzerverwaltungApiFp()
       .update(body, options)
       .then((request) => request(this.axios, this.basePath))
   }
@@ -364,7 +316,7 @@ export class BenutzerverwaltungApi extends BaseAPI {
    * @memberof BenutzerverwaltungApi
    */
   public async get(userId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<User>> {
-    return BenutzerverwaltungApiFp(this.configuration)
+    return BenutzerverwaltungApiFp()
       .get(userId, options)
       .then((request) => request(this.axios, this.basePath))
   }

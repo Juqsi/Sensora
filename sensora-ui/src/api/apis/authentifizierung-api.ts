@@ -1,5 +1,4 @@
 import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
-import { Configuration } from '@/api'
 import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
 import type { AuthLoginBody, AuthRegisterBody, User } from '@/api/models'
 import type { AuthResponse } from '@/api/models/authResponse.ts'
@@ -8,7 +7,7 @@ import type { AuthResponse } from '@/api/models/authResponse.ts'
  * AuthentifizierungApi - axios parameter creator
  * @export
  */
-export const AuthentifizierungApiAxiosParamCreator = function (configuration?: Configuration) {
+export const AuthentifizierungApiAxiosParamCreator = function () {
   return {
     /**
      * Authentifiziert einen Benutzer und gibt ein Token zurück.  **Test-Credentials für Staging**: - Benutzername: testuser@sensora.com - Passwort: Test!1234
@@ -29,9 +28,7 @@ export const AuthentifizierungApiAxiosParamCreator = function (configuration?: C
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'POST',
         ...baseOptions,
@@ -85,9 +82,7 @@ export const AuthentifizierungApiAxiosParamCreator = function (configuration?: C
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'POST',
         ...baseOptions,
@@ -125,7 +120,7 @@ export const AuthentifizierungApiAxiosParamCreator = function (configuration?: C
  * AuthentifizierungApi - functional programming interface
  * @export
  */
-export const AuthentifizierungApiFp = function (configuration?: Configuration) {
+export const AuthentifizierungApiFp = function () {
   return {
     /**
      * Authentifiziert einen Benutzer und gibt ein Token zurück.  **Test-Credentials für Staging**: - Benutzername: testuser@sensora.com - Passwort: Test!1234
@@ -138,10 +133,7 @@ export const AuthentifizierungApiFp = function (configuration?: Configuration) {
       body: AuthLoginBody,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<AuthResponse>>> {
-      const localVarAxiosArgs = await AuthentifizierungApiAxiosParamCreator(configuration).Login(
-        body,
-        options,
-      )
+      const localVarAxiosArgs = await AuthentifizierungApiAxiosParamCreator().Login(body, options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -161,9 +153,10 @@ export const AuthentifizierungApiFp = function (configuration?: Configuration) {
       body: AuthRegisterBody,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<User>>> {
-      const localVarAxiosArgs = await AuthentifizierungApiAxiosParamCreator(
-        configuration,
-      ).createAccount(body, options)
+      const localVarAxiosArgs = await AuthentifizierungApiAxiosParamCreator().createAccount(
+        body,
+        options,
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -179,11 +172,7 @@ export const AuthentifizierungApiFp = function (configuration?: Configuration) {
  * AuthentifizierungApi - factory interface
  * @export
  */
-export const AuthentifizierungApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance,
-) {
+export const AuthentifizierungApiFactory = function (basePath?: string, axios?: AxiosInstance) {
   return {
     /**
      * Authentifiziert einen Benutzer und gibt ein Token zurück.  **Test-Credentials für Staging**: - Benutzername: testuser@sensora.com - Passwort: Test!1234
@@ -196,7 +185,7 @@ export const AuthentifizierungApiFactory = function (
       body: AuthLoginBody,
       options?: AxiosRequestConfig,
     ): Promise<AxiosResponse<AuthResponse>> {
-      return AuthentifizierungApiFp(configuration)
+      return AuthentifizierungApiFp()
         .Login(body, options)
         .then((request) => request(axios, basePath))
     },
@@ -211,7 +200,7 @@ export const AuthentifizierungApiFactory = function (
       body: AuthRegisterBody,
       options?: AxiosRequestConfig,
     ): Promise<AxiosResponse<User>> {
-      return AuthentifizierungApiFp(configuration)
+      return AuthentifizierungApiFp()
         .createAccount(body, options)
         .then((request) => request(axios, basePath))
     },
@@ -237,7 +226,7 @@ export class AuthentifizierungApi extends BaseAPI {
     body: AuthLoginBody,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<AuthResponse>> {
-    return AuthentifizierungApiFp(this.configuration)
+    return AuthentifizierungApiFp()
       .Login(body, options)
       .then((request) => request(this.axios, this.basePath))
   }
@@ -254,7 +243,7 @@ export class AuthentifizierungApi extends BaseAPI {
     body: AuthRegisterBody,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<User>> {
-    return AuthentifizierungApiFp(this.configuration)
+    return AuthentifizierungApiFp()
       .createAccount(body, options)
       .then((request) => request(this.axios, this.basePath))
   }

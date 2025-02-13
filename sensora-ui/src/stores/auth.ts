@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import authApiClient from '@/api/clients.ts'
 import type { AuthLoginBody } from '@/api'
+import { authApiClient } from '@/api'
 import { toast } from 'vue-sonner'
 import i18n from '@/i18n'
 

@@ -1,5 +1,4 @@
 import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
-import { Configuration } from '@/api/configuration'
 
 import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
 import type { createGroupBody, Group, GroupPatchBody } from '@/api/models'
@@ -8,7 +7,7 @@ import type { createGroupBody, Group, GroupPatchBody } from '@/api/models'
  * GruppenverwaltungApi - axios parameter creator
  * @export
  */
-export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: Configuration) {
+export const GruppenverwaltungApiAxiosParamCreator = function () {
   return {
     /**
      * Gibt eine Liste der Gruppen zurück, zu denen der aktuell authentifizierte Benutzer gehört. Dies ermöglicht dem Benutzer, alle Gruppen zu sehen, an denen er teilnimmt, einschließlich der zugeordneten Räume und Pflanzen.
@@ -21,9 +20,7 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'GET',
         ...baseOptions,
@@ -31,16 +28,6 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       const query = new URLSearchParams(localVarUrlObj.search)
       for (const key in localVarQueryParameter) {
@@ -84,9 +71,7 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'DELETE',
         ...baseOptions,
@@ -94,16 +79,6 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       const query = new URLSearchParams(localVarUrlObj.search)
       for (const key in localVarQueryParameter) {
@@ -158,9 +133,7 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'DELETE',
         ...baseOptions,
@@ -168,16 +141,6 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       const query = new URLSearchParams(localVarUrlObj.search)
       for (const key in localVarQueryParameter) {
@@ -221,9 +184,7 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'DELETE',
         ...baseOptions,
@@ -231,16 +192,6 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       const query = new URLSearchParams(localVarUrlObj.search)
       for (const key in localVarQueryParameter) {
@@ -296,9 +247,7 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'PATCH',
         ...baseOptions,
@@ -306,16 +255,6 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       localVarHeaderParameter['Content-Type'] = 'application/json'
 
@@ -359,9 +298,7 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'PATCH',
         ...baseOptions,
@@ -369,16 +306,6 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       if (token !== undefined) {
         localVarQueryParameter['token'] = token
@@ -426,9 +353,7 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'POST',
         ...baseOptions,
@@ -436,16 +361,6 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       localVarHeaderParameter['Content-Type'] = 'application/json'
 
@@ -478,7 +393,7 @@ export const GruppenverwaltungApiAxiosParamCreator = function (configuration?: C
  * GruppenverwaltungApi - functional programming interface
  * @export
  */
-export const GruppenverwaltungApiFp = function (configuration?: Configuration) {
+export const GruppenverwaltungApiFp = function () {
   return {
     /**
      * Gibt eine Liste der Gruppen zurück, zu denen der aktuell authentifizierte Benutzer gehört. Dies ermöglicht dem Benutzer, alle Gruppen zu sehen, an denen er teilnimmt, einschließlich der zugeordneten Räume und Pflanzen.
@@ -489,8 +404,7 @@ export const GruppenverwaltungApiFp = function (configuration?: Configuration) {
     async get(
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<Group>>>> {
-      const localVarAxiosArgs =
-        await GruppenverwaltungApiAxiosParamCreator(configuration).get(options)
+      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().get(options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -510,7 +424,7 @@ export const GruppenverwaltungApiFp = function (configuration?: Configuration) {
       groupId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
-      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator(configuration).delete(
+      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().delete(
         groupId,
         options,
       )
@@ -535,7 +449,7 @@ export const GruppenverwaltungApiFp = function (configuration?: Configuration) {
       userId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Group>>> {
-      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator(configuration).kick(
+      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().kick(
         groupId,
         userId,
         options,
@@ -559,7 +473,7 @@ export const GruppenverwaltungApiFp = function (configuration?: Configuration) {
       groupId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
-      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator(configuration).leave(
+      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().leave(
         groupId,
         options,
       )
@@ -584,7 +498,7 @@ export const GruppenverwaltungApiFp = function (configuration?: Configuration) {
       groupId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Group>>> {
-      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator(configuration).update(
+      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().update(
         body,
         groupId,
         options,
@@ -608,10 +522,7 @@ export const GruppenverwaltungApiFp = function (configuration?: Configuration) {
       token: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Group>>> {
-      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator(configuration).join(
-        token,
-        options,
-      )
+      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().join(token, options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -631,10 +542,7 @@ export const GruppenverwaltungApiFp = function (configuration?: Configuration) {
       body: createGroupBody,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Group>>> {
-      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator(configuration).create(
-        body,
-        options,
-      )
+      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().create(body, options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -650,11 +558,7 @@ export const GruppenverwaltungApiFp = function (configuration?: Configuration) {
  * GruppenverwaltungApi - factory interface
  * @export
  */
-export const GruppenverwaltungApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance,
-) {
+export const GruppenverwaltungApiFactory = function (basePath?: string, axios?: AxiosInstance) {
   return {
     /**
      * Gibt eine Liste der Gruppen zurück, zu denen der aktuell authentifizierte Benutzer gehört. Dies ermöglicht dem Benutzer, alle Gruppen zu sehen, an denen er teilnimmt, einschließlich der zugeordneten Räume und Pflanzen.
@@ -663,7 +567,7 @@ export const GruppenverwaltungApiFactory = function (
      * @throws {RequiredError}
      */
     async get(options?: AxiosRequestConfig): Promise<AxiosResponse<Array<Group>>> {
-      return GruppenverwaltungApiFp(configuration)
+      return GruppenverwaltungApiFp()
         .get(options)
         .then((request) => request(axios, basePath))
     },
@@ -675,7 +579,7 @@ export const GruppenverwaltungApiFactory = function (
      * @throws {RequiredError}
      */
     async delete(groupId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
-      return GruppenverwaltungApiFp(configuration)
+      return GruppenverwaltungApiFp()
         .delete(groupId, options)
         .then((request) => request(axios, basePath))
     },
@@ -692,7 +596,7 @@ export const GruppenverwaltungApiFactory = function (
       userId: string,
       options?: AxiosRequestConfig,
     ): Promise<AxiosResponse<Group>> {
-      return GruppenverwaltungApiFp(configuration)
+      return GruppenverwaltungApiFp()
         .kick(groupId, userId, options)
         .then((request) => request(axios, basePath))
     },
@@ -704,7 +608,7 @@ export const GruppenverwaltungApiFactory = function (
      * @throws {RequiredError}
      */
     async leave(groupId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
-      return GruppenverwaltungApiFp(configuration)
+      return GruppenverwaltungApiFp()
         .leave(groupId, options)
         .then((request) => request(axios, basePath))
     },
@@ -721,7 +625,7 @@ export const GruppenverwaltungApiFactory = function (
       groupId: string,
       options?: AxiosRequestConfig,
     ): Promise<AxiosResponse<Group>> {
-      return GruppenverwaltungApiFp(configuration)
+      return GruppenverwaltungApiFp()
         .update(body, groupId, options)
         .then((request) => request(axios, basePath))
     },
@@ -733,7 +637,7 @@ export const GruppenverwaltungApiFactory = function (
      * @throws {RequiredError}
      */
     async join(token: string, options?: AxiosRequestConfig): Promise<AxiosResponse<Group>> {
-      return GruppenverwaltungApiFp(configuration)
+      return GruppenverwaltungApiFp()
         .join(token, options)
         .then((request) => request(axios, basePath))
     },
@@ -748,7 +652,7 @@ export const GruppenverwaltungApiFactory = function (
       body: createGroupBody,
       options?: AxiosRequestConfig,
     ): Promise<AxiosResponse<Group>> {
-      return GruppenverwaltungApiFp(configuration)
+      return GruppenverwaltungApiFp()
         .create(body, options)
         .then((request) => request(axios, basePath))
     },
@@ -770,7 +674,7 @@ export class GruppenverwaltungApi extends BaseAPI {
    * @memberof GruppenverwaltungApi
    */
   public async get(options?: AxiosRequestConfig): Promise<AxiosResponse<Array<Group>>> {
-    return GruppenverwaltungApiFp(this.configuration)
+    return GruppenverwaltungApiFp()
       .get(options)
       .then((request) => request(this.axios, this.basePath))
   }
@@ -784,7 +688,7 @@ export class GruppenverwaltungApi extends BaseAPI {
    * @memberof GruppenverwaltungApi
    */
   public async delete(groupId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
-    return GruppenverwaltungApiFp(this.configuration)
+    return GruppenverwaltungApiFp()
       .delete(groupId, options)
       .then((request) => request(this.axios, this.basePath))
   }
@@ -803,7 +707,7 @@ export class GruppenverwaltungApi extends BaseAPI {
     userId: string,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Group>> {
-    return GruppenverwaltungApiFp(this.configuration)
+    return GruppenverwaltungApiFp()
       .kick(groupId, userId, options)
       .then((request) => request(this.axios, this.basePath))
   }
@@ -817,7 +721,7 @@ export class GruppenverwaltungApi extends BaseAPI {
    * @memberof GruppenverwaltungApi
    */
   public async leave(groupId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
-    return GruppenverwaltungApiFp(this.configuration)
+    return GruppenverwaltungApiFp()
       .leave(groupId, options)
       .then((request) => request(this.axios, this.basePath))
   }
@@ -836,7 +740,7 @@ export class GruppenverwaltungApi extends BaseAPI {
     groupId: string,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Group>> {
-    return GruppenverwaltungApiFp(this.configuration)
+    return GruppenverwaltungApiFp()
       .update(body, groupId, options)
       .then((request) => request(this.axios, this.basePath))
   }
@@ -850,7 +754,7 @@ export class GruppenverwaltungApi extends BaseAPI {
    * @memberof GruppenverwaltungApi
    */
   public async join(token: string, options?: AxiosRequestConfig): Promise<AxiosResponse<Group>> {
-    return GruppenverwaltungApiFp(this.configuration)
+    return GruppenverwaltungApiFp()
       .join(token, options)
       .then((request) => request(this.axios, this.basePath))
   }
@@ -867,7 +771,7 @@ export class GruppenverwaltungApi extends BaseAPI {
     body: createGroupBody,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Group>> {
-    return GruppenverwaltungApiFp(this.configuration)
+    return GruppenverwaltungApiFp()
       .create(body, options)
       .then((request) => request(this.axios, this.basePath))
   }

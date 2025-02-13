@@ -1,14 +1,11 @@
 import { defineStore } from 'pinia'
 import { useGroupStore } from './group'
 import type { createRoomBody, Room, RoomPatchBody } from '@/api'
-import { RaumverwaltungApiFactory } from '@/api'
+import { roomsApiClient } from '@/api'
 import { handleApiError } from '@/utils/apiErrorHandler'
 import { toast } from 'vue-sonner'
 import i18n from '@/i18n'
 
-import apiClient from '@/api/apiClient'
-
-const roomApi = RaumverwaltungApiFactory(undefined, undefined, apiClient)
 const t = i18n.global?.t || ((key: string) => key)
 
 export const useRoomStore = defineStore('room', {
@@ -48,7 +45,7 @@ export const useRoomStore = defineStore('room', {
       this.loading = true
       try {
         const roomData: createRoomBody = { groupId, name }
-        const response = await roomApi.create(roomData)
+        const response = await roomsApiClient.create(roomData)
         const newRoom = response.data
 
         const group = this.groupStore.groups.find((g) => g.gid === groupId)
@@ -70,7 +67,7 @@ export const useRoomStore = defineStore('room', {
     async deleteRoom(roomId: string, groupId: string) {
       this.loading = true
       try {
-        await roomApi.delete(roomId)
+        await roomsApiClient.delete(roomId)
 
         const group = this.groupStore.groups.find((g) => g.gid === groupId)
         if (group) {
@@ -91,7 +88,7 @@ export const useRoomStore = defineStore('room', {
       this.loading = true
       try {
         const roomData: RoomPatchBody = { groupId, name }
-        const response = await roomApi.update(roomData, roomId)
+        const response = await roomsApiClient.update(roomData, roomId)
         const updatedRoom = response.data
 
         const group = this.groupStore.groups.find((g) => g.gid === groupId)
@@ -112,7 +109,7 @@ export const useRoomStore = defineStore('room', {
     async getRoomDetails(roomId: string, force = false) {
       if (force || !this.rooms.some((room) => room.rid === roomId)) {
         try {
-          const response = await roomApi.get(roomId)
+          const response = await roomsApiClient.get(roomId)
           const updatedRoom = response.data
 
           const roomIndex = this.rooms.findIndex((room) => room.rid === roomId)

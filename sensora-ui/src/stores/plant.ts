@@ -1,14 +1,11 @@
 import { defineStore } from 'pinia'
 import type { createPlantBody, Plant, updatePlantBody } from '@/api'
-import { PflanzenverwaltungApiFactory } from '@/api'
+import { plansApiClient } from '@/api'
 import { handleApiError } from '@/utils/apiErrorHandler'
 import { toast } from 'vue-sonner'
-import apiClient from '@/api/apiClient'
 import { useRoomStore } from '@/stores/room'
 import { useGroupStore } from '@/stores/group'
 import i18n from '@/i18n'
-
-const plantApi = PflanzenverwaltungApiFactory(undefined, undefined, apiClient)
 
 const t = i18n.global?.t || ((key: string) => key)
 
@@ -98,7 +95,7 @@ export const usePlantStore = defineStore('plant', {
     async createPlant(plantData: createPlantBody) {
       this.loading = true
       try {
-        const response = await plantApi.create(plantData)
+        const response = await plansApiClient.create(plantData)
         const newPlant = response.data
 
         this.plants.push(newPlant)
@@ -119,7 +116,7 @@ export const usePlantStore = defineStore('plant', {
     async deletePlant(plantId: string) {
       this.loading = true
       try {
-        await plantApi.delete(plantId)
+        await plansApiClient.delete(plantId)
 
         const plantToDelete = this.plants.find((plant) => plant.plantId === plantId)
 
@@ -145,7 +142,7 @@ export const usePlantStore = defineStore('plant', {
     async updatePlant(plantId: string, plantData: updatePlantBody) {
       this.loading = true
       try {
-        const response = await plantApi.update(plantData, plantId)
+        const response = await plansApiClient.update(plantData, plantId)
         const updatedPlant = response.data
 
         this.plants = this.plants.map((plant) => (plant.plantId === plantId ? updatedPlant : plant))
@@ -193,7 +190,7 @@ export const usePlantStore = defineStore('plant', {
         }
 
         // Wenn der Zeitraum nicht abgedeckt ist oder die Pflanze noch nicht existiert
-        const response = await plantApi.get(plantId, startTime, endTime)
+        const response = await plansApiClient.get(plantId, startTime, endTime)
         const updatedPlant = response.data
 
         // Kombiniere die neuen Sensorwerte mit den bestehenden Werten

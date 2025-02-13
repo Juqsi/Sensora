@@ -1,12 +1,11 @@
-import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
-import {Configuration} from '@/api/configuration'
-import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
+import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
+import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
 
 /**
  * StatischApi - axios parameter creator
  * @export
  */
-export const StatischApiAxiosParamCreator = function (configuration?: Configuration) {
+export const StatischApiAxiosParamCreator = function () {
   return {
     /**
      * Kann statische Resourcen abrufen, die im Fileserver gespeichert werden.
@@ -33,9 +32,7 @@ export const StatischApiAxiosParamCreator = function (configuration?: Configurat
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
-      if (configuration) {
-        baseOptions = configuration.baseOptions
-      }
+
       const localVarRequestOptions: AxiosRequestConfig = {
         method: 'GET',
         ...baseOptions,
@@ -43,16 +40,6 @@ export const StatischApiAxiosParamCreator = function (configuration?: Configurat
       }
       const localVarHeaderParameter = {} as any
       const localVarQueryParameter = {} as any
-
-      // authentication bearerAuth required
-      // http bearer authentication required
-      if (configuration && configuration.accessToken) {
-        const accessToken =
-          typeof configuration.accessToken === 'function'
-            ? await configuration.accessToken()
-            : await configuration.accessToken
-        localVarHeaderParameter['Authorization'] = 'Bearer ' + accessToken
-      }
 
       const query = new URLSearchParams(localVarUrlObj.search)
       for (const key in localVarQueryParameter) {
@@ -81,7 +68,7 @@ export const StatischApiAxiosParamCreator = function (configuration?: Configurat
  * StatischApi - functional programming interface
  * @export
  */
-export const StatischApiFp = function (configuration?: Configuration) {
+export const StatischApiFp = function () {
   return {
     /**
      * Kann statische Resourcen abrufen, die im Fileserver gespeichert werden.
@@ -94,9 +81,10 @@ export const StatischApiFp = function (configuration?: Configuration) {
       resource: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
-      const localVarAxiosArgs = await StatischApiAxiosParamCreator(
-        configuration,
-      ).staticsResourceGet(resource, options)
+      const localVarAxiosArgs = await StatischApiAxiosParamCreator().staticsResourceGet(
+        resource,
+        options,
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -112,11 +100,7 @@ export const StatischApiFp = function (configuration?: Configuration) {
  * StatischApi - factory interface
  * @export
  */
-export const StatischApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance,
-) {
+export const StatischApiFactory = function (basePath?: string, axios?: AxiosInstance) {
   return {
     /**
      * Kann statische Resourcen abrufen, die im Fileserver gespeichert werden.
@@ -129,7 +113,7 @@ export const StatischApiFactory = function (
       resource: string,
       options?: AxiosRequestConfig,
     ): Promise<AxiosResponse<any>> {
-      return StatischApiFp(configuration)
+      return StatischApiFp()
         .staticsResourceGet(resource, options)
         .then((request) => request(axios, basePath))
     },
@@ -155,7 +139,7 @@ export class StatischApi extends BaseAPI {
     resource: string,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<void>> {
-    return StatischApiFp(this.configuration)
+    return StatischApiFp()
       .staticsResourceGet(resource, options)
       .then((request) => request(this.axios, this.basePath))
   }

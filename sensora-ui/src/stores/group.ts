@@ -1,14 +1,11 @@
 import { defineStore } from 'pinia'
 import type { createGroupBody, Group, GroupPatchBody } from '@/api'
-import { GruppenverwaltungApiFactory } from '@/api'
-import apiClient from '@/api/apiClient'
+import { groupApiClient } from '@/api'
 import { handleApiError } from '@/utils/apiErrorHandler'
 import { toast } from 'vue-sonner'
 import i18n from '@/i18n'
 
 const t = i18n.global?.t || ((key: string) => key)
-
-const groupApi = GruppenverwaltungApiFactory(undefined, undefined, apiClient)
 
 export const useGroupStore = defineStore('group', {
   state: () => ({
@@ -21,7 +18,7 @@ export const useGroupStore = defineStore('group', {
       if (this.groups.length > 0 && !force) return
       this.loading = true
       try {
-        const response = await groupApi.get()
+        const response = await groupApiClient.get()
         this.groups = response.data
       } catch (error) {
         handleApiError(error)
@@ -32,7 +29,7 @@ export const useGroupStore = defineStore('group', {
 
     async deleteGroup(groupId: string) {
       try {
-        await groupApi.delete(groupId)
+        await groupApiClient.delete(groupId)
         this.groups = this.groups.filter((g) => g.gid !== groupId)
         toast.success(t('group.deleted'))
       } catch (error) {
@@ -42,7 +39,7 @@ export const useGroupStore = defineStore('group', {
 
     async removeUserFromGroup(groupId: string, userId: string) {
       try {
-        const response = await groupApi.kick(groupId, userId)
+        const response = await groupApiClient.kick(groupId, userId)
         const updatedGroup = response.data
         this.groups = this.groups.map((g) => (g.gid === groupId ? updatedGroup : g))
         toast.success(t('group.userRemoved'))
@@ -53,7 +50,7 @@ export const useGroupStore = defineStore('group', {
 
     async leaveGroup(groupId: string) {
       try {
-        await groupApi.leave(groupId)
+        await groupApiClient.leave(groupId)
         this.groups = this.groups.filter((g) => g.gid !== groupId)
         toast.success(t('group.left'))
       } catch (error) {
@@ -63,7 +60,7 @@ export const useGroupStore = defineStore('group', {
 
     async updateGroup(groupId: string, body: GroupPatchBody) {
       try {
-        const response = await groupApi.update(body, groupId)
+        const response = await groupApiClient.update(body, groupId)
         const updatedGroup = response.data
         this.groups = this.groups.map((g) => (g.gid === groupId ? updatedGroup : g))
         toast.success(t('group.updated'))
@@ -74,7 +71,7 @@ export const useGroupStore = defineStore('group', {
 
     async joinGroup(token: string) {
       try {
-        const response = await groupApi.join(token)
+        const response = await groupApiClient.join(token)
         this.groups.push(response.data)
         toast.success(t('group.joined'))
       } catch (error) {
@@ -84,7 +81,7 @@ export const useGroupStore = defineStore('group', {
 
     async createGroup(body: createGroupBody) {
       try {
-        const response = await groupApi.create(body)
+        const response = await groupApiClient.create(body)
         this.groups.push(response.data)
         toast.success(t('group.created'))
       } catch (error) {

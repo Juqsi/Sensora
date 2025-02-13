@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useI18n } from 'vue-i18n'
 import type { AuthRegisterBody } from '@/api'
-import authApiClient from '@/api/clients.ts'
+import { authApiClient } from '@/api/clients.ts'
 
 const props = defineProps<{ nextStep: () => void }>()
 

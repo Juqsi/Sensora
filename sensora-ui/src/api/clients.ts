@@ -9,21 +9,21 @@ import {
 } from '@/api'
 import apiClient from '@/api/apiClient'
 
-const authApiClient = AuthentifizierungApiFactory(undefined, undefined, apiClient)
+const authApiClient = AuthentifizierungApiFactory(undefined, apiClient)
 
-const userApiClient = BenutzerverwaltungApiFactory(undefined, undefined, apiClient)
+const userApiClient = BenutzerverwaltungApiFactory(undefined, apiClient)
 
-const deviceApiClient = GeraeteverwaltungApiFactory(undefined, undefined, apiClient)
+const deviceApiClient = GeraeteverwaltungApiFactory(undefined, apiClient)
 
-const groupApiClient = GruppenverwaltungApiFactory(undefined, undefined, apiClient)
+const groupApiClient = GruppenverwaltungApiFactory(undefined, apiClient)
 
-const plansApiClient = PflanzenverwaltungApiFactory(undefined, undefined, apiClient)
+const plansApiClient = PflanzenverwaltungApiFactory(undefined, apiClient)
 
-const roomsApiClient = RaumverwaltungApiFactory(undefined, undefined, apiClient)
+const roomsApiClient = RaumverwaltungApiFactory(undefined, apiClient)
 
-const staticApiClient = StatischApiFactory(undefined, undefined, apiClient)
+const staticApiClient = StatischApiFactory(undefined, apiClient)
 
-export default {
+export {
   authApiClient,
   userApiClient,
   groupApiClient,
