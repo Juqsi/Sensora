@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useI18n } from 'vue-i18n'
 import type { AuthRegisterBody } from '@/api'
-import authApiClient from '@/api/authApiClient.ts'
+import authApiClient from '@/api/clients.ts'
 
 const props = defineProps<{ nextStep: () => void }>()
 
@@ -17,14 +17,14 @@ const email = ref('')
 const password = ref('')
 
 const handleSubmit = () => {
-  const account: AuthRegisterBody = {
+  const accountInfos: AuthRegisterBody = {
     username: username.value,
     firstname: username.value,
     mail: email.value,
     password: password.value,
   }
 
-  authApiClient.createAccount(account)
+  authApiClient.createAccount(accountInfos)
 
   props.nextStep()
 }
