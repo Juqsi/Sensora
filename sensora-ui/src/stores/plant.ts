@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { Plant, PlantPatchBody, PlantPostBody } from '@/api'
+import type { createPlantBody, Plant, updatePlantBody } from '@/api'
 import { PflanzenverwaltungApiFactory } from '@/api'
 import { handleApiError } from '@/utils/apiErrorHandler'
 import { toast } from 'vue-sonner'
@@ -95,10 +95,10 @@ export const usePlantStore = defineStore('plant', {
       }, [] as Plant[])
     },
 
-    async createPlant(plantData: PlantPostBody) {
+    async createPlant(plantData: createPlantBody) {
       this.loading = true
       try {
-        const response = await plantApi.plantPost(plantData)
+        const response = await plantApi.create(plantData)
         const newPlant = response.data
 
         this.plants.push(newPlant)
@@ -119,7 +119,7 @@ export const usePlantStore = defineStore('plant', {
     async deletePlant(plantId: string) {
       this.loading = true
       try {
-        await plantApi.plantPlantIdDelete(plantId)
+        await plantApi.delete(plantId)
 
         const plantToDelete = this.plants.find((plant) => plant.plantId === plantId)
 
@@ -142,10 +142,10 @@ export const usePlantStore = defineStore('plant', {
       }
     },
 
-    async updatePlant(plantId: string, plantData: PlantPatchBody) {
+    async updatePlant(plantId: string, plantData: updatePlantBody) {
       this.loading = true
       try {
-        const response = await plantApi.plantPlantIdPatch(plantData, plantId)
+        const response = await plantApi.update(plantData, plantId)
         const updatedPlant = response.data
 
         this.plants = this.plants.map((plant) => (plant.plantId === plantId ? updatedPlant : plant))
@@ -193,7 +193,7 @@ export const usePlantStore = defineStore('plant', {
         }
 
         // Wenn der Zeitraum nicht abgedeckt ist oder die Pflanze noch nicht existiert
-        const response = await plantApi.plantPlantIdGet(plantId, startTime, endTime)
+        const response = await plantApi.get(plantId, startTime, endTime)
         const updatedPlant = response.data
 
         // Kombiniere die neuen Sensorwerte mit den bestehenden Werten

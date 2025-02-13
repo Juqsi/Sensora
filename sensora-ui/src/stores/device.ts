@@ -16,7 +16,7 @@ export const useDeviceStore = defineStore('device', {
       this.loading = true
       try {
         if (force || this.devices.length === 0) {
-          const response = await geraeteApi.devicesGet()
+          const response = await geraeteApi.getList()
           this.devices = response.data
         }
 
@@ -33,7 +33,7 @@ export const useDeviceStore = defineStore('device', {
       this.loading = true
       try {
         if (force || !this.devices.some((d) => d.did === deviceId)) {
-          const response = await geraeteApi.deviceDeviceIdGet(deviceId)
+          const response = await geraeteApi.get(deviceId)
           const device = response.data
 
           const existingDeviceIndex = this.devices.findIndex((d) => d.did === deviceId)
@@ -58,13 +58,11 @@ export const useDeviceStore = defineStore('device', {
     async removeDevice(deviceId: string) {
       this.loading = true
       try {
-        // Gerät über API löschen
-        await geraeteApi.deviceDeviceIdGet(deviceId)
+        await geraeteApi.get(deviceId)
 
-        // Entferne das Gerät aus der Liste
         this.devices = this.devices.filter((device) => device.did !== deviceId)
 
-        toast.success('Device successfully deleted') // Erfolgsnachricht
+        toast.success('Device successfully deleted')
       } catch (error) {
         handleApiError(error)
       } finally {

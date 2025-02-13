@@ -1,8 +1,8 @@
-import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
-import {Configuration} from '@/api'
-import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import type {AuthLoginBody, AuthRegisterBody, User} from '@/api/models'
-import type {AuthResponse} from '@/api/models/authResponse.ts'
+import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
+import { Configuration } from '@/api'
+import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
+import type { AuthLoginBody, AuthRegisterBody, User } from '@/api/models'
+import type { AuthResponse } from '@/api/models/authResponse.ts'
 
 /**
  * AuthentifizierungApi - axios parameter creator
@@ -17,15 +17,12 @@ export const AuthentifizierungApiAxiosParamCreator = function (configuration?: C
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    authLoginPost: async (
-      body: AuthLoginBody,
-      options: AxiosRequestConfig = {},
-    ): Promise<RequestArgs> => {
+    Login: async (body: AuthLoginBody, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'body' is not null or undefined
       if (body === null || body === undefined) {
         throw new RequiredError(
           'body',
-          'Required parameter body was null or undefined when calling authLoginPost.',
+          'Required parameter body was null or undefined when calling Login.',
         )
       }
       const localVarPath = `/auth/login`
@@ -73,7 +70,7 @@ export const AuthentifizierungApiAxiosParamCreator = function (configuration?: C
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    authRegisterPost: async (
+    createAccount: async (
       body: AuthRegisterBody,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
@@ -81,7 +78,7 @@ export const AuthentifizierungApiAxiosParamCreator = function (configuration?: C
       if (body === null || body === undefined) {
         throw new RequiredError(
           'body',
-          'Required parameter body was null or undefined when calling authRegisterPost.',
+          'Required parameter body was null or undefined when calling createAccount.',
         )
       }
       const localVarPath = `/auth/register`
@@ -137,13 +134,14 @@ export const AuthentifizierungApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async authLoginPost(
+    async Login(
       body: AuthLoginBody,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<AuthResponse>>> {
-      const localVarAxiosArgs = await AuthentifizierungApiAxiosParamCreator(
-        configuration,
-      ).authLoginPost(body, options)
+      const localVarAxiosArgs = await AuthentifizierungApiAxiosParamCreator(configuration).Login(
+        body,
+        options,
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -159,13 +157,13 @@ export const AuthentifizierungApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async authRegisterPost(
+    async createAccount(
       body: AuthRegisterBody,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<User>>> {
       const localVarAxiosArgs = await AuthentifizierungApiAxiosParamCreator(
         configuration,
-      ).authRegisterPost(body, options)
+      ).createAccount(body, options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -194,12 +192,12 @@ export const AuthentifizierungApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async authLoginPost(
+    async Login(
       body: AuthLoginBody,
       options?: AxiosRequestConfig,
     ): Promise<AxiosResponse<AuthResponse>> {
       return AuthentifizierungApiFp(configuration)
-        .authLoginPost(body, options)
+        .Login(body, options)
         .then((request) => request(axios, basePath))
     },
     /**
@@ -209,12 +207,12 @@ export const AuthentifizierungApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async authRegisterPost(
+    async createAccount(
       body: AuthRegisterBody,
       options?: AxiosRequestConfig,
     ): Promise<AxiosResponse<User>> {
       return AuthentifizierungApiFp(configuration)
-        .authRegisterPost(body, options)
+        .createAccount(body, options)
         .then((request) => request(axios, basePath))
     },
   }
@@ -235,12 +233,12 @@ export class AuthentifizierungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof AuthentifizierungApi
    */
-  public async authLoginPost(
+  public async Login(
     body: AuthLoginBody,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<AuthResponse>> {
     return AuthentifizierungApiFp(this.configuration)
-      .authLoginPost(body, options)
+      .Login(body, options)
       .then((request) => request(this.axios, this.basePath))
   }
 
@@ -252,12 +250,12 @@ export class AuthentifizierungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof AuthentifizierungApi
    */
-  public async authRegisterPost(
+  public async createAccount(
     body: AuthRegisterBody,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<User>> {
     return AuthentifizierungApiFp(this.configuration)
-      .authRegisterPost(body, options)
+      .createAccount(body, options)
       .then((request) => request(this.axios, this.basePath))
   }
 }

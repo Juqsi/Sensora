@@ -14,7 +14,7 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(credentials: AuthLoginBody) {
       try {
-        const response = await authApiClient.authLoginPost(credentials)
+        const response = await authApiClient.Login(credentials)
         this.token = response.data.token
         this.isAuthenticated = true
         toast.success(t('login.toast.success'))

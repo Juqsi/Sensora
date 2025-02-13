@@ -24,7 +24,7 @@ const handleSubmit = () => {
     password: password.value,
   }
 
-  authApiClient.authRegisterPost(account)
+  authApiClient.createAccount(account)
 
   props.nextStep()
 }

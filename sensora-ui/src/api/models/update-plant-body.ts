@@ -1,15 +1,15 @@
-import type {Plant, Sensor} from '@/api'
+import type { Plant, Sensor } from '@/api'
 
 /**
  *
  *
  * @export
- * @interface PlantPatchBody
+ * @interface updatePlantBody
  */
-export interface PlantPatchBody extends Omit<Plant, 'plantId'> {
+export interface updatePlantBody extends Omit<Plant, 'plantId'> {
   /**
    * @type {Array<PlantplantIdSensors>}
-   * @memberof PlantPatchBody
+   * @memberof updatePlantBody
    */
   sensors?: Array<Sensor>
 
@@ -17,7 +17,7 @@ export interface PlantPatchBody extends Omit<Plant, 'plantId'> {
    * Liste von Geräten, die vollständig zugewiesen werden. Alle angeschlossenen Sensoren werden der Pflanze zugeordnet.
    *
    * @type {Array<string>}
-   * @memberof PlantPatchBody
+   * @memberof updatePlantBody
    */
   assignFullDevice?: Array<string>
 }

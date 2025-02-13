@@ -1,7 +1,7 @@
-import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
-import {Configuration} from '@/api/configuration'
-import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import type {User, UserPatchBody} from '@/api/models'
+import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
+import { Configuration } from '@/api/configuration'
+import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
+import type { updateUserBody, User } from '@/api/models'
 
 /**
  * BenutzerverwaltungApi - axios parameter creator
@@ -15,7 +15,7 @@ export const BenutzerverwaltungApiAxiosParamCreator = function (configuration?: 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userDelete: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    delete: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/user`
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
@@ -64,19 +64,19 @@ export const BenutzerverwaltungApiAxiosParamCreator = function (configuration?: 
     /**
      * Bearbeitet einen bereits existierenden Benutzeraccount. Alle gesetzten Felder werden überschrieben. Der Benutzeraccount wird anhand des Auth-Tokens identifiziert. Beim Verändern des Benutzernamens oder der E-Mail, erlischt die Gültigkeit des Auth-Tokens. Das ändern des Passworts ist hier nicht möglich. Wenn die E-Mail geändert wird, muss diese erneut bestätigt werden, bevor der Account weiter benutzt werden kann.
      * @summary Benutzer bearbeiten
-     * @param {UserPatchBody} body
+     * @param {updateUserBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userPatch: async (
-      body: UserPatchBody,
+    update: async (
+      body: updateUserBody,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
       // verify required parameter 'body' is not null or undefined
       if (body === null || body === undefined) {
         throw new RequiredError(
           'body',
-          'Required parameter body was null or undefined when calling userPatch.',
+          'Required parameter body was null or undefined when calling update.',
         )
       }
       const localVarPath = `/user`
@@ -134,15 +134,12 @@ export const BenutzerverwaltungApiAxiosParamCreator = function (configuration?: 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    userUserIdGet: async (
-      userId: string,
-      options: AxiosRequestConfig = {},
-    ): Promise<RequestArgs> => {
+    get: async (userId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'userId' is not null or undefined
       if (userId === null || userId === undefined) {
         throw new RequiredError(
           'userId',
-          'Required parameter userId was null or undefined when calling userUserIdGet.',
+          'Required parameter userId was null or undefined when calling get.',
         )
       }
       let localVarPath = `/user/{userId}`.replace(
@@ -211,11 +208,11 @@ export const BenutzerverwaltungApiFp = function (configuration?: Configuration) 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userDelete(
+    async delete(
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
       const localVarAxiosArgs =
-        await BenutzerverwaltungApiAxiosParamCreator(configuration).userDelete(options)
+        await BenutzerverwaltungApiAxiosParamCreator(configuration).delete(options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -227,17 +224,18 @@ export const BenutzerverwaltungApiFp = function (configuration?: Configuration) 
     /**
      * Bearbeitet einen bereits existierenden Benutzeraccount. Alle gesetzten Felder werden überschrieben. Der Benutzeraccount wird anhand des Auth-Tokens identifiziert. Beim Verändern des Benutzernamens oder der E-Mail, erlischt die Gültigkeit des Auth-Tokens. Das ändern des Passworts ist hier nicht möglich. Wenn die E-Mail geändert wird, muss diese erneut bestätigt werden, bevor der Account weiter benutzt werden kann.
      * @summary Benutzer bearbeiten
-     * @param {UserPatchBody} body
+     * @param {updateUserBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userPatch(
-      body: UserPatchBody,
+    async update(
+      body: updateUserBody,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<User>>> {
-      const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator(
-        configuration,
-      ).userPatch(body, options)
+      const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator(configuration).update(
+        body,
+        options,
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -253,13 +251,14 @@ export const BenutzerverwaltungApiFp = function (configuration?: Configuration) 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userUserIdGet(
+    async get(
       userId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<User>>> {
-      const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator(
-        configuration,
-      ).userUserIdGet(userId, options)
+      const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator(configuration).get(
+        userId,
+        options,
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -287,24 +286,21 @@ export const BenutzerverwaltungApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userDelete(options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
+    async delete(options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
       return BenutzerverwaltungApiFp(configuration)
-        .userDelete(options)
+        .delete(options)
         .then((request) => request(axios, basePath))
     },
     /**
      * Bearbeitet einen bereits existierenden Benutzeraccount. Alle gesetzten Felder werden überschrieben. Der Benutzeraccount wird anhand des Auth-Tokens identifiziert. Beim Verändern des Benutzernamens oder der E-Mail, erlischt die Gültigkeit des Auth-Tokens. Das ändern des Passworts ist hier nicht möglich. Wenn die E-Mail geändert wird, muss diese erneut bestätigt werden, bevor der Account weiter benutzt werden kann.
      * @summary Benutzer bearbeiten
-     * @param {UserPatchBody} body
+     * @param {updateUserBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userPatch(
-      body: UserPatchBody,
-      options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<User>> {
+    async update(body: updateUserBody, options?: AxiosRequestConfig): Promise<AxiosResponse<User>> {
       return BenutzerverwaltungApiFp(configuration)
-        .userPatch(body, options)
+        .update(body, options)
         .then((request) => request(axios, basePath))
     },
     /**
@@ -314,12 +310,9 @@ export const BenutzerverwaltungApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async userUserIdGet(
-      userId: string,
-      options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<User>> {
+    async get(userId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<User>> {
       return BenutzerverwaltungApiFp(configuration)
-        .userUserIdGet(userId, options)
+        .get(userId, options)
         .then((request) => request(axios, basePath))
     },
   }
@@ -339,26 +332,26 @@ export class BenutzerverwaltungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof BenutzerverwaltungApi
    */
-  public async userDelete(options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
+  public async delete(options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
     return BenutzerverwaltungApiFp(this.configuration)
-      .userDelete(options)
+      .delete(options)
       .then((request) => request(this.axios, this.basePath))
   }
 
   /**
    * Bearbeitet einen bereits existierenden Benutzeraccount. Alle gesetzten Felder werden überschrieben. Der Benutzeraccount wird anhand des Auth-Tokens identifiziert. Beim Verändern des Benutzernamens oder der E-Mail, erlischt die Gültigkeit des Auth-Tokens. Das ändern des Passworts ist hier nicht möglich. Wenn die E-Mail geändert wird, muss diese erneut bestätigt werden, bevor der Account weiter benutzt werden kann.
    * @summary Benutzer bearbeiten
-   * @param {UserPatchBody} body
+   * @param {updateUserBody} body
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof BenutzerverwaltungApi
    */
-  public async userPatch(
-    body: UserPatchBody,
+  public async update(
+    body: updateUserBody,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<User>> {
     return BenutzerverwaltungApiFp(this.configuration)
-      .userPatch(body, options)
+      .update(body, options)
       .then((request) => request(this.axios, this.basePath))
   }
 
@@ -370,12 +363,9 @@ export class BenutzerverwaltungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof BenutzerverwaltungApi
    */
-  public async userUserIdGet(
-    userId: string,
-    options?: AxiosRequestConfig,
-  ): Promise<AxiosResponse<User>> {
+  public async get(userId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<User>> {
     return BenutzerverwaltungApiFp(this.configuration)
-      .userUserIdGet(userId, options)
+      .get(userId, options)
       .then((request) => request(this.axios, this.basePath))
   }
 }

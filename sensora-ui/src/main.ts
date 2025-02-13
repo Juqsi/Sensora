@@ -22,7 +22,7 @@ app.use(pinia)
 const authStore = useAuthStore()
 const userStore = useUserStore()
 if (authStore.token) {
-  await userStore.fetchUser()
+  userStore.fetchUser()
 }
 
 const { theme } = useTheme()

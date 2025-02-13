@@ -1,7 +1,7 @@
-import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
-import {Configuration} from '@/api/configuration'
-import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import type {Room, RoomPatchBody, RoomPostBody} from '@/api/models'
+import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
+import { Configuration } from '@/api/configuration'
+import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
+import type { createRoomBody, Room, RoomPatchBody } from '@/api/models'
 
 /**
  * RaumverwaltungApi - axios parameter creator
@@ -12,19 +12,19 @@ export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Conf
     /**
      * Erstellt einen Raum und fügt ihn einer Gruppe zu.
      * @summary Raum erstellen
-     * @param {RoomPostBody} body
+     * @param {createRoomBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    roomPost: async (
-      body: RoomPostBody,
+    create: async (
+      body: createRoomBody,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
       // verify required parameter 'body' is not null or undefined
       if (body === null || body === undefined) {
         throw new RequiredError(
           'body',
-          'Required parameter body was null or undefined when calling roomPost.',
+          'Required parameter body was null or undefined when calling create.',
         )
       }
       const localVarPath = `/room`
@@ -82,15 +82,12 @@ export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Conf
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    roomRoomIdDelete: async (
-      roomId: string,
-      options: AxiosRequestConfig = {},
-    ): Promise<RequestArgs> => {
+    delete: async (roomId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'roomId' is not null or undefined
       if (roomId === null || roomId === undefined) {
         throw new RequiredError(
           'roomId',
-          'Required parameter roomId was null or undefined when calling roomRoomIdDelete.',
+          'Required parameter roomId was null or undefined when calling delete.',
         )
       }
       const localVarPath = `/room/{roomId}`.replace(
@@ -148,15 +145,12 @@ export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Conf
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    roomRoomIdGet: async (
-      roomId: string,
-      options: AxiosRequestConfig = {},
-    ): Promise<RequestArgs> => {
+    get: async (roomId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'roomId' is not null or undefined
       if (roomId === null || roomId === undefined) {
         throw new RequiredError(
           'roomId',
-          'Required parameter roomId was null or undefined when calling roomRoomIdGet.',
+          'Required parameter roomId was null or undefined when calling get.',
         )
       }
       const localVarPath = `/room/{roomId}`.replace(
@@ -215,7 +209,7 @@ export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Conf
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    roomRoomIdPatch: async (
+    update: async (
       body: RoomPatchBody,
       roomId: string,
       options: AxiosRequestConfig = {},
@@ -224,14 +218,14 @@ export const RaumverwaltungApiAxiosParamCreator = function (configuration?: Conf
       if (body === null || body === undefined) {
         throw new RequiredError(
           'body',
-          'Required parameter body was null or undefined when calling roomRoomIdPatch.',
+          'Required parameter body was null or undefined when calling update.',
         )
       }
       // verify required parameter 'roomId' is not null or undefined
       if (roomId === null || roomId === undefined) {
         throw new RequiredError(
           'roomId',
-          'Required parameter roomId was null or undefined when calling roomRoomIdPatch.',
+          'Required parameter roomId was null or undefined when calling update.',
         )
       }
       const localVarPath = `/room/{roomId}`.replace(
@@ -297,15 +291,15 @@ export const RaumverwaltungApiFp = function (configuration?: Configuration) {
     /**
      * Erstellt einen Raum und fügt ihn einer Gruppe zu.
      * @summary Raum erstellen
-     * @param {RoomPostBody} body
+     * @param {createRoomBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async roomPost(
-      body: RoomPostBody,
+    async create(
+      body: createRoomBody,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Room>>> {
-      const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator(configuration).roomPost(
+      const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator(configuration).create(
         body,
         options,
       )
@@ -324,13 +318,14 @@ export const RaumverwaltungApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async roomRoomIdDelete(
+    async delete(
       roomId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
-      const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator(
-        configuration,
-      ).roomRoomIdDelete(roomId, options)
+      const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator(configuration).delete(
+        roomId,
+        options,
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -346,13 +341,14 @@ export const RaumverwaltungApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async roomRoomIdGet(
+    async get(
       roomId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Room>>> {
-      const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator(
-        configuration,
-      ).roomRoomIdGet(roomId, options)
+      const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator(configuration).get(
+        roomId,
+        options,
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -369,14 +365,16 @@ export const RaumverwaltungApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async roomRoomIdPatch(
+    async update(
       body: RoomPatchBody,
       roomId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Room>>> {
-      const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator(
-        configuration,
-      ).roomRoomIdPatch(body, roomId, options)
+      const localVarAxiosArgs = await RaumverwaltungApiAxiosParamCreator(configuration).update(
+        body,
+        roomId,
+        options,
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -401,13 +399,13 @@ export const RaumverwaltungApiFactory = function (
     /**
      * Erstellt einen Raum und fügt ihn einer Gruppe zu.
      * @summary Raum erstellen
-     * @param {RoomPostBody} body
+     * @param {createRoomBody} body
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async roomPost(body: RoomPostBody, options?: AxiosRequestConfig): Promise<AxiosResponse<Room>> {
+    async create(body: createRoomBody, options?: AxiosRequestConfig): Promise<AxiosResponse<Room>> {
       return RaumverwaltungApiFp(configuration)
-        .roomPost(body, options)
+        .create(body, options)
         .then((request) => request(axios, basePath))
     },
     /**
@@ -417,12 +415,9 @@ export const RaumverwaltungApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async roomRoomIdDelete(
-      roomId: string,
-      options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<void>> {
+    async delete(roomId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
       return RaumverwaltungApiFp(configuration)
-        .roomRoomIdDelete(roomId, options)
+        .delete(roomId, options)
         .then((request) => request(axios, basePath))
     },
     /**
@@ -432,12 +427,9 @@ export const RaumverwaltungApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async roomRoomIdGet(
-      roomId: string,
-      options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<Room>> {
+    async get(roomId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<Room>> {
       return RaumverwaltungApiFp(configuration)
-        .roomRoomIdGet(roomId, options)
+        .get(roomId, options)
         .then((request) => request(axios, basePath))
     },
     /**
@@ -448,13 +440,13 @@ export const RaumverwaltungApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async roomRoomIdPatch(
+    async update(
       body: RoomPatchBody,
       roomId: string,
       options?: AxiosRequestConfig,
     ): Promise<AxiosResponse<Room>> {
       return RaumverwaltungApiFp(configuration)
-        .roomRoomIdPatch(body, roomId, options)
+        .update(body, roomId, options)
         .then((request) => request(axios, basePath))
     },
   }
@@ -470,17 +462,17 @@ export class RaumverwaltungApi extends BaseAPI {
   /**
    * Erstellt einen Raum und fügt ihn einer Gruppe zu.
    * @summary Raum erstellen
-   * @param {RoomPostBody} body
+   * @param {createRoomBody} body
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof RaumverwaltungApi
    */
-  public async roomPost(
-    body: RoomPostBody,
+  public async create(
+    body: createRoomBody,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Room>> {
     return RaumverwaltungApiFp(this.configuration)
-      .roomPost(body, options)
+      .create(body, options)
       .then((request) => request(this.axios, this.basePath))
   }
 
@@ -492,12 +484,9 @@ export class RaumverwaltungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof RaumverwaltungApi
    */
-  public async roomRoomIdDelete(
-    roomId: string,
-    options?: AxiosRequestConfig,
-  ): Promise<AxiosResponse<void>> {
+  public async delete(roomId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
     return RaumverwaltungApiFp(this.configuration)
-      .roomRoomIdDelete(roomId, options)
+      .delete(roomId, options)
       .then((request) => request(this.axios, this.basePath))
   }
 
@@ -509,12 +498,9 @@ export class RaumverwaltungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof RaumverwaltungApi
    */
-  public async roomRoomIdGet(
-    roomId: string,
-    options?: AxiosRequestConfig,
-  ): Promise<AxiosResponse<Room>> {
+  public async get(roomId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<Room>> {
     return RaumverwaltungApiFp(this.configuration)
-      .roomRoomIdGet(roomId, options)
+      .get(roomId, options)
       .then((request) => request(this.axios, this.basePath))
   }
 
@@ -527,13 +513,13 @@ export class RaumverwaltungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof RaumverwaltungApi
    */
-  public async roomRoomIdPatch(
+  public async update(
     body: RoomPatchBody,
     roomId: string,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Room>> {
     return RaumverwaltungApiFp(this.configuration)
-      .roomRoomIdPatch(body, roomId, options)
+      .update(body, roomId, options)
       .then((request) => request(this.axios, this.basePath))
   }
 }

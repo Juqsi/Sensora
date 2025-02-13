@@ -1,8 +1,8 @@
-import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
-import {Configuration} from '@/api/configuration'
+import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
+import { Configuration } from '@/api/configuration'
 
-import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import {type Controller} from '@/api/models'
+import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
+import { type Controller } from '@/api/models'
 
 /**
  * GeraeteverwaltungApi - axios parameter creator
@@ -17,15 +17,12 @@ export const GeraeteverwaltungApiAxiosParamCreator = function (configuration?: C
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deviceDeviceIdGet: async (
-      deviceId: string,
-      options: AxiosRequestConfig = {},
-    ): Promise<RequestArgs> => {
+    get: async (deviceId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       // verify required parameter 'deviceId' is not null or undefined
       if (deviceId === null || deviceId === undefined) {
         throw new RequiredError(
           'deviceId',
-          'Required parameter deviceId was null or undefined when calling deviceDeviceIdGet.',
+          'Required parameter deviceId was null or undefined when calling get.',
         )
       }
       const localVarPath = `/device/{deviceId}`.replace(
@@ -82,7 +79,7 @@ export const GeraeteverwaltungApiAxiosParamCreator = function (configuration?: C
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    devicesGet: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    getList: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
       const localVarPath = `/devices`
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
@@ -144,13 +141,14 @@ export const GeraeteverwaltungApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async deviceDeviceIdGet(
+    async get(
       deviceId: string,
       options?: AxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Controller>>> {
-      const localVarAxiosArgs = await GeraeteverwaltungApiAxiosParamCreator(
-        configuration,
-      ).deviceDeviceIdGet(deviceId, options)
+      const localVarAxiosArgs = await GeraeteverwaltungApiAxiosParamCreator(configuration).get(
+        deviceId,
+        options,
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -165,13 +163,13 @@ export const GeraeteverwaltungApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async devicesGet(
+    async getList(
       options?: AxiosRequestConfig,
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<Controller & any>>>
     > {
       const localVarAxiosArgs =
-        await GeraeteverwaltungApiAxiosParamCreator(configuration).devicesGet(options)
+        await GeraeteverwaltungApiAxiosParamCreator(configuration).getList(options)
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -200,12 +198,9 @@ export const GeraeteverwaltungApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async deviceDeviceIdGet(
-      deviceId: string,
-      options?: AxiosRequestConfig,
-    ): Promise<AxiosResponse<Controller>> {
+    async get(deviceId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<Controller>> {
       return GeraeteverwaltungApiFp(configuration)
-        .deviceDeviceIdGet(deviceId, options)
+        .get(deviceId, options)
         .then((request) => request(axios, basePath))
     },
     /**
@@ -214,9 +209,9 @@ export const GeraeteverwaltungApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async devicesGet(options?: AxiosRequestConfig): Promise<AxiosResponse<Array<Controller>>> {
+    async getList(options?: AxiosRequestConfig): Promise<AxiosResponse<Array<Controller>>> {
       return GeraeteverwaltungApiFp(configuration)
-        .devicesGet(options)
+        .getList(options)
         .then((request) => request(axios, basePath))
     },
   }
@@ -237,12 +232,12 @@ export class GeraeteverwaltungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof GeraeteverwaltungApi
    */
-  public async deviceDeviceIdGet(
+  public async get(
     deviceId: string,
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Controller>> {
     return GeraeteverwaltungApiFp(this.configuration)
-      .deviceDeviceIdGet(deviceId, options)
+      .get(deviceId, options)
       .then((request) => request(this.axios, this.basePath))
   }
 
@@ -253,11 +248,11 @@ export class GeraeteverwaltungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof GeraeteverwaltungApi
    */
-  public async devicesGet(
+  public async getList(
     options?: AxiosRequestConfig,
   ): Promise<AxiosResponse<Array<Controller & any>>> {
     return GeraeteverwaltungApiFp(this.configuration)
-      .devicesGet(options)
+      .getList(options)
       .then((request) => request(this.axios, this.basePath))
   }
 }
