@@ -35,9 +35,7 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
-    if (response.config && (response.config as CustomAxiosRequestConfig).meta?.toastId) {
-      toast.dismiss((response.config as CustomAxiosRequestConfig).meta!.toastId)
-    }
+    toast.dismiss((response.config as CustomAxiosRequestConfig).meta!.toastId)
     return response
   },
   (error) => {

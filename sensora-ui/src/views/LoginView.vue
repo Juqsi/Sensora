@@ -5,7 +5,6 @@ import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth.ts'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import type { AuthLoginBody } from '@/api'
@@ -23,7 +22,7 @@ const errorMessage = ref<string | null>(null)
 // Login-Funktion
 const handleSubmit = async () => {
   if (!email.value || !password.value) {
-    errorMessage.value = t('login.MissingCredentials')
+    errorMessage.value = t('login.toast.MissingCredentials')
     return
   }
 
@@ -71,17 +70,10 @@ const handleSubmit = async () => {
             <Input id="password" v-model="password" required type="password" />
           </div>
 
-          <!-- Fehlermeldung anzeigen -->
-          <p v-if="errorMessage" class="text-red-500 text-sm">{{ errorMessage }}</p>
-
           <Button :disabled="loading" class="w-full" type="submit">
             <span v-if="loading">{{ t('login.Loading') }}</span>
             <span v-else>{{ t('login.SignIn') }}</span>
           </Button>
-
-          <Separator :label="t('login.Or')" class="my-4" />
-
-          <Button class="w-full" variant="outline">{{ t('login.SignInWithA') }}</Button>
         </form>
 
         <div class="mt-4 text-center text-sm">

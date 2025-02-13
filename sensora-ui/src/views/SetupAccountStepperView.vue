@@ -8,9 +8,8 @@ import {
   StepperTrigger,
 } from '@/components/ui/stepper'
 import { Check, Circle, Dot } from 'lucide-vue-next'
-import { ref, defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import LoginStep from '@/components/RegistrationStepper/LoginStep.vue'
 
 const { t } = useI18n()
 const stepIndex = ref(1)
@@ -28,14 +27,16 @@ const steps = [
     title: 'Your details',
     description:
       'Provide your name and email address. We will use this information to create your account',
-    component: defineAsyncComponent(() => import('@/components/RegistrationStepper/LoginStep.vue')),
+    component: defineAsyncComponent(
+      () => import('@/components/RegistrationStepper/CreateAccountStep.vue'),
+    ),
   },
   {
     step: 2,
     title: 'Company details',
     description: 'A few details about your company will help us personalize your experience',
     component: defineAsyncComponent(
-      () => import('@/components/RegistrationStepper/UserInfoStep.vue'),
+      () => import('@/components/RegistrationStepper/AccountCompletionStep.vue'),
     ),
   },
   {
@@ -43,7 +44,16 @@ const steps = [
     title: 'Invite your team',
     description:
       'Start collaborating with your team by inviting them to join your account. You can skip this step and invite them later',
-    component: defineAsyncComponent(() => import('@/components/RegistrationStepper/FinalStep.vue')),
+    component: defineAsyncComponent(
+      () => import('@/components/RegistrationStepper/ProfilePictureStep.vue'),
+    ),
+  },
+  {
+    step: 4,
+    title: 'Invite your team',
+    description:
+      'Start collaborating with your team by inviting them to join your account. You can skip this step and invite them later',
+    component: defineAsyncComponent(() => import('@/components/RegistrationStepper/GroupStep.vue')),
   },
 ]
 </script>
@@ -61,13 +71,14 @@ const steps = [
       class="relative flex w-full flex-col gap-4"
       :step="step.step"
     >
-      <div class="flex items-start gap-4">
+      <div v-if="stepIndex !== 1" class="flex items-start gap-4">
         <StepperTrigger as-child>
           <Button
             :variant="state === 'completed' || state === 'active' ? 'default' : 'outline'"
             size="icon"
             class="rounded-full shrink-0"
             :class="[state === 'active' && 'ring-2 ring-ring ring-offset-2 ring-offset-background']"
+            :style="{ pointerEvents: step.step === 1 && state === 'completed' ? 'none' : 'auto' }"
           >
             <Check v-if="state === 'completed'" class="size-5" />
             <Circle v-if="state === 'active'" />
