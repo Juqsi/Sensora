@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Button } from '@/components/ui/button'
 import {
   Stepper,
@@ -15,7 +15,6 @@ const { t } = useI18n()
 const stepIndex = ref(1)
 
 const nextStep = () => {
-  console.log('hier')
   if (stepIndex.value < 3) {
     stepIndex.value++
   }
@@ -60,25 +59,25 @@ const steps = [
 
 <template>
   <Stepper
-    orientation="vertical"
-    class="mx-auto flex w-full max-w-md flex-col justify-start gap-10"
     v-model="stepIndex"
+    class="mx-auto flex w-full max-w-md flex-col justify-start gap-10"
+    orientation="vertical"
   >
     <StepperItem
       v-for="(step, index) in steps"
       :key="step.step"
       v-slot="{ state }"
-      class="relative flex w-full flex-col gap-4"
       :step="step.step"
+      class="relative flex w-full flex-col gap-4"
     >
       <div v-if="stepIndex !== 1" class="flex items-start gap-4">
         <StepperTrigger as-child>
           <Button
-            :variant="state === 'completed' || state === 'active' ? 'default' : 'outline'"
-            size="icon"
-            class="rounded-full shrink-0"
             :class="[state === 'active' && 'ring-2 ring-ring ring-offset-2 ring-offset-background']"
             :style="{ pointerEvents: step.step === 1 && state === 'completed' ? 'none' : 'auto' }"
+            :variant="state === 'completed' || state === 'active' ? 'default' : 'outline'"
+            class="rounded-full shrink-0"
+            size="icon"
           >
             <Check v-if="state === 'completed'" class="size-5" />
             <Circle v-if="state === 'active'" />
@@ -102,7 +101,7 @@ const steps = [
         </div>
       </div>
 
-      <component :is="step.component" :nextStep="nextStep" v-if="index + 1 == stepIndex" />
+      <component :is="step.component" v-if="index + 1 == stepIndex" :nextStep="nextStep" />
     </StepperItem>
   </Stepper>
 </template>

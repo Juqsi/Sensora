@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -16,12 +16,12 @@ defineProps<{ nextStep: () => void }>()
     <CardContent>
       <div class="grid gap-4">
         <div class="grid gap-2">
-          <Label for="email">Email</Label>
-          <Input id="email" placeholder="your.email@example.com" required type="email" />
+          <Label for="forename"> 'account.forename' </Label>
+          <Input id="forename" placeholder="Max" required type="text" />
         </div>
         <div class="grid gap-2">
-          <Label for="password">Password</Label>
-          <Input id="password" type="password" required />
+          <Label for="surname">'account.surname'</Label>
+          <Input id="surname" required type="text" />
         </div>
         <Button class="w-full" @click="nextStep">Continue</Button>
       </div>

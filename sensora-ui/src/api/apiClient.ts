@@ -21,10 +21,12 @@ apiClient.interceptors.request.use(
 
     config.meta = config.meta || {}
     config.meta.toastId = toast.loading(t('errors.loading'))
+
     const token = authStore.token
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`
     }
+
     return config
   },
   (error) => {
@@ -35,21 +37,28 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
-    toast.dismiss((response.config as CustomAxiosRequestConfig).meta!.toastId)
+    toast.success(t('success.requestCompleted'), {
+      id: (response.config as CustomAxiosRequestConfig).meta!.toastId,
+    })
+
     return response
   },
   (error) => {
     const customConfig = error.config as CustomAxiosRequestConfig
+    const toastId = customConfig?.meta?.toastId
 
-    if (customConfig?.meta?.toastId) {
-      toast.dismiss(customConfig.meta.toastId)
-    } else {
-      toast.dismiss()
+    if (toastId === undefined) {
+      toast.dismiss(toastId)
     }
 
-    if (!error.response) {
-      toast.error(t('errors.networkError'))
-    }
+    const errorCode = error?.response?.data?.code
+    const errorMessage = errorCode
+      ? t(`errors.${errorCode}`, t('errors.unknownError'))
+      : t('errors.unknownError')
+
+    toast.error(errorMessage, {
+      id: toastId,
+    })
 
     return Promise.reject(error)
   },

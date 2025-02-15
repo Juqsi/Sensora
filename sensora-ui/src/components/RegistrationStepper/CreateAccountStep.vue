@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label'
 import { useI18n } from 'vue-i18n'
 import type { AuthRegisterBody } from '@/api'
 import { authApiClient } from '@/api/clients.ts'
+import { toast } from 'vue-sonner'
 
 const props = defineProps<{ nextStep: () => void }>()
 
@@ -16,17 +17,38 @@ const username = ref('')
 const email = ref('')
 const password = ref('')
 
-const handleSubmit = () => {
+function validatePassword(password: string): string | null {
+  const specialCharacters = /[!"#$%&'()*+,-./:;<=>?[\]^_`{|}~]/
+
+  if (password.length < 8) {
+    return 'Das Passwort muss mindestens 8 Zeichen lang sein.'
+  }
+  if (!specialCharacters.test(password)) {
+    return 'Das Passwort muss mindestens ein Sonderzeichen enthalten (!"#$%&\'()*+,-./:;<=>?[]^_{}|~).'
+  }
+
+  return null
+}
+
+const handleSubmit = async () => {
+  const errorMessage = validatePassword(password.value)
+  if (errorMessage) {
+    toast.warning(errorMessage)
+    return
+  }
   const accountInfos: AuthRegisterBody = {
     username: username.value,
     firstname: username.value,
     mail: email.value,
     password: password.value,
   }
+  try {
+    await authApiClient.createAccount(accountInfos)
 
-  authApiClient.createAccount(accountInfos)
-
-  props.nextStep()
+    props.nextStep()
+  } catch (error) {
+    console.log('error')
+  }
 }
 </script>
 

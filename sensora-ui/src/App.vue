@@ -9,7 +9,7 @@ import { Toaster } from 'vue-sonner'
     <router-view />
   </div>
   <bottom-nav-bar v-if="$route.path !== '/signup' && $route.path !== '/signin'" />
-  <Toaster />
+  <Toaster richColors />
 </template>
 
 <style scoped>
