@@ -8,6 +8,7 @@ import { useI18n } from 'vue-i18n'
 import type { AuthRegisterBody } from '@/api'
 import { authApiClient } from '@/api/clients.ts'
 import { toast } from 'vue-sonner'
+import { useAuthStore } from '@/stores'
 
 const props = defineProps<{ nextStep: () => void }>()
 
@@ -21,10 +22,10 @@ function validatePassword(password: string): string | null {
   const specialCharacters = /[!"#$%&'()*+,-./:;<=>?[\]^_`{|}~]/
 
   if (password.length < 8) {
-    return 'Das Passwort muss mindestens 8 Zeichen lang sein.'
+    return 'register.MinLength'
   }
   if (!specialCharacters.test(password)) {
-    return 'Das Passwort muss mindestens ein Sonderzeichen enthalten (!"#$%&\'()*+,-./:;<=>?[]^_{}|~).'
+    return 'register.SpecialCharRequired'
   }
 
   return null
@@ -33,7 +34,7 @@ function validatePassword(password: string): string | null {
 const handleSubmit = async () => {
   const errorMessage = validatePassword(password.value)
   if (errorMessage) {
-    toast.warning(errorMessage)
+    toast.warning(t(errorMessage))
     return
   }
   const accountInfos: AuthRegisterBody = {
@@ -45,9 +46,11 @@ const handleSubmit = async () => {
   try {
     await authApiClient.createAccount(accountInfos)
 
+    const authStore = useAuthStore()
+    await authStore.login({ username: username.value, password: password.value })
     props.nextStep()
   } catch (error) {
-    console.log('error')
+    password.value = ''
   }
 }
 </script>

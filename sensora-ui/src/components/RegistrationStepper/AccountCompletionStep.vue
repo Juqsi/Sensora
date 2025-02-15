@@ -3,6 +3,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 defineProps<{ nextStep: () => void }>()
 </script>
@@ -16,11 +19,11 @@ defineProps<{ nextStep: () => void }>()
     <CardContent>
       <div class="grid gap-4">
         <div class="grid gap-2">
-          <Label for="forename"> 'account.forename' </Label>
+          <Label for="forename"> {{ t('account.forename') }}'account.forename' </Label>
           <Input id="forename" placeholder="Max" required type="text" />
         </div>
         <div class="grid gap-2">
-          <Label for="surname">'account.surname'</Label>
+          <Label for="surname">{{ t('account.surname') }}</Label>
           <Input id="surname" required type="text" />
         </div>
         <Button class="w-full" @click="nextStep">Continue</Button>

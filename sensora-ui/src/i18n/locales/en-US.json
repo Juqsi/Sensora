@@ -82,5 +82,9 @@
   "user": {
     "updated": "User successfully updated!",
     "deleted": "User successfully deleted!"
+  },
+  "register": {
+    "SpecialCharRequired": "The password must contain at least one special character (!\"#$%&'()*+,-./:;<=>?[]^_{}|~).",
+    "MinLength": "The password must be at least 8 characters long."
   }
 }
