@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import type { AuthLoginBody } from '@/api'
 import { authApiClient } from '@/api'
-import { toast } from 'vue-sonner'
 import i18n from '@/i18n'
 
 const t = i18n.global?.t || ((key: string) => key)
@@ -17,11 +16,7 @@ export const useAuthStore = defineStore('auth', {
         const response = await authApiClient.Login(credentials)
         this.token = response.data.token
         this.isAuthenticated = true
-        toast.success(t('login.toast.success'))
-      } catch (error) {
-        console.error('Login fehlgeschlagen:', error)
-        toast.error(t('login.toast.Failed'))
-      }
+      } catch (error) {}
     },
     logout() {
       console.log('logout')

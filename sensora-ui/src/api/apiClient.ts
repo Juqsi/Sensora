@@ -1,15 +1,10 @@
-import axios, { type AxiosResponse, type InternalAxiosRequestConfig } from 'axios'
+import axios, { type AxiosResponse } from 'axios'
 import { toast } from 'vue-sonner'
 import i18n from '@/i18n'
 import { useAuthStore } from '@/stores/auth.ts'
+import type { CustomAxiosRequestConfig } from '@/api/CustomAxiosRequestConfig.ts'
 
 const t = i18n.global?.t || ((key: string) => key)
-
-interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
-  meta?: {
-    toastId?: string | number
-  }
-}
 
 const apiClient = axios.create({
   headers: { 'Content-Type': 'application/json' },
@@ -19,9 +14,16 @@ apiClient.interceptors.request.use(
   (config: CustomAxiosRequestConfig) => {
     const authStore = useAuthStore()
 
+    // Sicherstellen, dass headers existiert
+    config.headers = config.headers || {}
+
+    // Meta-Objekt initialisieren
     config.meta = config.meta || {}
+
+    // Lade-Toast anzeigen
     config.meta.toastId = toast.loading(t('errors.loading'))
 
+    // Token hinzufügen, falls vorhanden
     const token = authStore.token
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`
@@ -37,9 +39,14 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
-    toast.success(t('success.requestCompleted'), {
-      id: (response.config as CustomAxiosRequestConfig).meta!.toastId,
-    })
+    const customConfig = response.config as CustomAxiosRequestConfig
+    if (customConfig?.meta?.toastId) {
+      toast.dismiss(customConfig.meta.toastId)
+    }
+
+    const successMessage = customConfig?.meta?.successMessage || t('success.requestCompleted')
+
+    toast.success(successMessage)
 
     return response
   },
@@ -47,18 +54,18 @@ apiClient.interceptors.response.use(
     const customConfig = error.config as CustomAxiosRequestConfig
     const toastId = customConfig?.meta?.toastId
 
-    if (toastId === undefined) {
+    if (toastId) {
       toast.dismiss(toastId)
     }
 
     const errorCode = error?.response?.data?.code
-    const errorMessage = errorCode
+    const defaultErrorMessage = errorCode
       ? t(`errors.${errorCode}`, t('errors.unknownError'))
       : t('errors.unknownError')
 
-    toast.error(errorMessage, {
-      id: toastId,
-    })
+    const errorMessage = customConfig?.meta?.errorMessage || defaultErrorMessage
+
+    toast.error(errorMessage)
 
     return Promise.reject(error)
   },
