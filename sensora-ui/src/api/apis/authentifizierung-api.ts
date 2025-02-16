@@ -1,7 +1,8 @@
-import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
-import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
-import type { AuthLoginBody, AuthRegisterBody, User } from '@/api/models'
-import type { AuthResponse } from '@/api/models/authResponse.ts'
+import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
+import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
+import type {AuthLoginBody, AuthRegisterBody, User} from '@/api/models'
+import type {AuthResponse} from '@/api/models/authResponse.ts'
+import type {CustomAxiosRequestConfig} from '@/api/apiClient.ts'
 
 /**
  * AuthentifizierungApi - axios parameter creator
@@ -16,7 +17,7 @@ export const AuthentifizierungApiAxiosParamCreator = function () {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    Login: async (body: AuthLoginBody, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    Login: async (body: AuthLoginBody, options: CustomAxiosRequestConfig): Promise<RequestArgs> => {
       // verify required parameter 'body' is not null or undefined
       if (body === null || body === undefined) {
         throw new RequiredError(
@@ -29,7 +30,7 @@ export const AuthentifizierungApiAxiosParamCreator = function () {
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
 
-      const localVarRequestOptions: AxiosRequestConfig = {
+      const localVarRequestOptions: CustomAxiosRequestConfig = {
         method: 'POST',
         ...baseOptions,
         ...options,
@@ -69,7 +70,7 @@ export const AuthentifizierungApiAxiosParamCreator = function () {
      */
     createAccount: async (
       body: AuthRegisterBody,
-      options: AxiosRequestConfig = {},
+      options: CustomAxiosRequestConfig,
     ): Promise<RequestArgs> => {
       // verify required parameter 'body' is not null or undefined
       if (body === null || body === undefined) {
@@ -83,7 +84,7 @@ export const AuthentifizierungApiAxiosParamCreator = function () {
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
 
-      const localVarRequestOptions: AxiosRequestConfig = {
+      const localVarRequestOptions: CustomAxiosRequestConfig = {
         method: 'POST',
         ...baseOptions,
         ...options,
@@ -131,9 +132,12 @@ export const AuthentifizierungApiFp = function () {
      */
     async Login(
       body: AuthLoginBody,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<AuthResponse>>> {
-      const localVarAxiosArgs = await AuthentifizierungApiAxiosParamCreator().Login(body, options)
+      const localVarAxiosArgs = await AuthentifizierungApiAxiosParamCreator().Login(
+        body,
+        options ? options : ({} as CustomAxiosRequestConfig),
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -151,11 +155,11 @@ export const AuthentifizierungApiFp = function () {
      */
     async createAccount(
       body: AuthRegisterBody,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<User>>> {
       const localVarAxiosArgs = await AuthentifizierungApiAxiosParamCreator().createAccount(
         body,
-        options,
+        options ? options : ({} as CustomAxiosRequestConfig),
       )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
@@ -183,7 +187,7 @@ export const AuthentifizierungApiFactory = function (basePath?: string, axios?: 
      */
     async Login(
       body: AuthLoginBody,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<AxiosResponse<AuthResponse>> {
       return AuthentifizierungApiFp()
         .Login(body, options)
@@ -198,7 +202,7 @@ export const AuthentifizierungApiFactory = function (basePath?: string, axios?: 
      */
     async createAccount(
       body: AuthRegisterBody,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<AxiosResponse<User>> {
       return AuthentifizierungApiFp()
         .createAccount(body, options)
@@ -224,7 +228,7 @@ export class AuthentifizierungApi extends BaseAPI {
    */
   public async Login(
     body: AuthLoginBody,
-    options?: AxiosRequestConfig,
+    options?: CustomAxiosRequestConfig,
   ): Promise<AxiosResponse<AuthResponse>> {
     return AuthentifizierungApiFp()
       .Login(body, options)
@@ -241,7 +245,7 @@ export class AuthentifizierungApi extends BaseAPI {
    */
   public async createAccount(
     body: AuthRegisterBody,
-    options?: AxiosRequestConfig,
+    options?: CustomAxiosRequestConfig,
   ): Promise<AxiosResponse<User>> {
     return AuthentifizierungApiFp()
       .createAccount(body, options)

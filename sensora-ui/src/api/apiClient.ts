@@ -1,10 +1,17 @@
-import axios, { type AxiosResponse } from 'axios'
+import axios, { type AxiosResponse, type InternalAxiosRequestConfig } from 'axios'
 import { toast } from 'vue-sonner'
 import i18n from '@/i18n'
 import { useAuthStore } from '@/stores/auth.ts'
-import type { CustomAxiosRequestConfig } from '@/api/CustomAxiosRequestConfig.ts'
 
 const t = i18n.global?.t || ((key: string) => key)
+
+export interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+  meta?: {
+    toastId?: string | number
+    successMessage?: string
+    errorMessage?: string
+  }
+}
 
 const apiClient = axios.create({
   headers: { 'Content-Type': 'application/json' },
@@ -39,6 +46,9 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
+    toast.success(t('success.requestCompleted'), {
+      id: (response.config as CustomAxiosRequestConfig).meta!.toastId,
+    })
     const customConfig = response.config as CustomAxiosRequestConfig
     if (customConfig?.meta?.toastId) {
       toast.dismiss(customConfig.meta.toastId)
@@ -54,18 +64,21 @@ apiClient.interceptors.response.use(
     const customConfig = error.config as CustomAxiosRequestConfig
     const toastId = customConfig?.meta?.toastId
 
-    if (toastId) {
+    if (toastId === undefined) {
       toast.dismiss(toastId)
     }
 
     const errorCode = error?.response?.data?.code
+    let errorMessage = errorCode
     const defaultErrorMessage = errorCode
       ? t(`errors.${errorCode}`, t('errors.unknownError'))
       : t('errors.unknownError')
 
-    const errorMessage = customConfig?.meta?.errorMessage || defaultErrorMessage
+    errorMessage = customConfig?.meta?.errorMessage || defaultErrorMessage
 
-    toast.error(errorMessage)
+    toast.error(errorMessage, {
+      id: toastId,
+    })
 
     return Promise.reject(error)
   },

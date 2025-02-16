@@ -9,6 +9,7 @@ import type { AuthRegisterBody } from '@/api'
 import { authApiClient } from '@/api/clients.ts'
 import { toast } from 'vue-sonner'
 import { useAuthStore } from '@/stores'
+import type { CustomAxiosRequestConfig } from '@/api/apiClient.ts'
 
 const props = defineProps<{ nextStep: () => void }>()
 
@@ -44,7 +45,9 @@ const handleSubmit = async () => {
     password: password.value,
   }
   try {
-    await authApiClient.createAccount(accountInfos)
+    await authApiClient.createAccount(accountInfos, {
+      meta: {},
+    } as CustomAxiosRequestConfig)
 
     const authStore = useAuthStore()
     await authStore.login({ username: username.value, password: password.value })
