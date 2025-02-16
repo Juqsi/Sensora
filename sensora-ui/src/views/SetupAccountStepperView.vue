@@ -74,7 +74,12 @@ const steps = [
         <StepperTrigger as-child>
           <Button
             :class="[state === 'active' && 'ring-2 ring-ring ring-offset-2 ring-offset-background']"
-            :style="{ pointerEvents: step.step === 1 && state === 'completed' ? 'none' : 'auto' }"
+            :style="{
+              pointerEvents:
+                (step.step === 1 && state === 'completed') || step.step > stepIndex
+                  ? 'none'
+                  : 'auto',
+            }"
             :variant="state === 'completed' || state === 'active' ? 'default' : 'outline'"
             class="rounded-full shrink-0"
             size="icon"

@@ -45,7 +45,7 @@ export interface User {
    * @memberof User
    * @example Max
    */
-  firstname?: string
+  firstname: string
 
   /**
    * @type {string}

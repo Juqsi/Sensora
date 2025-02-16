@@ -72,12 +72,12 @@ const handleSubmit = async () => {
           <div class="grid gap-4">
             <div class="grid gap-4">
               <div class="grid gap-2">
-                <Label for="username">{{ t('login.username') }}</Label>
+                <Label for="username">{{ t('login.username') }}*</Label>
                 <Input id="username" v-model="username" placeholder="Max" required />
               </div>
             </div>
             <div class="grid gap-2">
-              <Label for="email">{{ t('login.Email') }}</Label>
+              <Label for="email">{{ t('login.Email') }}*</Label>
               <Input
                 id="email"
                 v-model="email"
@@ -87,7 +87,7 @@ const handleSubmit = async () => {
               />
             </div>
             <div class="grid gap-2">
-              <Label for="password">{{ t('login.Password') }}</Label>
+              <Label for="password">{{ t('login.Password') }}*</Label>
               <Input id="password" v-model="password" type="password" />
             </div>
             <Button class="w-full" type="submit">{{ t('login.CreateAccount') }}</Button>

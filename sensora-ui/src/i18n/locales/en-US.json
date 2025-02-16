@@ -14,7 +14,8 @@
     "CreateAccount": "Create Account",
     "AlreadyHaveAccount": "Already have an account?",
     "SignUpWithA": "Sign up with A",
-    "Or": "or"
+    "Or": "or",
+    "Success": "Login successful"
   },
   "appearance": {
     "Title": "Appearance",

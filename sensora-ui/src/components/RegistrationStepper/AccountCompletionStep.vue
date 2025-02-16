@@ -4,10 +4,25 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { useI18n } from 'vue-i18n'
+import { ref } from 'vue'
+import { useUserStore } from '@/stores'
 
+const userStore = useUserStore()
 const { t } = useI18n()
 
-defineProps<{ nextStep: () => void }>()
+const props = defineProps<{ nextStep: () => void }>()
+
+const forename = ref(userStore.user?.firstname)
+const surname = ref(userStore.user?.lastname)
+
+async function handleSubmit() {
+  try {
+    await userStore.updateUser({ firstname: forename.value, lastname: surname.value })
+    props.nextStep()
+  } catch (error) {
+    console.error(error)
+  }
+}
 </script>
 
 <template>
@@ -17,17 +32,19 @@ defineProps<{ nextStep: () => void }>()
       <CardDescription>Enter your email and password to proceed</CardDescription>
     </CardHeader>
     <CardContent>
-      <div class="grid gap-4">
-        <div class="grid gap-2">
-          <Label for="forename"> {{ t('account.forename') }}'account.forename' </Label>
-          <Input id="forename" placeholder="Max" required type="text" />
+      <form @submit.prevent="handleSubmit">
+        <div class="grid gap-4">
+          <div class="grid gap-2">
+            <Label for="forename"> {{ t('account.forename') }}* </Label>
+            <Input v-model="forename" id="forename" type="text" />
+          </div>
+          <div class="grid gap-2">
+            <Label for="surname">{{ t('account.surname') }}</Label>
+            <Input v-model="surname" id="surname" type="text" />
+          </div>
+          <Button class="w-full" type="submit">{{ t('register.Continue') }}</Button>
         </div>
-        <div class="grid gap-2">
-          <Label for="surname">{{ t('account.surname') }}</Label>
-          <Input id="surname" required type="text" />
-        </div>
-        <Button class="w-full" @click="nextStep">Continue</Button>
-      </div>
+      </form>
     </CardContent>
   </Card>
 </template>

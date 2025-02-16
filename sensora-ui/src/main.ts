@@ -10,8 +10,7 @@ import router from './router'
 import i18n from '@/i18n'
 
 import { useTheme } from './composables/useTheme'
-import { useAuthStore } from './stores/auth'
-import { useUserStore } from './stores/user'
+import { useAuthStore, useUserStore } from '@/stores'
 
 const app = createApp(App)
 
@@ -21,7 +20,7 @@ app.use(pinia)
 
 const authStore = useAuthStore()
 const userStore = useUserStore()
-if (authStore.token) {
+if (authStore.token && authStore.isAuthenticated) {
   userStore.fetchUser()
 }
 

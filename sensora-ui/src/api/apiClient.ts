@@ -65,12 +65,18 @@ apiClient.interceptors.response.use(
       toast.dismiss()
     }
 
-    const errorCode = error?.response?.data?.code
-    const defaultErrorMessage = errorCode
-      ? t(`errors.${errorCode}`, t('errors.unknownError'))
-      : t('errors.unknownError')
+    let errorMessage = ''
 
-    let errorMessage = customConfig?.meta?.errorMessage || defaultErrorMessage
+    if (!error.response) {
+      errorMessage = t('errors.networkError')
+    } else {
+      const errorCode = error?.response?.data?.code
+      const defaultErrorMessage = errorCode
+        ? t(`errors.${errorCode}`, t('errors.unknownError'))
+        : t('errors.unknownError')
+
+      errorMessage = customConfig?.meta?.errorMessage || defaultErrorMessage
+    }
     toast.error(errorMessage, {
       id: toastId,
     })

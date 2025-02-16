@@ -14,7 +14,8 @@
     "CreateAccount": "Konto erstellen",
     "AlreadyHaveAccount": "Haben Sie bereits ein Konto?",
     "SignUpWithA": "Registrieren Sie sich mit A",
-    "Or": "oder"
+    "Or": "oder",
+    "Success": "Erfolgreich angemeldet!"
   },
   "appearance": {
     "Title": "Erscheinungsbild",
