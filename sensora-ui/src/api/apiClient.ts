@@ -24,10 +24,10 @@ apiClient.interceptors.request.use(
 
     config.headers = config.headers || {}
 
-    config.meta = config.meta || {}
+    config.meta = { duration: 4000, ...config.meta }
 
     config.meta.toastId = toast.loading(t('errors.loading'), {
-      duration: config.meta?.duration || 4000,
+      duration: config.meta.duration,
     })
 
     const token = authStore.token
