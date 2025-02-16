@@ -1,6 +1,8 @@
-import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
-import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
-import type { createPlantBody, Plant, updatePlantBody } from '@/api/models'
+import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
+import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
+import type {createPlantBody, Plant, updatePlantBody} from '@/api/models'
+
+import type {CustomAxiosRequestConfig} from '@/api/apiClient.ts'
 
 /**
  * PflanzenverwaltungApi - axios parameter creator
@@ -15,7 +17,7 @@ export const PflanzenverwaltungApiAxiosParamCreator = function () {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    delete: async (plantId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    delete: async (plantId: string, options: CustomAxiosRequestConfig): Promise<RequestArgs> => {
       // verify required parameter 'plantId' is not null or undefined
       if (plantId === null || plantId === undefined) {
         throw new RequiredError(
@@ -31,7 +33,7 @@ export const PflanzenverwaltungApiAxiosParamCreator = function () {
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
 
-      const localVarRequestOptions: AxiosRequestConfig = {
+      const localVarRequestOptions: CustomAxiosRequestConfig = {
         method: 'DELETE',
         ...baseOptions,
         ...options,
@@ -72,7 +74,7 @@ export const PflanzenverwaltungApiAxiosParamCreator = function () {
       plantId: string,
       startTime?: Date,
       endTime?: Date,
-      options: AxiosRequestConfig = {},
+      options?: CustomAxiosRequestConfig,
     ): Promise<RequestArgs> => {
       // verify required parameter 'plantId' is not null or undefined
       if (plantId === null || plantId === undefined) {
@@ -89,7 +91,7 @@ export const PflanzenverwaltungApiAxiosParamCreator = function () {
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
 
-      const localVarRequestOptions: AxiosRequestConfig = {
+      const localVarRequestOptions: CustomAxiosRequestConfig = {
         method: 'GET',
         ...baseOptions,
         ...options,
@@ -111,7 +113,7 @@ export const PflanzenverwaltungApiAxiosParamCreator = function () {
       for (const key in localVarQueryParameter) {
         query.set(key, localVarQueryParameter[key])
       }
-      for (const key in options.params) {
+      for (const key in options?.params) {
         query.set(key, options.params[key])
       }
       localVarUrlObj.search = new URLSearchParams(query).toString()
@@ -119,7 +121,7 @@ export const PflanzenverwaltungApiAxiosParamCreator = function () {
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
-        ...options.headers,
+        ...options?.headers,
       }
 
       return {
@@ -138,7 +140,7 @@ export const PflanzenverwaltungApiAxiosParamCreator = function () {
     update: async (
       body: updatePlantBody,
       plantId: string,
-      options: AxiosRequestConfig = {},
+      options: CustomAxiosRequestConfig,
     ): Promise<RequestArgs> => {
       // verify required parameter 'body' is not null or undefined
       if (body === null || body === undefined) {
@@ -162,7 +164,7 @@ export const PflanzenverwaltungApiAxiosParamCreator = function () {
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
 
-      const localVarRequestOptions: AxiosRequestConfig = {
+      const localVarRequestOptions: CustomAxiosRequestConfig = {
         method: 'PATCH',
         ...baseOptions,
         ...options,
@@ -202,7 +204,7 @@ export const PflanzenverwaltungApiAxiosParamCreator = function () {
      */
     create: async (
       body: createPlantBody,
-      options: AxiosRequestConfig = {},
+      options: CustomAxiosRequestConfig,
     ): Promise<RequestArgs> => {
       // verify required parameter 'body' is not null or undefined
       if (body === null || body === undefined) {
@@ -216,7 +218,7 @@ export const PflanzenverwaltungApiAxiosParamCreator = function () {
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
 
-      const localVarRequestOptions: AxiosRequestConfig = {
+      const localVarRequestOptions: CustomAxiosRequestConfig = {
         method: 'POST',
         ...baseOptions,
         ...options,
@@ -265,11 +267,11 @@ export const PflanzenverwaltungApiFp = function () {
      */
     async delete(
       plantId: string,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
       const localVarAxiosArgs = await PflanzenverwaltungApiAxiosParamCreator().delete(
         plantId,
-        options,
+        options ? options : ({} as CustomAxiosRequestConfig),
       )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
@@ -292,7 +294,7 @@ export const PflanzenverwaltungApiFp = function () {
       plantId: string,
       startTime?: Date,
       endTime?: Date,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Plant>>> {
       const localVarAxiosArgs = await PflanzenverwaltungApiAxiosParamCreator().get(
         plantId,
@@ -319,12 +321,12 @@ export const PflanzenverwaltungApiFp = function () {
     async update(
       body: updatePlantBody,
       plantId: string,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Plant>>> {
       const localVarAxiosArgs = await PflanzenverwaltungApiAxiosParamCreator().update(
         body,
         plantId,
-        options,
+        options ? options : ({} as CustomAxiosRequestConfig),
       )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
@@ -343,9 +345,12 @@ export const PflanzenverwaltungApiFp = function () {
      */
     async create(
       body: createPlantBody,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Plant>>> {
-      const localVarAxiosArgs = await PflanzenverwaltungApiAxiosParamCreator().create(body, options)
+      const localVarAxiosArgs = await PflanzenverwaltungApiAxiosParamCreator().create(
+        body,
+        options ? options : ({} as CustomAxiosRequestConfig),
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -370,7 +375,10 @@ export const PflanzenverwaltungApiFactory = function (basePath?: string, axios?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async delete(plantId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
+    async delete(
+      plantId: string,
+      options?: CustomAxiosRequestConfig,
+    ): Promise<AxiosResponse<void>> {
       return PflanzenverwaltungApiFp()
         .delete(plantId, options)
         .then((request) => request(axios, basePath))
@@ -388,7 +396,7 @@ export const PflanzenverwaltungApiFactory = function (basePath?: string, axios?:
       plantId: string,
       startTime?: Date,
       endTime?: Date,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<AxiosResponse<Plant>> {
       return PflanzenverwaltungApiFp()
         .get(plantId, startTime, endTime, options)
@@ -405,7 +413,7 @@ export const PflanzenverwaltungApiFactory = function (basePath?: string, axios?:
     async update(
       body: updatePlantBody,
       plantId: string,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<AxiosResponse<Plant>> {
       return PflanzenverwaltungApiFp()
         .update(body, plantId, options)
@@ -420,7 +428,7 @@ export const PflanzenverwaltungApiFactory = function (basePath?: string, axios?:
      */
     async create(
       body: createPlantBody,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<AxiosResponse<Plant>> {
       return PflanzenverwaltungApiFp()
         .create(body, options)
@@ -444,7 +452,10 @@ export class PflanzenverwaltungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof PflanzenverwaltungApi
    */
-  public async delete(plantId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
+  public async delete(
+    plantId: string,
+    options?: CustomAxiosRequestConfig,
+  ): Promise<AxiosResponse<void>> {
     return PflanzenverwaltungApiFp()
       .delete(plantId, options)
       .then((request) => request(this.axios, this.basePath))
@@ -464,7 +475,7 @@ export class PflanzenverwaltungApi extends BaseAPI {
     plantId: string,
     startTime?: Date,
     endTime?: Date,
-    options?: AxiosRequestConfig,
+    options?: CustomAxiosRequestConfig,
   ): Promise<AxiosResponse<Plant>> {
     return PflanzenverwaltungApiFp()
       .get(plantId, startTime, endTime, options)
@@ -483,7 +494,7 @@ export class PflanzenverwaltungApi extends BaseAPI {
   public async update(
     body: updatePlantBody,
     plantId: string,
-    options?: AxiosRequestConfig,
+    options?: CustomAxiosRequestConfig,
   ): Promise<AxiosResponse<Plant>> {
     return PflanzenverwaltungApiFp()
       .update(body, plantId, options)
@@ -500,7 +511,7 @@ export class PflanzenverwaltungApi extends BaseAPI {
    */
   public async create(
     body: createPlantBody,
-    options?: AxiosRequestConfig,
+    options?: CustomAxiosRequestConfig,
   ): Promise<AxiosResponse<Plant>> {
     return PflanzenverwaltungApiFp()
       .create(body, options)

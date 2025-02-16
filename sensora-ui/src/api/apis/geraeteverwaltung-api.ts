@@ -1,7 +1,9 @@
-import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
+import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
 
-import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
-import { type Controller } from '@/api/models'
+import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
+import {type Controller} from '@/api/models'
+
+import type {CustomAxiosRequestConfig} from '@/api/apiClient.ts'
 
 /**
  * GeraeteverwaltungApi - axios parameter creator
@@ -16,7 +18,7 @@ export const GeraeteverwaltungApiAxiosParamCreator = function () {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    get: async (deviceId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    get: async (deviceId: string, options: CustomAxiosRequestConfig): Promise<RequestArgs> => {
       // verify required parameter 'deviceId' is not null or undefined
       if (deviceId === null || deviceId === undefined) {
         throw new RequiredError(
@@ -66,7 +68,7 @@ export const GeraeteverwaltungApiAxiosParamCreator = function () {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getList: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    getList: async (options: CustomAxiosRequestConfig): Promise<RequestArgs> => {
       const localVarPath = `/devices`
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
@@ -118,9 +120,12 @@ export const GeraeteverwaltungApiFp = function () {
      */
     async get(
       deviceId: string,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Controller>>> {
-      const localVarAxiosArgs = await GeraeteverwaltungApiAxiosParamCreator().get(deviceId, options)
+      const localVarAxiosArgs = await GeraeteverwaltungApiAxiosParamCreator().get(
+        deviceId,
+        options ? options : ({} as CustomAxiosRequestConfig),
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -136,11 +141,13 @@ export const GeraeteverwaltungApiFp = function () {
      * @throws {RequiredError}
      */
     async getList(
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<Controller & any>>>
     > {
-      const localVarAxiosArgs = await GeraeteverwaltungApiAxiosParamCreator().getList(options)
+      const localVarAxiosArgs = await GeraeteverwaltungApiAxiosParamCreator().getList(
+        options ? options : ({} as CustomAxiosRequestConfig),
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -165,7 +172,10 @@ export const GeraeteverwaltungApiFactory = function (basePath?: string, axios?: 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async get(deviceId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<Controller>> {
+    async get(
+      deviceId: string,
+      options?: CustomAxiosRequestConfig,
+    ): Promise<AxiosResponse<Controller>> {
       return GeraeteverwaltungApiFp()
         .get(deviceId, options)
         .then((request) => request(axios, basePath))
@@ -176,7 +186,7 @@ export const GeraeteverwaltungApiFactory = function (basePath?: string, axios?: 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async getList(options?: AxiosRequestConfig): Promise<AxiosResponse<Array<Controller>>> {
+    async getList(options?: CustomAxiosRequestConfig): Promise<AxiosResponse<Array<Controller>>> {
       return GeraeteverwaltungApiFp()
         .getList(options)
         .then((request) => request(axios, basePath))
@@ -201,7 +211,7 @@ export class GeraeteverwaltungApi extends BaseAPI {
    */
   public async get(
     deviceId: string,
-    options?: AxiosRequestConfig,
+    options?: CustomAxiosRequestConfig,
   ): Promise<AxiosResponse<Controller>> {
     return GeraeteverwaltungApiFp()
       .get(deviceId, options)
@@ -216,7 +226,7 @@ export class GeraeteverwaltungApi extends BaseAPI {
    * @memberof GeraeteverwaltungApi
    */
   public async getList(
-    options?: AxiosRequestConfig,
+    options?: CustomAxiosRequestConfig,
   ): Promise<AxiosResponse<Array<Controller & any>>> {
     return GeraeteverwaltungApiFp()
       .getList(options)

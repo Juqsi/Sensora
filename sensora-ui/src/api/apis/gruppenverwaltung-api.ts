@@ -1,7 +1,9 @@
-import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
+import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
 
-import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
-import type { createGroupBody, Group, GroupPatchBody } from '@/api/models'
+import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
+import type {createGroupBody, Group, GroupPatchBody} from '@/api/models'
+
+import type {CustomAxiosRequestConfig} from '@/api/apiClient.ts'
 
 /**
  * GruppenverwaltungApi - axios parameter creator
@@ -15,7 +17,7 @@ export const GruppenverwaltungApiAxiosParamCreator = function () {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    get: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    get: async (options: CustomAxiosRequestConfig): Promise<RequestArgs> => {
       const localVarPath = `/group`
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
@@ -56,7 +58,7 @@ export const GruppenverwaltungApiAxiosParamCreator = function () {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    delete: async (groupId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    delete: async (groupId: string, options: CustomAxiosRequestConfig): Promise<RequestArgs> => {
       // verify required parameter 'groupId' is not null or undefined
       if (groupId === null || groupId === undefined) {
         throw new RequiredError(
@@ -111,7 +113,7 @@ export const GruppenverwaltungApiAxiosParamCreator = function () {
     kick: async (
       groupId: string,
       userId: string,
-      options: AxiosRequestConfig = {},
+      options: CustomAxiosRequestConfig,
     ): Promise<RequestArgs> => {
       // verify required parameter 'groupId' is not null or undefined
       if (groupId === null || groupId === undefined) {
@@ -169,7 +171,7 @@ export const GruppenverwaltungApiAxiosParamCreator = function () {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    leave: async (groupId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    leave: async (groupId: string, options: CustomAxiosRequestConfig): Promise<RequestArgs> => {
       // verify required parameter 'groupId' is not null or undefined
       if (groupId === null || groupId === undefined) {
         throw new RequiredError(
@@ -224,7 +226,7 @@ export const GruppenverwaltungApiAxiosParamCreator = function () {
     update: async (
       body: GroupPatchBody,
       groupId: string,
-      options: AxiosRequestConfig = {},
+      options: CustomAxiosRequestConfig,
     ): Promise<RequestArgs> => {
       // verify required parameter 'body' is not null or undefined
       if (body === null || body === undefined) {
@@ -286,7 +288,7 @@ export const GruppenverwaltungApiAxiosParamCreator = function () {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    join: async (token: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    join: async (token: string, options: CustomAxiosRequestConfig): Promise<RequestArgs> => {
       // verify required parameter 'token' is not null or undefined
       if (token === null || token === undefined) {
         throw new RequiredError(
@@ -340,7 +342,7 @@ export const GruppenverwaltungApiAxiosParamCreator = function () {
      */
     create: async (
       body: createGroupBody,
-      options: AxiosRequestConfig = {},
+      options: CustomAxiosRequestConfig,
     ): Promise<RequestArgs> => {
       // verify required parameter 'body' is not null or undefined
       if (body === null || body === undefined) {
@@ -402,9 +404,11 @@ export const GruppenverwaltungApiFp = function () {
      * @throws {RequiredError}
      */
     async get(
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<Group>>>> {
-      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().get(options)
+      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().get(
+        options ? options : ({} as CustomAxiosRequestConfig),
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -422,11 +426,11 @@ export const GruppenverwaltungApiFp = function () {
      */
     async delete(
       groupId: string,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
       const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().delete(
         groupId,
-        options,
+        options ? options : ({} as CustomAxiosRequestConfig),
       )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
@@ -447,12 +451,12 @@ export const GruppenverwaltungApiFp = function () {
     async kick(
       groupId: string,
       userId: string,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Group>>> {
       const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().kick(
         groupId,
         userId,
-        options,
+        options ? options : ({} as CustomAxiosRequestConfig),
       )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
@@ -471,11 +475,11 @@ export const GruppenverwaltungApiFp = function () {
      */
     async leave(
       groupId: string,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
       const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().leave(
         groupId,
-        options,
+        options ? options : ({} as CustomAxiosRequestConfig),
       )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
@@ -496,12 +500,12 @@ export const GruppenverwaltungApiFp = function () {
     async update(
       body: GroupPatchBody,
       groupId: string,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Group>>> {
       const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().update(
         body,
         groupId,
-        options,
+        options ? options : ({} as CustomAxiosRequestConfig),
       )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
@@ -520,9 +524,12 @@ export const GruppenverwaltungApiFp = function () {
      */
     async join(
       token: string,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Group>>> {
-      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().join(token, options)
+      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().join(
+        token,
+        options ? options : ({} as CustomAxiosRequestConfig),
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -540,9 +547,12 @@ export const GruppenverwaltungApiFp = function () {
      */
     async create(
       body: createGroupBody,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Group>>> {
-      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().create(body, options)
+      const localVarAxiosArgs = await GruppenverwaltungApiAxiosParamCreator().create(
+        body,
+        options ? options : ({} as CustomAxiosRequestConfig),
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -566,7 +576,7 @@ export const GruppenverwaltungApiFactory = function (basePath?: string, axios?: 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async get(options?: AxiosRequestConfig): Promise<AxiosResponse<Array<Group>>> {
+    async get(options?: CustomAxiosRequestConfig): Promise<AxiosResponse<Array<Group>>> {
       return GruppenverwaltungApiFp()
         .get(options)
         .then((request) => request(axios, basePath))
@@ -578,7 +588,10 @@ export const GruppenverwaltungApiFactory = function (basePath?: string, axios?: 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async delete(groupId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
+    async delete(
+      groupId: string,
+      options?: CustomAxiosRequestConfig,
+    ): Promise<AxiosResponse<void>> {
       return GruppenverwaltungApiFp()
         .delete(groupId, options)
         .then((request) => request(axios, basePath))
@@ -594,7 +607,7 @@ export const GruppenverwaltungApiFactory = function (basePath?: string, axios?: 
     async kick(
       groupId: string,
       userId: string,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<AxiosResponse<Group>> {
       return GruppenverwaltungApiFp()
         .kick(groupId, userId, options)
@@ -607,7 +620,7 @@ export const GruppenverwaltungApiFactory = function (basePath?: string, axios?: 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async leave(groupId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
+    async leave(groupId: string, options?: CustomAxiosRequestConfig): Promise<AxiosResponse<void>> {
       return GruppenverwaltungApiFp()
         .leave(groupId, options)
         .then((request) => request(axios, basePath))
@@ -623,7 +636,7 @@ export const GruppenverwaltungApiFactory = function (basePath?: string, axios?: 
     async update(
       body: GroupPatchBody,
       groupId: string,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<AxiosResponse<Group>> {
       return GruppenverwaltungApiFp()
         .update(body, groupId, options)
@@ -636,7 +649,7 @@ export const GruppenverwaltungApiFactory = function (basePath?: string, axios?: 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async join(token: string, options?: AxiosRequestConfig): Promise<AxiosResponse<Group>> {
+    async join(token: string, options?: CustomAxiosRequestConfig): Promise<AxiosResponse<Group>> {
       return GruppenverwaltungApiFp()
         .join(token, options)
         .then((request) => request(axios, basePath))
@@ -650,7 +663,7 @@ export const GruppenverwaltungApiFactory = function (basePath?: string, axios?: 
      */
     async create(
       body: createGroupBody,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<AxiosResponse<Group>> {
       return GruppenverwaltungApiFp()
         .create(body, options)
@@ -673,7 +686,7 @@ export class GruppenverwaltungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof GruppenverwaltungApi
    */
-  public async get(options?: AxiosRequestConfig): Promise<AxiosResponse<Array<Group>>> {
+  public async get(options?: CustomAxiosRequestConfig): Promise<AxiosResponse<Array<Group>>> {
     return GruppenverwaltungApiFp()
       .get(options)
       .then((request) => request(this.axios, this.basePath))
@@ -687,7 +700,10 @@ export class GruppenverwaltungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof GruppenverwaltungApi
    */
-  public async delete(groupId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
+  public async delete(
+    groupId: string,
+    options?: CustomAxiosRequestConfig,
+  ): Promise<AxiosResponse<void>> {
     return GruppenverwaltungApiFp()
       .delete(groupId, options)
       .then((request) => request(this.axios, this.basePath))
@@ -705,7 +721,7 @@ export class GruppenverwaltungApi extends BaseAPI {
   public async kick(
     groupId: string,
     userId: string,
-    options?: AxiosRequestConfig,
+    options?: CustomAxiosRequestConfig,
   ): Promise<AxiosResponse<Group>> {
     return GruppenverwaltungApiFp()
       .kick(groupId, userId, options)
@@ -720,7 +736,10 @@ export class GruppenverwaltungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof GruppenverwaltungApi
    */
-  public async leave(groupId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
+  public async leave(
+    groupId: string,
+    options?: CustomAxiosRequestConfig,
+  ): Promise<AxiosResponse<void>> {
     return GruppenverwaltungApiFp()
       .leave(groupId, options)
       .then((request) => request(this.axios, this.basePath))
@@ -738,7 +757,7 @@ export class GruppenverwaltungApi extends BaseAPI {
   public async update(
     body: GroupPatchBody,
     groupId: string,
-    options?: AxiosRequestConfig,
+    options?: CustomAxiosRequestConfig,
   ): Promise<AxiosResponse<Group>> {
     return GruppenverwaltungApiFp()
       .update(body, groupId, options)
@@ -753,7 +772,10 @@ export class GruppenverwaltungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof GruppenverwaltungApi
    */
-  public async join(token: string, options?: AxiosRequestConfig): Promise<AxiosResponse<Group>> {
+  public async join(
+    token: string,
+    options?: CustomAxiosRequestConfig,
+  ): Promise<AxiosResponse<Group>> {
     return GruppenverwaltungApiFp()
       .join(token, options)
       .then((request) => request(this.axios, this.basePath))
@@ -769,7 +791,7 @@ export class GruppenverwaltungApi extends BaseAPI {
    */
   public async create(
     body: createGroupBody,
-    options?: AxiosRequestConfig,
+    options?: CustomAxiosRequestConfig,
   ): Promise<AxiosResponse<Group>> {
     return GruppenverwaltungApiFp()
       .create(body, options)

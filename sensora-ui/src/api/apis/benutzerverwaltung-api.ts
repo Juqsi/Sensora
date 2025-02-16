@@ -1,6 +1,7 @@
-import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
-import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
-import type { updateUserBody, User } from '@/api/models'
+import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
+import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
+import type {updateUserBody, User} from '@/api/models'
+import type {CustomAxiosRequestConfig} from '@/api/apiClient.ts'
 
 /**
  * BenutzerverwaltungApi - axios parameter creator
@@ -14,13 +15,13 @@ export const BenutzerverwaltungApiAxiosParamCreator = function () {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    delete: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    delete: async (options: CustomAxiosRequestConfig): Promise<RequestArgs> => {
       const localVarPath = `/user`
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
 
-      const localVarRequestOptions: AxiosRequestConfig = {
+      const localVarRequestOptions: CustomAxiosRequestConfig = {
         method: 'DELETE',
         ...baseOptions,
         ...options,
@@ -57,7 +58,7 @@ export const BenutzerverwaltungApiAxiosParamCreator = function () {
      */
     update: async (
       body: updateUserBody,
-      options: AxiosRequestConfig = {},
+      options: CustomAxiosRequestConfig,
     ): Promise<RequestArgs> => {
       // verify required parameter 'body' is not null or undefined
       if (body === null || body === undefined) {
@@ -71,7 +72,7 @@ export const BenutzerverwaltungApiAxiosParamCreator = function () {
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
 
-      const localVarRequestOptions: AxiosRequestConfig = {
+      const localVarRequestOptions: CustomAxiosRequestConfig = {
         method: 'PATCH',
         ...baseOptions,
         ...options,
@@ -109,7 +110,7 @@ export const BenutzerverwaltungApiAxiosParamCreator = function () {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    get: async (userId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+    get: async (userId: string, options: CustomAxiosRequestConfig): Promise<RequestArgs> => {
       // verify required parameter 'userId' is not null or undefined
       if (userId === null || userId === undefined) {
         throw new RequiredError(
@@ -128,7 +129,7 @@ export const BenutzerverwaltungApiAxiosParamCreator = function () {
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
 
-      const localVarRequestOptions: AxiosRequestConfig = {
+      const localVarRequestOptions: CustomAxiosRequestConfig = {
         method: 'GET',
         ...baseOptions,
         ...options,
@@ -172,9 +173,11 @@ export const BenutzerverwaltungApiFp = function () {
      * @throws {RequiredError}
      */
     async delete(
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
-      const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator().delete(options)
+      const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator().delete(
+        options ? options : ({} as CustomAxiosRequestConfig),
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -192,9 +195,12 @@ export const BenutzerverwaltungApiFp = function () {
      */
     async update(
       body: updateUserBody,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<User>>> {
-      const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator().update(body, options)
+      const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator().update(
+        body,
+        options ? options : ({} as CustomAxiosRequestConfig),
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -212,9 +218,12 @@ export const BenutzerverwaltungApiFp = function () {
      */
     async get(
       userId: string,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<User>>> {
-      const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator().get(userId, options)
+      const localVarAxiosArgs = await BenutzerverwaltungApiAxiosParamCreator().get(
+        userId,
+        options ? options : ({} as CustomAxiosRequestConfig),
+      )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
           ...localVarAxiosArgs.options,
@@ -238,7 +247,7 @@ export const BenutzerverwaltungApiFactory = function (basePath?: string, axios?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async delete(options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
+    async delete(options?: CustomAxiosRequestConfig): Promise<AxiosResponse<void>> {
       return BenutzerverwaltungApiFp()
         .delete(options)
         .then((request) => request(axios, basePath))
@@ -250,7 +259,10 @@ export const BenutzerverwaltungApiFactory = function (basePath?: string, axios?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async update(body: updateUserBody, options?: AxiosRequestConfig): Promise<AxiosResponse<User>> {
+    async update(
+      body: updateUserBody,
+      options?: CustomAxiosRequestConfig,
+    ): Promise<AxiosResponse<User>> {
       return BenutzerverwaltungApiFp()
         .update(body, options)
         .then((request) => request(axios, basePath))
@@ -262,7 +274,7 @@ export const BenutzerverwaltungApiFactory = function (basePath?: string, axios?:
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async get(userId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<User>> {
+    async get(userId: string, options?: CustomAxiosRequestConfig): Promise<AxiosResponse<User>> {
       return BenutzerverwaltungApiFp()
         .get(userId, options)
         .then((request) => request(axios, basePath))
@@ -284,7 +296,7 @@ export class BenutzerverwaltungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof BenutzerverwaltungApi
    */
-  public async delete(options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
+  public async delete(options?: CustomAxiosRequestConfig): Promise<AxiosResponse<void>> {
     return BenutzerverwaltungApiFp()
       .delete(options)
       .then((request) => request(this.axios, this.basePath))
@@ -300,7 +312,7 @@ export class BenutzerverwaltungApi extends BaseAPI {
    */
   public async update(
     body: updateUserBody,
-    options?: AxiosRequestConfig,
+    options?: CustomAxiosRequestConfig,
   ): Promise<AxiosResponse<User>> {
     return BenutzerverwaltungApiFp()
       .update(body, options)
@@ -315,7 +327,10 @@ export class BenutzerverwaltungApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof BenutzerverwaltungApi
    */
-  public async get(userId: string, options?: AxiosRequestConfig): Promise<AxiosResponse<User>> {
+  public async get(
+    userId: string,
+    options?: CustomAxiosRequestConfig,
+  ): Promise<AxiosResponse<User>> {
     return BenutzerverwaltungApiFp()
       .get(userId, options)
       .then((request) => request(this.axios, this.basePath))

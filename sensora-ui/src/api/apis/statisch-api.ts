@@ -1,5 +1,6 @@
-import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
-import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
+import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
+import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
+import type {CustomAxiosRequestConfig} from '@/api/apiClient.ts'
 
 /**
  * StatischApi - axios parameter creator
@@ -16,7 +17,7 @@ export const StatischApiAxiosParamCreator = function () {
      */
     staticsResourceGet: async (
       resource: string,
-      options: AxiosRequestConfig = {},
+      options: CustomAxiosRequestConfig,
     ): Promise<RequestArgs> => {
       // verify required parameter 'resource' is not null or undefined
       if (resource === null || resource === undefined) {
@@ -33,7 +34,7 @@ export const StatischApiAxiosParamCreator = function () {
       const localVarUrlObj = new URL(localVarPath, 'https://example.com')
       let baseOptions
 
-      const localVarRequestOptions: AxiosRequestConfig = {
+      const localVarRequestOptions: CustomAxiosRequestConfig = {
         method: 'GET',
         ...baseOptions,
         ...options,
@@ -79,11 +80,11 @@ export const StatischApiFp = function () {
      */
     async staticsResourceGet(
       resource: string,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
       const localVarAxiosArgs = await StatischApiAxiosParamCreator().staticsResourceGet(
         resource,
-        options,
+        options ? options : ({} as CustomAxiosRequestConfig),
       )
       return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
         const axiosRequestArgs: AxiosRequestConfig = {
@@ -111,7 +112,7 @@ export const StatischApiFactory = function (basePath?: string, axios?: AxiosInst
      */
     async staticsResourceGet(
       resource: string,
-      options?: AxiosRequestConfig,
+      options?: CustomAxiosRequestConfig,
     ): Promise<AxiosResponse<any>> {
       return StatischApiFp()
         .staticsResourceGet(resource, options)
@@ -137,7 +138,7 @@ export class StatischApi extends BaseAPI {
    */
   public async staticsResourceGet(
     resource: string,
-    options?: AxiosRequestConfig,
+    options?: CustomAxiosRequestConfig,
   ): Promise<AxiosResponse<void>> {
     return StatischApiFp()
       .staticsResourceGet(resource, options)
