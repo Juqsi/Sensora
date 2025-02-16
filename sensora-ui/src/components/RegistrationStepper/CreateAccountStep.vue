@@ -52,6 +52,7 @@ const handleSubmit = async () => {
     } as CustomAxiosRequestConfig)
 
     const authStore = useAuthStore()
+    authStore.logout()
     await authStore.login({ username: username.value, password: password.value })
     props.nextStep()
   } catch (error) {

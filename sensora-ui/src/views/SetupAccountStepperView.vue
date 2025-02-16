@@ -12,7 +12,7 @@ import { defineAsyncComponent, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-const stepIndex = ref(1)
+const stepIndex = ref(2)
 
 const nextStep = () => {
   if (stepIndex.value < 3) {

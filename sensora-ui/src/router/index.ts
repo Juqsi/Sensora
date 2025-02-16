@@ -62,7 +62,7 @@ const router = createRouter({
     {
       path: '/setupAccount',
       name: 'Setup Account',
-      component: () => import('../views/SetupAccountStepperView.vue'),
+      component: () => import('../views/AccountCompletionView.vue'),
       meta: { requiresAuth: true },
     },
     {

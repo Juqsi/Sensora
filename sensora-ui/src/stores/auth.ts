@@ -17,10 +17,12 @@ export const useAuthStore = defineStore('auth', {
       try {
         const response = await authApiClient.Login(credentials, {
           meta: {
-            successMessage: t('login.success'),
+            successMessage: t('login.Success'),
           },
         } as CustomAxiosRequestConfig)
         this.token = response.data.token
+        const userStore = useUserStore()
+        userStore.user = response.data
         this.isAuthenticated = true
       } catch (error) {}
     },

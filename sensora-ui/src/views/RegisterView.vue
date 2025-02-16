@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n'
-import SetupAccountStepperView from '@/views/SetupAccountStepperView.vue'
+import CreateAccountStep from '@/components/RegistrationStepper/CreateAccountStep.vue'
+import router from '@/router'
 
-const { t } = useI18n()
+const nextStep = () => {
+  router.push({ path: '/setupAccount' })
+}
 </script>
 
 <template>
-  <SetupAccountStepperView></SetupAccountStepperView>
+  <CreateAccountStep :next-step="nextStep"> </CreateAccountStep>
 </template>

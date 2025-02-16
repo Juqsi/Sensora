@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
+import { UserAvatarRefEnum } from '@/api'
 
 defineProps<{ nextStep: () => void }>()
+async function handleSubmit() {}
 </script>
 
 <template>
@@ -14,21 +14,13 @@ defineProps<{ nextStep: () => void }>()
       <CardDescription>Enter your username and full name</CardDescription>
     </CardHeader>
     <CardContent>
-      <div class="grid gap-4">
-        <div class="grid gap-2">
-          <Label for="username">Username</Label>
-          <Input id="username" placeholder="your_username" required />
+      <form @submit.prevent="handleSubmit">
+        <div class="grid grid-cols-3 gap-4" v-for="avatar in UserAvatarRefEnum">
+          <AvatarImage src="https://github.com/radix-vue.png " alt="@radix-vue" />
+          <AvatarFallback>CN</AvatarFallback>
         </div>
-        <div class="grid gap-2">
-          <Label for="first-name">First Name</Label>
-          <Input id="first-name" placeholder="John" required />
-        </div>
-        <div class="grid gap-2">
-          <Label for="last-name">Last Name</Label>
-          <Input id="last-name" placeholder="Doe" required />
-        </div>
-        <Button class="w-full" @click="nextStep">Continue</Button>
-      </div>
+        <Button class="w-full" type="submit">Continue</Button>
+      </form>
     </CardContent>
   </Card>
 </template>
