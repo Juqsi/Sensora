@@ -46,7 +46,9 @@ const handleSubmit = async () => {
   }
   try {
     await authApiClient.createAccount(accountInfos, {
-      meta: {},
+      meta: {
+        successMessage: 'Dein Konto wurde erfolgreich erstellt!',
+      },
     } as CustomAxiosRequestConfig)
 
     const authStore = useAuthStore()

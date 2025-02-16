@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import type { AuthLoginBody } from '@/api'
 import { authApiClient } from '@/api'
 import i18n from '@/i18n'
+import type { CustomAxiosRequestConfig } from '@/api/apiClient.ts'
 
 const t = i18n.global?.t || ((key: string) => key)
 
@@ -13,7 +14,11 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(credentials: AuthLoginBody) {
       try {
-        const response = await authApiClient.Login(credentials)
+        const response = await authApiClient.Login(credentials, {
+          meta: {
+            successMessage: 'Erfolgreich Angemeldet',
+          },
+        } as CustomAxiosRequestConfig)
         this.token = response.data.token
         this.isAuthenticated = true
       } catch (error) {}

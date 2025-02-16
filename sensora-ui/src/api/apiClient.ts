@@ -21,16 +21,12 @@ apiClient.interceptors.request.use(
   (config: CustomAxiosRequestConfig) => {
     const authStore = useAuthStore()
 
-    // Sicherstellen, dass headers existiert
     config.headers = config.headers || {}
 
-    // Meta-Objekt initialisieren
     config.meta = config.meta || {}
 
-    // Lade-Toast anzeigen
     config.meta.toastId = toast.loading(t('errors.loading'))
 
-    // Token hinzufügen, falls vorhanden
     const token = authStore.token
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`
@@ -46,18 +42,16 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
-    toast.success(t('success.requestCompleted'), {
-      id: (response.config as CustomAxiosRequestConfig).meta!.toastId,
-    })
     const customConfig = response.config as CustomAxiosRequestConfig
-    if (customConfig?.meta?.toastId) {
-      toast.dismiss(customConfig.meta.toastId)
+    if (customConfig?.meta?.toastId === undefined) {
+      toast.dismiss()
     }
 
     const successMessage = customConfig?.meta?.successMessage || t('success.requestCompleted')
 
-    toast.success(successMessage)
-
+    toast.success(successMessage, {
+      id: (response.config as CustomAxiosRequestConfig).meta!.toastId,
+    })
     return response
   },
   (error) => {
@@ -65,17 +59,15 @@ apiClient.interceptors.response.use(
     const toastId = customConfig?.meta?.toastId
 
     if (toastId === undefined) {
-      toast.dismiss(toastId)
+      toast.dismiss()
     }
 
     const errorCode = error?.response?.data?.code
-    let errorMessage = errorCode
     const defaultErrorMessage = errorCode
       ? t(`errors.${errorCode}`, t('errors.unknownError'))
       : t('errors.unknownError')
 
-    errorMessage = customConfig?.meta?.errorMessage || defaultErrorMessage
-
+    let errorMessage = customConfig?.meta?.errorMessage || defaultErrorMessage
     toast.error(errorMessage, {
       id: toastId,
     })
