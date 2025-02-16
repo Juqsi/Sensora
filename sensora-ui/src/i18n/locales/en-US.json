@@ -87,5 +87,23 @@
   "register": {
     "SpecialCharRequired": "The password must contain at least one special character (!\"#$%&'()*+,-./:;<=>?[]^_{}|~).",
     "MinLength": "The password must be at least 8 characters long."
+  },
+  "setupAccountStepper": {
+    "1": {
+      "title": "Account Creation",
+      "description": "Set up your account to get started"
+    },
+    "2": {
+      "title": "Personal Information",
+      "description": "Enter your first name and last name"
+    },
+    "3": {
+      "title": "Profile Picture",
+      "description": "Choose a profile picture to represent yourself"
+    },
+    "4": {
+      "title": "Create Flat",
+      "description": "Begin creating your flat and setting up your space"
+    }
   }
 }

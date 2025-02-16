@@ -23,35 +23,32 @@ const nextStep = () => {
 const steps = [
   {
     step: 1,
-    title: 'Your details',
-    description:
-      'Provide your name and email address. We will use this information to create your account',
+    title: t('setupAccountStepper.1.title'),
+    description: t('setupAccountStepper.1.description'),
     component: defineAsyncComponent(
       () => import('@/components/RegistrationStepper/CreateAccountStep.vue'),
     ),
   },
   {
     step: 2,
-    title: 'Company details',
-    description: 'A few details about your company will help us personalize your experience',
+    title: t('setupAccountStepper.2.title'),
+    description: t('setupAccountStepper.2.description'),
     component: defineAsyncComponent(
       () => import('@/components/RegistrationStepper/AccountCompletionStep.vue'),
     ),
   },
   {
     step: 3,
-    title: 'Invite your team',
-    description:
-      'Start collaborating with your team by inviting them to join your account. You can skip this step and invite them later',
+    title: t('setupAccountStepper.3.title'),
+    description: t('setupAccountStepper.3.description'),
     component: defineAsyncComponent(
       () => import('@/components/RegistrationStepper/ProfilePictureStep.vue'),
     ),
   },
   {
     step: 4,
-    title: 'Invite your team',
-    description:
-      'Start collaborating with your team by inviting them to join your account. You can skip this step and invite them later',
+    title: t('setupAccountStepper.4.title'),
+    description: t('setupAccountStepper.4.description'),
     component: defineAsyncComponent(() => import('@/components/RegistrationStepper/GroupStep.vue')),
   },
 ]
@@ -68,9 +65,9 @@ const steps = [
       :key="step.step"
       v-slot="{ state }"
       :step="step.step"
-      class="relative flex w-full flex-col gap-4"
+      class="relative flex w-full flex-col items-start gap-4"
     >
-      <div v-if="stepIndex !== 1" class="flex items-start gap-4">
+      <div v-if="stepIndex !== 1" class="flex items-center gap-4">
         <StepperTrigger as-child>
           <Button
             :class="[state === 'active' && 'ring-2 ring-ring ring-offset-2 ring-offset-background']"
@@ -90,7 +87,7 @@ const steps = [
         <div class="flex flex-col gap-1">
           <StepperTitle
             :class="[state === 'active' && 'text-primary']"
-            class="text-sm font-semibold transition lg:text-base"
+            class="text-md font-semibold transition lg:text-base"
           >
             {{ step.title }}
           </StepperTitle>
