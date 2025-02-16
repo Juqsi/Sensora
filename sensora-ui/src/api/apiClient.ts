@@ -10,6 +10,7 @@ export interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
     toastId?: string | number
     successMessage?: string
     errorMessage?: string
+    duration: number
   }
 }
 
@@ -25,7 +26,9 @@ apiClient.interceptors.request.use(
 
     config.meta = config.meta || {}
 
-    config.meta.toastId = toast.loading(t('errors.loading'))
+    config.meta.toastId = toast.loading(t('errors.loading'), {
+      duration: config.meta?.duration || 4000,
+    })
 
     const token = authStore.token
     if (token) {
