@@ -60,15 +60,17 @@ const tips: Tip[] = [
   <div class="w-full mt-2">
     <div class="flex justify-between items-center">
       <h3 class="text-xl my-2 font-medium">Zimmer 1</h3>
-      <Button aria-label="Zimmer Hinzufügen" variant="default" size="icon"><CirclePlus /></Button>
+      <Button aria-label="Zimmer Hinzufügen" size="icon" variant="default">
+        <CirclePlus />
+      </Button>
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
       <HomeCard
         v-for="x in 10"
-        :wrench="x % 3 == 0"
-        :siren="x % 4 == 0"
         :alert="x % 5 == 0"
-        :co="x % 3 == 0"
+        :connectionLost="x % 3 == 0"
+        :siren="x % 4 == 0"
+        :wrench="x % 3 == 0"
       ></HomeCard>
     </div>
   </div>

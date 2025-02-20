@@ -1,17 +1,18 @@
-<script setup lang="ts">
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+<script lang="ts" setup>
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import {
   CloudHail,
   Droplet,
+  Siren,
   Sun,
   Thermometer,
-  Siren,
-  Wrench,
   TriangleAlert,
   WifiOff,
+  Wrench,
 } from 'lucide-vue-next'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 defineProps({
   connectionLost: Boolean,
@@ -42,10 +43,54 @@ defineProps({
           <Droplet id="water" />
           <Label for="light">10</Label>
         </div>
-        <Badge class="max-w-fit" v-if="connectionLost" variant="destructive"> <WifiOff /></Badge>
-        <Badge class="max-w-fit" v-if="alert" variant="destructive"> <TriangleAlert /></Badge>
-        <Badge class="max-w-fit" v-if="siren" variant="destructive"> <Siren /></Badge>
-        <Badge class="max-w-fit" v-if="wrench" variant="destructive"><Wrench /></Badge>
+        <TooltipProvider v-if="connectionLost">
+          <Tooltip>
+            <TooltipTrigger class="flex justify-center items-center">
+              <Badge class="max-w-fit" variant="destructive">
+                <WifiOff />
+              </Badge>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Help here</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider v-if="alert">
+          <Tooltip>
+            <TooltipTrigger class="flex justify-center items-center">
+              <Badge class="max-w-fit" variant="destructive">
+                <TriangleAlert />
+              </Badge>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Help here</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider v-if="siren">
+          <Tooltip>
+            <TooltipTrigger class="flex justify-center items-center">
+              <Badge class="max-w-fit" variant="destructive">
+                <Siren />
+              </Badge>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Help here</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider v-if="wrench">
+          <Tooltip>
+            <TooltipTrigger class="flex justify-center items-center">
+              <Badge class="max-w-fit" variant="destructive">
+                <Wrench />
+              </Badge>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Help here</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </CardContent>
   </Card>
