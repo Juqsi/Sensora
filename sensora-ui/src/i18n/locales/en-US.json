@@ -105,5 +105,35 @@
       "title": "Create Flat",
       "description": "Begin creating your flat and setting up your space"
     }
+  },
+  "plant": {
+    "settings": {
+      "Title": "Plant Settings",
+      "SubTitle": "Manage your plant information",
+      "NameOfPlant": "Name of Plant",
+      "NamePlaceholder": "Enter the name of the plant",
+      "Room": "Room",
+      "SelectRoom": "Select Room",
+      "SelectSensor": "Select Sensor",
+      "PlantType": "Plant Type",
+      "PlantTypePlaceholder": "Enter the plant type",
+      "Avatar": "Avatar",
+      "Description": "Description",
+      "DescriptionPlaceholder": "Please include all relevant information",
+      "Cancel": "Cancel",
+      "Submit": "Submit",
+      "Group1": "Group 1",
+      "Group2": "Group 2",
+      "Room1": "Room 1",
+      "Room2": "Room 2",
+      "Room3": "Room 3",
+      "Room4": "Room 4",
+      "Sensors": "Sensors",
+      "Sensor1": "Sensor 1",
+      "Sensor2": "Sensor 2",
+      "Avatars": "Avatars",
+      "Avatar1": "Avatar 1",
+      "Avatar2": "Avatar 2"
+    }
   }
 }

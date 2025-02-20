@@ -105,5 +105,35 @@
       "title": "Erstelle Wohnung",
       "description": "Beginnen Sie mit der Erstellung Ihrer Wohnung und dem Einrichten Ihres Raums"
     }
+  },
+  "plant": {
+    "settings": {
+      "Title": "Pflanzeneinstellungen",
+      "SubTitle": "Verwalte deine Pflanzeninformationen",
+      "NameOfPlant": "Name der Pflanze",
+      "NamePlaceholder": "Gib den Namen der Pflanze ein",
+      "Room": "Raum",
+      "SelectRoom": "Raum auswählen",
+      "SelectSensor": "Sensor auswählen",
+      "PlantType": "Pflanzentyp",
+      "PlantTypePlaceholder": "Gib den Pflanzentyp ein",
+      "Avatar": "Avatar",
+      "Description": "Beschreibung",
+      "DescriptionPlaceholder": "Bitte gib alle relevanten Informationen ein",
+      "Cancel": "Abbrechen",
+      "Submit": "Speichern",
+      "Group1": "Gruppe 1",
+      "Group2": "Gruppe 2",
+      "Room1": "Raum 1",
+      "Room2": "Raum 2",
+      "Room3": "Raum 3",
+      "Room4": "Raum 4",
+      "Sensors": "Sensoren",
+      "Sensor1": "Sensor 1",
+      "Sensor2": "Sensor 2",
+      "Avatars": "Avatare",
+      "Avatar1": "Avatar 1",
+      "Avatar2": "Avatar 2"
+    }
   }
 }

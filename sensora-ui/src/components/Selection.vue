@@ -1,12 +1,10 @@
 <script lang="ts" setup>
 import { defineProps, ref } from 'vue'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
   CommandSeparator,
@@ -39,6 +37,7 @@ const { t } = useI18n()
 const props = defineProps<{
   groups: { label: string; value: string; entity: { label: string; value: string }[] }[]
   selectedEntity: { label: string; value: string }
+  newEntityButton: Boolean
   prefix: string
 }>()
 
@@ -74,20 +73,12 @@ const onCreateNewTeam = () => {
           role="combobox"
           variant="outline"
         >
-          <Avatar class="mr-2 h-5 w-5">
-            <AvatarImage
-              :alt="props.selectedEntity.label"
-              :src="`https://avatar.vercel.sh/${props.selectedEntity.value}.png`"
-            />
-            <AvatarFallback>R</AvatarFallback>
-          </Avatar>
           {{ props.selectedEntity.label }}
           <ChevronDown class="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent class="p-0 w-[var(--radix-popper-anchor-width)]">
         <Command>
-          <CommandInput :placeholder="t(props.prefix + '.selection.Search')" />
           <CommandEmpty>No xxxx found.</CommandEmpty>
           <CommandList>
             <CommandGroup v-for="group in props.groups" :key="group.label" :heading="group.label">
@@ -95,17 +86,9 @@ const onCreateNewTeam = () => {
                 v-for="entity in group.entity"
                 :key="entity.value"
                 :value="entity.label"
-                class="text-sm"
+                class="text-sm pl-6"
                 @select="selectEntity(entity)"
               >
-                <Avatar class="mr-2 h-5 w-5">
-                  <AvatarImage
-                    :alt="entity.label"
-                    :src="`https://avatar.vercel.sh/${entity.value}.png`"
-                    class="grayscale"
-                  />
-                  <AvatarFallback>R</AvatarFallback>
-                </Avatar>
                 {{ entity.label }}
                 <CheckIcon
                   :class="
@@ -119,7 +102,7 @@ const onCreateNewTeam = () => {
             </CommandGroup>
           </CommandList>
           <CommandSeparator />
-          <CommandList>
+          <CommandList v-if="newEntityButton">
             <CommandGroup>
               <DialogTrigger as-child>
                 <CommandItem value="12" @select="showNewTeamDialog = true">

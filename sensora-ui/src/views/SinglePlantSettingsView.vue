@@ -1,12 +1,4 @@
 <script lang="ts" setup>
-/*
-Pflanzennamen
-SollWerte -> Template von anderen Pflanzen
-Pflanzenart
-Notiz
-Zimmer
-Sensor - wenn vergeben mit pop up von a nach b moven? und bei Liste bei auswahl frei extra icon bzw benutzt icon
- */
 import { CardContent, CardFooter } from '@/components/ui/card'
 import { Label } from '@/components/ui/label/index.ts'
 import { Button } from '@/components/ui/button'
@@ -19,44 +11,51 @@ import { useRouter } from 'vue-router'
 import NavCard from '@/components/NavCard.vue'
 
 const router = useRouter()
+const { t } = useI18n()
 
-// statische Gruppen, später von API
 const rooms = [
   {
-    label: 'Gruppe 1',
+    label: t('plant.settings.Group1'),
     value: 'uuid-1-der-gruppe',
     entity: [
-      { label: 'Raum 1', value: 'uuid-1-des-raums' },
-      { label: 'Raum 2', value: 'uuid-2-des-raums' },
+      { label: t('plant.settings.Room1'), value: 'uuid-1-des-raums' },
+      { label: t('plant.settings.Room2'), value: 'uuid-2-des-raums' },
     ],
   },
   {
-    label: 'Gruppe 2',
+    label: t('plant.settings.Group2'),
     value: 'uuid-2-der-gruppe',
     entity: [
-      { label: 'Raum 3', value: 'uuid-3-des-raums' },
-      { label: 'Raum 4', value: 'uuid-4-des-raums' },
+      { label: t('plant.settings.Room3'), value: 'uuid-3-des-raums' },
+      { label: t('plant.settings.Room4'), value: 'uuid-4-des-raums' },
     ],
   },
 ]
 
 const sensors = [
   {
-    label: 'Sensors',
+    label: t('plant.settings.Sensors'),
     value: 'uuid-1-des-sensors',
     entity: [
-      { label: 'Sensor 1', value: 'uuid-1-des-sensors' },
-      { label: 'Sensor 2', value: 'uuid-2-des-sensors' },
+      { label: t('plant.settings.Sensor1'), value: 'uuid-1-des-sensors' },
+      { label: t('plant.settings.Sensor2'), value: 'uuid-2-des-sensors' },
     ],
   },
 ]
 
-const { t } = useI18n()
+const avatars = [
+  {
+    label: t('plant.settings.Avatars'),
+    value: 'uuid-1-des-avatar',
+    entity: [
+      { label: t('plant.settings.Avatar1'), value: 'uuid-1-des-avatar' },
+      { label: t('plant.settings.Avatar2'), value: 'uuid-2-des-avatar' },
+    ],
+  },
+]
 
-const selectedRoom = ref({ label: 'Select Raum', value: 'uuid-1-des-raums' })
-const selectedSensor = ref({ label: 'Select Sensor', value: 'uuid-1-des-raums' })
-
-function createSensor() {}
+const selectedRoom = ref({ label: t('plant.settings.SelectRoom'), value: 'uuid-1-des-raums' })
+const selectedSensor = ref({ label: t('plant.settings.SelectSensor'), value: 'uuid-1-des-raums' })
 
 function createRoom() {}
 </script>
@@ -66,15 +65,16 @@ function createRoom() {}
     <CardContent class="grid gap-6">
       <div class="grid gap-2">
         <Label for="subject">{{ t('plant.settings.NameOfPlant') }}</Label>
-        <Input id="subject" placeholder="Name der Pflanze" />
+        <Input id="subject" :placeholder="t('plant.settings.NamePlaceholder')" />
       </div>
       <div class="grid gap-4">
         <div class="grid gap-2">
-          <Label for="room">{{ t('plant.settings.SelectSensor') }}</Label>
+          <Label for="room">{{ t('plant.settings.Room') }}</Label>
           <Selection
             id="room"
             v-model:selectedEntity="selectedRoom"
             :groups="rooms"
+            :new-entity-button="true"
             prefix="prefix"
             @createEntity="createRoom"
           />
@@ -85,24 +85,38 @@ function createRoom() {}
             id="sensor"
             v-model:selectedEntity="selectedSensor"
             :groups="sensors"
+            :new-entity-button="false"
             class="w-full"
             prefix="prefix"
-            @createEntity="createSensor"
           />
         </div>
       </div>
 
       <div class="grid gap-2">
-        <Label for="description">Description</Label>
-        <Textarea
-          id="description"
-          placeholder="Please include all information relevant to your issue."
+        <Label for="plantType">{{ t('plant.settings.PlantType') }}</Label>
+        <Input id="plantType" :placeholder="t('plant.settings.PlantTypePlaceholder')" />
+      </div>
+
+      <div class="grid gap-2">
+        <Label for="avatar">{{ t('plant.settings.Avatar') }}</Label>
+        <Selection
+          id="avatar"
+          v-model:selectedEntity="selectedSensor"
+          :groups="avatars"
+          :new-entity-button="false"
+          class="w-full"
+          prefix="prefix"
         />
+      </div>
+
+      <div class="grid gap-2">
+        <Label for="description">{{ t('plant.settings.Description') }}</Label>
+        <Textarea id="description" :placeholder="t('plant.settings.DescriptionPlaceholder')" />
       </div>
     </CardContent>
     <CardFooter class="justify-between space-x-2">
-      <Button variant="ghost" @click="router.back()"> Cancel</Button>
-      <Button>Submit</Button>
+      <Button variant="ghost" @click="router.back()">{{ t('plant.settings.Cancel') }}</Button>
+      <Button>{{ t('plant.settings.Submit') }}</Button>
     </CardFooter>
   </NavCard>
 </template>
