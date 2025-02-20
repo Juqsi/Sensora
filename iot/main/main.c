@@ -1,6 +1,7 @@
 #include "nvs_flash.h"
 #include "led_control.h"
 #include "wifi_manager.h"
+#include "solace_manager.h"
 
 void app_main(void) {
 	// Initialisierung von NVS
@@ -13,4 +14,6 @@ void app_main(void) {
 
 	led_init();
 	wifi_init();
+
+	solace_init();
 }
