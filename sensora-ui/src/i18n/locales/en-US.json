@@ -78,7 +78,13 @@
     "left": "Successfully left the group",
     "updated": "Group updated",
     "joined": "Successfully joined the group",
-    "created": "Group created"
+    "created": "Group created",
+    "alert": {
+      "title": "Are you sure?",
+      "description": "Do you really want to remove {name} from the group? This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    }
   },
   "user": {
     "updated": "User successfully updated!",

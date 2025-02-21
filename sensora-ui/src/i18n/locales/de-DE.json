@@ -78,7 +78,13 @@
     "left": "Gruppe erfolgreich verlassen",
     "updated": "Gruppe aktualisiert",
     "joined": "Erfolgreich der Gruppe beigetreten",
-    "created": "Gruppe erstellt"
+    "created": "Gruppe erstellt",
+    "alert": {
+      "title": "Bist du sicher?",
+      "description": "Möchtest du wirklich {name} aus der Gruppe entfernen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "cancel": "Abbrechen",
+      "confirm": "Löschen"
+    }
   },
   "user": {
     "updated": "Benutzer erfolgreich aktualisiert!",
