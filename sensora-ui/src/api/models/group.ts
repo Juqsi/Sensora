@@ -1,4 +1,4 @@
-import type {Room, User} from '@/api'
+import type { Room, User } from '@/api'
 
 /**
  *
@@ -36,7 +36,7 @@ export interface Group {
    * @type {Array<User>}
    * @memberof Group
    */
-  members?: Array<User>
+  members: Array<User>
 
   /**
    * Liste der zugeordneten Räume
@@ -44,7 +44,7 @@ export interface Group {
    * @type {Array<Room>}
    * @memberof Group
    */
-  rooms?: Array<Room>
+  rooms: Array<Room>
 }
 
 /**
