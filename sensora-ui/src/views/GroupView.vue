@@ -5,17 +5,16 @@ import { AccordionItem, AccordionTrigger } from '@/components/ui/custom-accordio
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ref } from 'vue'
 import { useGroupStore } from '@/stores'
-import { Button } from '@/components/ui/button'
+import CreateGroupComponent from '@/components/CreateGroupComponent.vue'
 
 const groupStore = useGroupStore()
-await groupStore.fetchGroups()
 
 const defaultOpenValues = ref(groupStore.groups.length === 1 ? [groupStore.groups[0].gid] : [])
 </script>
 
 <template>
   <h1 class="font-bold text-3xl m-3 mb-6 w-full">Meine Gruppen</h1>
-  <Button></Button>
+  <CreateGroupComponent />
   <Accordion type="multiple" class="w-full" collapsible :default-value="defaultOpenValues">
     <AccordionItem
       class="mb-4"

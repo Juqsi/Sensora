@@ -31,6 +31,10 @@ const confirmRemove = () => {
     isDialogOpen.value = false
   }
 }
+const openDialog = (member: User) => {
+  selectedMember.value = member
+  isDialogOpen.value = true
+}
 </script>
 
 <template>
@@ -48,15 +52,7 @@ const confirmRemove = () => {
           <p class="text-sm text-muted-foreground">{{ member.mail }}</p>
         </div>
       </div>
-      <Button
-        class="text-destructive"
-        variant="ghost"
-        size="icon"
-        @click="
-          selectedMember = member
-          isDialogOpen = true
-        "
-      >
+      <Button class="text-destructive" variant="ghost" size="icon" @click="openDialog(member)">
         <CircleX />
       </Button>
     </div>
