@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { updateUserBody, User } from '@/api'
+import type { AuthResponse, updateUserBody, User } from '@/api'
 import { userApiClient } from '@/api'
 import i18n from '@/i18n'
 import type { CustomAxiosRequestConfig } from '@/api/apiClient.ts'
@@ -9,6 +9,7 @@ const t = i18n.global?.t || ((key: string) => key)
 export const useUserStore = defineStore('user', {
   state: () => ({
     user: null as User | null,
+    fullUser: null as AuthResponse | null,
   }),
   actions: {
     async fetchUser(userId?: string, force = false) {
@@ -24,7 +25,7 @@ export const useUserStore = defineStore('user', {
           successMessage: t('user.updated'),
         },
       } as CustomAxiosRequestConfig)
-      this.user = response.data
+      this.user = response.data as User
     },
 
     async deleteUser() {

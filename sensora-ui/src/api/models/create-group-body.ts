@@ -1,4 +1,4 @@
-import type { Group } from '@/api'
+import type {Group} from '@/api'
 
 /**
  *
@@ -6,4 +6,4 @@ import type { Group } from '@/api'
  * @export
  * @interface createGroupBody
  */
-export interface createGroupBody extends Omit<Group, 'gid' | 'members' | 'rooms'> {}
+export interface createGroupBody extends Omit<Group, 'gid' | 'rooms'> {}

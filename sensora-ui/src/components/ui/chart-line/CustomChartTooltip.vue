@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card'
 defineProps<{
   title?: string
   data: {
-    name: string
+    groupName: string
     color: string
     value: any
   }[]
@@ -17,7 +17,7 @@ defineProps<{
       <div v-for="(item, key) in data" :key="key" class="flex justify-between items-center">
         <div class="flex items-center">
           <span :style="{ background: item.color }" class="w-1 h-7 mr-4 rounded-full" />
-          <span>{{ item.name }}</span>
+          <span>{{ item.groupName }}</span>
         </div>
         <span class="font-semibold ml-4">{{ item.value }}</span>
       </div>

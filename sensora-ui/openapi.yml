@@ -188,7 +188,7 @@ paths:
         abgerufen. Wenn eine Benutzer-ID angegeben wird, werden die
         Informationen des angegebenen Benutzers abgerufen.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: userId
           in: path
@@ -241,7 +241,7 @@ paths:
         E-Mail, erlischt die Gültigkeit des Auth-Tokens. Das ändern des
         Passworts ist hier nicht möglich. Wenn die E-Mail geändert wird, muss diese erneut bestätigt werden, bevor der Account weiter benutzt werden kann.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -289,7 +289,7 @@ paths:
         Löscht einen Benutzer und alle seine zugehörigen Daten. Dies kann nicht
         rückgängig gemacht werden. Das Auth-Token verliert seine Gültigkeit.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       responses:
         '204':
           description: Benutzerdaten wurden erfolgreich gelöscht.
@@ -311,7 +311,7 @@ paths:
         Gruppen zu sehen, an denen er teilnimmt, einschließlich der zugeordneten
         Räume und Pflanzen.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       responses:
         '200':
           description: >-
@@ -376,14 +376,14 @@ paths:
                                           - ilk
                                   required:
                                     - plantId
-                                    - name
+                                    - groupName
                                     - room
                             required:
                               - rid
-                              - name
+                              - groupName
                               - owner
                       required:
-                        - name
+                        - groupName
                         - gid
                         - avatarRef
         '401':
@@ -399,7 +399,7 @@ paths:
       summary: Gruppe erstelen
       description: Erstellt eine Gruppe und fügt den aktuellen Benutzer hinzu.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -426,7 +426,7 @@ paths:
                               Es muss mindestens eines der folgenden Felder
                               angegeben sein: `username`, `mail`, `uid`
                   required:
-                    - name
+                    - groupName
       responses:
         '200':
           description: Die Gruppe wurde erfolgreich angelegt.
@@ -449,7 +449,7 @@ paths:
                           required:
                             - username
                     required:
-                      - name
+                      - groupName
                       - gid
                       - avatarRef
                       - members
@@ -467,7 +467,7 @@ paths:
       summary: Gruppe bearbeiten
       description: Überarbeitet eine Gruppe
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: groupId
           in: path
@@ -511,7 +511,7 @@ paths:
                             - mail
                             - uid
                     required:
-                      - name
+                      - groupName
                       - gid
                       - avatarRef
         '401':
@@ -531,7 +531,7 @@ paths:
         sind nur noch den Benutzern zugänglich, die als Besitzer eingetragen
         sind. Diese Aktion kann nicht rückgängig gemacht werden.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: groupId
           in: path
@@ -563,7 +563,7 @@ paths:
         Benutzer wird als Mitglied der Gruppe eingetragen und erhält Zugang zu
         den geteilten Ressourcen.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: token
           required: true
@@ -624,14 +624,14 @@ paths:
                                         - ilk
                                 required:
                                   - plantId
-                                  - name
+                                  - groupName
                                   - room
                           required:
                             - rid
-                            - name
+                            - groupName
                             - owner
                     required:
-                      - name
+                      - groupName
                       - gid
                       - avatarRef
         '400':
@@ -660,7 +660,7 @@ paths:
         ist. Diese Aktion kann nur von Gruppenadministratoren oder
         Gruppenbesitzern durchgeführt werden.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: groupId
           in: path
@@ -687,7 +687,7 @@ paths:
                       rooms:
                         writeOnly: true
                     required:
-                      - name
+                      - groupName
                       - gid
                       - avatarRef
         '401':
@@ -713,7 +713,7 @@ paths:
         denen er als Eigentümer eingetragen ist. Sollte der Benutzer das einzige
         Mitglied der Gruppe sein, wird die Gruppe unwiderruflich gelöscht.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: groupId
           in: path
@@ -740,7 +740,7 @@ paths:
       summary: Raum erstellen
       description: Erstellt einen Raum und fügt ihn einer Gruppe zu.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -778,7 +778,7 @@ paths:
                     required:
                       - rid
                       - griupId
-                      - name
+                      - groupName
                       - owner
         '400':
           description: Ungültige Anforderungsdaten.
@@ -793,7 +793,7 @@ paths:
       summary: Raum abfragen
       description: Ruft die Informationen zu einem spezifischen Raum ab.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: roomId
           in: path
@@ -848,11 +848,11 @@ paths:
                                   - ilk
                           required:
                             - plantId
-                            - name
+                            - groupName
                             - room
                     required:
                       - rid
-                      - name
+                      - groupName
                       - owner
         '401':
           description: Das Auth-Token ist ungültig.
@@ -864,7 +864,7 @@ paths:
       summary: Raum aktualisieren
       description: Ermöglicht das Aktualisieren der Raumdetails.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: roomId
           in: path
@@ -933,11 +933,11 @@ paths:
                                   - ilk
                           required:
                             - plantId
-                            - name
+                            - groupName
                             - room
                     required:
                       - rid
-                      - name
+                      - groupName
                       - owner
         '401':
           description: Das Auth-Token ist ungültig.
@@ -949,7 +949,7 @@ paths:
       summary: Raum löschen
       description: Löscht einen Raum aus dem System.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: roomId
           in: path
@@ -973,7 +973,7 @@ paths:
         Erstellt eine neue Pflanze und verknüpft sie mit einem Raum und einem
         Sensor.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -995,7 +995,7 @@ paths:
                           - value
                           - ilk
                   required:
-                    - name
+                    - groupName
                     - room
       responses:
         '200':
@@ -1018,7 +1018,7 @@ paths:
                             - ilk
                     required:
                       - plantId
-                      - name
+                      - groupName
                       - room
         '400':
           description: Ungültige Anforderungsdaten.
@@ -1035,7 +1035,7 @@ paths:
         Ruft die Pflanzendaten sowie die Sensordaten ab, die im angegebenen
         Zeitraum liegen.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: plantId
           in: path
@@ -1099,7 +1099,7 @@ paths:
                             - ilk
                     required:
                       - plantId
-                      - name
+                      - groupName
                       - room
         '401':
           description: Das Auth-Token ist ungültig.
@@ -1111,7 +1111,7 @@ paths:
       summary: Pflanze aktualisieren
       description: Ermöglicht das Aktualisieren von Pflanzendaten.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: plantId
           in: path
@@ -1198,7 +1198,7 @@ paths:
                             - ilk
                     required:
                       - plantId
-                      - name
+                      - groupName
                       - room
         '401':
           description: Das Auth-Token ist ungültig.
@@ -1210,7 +1210,7 @@ paths:
       summary: Pflanze löschen
       description: Löscht eine Pflanze aus dem System.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: plantId
           in: path
@@ -1236,7 +1236,7 @@ paths:
         Systems abzurufen, die zur Überwachung von verschiedenen Geräten 
         verwendet werden.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       responses:
         '200':
           description: Erfolgreich alle Geräte abgerufen.
@@ -1292,7 +1292,7 @@ paths:
         Gibt die Informationen über ein Gerät zurück, einschließlich der
         zugehörigen Sensoren und deren Daten.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: deviceId
           in: path
@@ -1353,7 +1353,7 @@ paths:
       summary: Statische Resourcen abrufen
       description: Kann statische Resourcen abrufen, die im Fileserver gespeichert werden.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: resource
           in: path

@@ -24,7 +24,7 @@ const defaultValue = 'item-1'
 const accordionItems = [
   {
     value: 'item-1',
-    title: "What is the plant's name?",
+    title: "What is the plant's groupName?",
     content:
       "The plant is called 'Aloe Vera'. It is known for its medicinal properties and its ability to thrive in dry conditions.",
   },

@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 defineProps<{
   title?: string
   data: {
-    name: string
+    groupName: string
     color: string
     value: any
   }[]
@@ -31,7 +31,7 @@ defineProps<{
               />
             </svg>
           </span>
-          <span>{{ item.name }}</span>
+          <span>{{ item.groupName }}</span>
         </div>
         <span class="font-semibold ml-4">{{ item.value }}</span>
       </div>

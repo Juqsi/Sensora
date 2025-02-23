@@ -1,5 +1,5 @@
 import process from 'node:process'
-import { defineConfig, devices } from '@playwright/test'
+import {defineConfig, devices} from '@playwright/test'
 
 /**
  * Read environment variables from file.
@@ -66,13 +66,13 @@ export default defineConfig({
 
     /* Test against mobile viewports. */
     // {
-    //   name: 'Mobile Chrome',
+    //   groupName: 'Mobile Chrome',
     //   use: {
     //     ...devices['Pixel 5'],
     //   },
     // },
     // {
-    //   name: 'Mobile Safari',
+    //   groupName: 'Mobile Safari',
     //   use: {
     //     ...devices['iPhone 12'],
     //   },
@@ -80,13 +80,13 @@ export default defineConfig({
 
     /* Test against branded browsers. */
     // {
-    //   name: 'Microsoft Edge',
+    //   groupName: 'Microsoft Edge',
     //   use: {
     //     channel: 'msedge',
     //   },
     // },
     // {
-    //   name: 'Google Chrome',
+    //   groupName: 'Google Chrome',
     //   use: {
     //     channel: 'chrome',
     //   },

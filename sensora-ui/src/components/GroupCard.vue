@@ -65,7 +65,7 @@ const openDialog = (member: User) => {
         <AlertDialogDescription>
           {{
             t('group.alert.description', {
-              name: selectedMember.firstname + ' ' + selectedMember.lastname,
+              groupName: selectedMember.firstname + ' ' + selectedMember.lastname,
             })
           }}
         </AlertDialogDescription>

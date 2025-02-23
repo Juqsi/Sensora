@@ -53,11 +53,12 @@ export const useGroupStore = defineStore('group', {
       this.groups.push(response.data)
     },
 
-    async createGroup(body: createGroupBody) {
+    async createGroup(body: createGroupBody): Promise<Group> {
       const response = await groupApiClient.create(body, {
         meta: { successMessage: t('group.created') },
       } as CustomAxiosRequestConfig)
       this.groups.push(response.data)
+      return response.data
     },
 
     clearData() {

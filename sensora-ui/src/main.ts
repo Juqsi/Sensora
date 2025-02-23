@@ -21,6 +21,8 @@ const authStore = useAuthStore()
 const userStore = useUserStore()
 if (authStore.token && authStore.isAuthenticated) {
   userStore.fetchUser()
+} else {
+  authStore.logout()
 }
 
 app.use(router)

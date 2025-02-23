@@ -40,12 +40,11 @@ export const useRoomStore = defineStore('room', {
       }, [] as Room[])
     },
 
-    async createRoom(groupId: string, name: string) {
-      const roomData: createRoomBody = { groupId, name }
-      const response = await roomsApiClient.create(roomData)
+    async createRoom(room: createRoomBody) {
+      const response = await roomsApiClient.create(room)
       const newRoom = response.data
 
-      const group = this.groupStore.groups.find((g) => g.gid === groupId)
+      const group = this.groupStore.groups.find((g) => g.gid === room.groupId)
 
       if (group) {
         group.rooms = [...(group.rooms || []), newRoom]
