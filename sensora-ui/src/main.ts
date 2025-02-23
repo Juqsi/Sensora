@@ -9,7 +9,6 @@ import router from './router'
 
 import i18n from '@/i18n'
 
-import { useTheme } from './composables/useTheme'
 import { useAuthStore, useUserStore } from '@/stores'
 
 const app = createApp(App)
@@ -23,9 +22,6 @@ const userStore = useUserStore()
 if (authStore.token && authStore.isAuthenticated) {
   userStore.fetchUser()
 }
-
-const { theme } = useTheme()
-app.provide('theme', theme)
 
 app.use(router)
 app.use(i18n)

@@ -10,7 +10,7 @@ const t = i18n.global?.t || ((key: string) => key)
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: null as string | null,
-    isAuthenticated: false,
+    isAuthenticated: true,
   }),
   actions: {
     async login(credentials: AuthLoginBody) {

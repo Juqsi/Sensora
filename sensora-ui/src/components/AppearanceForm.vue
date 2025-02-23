@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { Theme, useTheme } from '@/composables/useTheme'
 import {
   FormControl,
   FormDescription,
@@ -10,21 +9,12 @@ import {
 } from '@/components/ui/form'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
-import { toast } from 'vue-sonner'
 import { useI18n } from 'vue-i18n'
+import { useColorMode } from '@vueuse/core'
+
+const mode = useColorMode()
 
 const { t } = useI18n()
-const { theme, setTheme, setOSTheme } = useTheme()
-
-const onThemeChange = (theme: string) => {
-  if (theme === 'os') {
-    const success = setOSTheme()
-    if (success) toast.success(t('appearance.SetToOS'))
-  } else {
-    const success = setTheme(theme as Theme.Dark | Theme.Light)
-    if (success) toast.success(t(`appearance.SwitchTo${theme === 'dark' ? 'Dark' : 'Light'}Mode`))
-  }
-}
 </script>
 
 <template>
@@ -44,13 +34,11 @@ const onThemeChange = (theme: string) => {
         <FormMessage />
 
         <RadioGroup
-          :default-value="theme"
-          :value="theme"
+          :default-value="mode"
           class="grid max-w-md grid-cols-3 gap-8 pt-2"
           v-bind="componentField"
-          @update:modelValue="onThemeChange"
         >
-          <FormItem>
+          <FormItem @click="mode = 'light'">
             <FormLabel class="[&:has([data-state=checked])>div]:border-primary">
               <FormControl>
                 <RadioGroupItem class="sr-only" value="light" />
@@ -76,7 +64,7 @@ const onThemeChange = (theme: string) => {
               }}</span>
             </FormLabel>
           </FormItem>
-          <FormItem>
+          <FormItem @click="mode = 'dark'">
             <FormLabel class="[&:has([data-state=checked])>div]:border-primary">
               <FormControl>
                 <RadioGroupItem class="sr-only" value="dark" />
@@ -104,10 +92,10 @@ const onThemeChange = (theme: string) => {
               }}</span>
             </FormLabel>
           </FormItem>
-          <FormItem>
+          <FormItem @click="mode = 'auto'">
             <FormLabel class="[&:has([data-state=checked])>div]:border-primary">
               <FormControl>
-                <RadioGroupItem class="sr-only" value="os" />
+                <RadioGroupItem class="sr-only" value="auto" />
               </FormControl>
               <div class="items-center rounded-md border-2 border-muted p-1 hover:border-accent">
                 <div class="space-y-2 rounded-sm bg-gray-300 p-2">

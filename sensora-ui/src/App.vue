@@ -2,6 +2,9 @@
 import { RouterView } from 'vue-router'
 import BottomNavBar from '@/components/BottomNavBar.vue'
 import { Toaster } from 'vue-sonner'
+import { useColorMode } from '@vueuse/core'
+
+const mode = useColorMode()
 </script>
 
 <template>
@@ -9,7 +12,7 @@ import { Toaster } from 'vue-sonner'
     <router-view />
   </div>
   <bottom-nav-bar v-if="$route.path !== '/signup' && $route.path !== '/signin'" />
-  <Toaster richColors theme="dark" />
+  <Toaster richColors :theme="mode === 'dark' ? 'dark' : 'light'" />
 </template>
 
 <style scoped>
