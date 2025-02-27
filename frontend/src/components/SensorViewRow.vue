@@ -53,7 +53,7 @@ defineEmits(['delete'])
     </TableCell>
     <TableCell class="overflow-hidden font-medium">
       <router-link :to="url" class="block w-full h-full">
-        {{ groupName }}
+        {{ group }}
       </router-link>
     </TableCell>
     <TableCell>

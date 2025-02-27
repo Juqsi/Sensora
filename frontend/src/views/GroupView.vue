@@ -1,18 +1,25 @@
 <script lang="ts" setup>
-import GroupCard from '@/components/GroupCard.vue'
-import { Accordion, AccordionContent } from '@/components/ui/accordion'
-import { AccordionItem, AccordionTrigger } from '@/components/ui/custom-accordion'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ref } from 'vue'
+import { usePullToRefresh } from '@/composables/usePullToRefresh'
 import { useGroupStore } from '@/stores'
-import CreateGroupComponent from '@/components/CreateGroupComponent.vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import GroupCard from '@/components/GroupCard.vue'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import CreateGroupComponent from '@/components/CreateGroupComponent.vue'
 
 const groupStore = useGroupStore()
-
 const { t } = useI18n()
-
 const defaultOpenValues = ref(groupStore.groups.length === 1 ? [groupStore.groups[0].gid] : [])
+
+const { isRefreshing } = usePullToRefresh(async () => {
+  await groupStore.fetchGroups(true)
+})
 </script>
 
 <template>
@@ -43,5 +50,3 @@ const defaultOpenValues = ref(groupStore.groups.length === 1 ? [groupStore.group
     </AccordionItem>
   </Accordion>
 </template>
-
-<style scoped></style>

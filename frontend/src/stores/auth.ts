@@ -39,7 +39,7 @@ export const useAuthStore = defineStore('auth', {
     logout() {
       console.log('logout')
       this.token = null
-      this.isAuthenticated = false
+      this.isAuthenticated = true
       const userStore = useUserStore()
       const deviceStore = useDeviceStore()
       const plantStore = usePlantStore()
