@@ -36,6 +36,7 @@ export const useUserStore = defineStore('user', {
     },
 
     clearData() {
+      this.fullUser = null
       this.user = null
     },
   },
