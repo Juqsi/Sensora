@@ -32,11 +32,10 @@ import {
 } from '@/components/ui/tags-input'
 import { CirclePlus } from 'lucide-vue-next'
 import type { createGroupBody, Group } from '@/api'
-import { useGroupStore, useRoomStore, useUserStore } from '@/stores'
+import { useGroupStore, useRoomStore } from '@/stores'
 
 const groupStore = useGroupStore()
 const roomStore = useRoomStore()
-const userStore = useUserStore()
 
 const [UseTemplate, GridForm] = createReusableTemplate()
 const isDesktop = useMediaQuery('(min-width: 768px)')
@@ -45,18 +44,18 @@ const { t } = useI18n()
 const isOpen = ref(false)
 
 const groupName = ref<string>('')
-const rooms = ref<Array<string>>([t('group.create.RoomEntity')])
+const rooms = ref<Array<string>>([t('group.create.RoomEntity') as string])
 
 const createGroupSubmit = async () => {
   let group: Group
   try {
-    let newGroup: createGroupBody = { name: groupName.value, members: [userStore.user!] }
+    let newGroup: createGroupBody = { name: groupName.value, members: [] }
     group = await groupStore.createGroup(newGroup)
     groupName.value = ''
-    for (const room in rooms) {
+    for (const room in rooms.value) {
       await roomStore.createRoom({ groupId: group.gid, name: room })
     }
-    rooms.value = [t('group.create.RoomEntity')]
+    rooms.value = [t('group.create.RoomEntity') as string]
   } catch (error) {
     console.log(error)
   } finally {
@@ -67,7 +66,7 @@ const createGroupSubmit = async () => {
 
 <template>
   <UseTemplate>
-    <form @submit.prevent="createGroupSubmit" class="grid items-start gap-4 px-4">
+    <form class="grid items-start gap-4 px-4" @submit.prevent="createGroupSubmit">
       <div class="grid gap-2">
         <Label html-for="groupName">{{ t('group.create.groupName') }}</Label>
         <Input id="name" v-model="groupName" :placeholder="t('group.create.namePlaceholder')" />
@@ -103,7 +102,7 @@ const createGroupSubmit = async () => {
 
   <Drawer v-else v-model:open="isOpen">
     <DrawerTrigger as-child>
-      <Button :aria-label="t('group.create.create')" variant="outline" size="icon">
+      <Button :aria-label="t('group.create.create')" size="icon" variant="outline">
         <CirclePlus />
       </Button>
     </DrawerTrigger>
