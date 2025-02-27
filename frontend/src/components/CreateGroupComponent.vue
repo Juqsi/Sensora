@@ -52,7 +52,7 @@ const createGroupSubmit = async () => {
     let newGroup: createGroupBody = { name: groupName.value, members: [] }
     group = await groupStore.createGroup(newGroup)
     groupName.value = ''
-    for (const room in rooms.value) {
+    for (const room of rooms.value) {
       await roomStore.createRoom({ groupId: group.gid, name: room })
     }
     rooms.value = [t('group.create.RoomEntity') as string]

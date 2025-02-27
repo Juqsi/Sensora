@@ -42,8 +42,8 @@ const openDialog = (member: User) => {
     <div v-for="member in group.members" :key="member.uid" class="w-full flex justify-between">
       <div class="flex">
         <Avatar class="h-9 w-9">
-          <AvatarImage alt="Avatar" src="/avatars/01.png" />
-          <AvatarFallback>OM</AvatarFallback>
+          <AvatarImage :src="member.avatarRef || 'default-avatar.png'" alt="Avatar" />
+          <AvatarFallback>{{ member.firstname.slice(0, 1) }}</AvatarFallback>
         </Avatar>
         <div class="ml-4 space-y-1">
           <p class="text-sm font-medium leading-none">
