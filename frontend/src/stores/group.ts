@@ -3,6 +3,7 @@ import type { createGroupBody, Group, GroupPatchBody } from '@/api'
 import { groupApiClient } from '@/api'
 import i18n from '@/i18n'
 import type { CustomAxiosRequestConfig } from '@/api/apiClient.ts'
+import { useUserStore } from '@/stores'
 
 const t = i18n.global?.t || ((key: string) => key)
 
@@ -28,7 +29,12 @@ export const useGroupStore = defineStore('group', {
         meta: { successMessage: t('group.userRemoved') },
       } as CustomAxiosRequestConfig)
       const updatedGroup = response.data
-      this.groups = this.groups.map((g) => (g.gid === groupId ? updatedGroup : g))
+      const userStore = useUserStore()
+      if (userId === userStore.user?.uid) {
+        this.groups = this.groups.filter((g) => g.gid !== groupId)
+      } else {
+        this.groups = this.groups.map((g) => (g.gid === groupId ? updatedGroup : g))
+      }
     },
 
     async leaveGroup(groupId: string) {

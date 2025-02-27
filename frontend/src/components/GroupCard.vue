@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref } from 'vue'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -39,20 +39,20 @@ const openDialog = (member: User) => {
 
 <template>
   <div class="space-y-8">
-    <div class="w-full flex justify-between" v-for="member in group.members" :key="member.uid">
+    <div v-for="member in group.members" :key="member.uid" class="w-full flex justify-between">
       <div class="flex">
         <Avatar class="h-9 w-9">
-          <AvatarImage src="/avatars/01.png" alt="Avatar" />
+          <AvatarImage alt="Avatar" src="/avatars/01.png" />
           <AvatarFallback>OM</AvatarFallback>
         </Avatar>
         <div class="ml-4 space-y-1">
           <p class="text-sm font-medium leading-none">
-            {{ member.firstname + ' ' + member.lastname }}
+            {{ `${member.firstname}${member.lastname ? ' ' + member.lastname : ''}` }}
           </p>
           <p class="text-sm text-muted-foreground">{{ member.mail }}</p>
         </div>
       </div>
-      <Button class="text-destructive" variant="ghost" size="icon" @click="openDialog(member)">
+      <Button class="text-destructive" size="icon" variant="ghost" @click="openDialog(member)">
         <CircleX />
       </Button>
     </div>
@@ -74,7 +74,7 @@ const openDialog = (member: User) => {
         <AlertDialogCancel @click="isDialogOpen = false">
           {{ t('group.alert.cancel') }}
         </AlertDialogCancel>
-        <AlertDialogAction @click="confirmRemove" variant="destructive">
+        <AlertDialogAction variant="destructive" @click="confirmRemove">
           {{ t('group.alert.confirm') }}
         </AlertDialogAction>
       </AlertDialogFooter>

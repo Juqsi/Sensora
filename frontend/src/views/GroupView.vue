@@ -1,8 +1,8 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import GroupCard from '@/components/GroupCard.vue'
 import { Accordion, AccordionContent } from '@/components/ui/accordion'
 import { AccordionItem, AccordionTrigger } from '@/components/ui/custom-accordion'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ref } from 'vue'
 import { useGroupStore } from '@/stores'
 import CreateGroupComponent from '@/components/CreateGroupComponent.vue'
@@ -21,18 +21,17 @@ const defaultOpenValues = ref(groupStore.groups.length === 1 ? [groupStore.group
     <CreateGroupComponent />
   </div>
 
-  <Accordion type="multiple" class="w-full" collapsible :default-value="defaultOpenValues">
+  <Accordion :default-value="defaultOpenValues" class="w-full" collapsible type="multiple">
     <AccordionItem
-      class="mb-4"
       v-for="group in groupStore.groups"
       :key="group.gid"
       :value="group.gid"
+      class="mb-4"
     >
       <Card>
         <AccordionTrigger class="p-2 text-left pr-6">
           <CardHeader>
-            <CardTitle>{{ group.groupName }}</CardTitle>
-            <CardDescription> {{ group.rooms }}</CardDescription>
+            <CardTitle>{{ group.name }}</CardTitle>
           </CardHeader>
         </AccordionTrigger>
         <AccordionContent>

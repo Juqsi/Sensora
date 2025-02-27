@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { useGroupStore } from './group'
 import type { createRoomBody, Room, RoomPatchBody } from '@/api'
 import { roomsApiClient } from '@/api'
-import { toast } from 'vue-sonner'
 import i18n from '@/i18n'
 import type { CustomAxiosRequestConfig } from '@/api/apiClient.ts'
 
@@ -51,8 +50,6 @@ export const useRoomStore = defineStore('room', {
       }
 
       this.rooms.push(newRoom)
-
-      toast.success(t('room.created'))
     },
 
     async deleteRoom(roomId: string, groupId: string) {
