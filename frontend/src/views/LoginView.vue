@@ -13,13 +13,11 @@ const { t } = useI18n()
 const auth = useAuthStore()
 const router = useRouter()
 
-// Reaktive Werte für E-Mail und Passwort
 const email = ref('')
 const password = ref('')
 const loading = ref(false)
 const errorMessage = ref<string | null>(null)
 
-// Login-Funktion
 const handleSubmit = async () => {
   if (!email.value || !password.value) {
     errorMessage.value = t('login.toast.MissingCredentials')
@@ -48,7 +46,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="flex items-center justify-center min-h-screen">
+  <div class="flex items-center justify-center">
     <Card class="mx-auto max-w-sm w-full">
       <CardHeader>
         <CardTitle class="text-2xl"> {{ t('login.SignIn') }}</CardTitle>
