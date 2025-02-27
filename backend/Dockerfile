@@ -16,7 +16,7 @@ RUN mkdir -p /usr/local/bin
 
 COPY --from=builder /app/target/release/Sensora /usr/local/bin/Sensora
 
-WORKDIR /usr/local/bin/
+WORKDIR /App
 
 EXPOSE 8080
 
