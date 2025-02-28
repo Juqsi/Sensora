@@ -11,14 +11,14 @@ import {
 } from '@/components/ui/accordion'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import CreateGroupComponent from '@/components/CreateGroupComponent.vue'
-import { Button } from '@/components/ui/button'
-import { CircleX } from 'lucide-vue-next'
+import GroupRoomCard from '@/components/GroupRoomCard.vue'
+import GroupCard from '@/components/GroupCard.vue'
 
 const groupStore = useGroupStore()
 const { t } = useI18n()
 const defaultOpenValues = ref(groupStore.groups.length === 1 ? [groupStore.groups[0].gid] : [])
 
-const { isRefreshing } = usePullToRefresh(async () => {
+usePullToRefresh(async () => {
   await groupStore.fetchGroups(true)
 })
 </script>
@@ -49,26 +49,7 @@ const { isRefreshing } = usePullToRefresh(async () => {
         </AccordionContent>
         <CardFooter class="grid grid-cols-1">
           <p class="pb-4 pl-2 text-xl font-medium">Räume</p>
-          <div class="space-y-8">
-            <div v-for="room in group.rooms" :key="room.rid" class="w-full flex justify-between">
-              <div class="flex">
-                <div class="ml-4 space-y-1">
-                  <p class="text-sm font-medium leading-none">
-                    {{ room.name }}
-                  </p>
-                  <p class="text-xs text-muted-foreground">{{ room.groupId }}</p>
-                </div>
-              </div>
-              <Button
-                class="text-destructive"
-                size="icon"
-                variant="ghost"
-                @click="openDialog(room)"
-              >
-                <CircleX />
-              </Button>
-            </div>
-          </div>
+          <GroupRoomCard :group="group"></GroupRoomCard>
         </CardFooter>
       </Card>
     </AccordionItem>

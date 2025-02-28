@@ -84,6 +84,14 @@
       "description": "Do you really want to remove {name} from the group? This action cannot be undone.",
       "cancel": "Cancel",
       "confirm": "Delete"
+    },
+    "room": {
+      "alert": {
+        "title": "Remove Room",
+        "description": "Are you sure you want to remove the room \"{groupName}\" from the group?",
+        "cancel": "Cancel",
+        "confirm": "Remove"
+      }
     }
   },
   "user": {

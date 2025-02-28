@@ -84,6 +84,14 @@
       "description": "Möchtest du wirklich {name} aus der Gruppe entfernen? Diese Aktion kann nicht rückgängig gemacht werden.",
       "cancel": "Abbrechen",
       "confirm": "Löschen"
+    },
+    "room": {
+      "alert": {
+        "title": "Raum entfernen",
+        "description": "Bist du sicher, dass du den Raum \"{groupName}\" aus der Gruppe entfernen möchtest?",
+        "cancel": "Abbrechen",
+        "confirm": "Entfernen"
+      }
     }
   },
   "user": {
