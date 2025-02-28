@@ -47,6 +47,8 @@ import { useDeviceStore, useGroupStore } from '@/stores'
 const groupStore = useGroupStore()
 const deviceStore = useDeviceStore()
 
+const searchQuery = ref('')
+
 const flatPlantList = computed(() =>
   groupStore.groups.flatMap((group) =>
     group.rooms.flatMap((room) =>
@@ -60,17 +62,28 @@ const flatPlantList = computed(() =>
 )
 
 const filteredPlantList = computed(() => {
-  return flatPlantList.value.filter((item) =>
-    item.plant.controllers.some((controller) =>
+  return flatPlantList.value.filter((item) => {
+    const matchesStatus = item.plant.controllers.some((controller) =>
       controller.sensors.some((sensor) => values.items!.includes(sensor.status)),
-    ),
-  )
+    )
+    const matchesSearch =
+      searchQuery.value.trim() === '' ||
+      item.plant.plantId.toLowerCase().includes(searchQuery.value.toLowerCase())
+
+    return matchesStatus && matchesSearch
+  })
 })
 
 const filteredControllerList = computed(() => {
-  return deviceStore.devices.filter((controller) =>
-    controller.sensors.some((sensor) => values.items!.includes(sensor.status)),
-  )
+  return deviceStore.devices.filter((controller) => {
+    const matchesStatus = controller.sensors.some((sensor) => values.items!.includes(sensor.status))
+
+    const matchesSearch =
+      searchQuery.value.trim() === '' ||
+      controller.did.toLowerCase().includes(searchQuery.value.toLowerCase())
+
+    return matchesStatus && matchesSearch
+  })
 })
 
 const controllerMap = new Map(
@@ -142,7 +155,12 @@ const deleteEntry = () => {
     >
       <div class="relative w-full ml-auto flex-1 md:grow-0">
         <Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input class="w-full rounded-lg bg-background pl-8" placeholder="Search..." type="search" />
+        <Input
+          class="w-full rounded-lg bg-background pl-8"
+          placeholder="Search..."
+          type="search"
+          v-model="searchQuery"
+        />
       </div>
     </header>
     <main class="grid flex-1 items-start gap-4 sm:px-6 sm:py-0 md:gap-8">
