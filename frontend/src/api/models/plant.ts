@@ -1,4 +1,4 @@
-import type {Controller, PlantTargetValues} from '@/api'
+import type { Controller, PlantTargetValues } from '@/api'
 
 /**
  *
@@ -59,7 +59,7 @@ export interface Plant {
    * @type {Array<Controller>}
    * @memberof Plant
    */
-  controllers?: Array<Controller>
+  controllers: Array<Controller>
 
   /**
    * @type {Array<PlantTargetValues>}

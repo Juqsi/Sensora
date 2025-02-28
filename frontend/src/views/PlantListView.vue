@@ -58,6 +58,21 @@ const flatPlantList = computed(() =>
     ),
   ),
 )
+
+const filteredPlantList = computed(() => {
+  return flatPlantList.value.filter((item) =>
+    item.plant.controllers.some((controller) =>
+      controller.sensors.some((sensor) => values.items!.includes(sensor.status)),
+    ),
+  )
+})
+
+const filteredControllerList = computed(() => {
+  return deviceStore.devices.filter((controller) =>
+    controller.sensors.some((sensor) => values.items!.includes(sensor.status)),
+  )
+})
+
 const controllerMap = new Map(
   flatPlantList.value.flatMap(
     (obj) => obj.plant.controllers?.map((controller) => [controller.did, obj]) || [],
@@ -230,7 +245,7 @@ const deleteEntry = () => {
                 </TableHeader>
                 <TableBody>
                   <SensorViewRow
-                    v-for="item in flatPlantList"
+                    v-for="item in filteredPlantList"
                     :id="item.plant.plantId"
                     :group="item.group"
                     :plant="item.plant"
@@ -242,7 +257,7 @@ const deleteEntry = () => {
             </CardContent>
             <CardFooter>
               <div class="text-xs text-muted-foreground">
-                Showing <strong>{{ flatPlantList.length }}</strong> Plants
+                Showing <strong>{{ filteredPlantList.length }}</strong> Plants
               </div>
             </CardFooter>
           </Card>
@@ -265,7 +280,7 @@ const deleteEntry = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow v-for="sensor in deviceStore.devices">
+                  <TableRow v-for="sensor in filteredControllerList">
                     <TableCell class="hidden sm:table-cell"> </TableCell>
                     <TableCell class="overflow-hidden font-medium">
                       <router-link :to="`/sensor/${sensor.did}`">
@@ -296,7 +311,7 @@ const deleteEntry = () => {
             </CardContent>
             <CardFooter>
               <div class="text-xs text-muted-foreground">
-                Showing <strong>{{ deviceStore.devices.length }}</strong> Sensors
+                Showing <strong>{{ filteredControllerList.length }}</strong> Sensors
               </div>
             </CardFooter>
           </Card>
