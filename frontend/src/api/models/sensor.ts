@@ -1,4 +1,4 @@
-import {type Value} from '@/api'
+import { type Value } from '@/api'
 
 /**
  *
@@ -23,7 +23,7 @@ export interface Sensor {
    * @memberof Sensor
    * @example 2024-12-16T12:00:00Z
    */
-  lastCall?: string
+  lastCall: string
 
   /**
    * ID des Controllers, dem der Sensor zugeordnet ist
@@ -32,13 +32,13 @@ export interface Sensor {
    * @memberof Sensor
    * @example 55197b05-56e7-4923-acb5-3cc1f1ea1fe5
    */
-  controller?: string
+  controller: string
 
   /**
    * @type {Array<Value>}
    * @memberof Sensor
    */
-  values?: Array<Value>
+  values: Array<Value>
 
   /**
    * Art des Messwerts
@@ -47,7 +47,7 @@ export interface Sensor {
    * @memberof Sensor
    * @example temperature
    */
-  ilk?: string
+  ilk: string
 
   /**
    * Maßeinheit
@@ -56,14 +56,14 @@ export interface Sensor {
    * @memberof Sensor
    * @example °C
    */
-  unit?: string
+  unit: string
 
   /**
    * @type {string}
    * @memberof Sensor
    * @example active
    */
-  status?: SensorStatusEnum
+  status: SensorStatusEnum
 }
 
 /**

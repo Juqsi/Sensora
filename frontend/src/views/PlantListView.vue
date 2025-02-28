@@ -15,7 +15,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
-import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table/index.ts'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table/index.ts'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ListFilter, PlusCircle, Search } from 'lucide-vue-next'
 import SensorViewRow from '@/components/SensorViewRow.vue'
@@ -34,10 +41,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog/index.ts'
-import {computed, ref} from 'vue'
-import { useGroupStore } from '@/stores'
+import { computed, ref } from 'vue'
+import { useDeviceStore, useGroupStore } from '@/stores'
 
 const groupStore = useGroupStore()
+const deviceStore = useDeviceStore()
 
 const flatPlantList = computed(() =>
   groupStore.groups.flatMap((group) =>
@@ -50,7 +58,11 @@ const flatPlantList = computed(() =>
     ),
   ),
 )
-
+const controllerMap = new Map(
+  flatPlantList.value.flatMap(
+    (obj) => obj.plant.controllers?.map((controller) => [controller.did, obj]) || [],
+  ),
+)
 
 const filter = [
   {
@@ -79,6 +91,7 @@ const formSchema = toTypedSchema(
     }),
   }),
 )
+
 const { handleSubmit, values } = useForm({
   validationSchema: formSchema,
   initialValues: {
@@ -220,48 +233,71 @@ const deleteEntry = () => {
                     v-for="item in flatPlantList"
                     :id="item.plant.plantId"
                     :group="item.group"
+                    :plant="item.plant"
                     :room="item.room"
-                    :plant = "item.plant"
                     @delete="openDeleteEntryDialog(item.plant.plantId)"
                   />
-
-
                 </TableBody>
               </Table>
             </CardContent>
             <CardFooter>
-              <div class="text-xs text-muted-foreground">Showing <strong>32</strong> Plants</div>
+              <div class="text-xs text-muted-foreground">
+                Showing <strong>{{ flatPlantList.length }}</strong> Plants
+              </div>
             </CardFooter>
           </Card>
         </TabsContent>
+
         <TabsContent value="sensors">
           <Card>
             <CardHeader>
-              <CardTitle>Plants</CardTitle>
-              <CardDescription> Manage your Plants</CardDescription>
+              <CardTitle>Sensors</CardTitle>
+              <CardDescription> Manage your Sensors</CardDescription>
             </CardHeader>
             <CardContent class="p-3">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead class="hidden w-[100px] sm:table-cell">
-                      <span class="sr-only">img</span>
-                    </TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead class="text-center max-w-fit">Status</TableHead>
-                    <TableHead class="hidden md:table-cell"> Group</TableHead>
-                    <TableHead class="hidden md:table-cell"> Room</TableHead>
-                    <TableHead class="hidden md:table-cell"> Sensor</TableHead>
-                    <TableHead>
-                      <span class="sr-only">Actions</span>
-                    </TableHead>
+                    <TableHead>ID</TableHead>
+                    <TableHead class="text-center max-w-fit">Pflanze</TableHead>
+                    <TableHead class="hidden md:table-cell">Letzer Kontakt</TableHead>
+                    <TableHead class="hidden md:table-cell">Modell</TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody> </TableBody>
+                <TableBody>
+                  <TableRow v-for="sensor in deviceStore.devices">
+                    <TableCell class="hidden sm:table-cell"> </TableCell>
+                    <TableCell class="overflow-hidden font-medium">
+                      <router-link :to="`/sensor/${sensor.did}`">
+                        {{ sensor.did }}
+                      </router-link>
+                    </TableCell>
+                    <TableCell>
+                      <router-link :to="`/plant/${sensor.did}`">
+                        {{ controllerMap.get(sensor.did)?.plant.name ?? '' }}
+                      </router-link>
+                    </TableCell>
+                    <TableCell class="hidden md:table-cell">
+                      {{
+                        sensor.sensors
+                          .filter((sen) => sen.lastCall)
+                          .sort(
+                            (a, b) =>
+                              new Date(b.lastCall).getTime() - new Date(a.lastCall).getTime(),
+                          )[0] ?? ''
+                      }}
+                    </TableCell>
+                    <TableCell class="hidden md:table-cell">
+                      {{ sensor.model }}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
               </Table>
             </CardContent>
             <CardFooter>
-              <div class="text-xs text-muted-foreground">Showing <strong>32</strong> Plants</div>
+              <div class="text-xs text-muted-foreground">
+                Showing <strong>{{ deviceStore.devices.length }}</strong> Sensors
+              </div>
             </CardFooter>
           </Card>
         </TabsContent>

@@ -11,7 +11,7 @@ const t = i18n.global?.t || ((key: string) => key)
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: null as string | null,
-    isAuthenticated: true,
+    isAuthenticated: false,
   }),
   actions: {
     async login(credentials: AuthLoginBody) {
@@ -39,7 +39,7 @@ export const useAuthStore = defineStore('auth', {
     logout() {
       console.log('logout')
       this.token = null
-      this.isAuthenticated = true
+      this.isAuthenticated = false
       const userStore = useUserStore()
       const deviceStore = useDeviceStore()
       const plantStore = usePlantStore()

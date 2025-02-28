@@ -34,17 +34,6 @@ const badgeLabel = status[props.plant.status as StatusKey]?.label || 'unknown'
 
 <template>
   <TableRow>
-    <TableCell class="hidden sm:table-cell">
-      <router-link :to="`/plant/${plant.id}`">
-        <img
-          alt="Plant Image"
-          class="aspect-square rounded-md object-cover"
-          height="64"
-          src="https://www.svgrepo.com/show/508699/landscape-placeholder.svg"
-          width="64"
-        />
-      </router-link>
-    </TableCell>
     <TableCell class="overflow-hidden font-medium">
       <router-link :to="`/plant/${plant.id}`">
         {{ plant.name }}

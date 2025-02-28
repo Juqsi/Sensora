@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, defineModel } from 'vue'
+import { defineModel, ref } from 'vue'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -31,14 +31,14 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { useI18n } from 'vue-i18n'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import {useGroupStore, useRoomStore} from '@/stores'
+import { useGroupStore, useRoomStore } from '@/stores'
 import type { Room } from '@/api'
 
 const { t } = useI18n()
 const groupStore = useGroupStore()
 const roomStore = useRoomStore()
 
-const model = defineModel<Room>()
+const model = defineModel<Room | undefined>('room', { required: true })
 
 const open = ref(false)
 const showNewTeamDialog = ref(false)
@@ -53,8 +53,8 @@ const selectEntity = (entity: Room) => {
 const onCreateNewTeam = (event: Event) => {
   event.preventDefault()
   try {
-    roomStore.createRoom({name: newTeamName.value, groupId: selectedGroup.value})
-  }catch (e) {
+    roomStore.createRoom({ name: newTeamName.value, groupId: selectedGroup.value })
+  } catch (e) {
     console.log(e)
   }
   showNewTeamDialog.value = false
@@ -93,7 +93,9 @@ const onCreateNewTeam = (event: Event) => {
               >
                 {{ room.name }}
                 <CheckIcon
-                  :class="cn('ml-auto h-4 w-4', model?.rid === room.rid ? 'opacity-100' : 'opacity-0')"
+                  :class="
+                    cn('ml-auto h-4 w-4', model?.rid === room.rid ? 'opacity-100' : 'opacity-0')
+                  "
                 />
               </CommandItem>
             </CommandGroup>
@@ -139,14 +141,12 @@ const onCreateNewTeam = (event: Event) => {
             <Label for="group">{{ t('group.createRoom.NewEntitySelectionGroup') }}</Label>
             <Select v-model="selectedGroup" required>
               <SelectTrigger>
-                <SelectValue :placeholder="t('group.createRoom.NewEntitySelectionGroupPlaceholder')" />
+                <SelectValue
+                  :placeholder="t('group.createRoom.NewEntitySelectionGroupPlaceholder')"
+                />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem
-                  v-for="group in groupStore.groups"
-                  :key="group.gid"
-                  :value="group.gid"
-                >
+                <SelectItem v-for="group in groupStore.groups" :key="group.gid" :value="group.gid">
                   {{ group.name }}
                 </SelectItem>
               </SelectContent>
