@@ -5,59 +5,20 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input/index.ts'
 import { Textarea } from '@/components/ui/textarea/index.ts'
 import { useI18n } from 'vue-i18n'
-import Selection from '@/components/Selection.vue'
+import RoomSelection from '@/components/RoomSelection.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import NavCard from '@/components/NavCard.vue'
-
+import {useDeviceStore} from "@/stores";
+import {Select, SelectTrigger, SelectValue, SelectItem, SelectContent, SelectGroup, SelectLabel} from '@/components/ui/select'
+import {plantAvatars} from '@/components/plant3d/plantAvatars'
+import type {Room} from "@/api";
 const router = useRouter()
 const { t } = useI18n()
 
-const rooms = [
-  {
-    label: t('plant.settings.Group1'),
-    value: 'uuid-1-der-gruppe',
-    entity: [
-      { label: t('plant.settings.Room1'), value: 'uuid-1-des-raums' },
-      { label: t('plant.settings.Room2'), value: 'uuid-2-des-raums' },
-    ],
-  },
-  {
-    label: t('plant.settings.Group2'),
-    value: 'uuid-2-der-gruppe',
-    entity: [
-      { label: t('plant.settings.Room3'), value: 'uuid-3-des-raums' },
-      { label: t('plant.settings.Room4'), value: 'uuid-4-des-raums' },
-    ],
-  },
-]
+const deviceStore = useDeviceStore()
 
-const sensors = [
-  {
-    label: t('plant.settings.Sensors'),
-    value: 'uuid-1-des-sensors',
-    entity: [
-      { label: t('plant.settings.Sensor1'), value: 'uuid-1-des-sensors' },
-      { label: t('plant.settings.Sensor2'), value: 'uuid-2-des-sensors' },
-    ],
-  },
-]
-
-const avatars = [
-  {
-    label: t('plant.settings.Avatars'),
-    value: 'uuid-1-des-avatar',
-    entity: [
-      { label: t('plant.settings.Avatar1'), value: 'uuid-1-des-avatar' },
-      { label: t('plant.settings.Avatar2'), value: 'uuid-2-des-avatar' },
-    ],
-  },
-]
-
-const selectedRoom = ref({ label: t('plant.settings.SelectRoom'), value: 'uuid-1-des-raums' })
-const selectedSensor = ref({ label: t('plant.settings.SelectSensor'), value: 'uuid-1-des-raums' })
-
-function createRoom() {}
+const selectedEntity = ref<Room | null>(null)
 </script>
 
 <template>
@@ -70,25 +31,23 @@ function createRoom() {}
       <div class="grid gap-4">
         <div class="grid gap-2">
           <Label for="room">{{ t('plant.settings.Room') }}</Label>
-          <Selection
-            id="room"
-            v-model:selectedEntity="selectedRoom"
-            :groups="rooms"
-            :new-entity-button="true"
-            prefix="prefix"
-            @createEntity="createRoom"
-          />
+          <RoomSelection id="room" v-model="selectedEntity" />
         </div>
         <div class="grid gap-2">
           <Label for="sensor">{{ t('plant.settings.SelectSensor') }}</Label>
-          <Selection
-            id="sensor"
-            v-model:selectedEntity="selectedSensor"
-            :groups="sensors"
-            :new-entity-button="false"
-            class="w-full"
-            prefix="prefix"
-          />
+          <Select id="sensor">
+            <SelectTrigger>
+              <SelectValue placeholder="Select a sensor" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Sensors</SelectLabel>
+                <SelectItem v-for="device in deviceStore.devices" :value="device.did">
+                  {{device.did}}
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -99,14 +58,19 @@ function createRoom() {}
 
       <div class="grid gap-2">
         <Label for="avatar">{{ t('plant.settings.Avatar') }}</Label>
-        <Selection
-          id="avatar"
-          v-model:selectedEntity="selectedSensor"
-          :groups="avatars"
-          :new-entity-button="false"
-          class="w-full"
-          prefix="prefix"
-        />
+        <Select id="avatar">
+          <SelectTrigger>
+            <SelectValue placeholder="Select a fruit" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Fruits</SelectLabel>
+              <SelectItem v-for="avatar in plantAvatars" :value="avatar.value">
+                {{avatar.label}}
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
       <div class="grid gap-2">

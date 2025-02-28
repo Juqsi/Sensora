@@ -20,30 +20,24 @@ const status = {
 
 type StatusKey = keyof typeof status
 
-defineProps({
-  name: { type: String, required: true },
-  id: { type: String, required: true },
-  url: { type: String, required: true },
-  badgeUrl: { type: String, required: true },
-  img: { type: String, required: false },
-  badge: {
-    type: Object as () => StatusKey,
-    required: true,
-  },
-  group: { type: String, required: true },
-  room: { type: String, required: true },
-  sensor: { type: String, required: true },
+const props = defineProps({
+  plant: { type: Object, required: true },
+  group: { type: Object, required: true },
+  room: { type: Object, required: true },
 })
 
 defineEmits(['delete'])
+
+const badgeVariant = status[props.plant.status as StatusKey]?.value || 'outline'
+const badgeLabel = status[props.plant.status as StatusKey]?.label || 'unknown'
 </script>
 
 <template>
   <TableRow>
     <TableCell class="hidden sm:table-cell">
-      <router-link :to="url">
+      <router-link :to="`/plant/${plant.id}`">
         <img
-          alt="Product image"
+          alt="Plant Image"
           class="aspect-square rounded-md object-cover"
           height="64"
           src="https://www.svgrepo.com/show/508699/landscape-placeholder.svg"
@@ -52,31 +46,25 @@ defineEmits(['delete'])
       </router-link>
     </TableCell>
     <TableCell class="overflow-hidden font-medium">
-      <router-link :to="url" class="block w-full h-full">
-        {{ group }}
+      <router-link :to="`/plant/${plant.id}`">
+        {{ plant.name }}
       </router-link>
     </TableCell>
     <TableCell>
-      <router-link :to="badgeUrl">
-        <Badge :variant="status[badge].value" class="w-full justify-center">
-          {{ status[badge].label }}
+      <router-link :to="`/plant/${plant.id}`">
+        <Badge :variant="badgeVariant" class="w-full justify-center">
+          {{ badgeLabel }}
         </Badge>
       </router-link>
     </TableCell>
     <TableCell class="hidden md:table-cell">
-      <router-link :to="url">
-        {{ group }}
-      </router-link>
+      {{ group }}
     </TableCell>
     <TableCell class="hidden md:table-cell">
-      <router-link :to="url">
-        {{ room }}
-      </router-link>
+      {{ room }}
     </TableCell>
     <TableCell class="hidden md:table-cell">
-      <router-link :to="url">
-        {{ sensor }}
-      </router-link>
+      {{ plant.controllers[0].ilk }}
     </TableCell>
     <TableCell>
       <DropdownMenu>
@@ -88,10 +76,10 @@ defineEmits(['delete'])
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <router-link to="/plant/123/edit">
+          <router-link :to="`/plant/${plant.id}/edit`">
             <DropdownMenuItem>Edit</DropdownMenuItem>
           </router-link>
-          <DropdownMenuItem @click="$emit('delete')"> Delete</DropdownMenuItem>
+          <DropdownMenuItem @click="$emit('delete', plant.id)">Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </TableCell>

@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table/index.ts'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ListFilter, PlusCircle, Search } from 'lucide-vue-next'
 import SensorViewRow from '@/components/SensorViewRow.vue'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -34,7 +34,23 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog/index.ts'
-import { ref } from 'vue'
+import {computed, ref} from 'vue'
+import { useGroupStore } from '@/stores'
+
+const groupStore = useGroupStore()
+
+const flatPlantList = computed(() =>
+  groupStore.groups.flatMap((group) =>
+    group.rooms.flatMap((room) =>
+      room.plants.map((plant) => ({
+        group: group,
+        room: room,
+        plant: plant,
+      })),
+    ),
+  ),
+)
+
 
 const filter = [
   {
@@ -68,6 +84,7 @@ const { handleSubmit, values } = useForm({
   initialValues: {
     items: ['error', 'active', 'inactive', 'unknown'],
   },
+  keepValuesOnUnmount: true,
 })
 
 const handleCheckboxChange = () => {
@@ -178,81 +195,76 @@ const deleteEntry = () => {
             </Button>
           </div>
         </div>
-        <Card>
-          <CardHeader>
-            <CardTitle>Plants</CardTitle>
-            <CardDescription> Manage your Plants</CardDescription>
-          </CardHeader>
-          <CardContent class="p-3">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead class="hidden w-[100px] sm:table-cell">
-                    <span class="sr-only">img</span>
-                  </TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead class="text-center max-w-fit">Status</TableHead>
-                  <TableHead class="hidden md:table-cell"> Group</TableHead>
-                  <TableHead class="hidden md:table-cell"> Room</TableHead>
-                  <TableHead class="hidden md:table-cell"> Sensor</TableHead>
-                  <TableHead>
-                    <span class="sr-only">Actions</span>
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <SensorViewRow
-                  id="123"
-                  badge="active"
-                  badge-url="/sensor/123"
-                  group="Group 1"
-                  name="Sensor 1"
-                  room="Room 1"
-                  sensor="Sensor 1"
-                  url="/plant/123"
-                  @delete="openDeleteEntryDialog('id')"
-                />
-                <SensorViewRow
-                  id="123"
-                  badge="inactive"
-                  badge-url="/sensor/123"
-                  group="Group 1"
-                  name="Sensor 1"
-                  room="Room 1"
-                  sensor="Sensor 1"
-                  url="/plant/123"
-                  @delete="openDeleteEntryDialog('id')"
-                />
-                <SensorViewRow
-                  id="123"
-                  badge="unknown"
-                  badge-url="/sensor/123"
-                  group="Group 1"
-                  name="Sensor 1"
-                  room="Room 1"
-                  sensor="Sensor 1"
-                  url="/plant/123"
-                  @delete="openDeleteEntryDialog('id')"
-                />
-                <SensorViewRow
-                  v-for="x in 10"
-                  id="123"
-                  badge="error"
-                  badge-url="/sensor/123"
-                  group="Group 1 2348932894 9ß23849ß234 "
-                  name="Pflanze 1ewrewrwerwe wrwerwerwe "
-                  room="Room 1 428478937894 23u42i3u4 3840 "
-                  sensor="Sensor 1234234234324 234234234 234234234  "
-                  url="/plant/123"
-                  @delete="openDeleteEntryDialog('id')"
-                />
-              </TableBody>
-            </Table>
-          </CardContent>
-          <CardFooter>
-            <div class="text-xs text-muted-foreground">Showing <strong>32</strong> Plants</div>
-          </CardFooter>
-        </Card>
+        <TabsContent value="plants">
+          <Card>
+            <CardHeader>
+              <CardTitle>Plants</CardTitle>
+              <CardDescription> Manage your Plants</CardDescription>
+            </CardHeader>
+            <CardContent class="p-3">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead class="text-center max-w-fit">Status</TableHead>
+                    <TableHead class="hidden md:table-cell"> Group</TableHead>
+                    <TableHead class="hidden md:table-cell"> Room</TableHead>
+                    <TableHead class="hidden md:table-cell"> Sensor</TableHead>
+                    <TableHead>
+                      <span class="sr-only">Actions</span>
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <SensorViewRow
+                    v-for="item in flatPlantList"
+                    :id="item.plant.plantId"
+                    :group="item.group"
+                    :room="item.room"
+                    :plant = "item.plant"
+                    @delete="openDeleteEntryDialog(item.plant.plantId)"
+                  />
+
+
+                </TableBody>
+              </Table>
+            </CardContent>
+            <CardFooter>
+              <div class="text-xs text-muted-foreground">Showing <strong>32</strong> Plants</div>
+            </CardFooter>
+          </Card>
+        </TabsContent>
+        <TabsContent value="sensors">
+          <Card>
+            <CardHeader>
+              <CardTitle>Plants</CardTitle>
+              <CardDescription> Manage your Plants</CardDescription>
+            </CardHeader>
+            <CardContent class="p-3">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead class="hidden w-[100px] sm:table-cell">
+                      <span class="sr-only">img</span>
+                    </TableHead>
+                    <TableHead>Name</TableHead>
+                    <TableHead class="text-center max-w-fit">Status</TableHead>
+                    <TableHead class="hidden md:table-cell"> Group</TableHead>
+                    <TableHead class="hidden md:table-cell"> Room</TableHead>
+                    <TableHead class="hidden md:table-cell"> Sensor</TableHead>
+                    <TableHead>
+                      <span class="sr-only">Actions</span>
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody> </TableBody>
+              </Table>
+            </CardContent>
+            <CardFooter>
+              <div class="text-xs text-muted-foreground">Showing <strong>32</strong> Plants</div>
+            </CardFooter>
+          </Card>
+        </TabsContent>
       </Tabs>
     </main>
   </div>
