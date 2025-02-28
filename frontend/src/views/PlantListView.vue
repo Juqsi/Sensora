@@ -68,7 +68,7 @@ const filteredPlantList = computed(() => {
     )
     const matchesSearch =
       searchQuery.value.trim() === '' ||
-      item.plant.plantId.toLowerCase().includes(searchQuery.value.toLowerCase())
+      item.plant.name.toLowerCase().includes(searchQuery.value.toLowerCase())
 
     return matchesStatus && matchesSearch
   })
