@@ -31,11 +31,12 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { useI18n } from 'vue-i18n'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { useGroupStore } from '@/stores'
+import {useGroupStore, useRoomStore} from '@/stores'
 import type { Room } from '@/api'
 
 const { t } = useI18n()
 const groupStore = useGroupStore()
+const roomStore = useRoomStore()
 
 const model = defineModel<Room>()
 
@@ -51,9 +52,11 @@ const selectEntity = (entity: Room) => {
 
 const onCreateNewTeam = (event: Event) => {
   event.preventDefault()
-  console.log('New Team:', newTeamName.value, selectedGroup.value)
-
-  // Hier würdest du den neuen Raum im Store oder API anlegen
+  try {
+    roomStore.createRoom({name: newTeamName.value, groupId: selectedGroup.value})
+  }catch (e) {
+    console.log(e)
+  }
   showNewTeamDialog.value = false
   newTeamName.value = ''
   selectedGroup.value = ''
