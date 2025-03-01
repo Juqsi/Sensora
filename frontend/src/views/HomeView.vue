@@ -6,8 +6,12 @@ import { CirclePlus } from 'lucide-vue-next'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useI18n } from 'vue-i18n'
+import { useRoomStore } from '@/stores'
+import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 
 const { t } = useI18n()
+
+const roomStore = useRoomStore()
 
 interface Hint {
   id: string
@@ -24,6 +28,9 @@ const hints: Hint[] = [
   { id: '2', title: 'Hint 2', description: 'Another useful tip for you' },
   { id: '3', title: 'Hint 3', description: 'Don’t forget this one!' },
 ]
+usePullToRefresh(async () => {
+  await roomStore.fetchRooms(true)
+})
 </script>
 
 <template>
@@ -60,21 +67,15 @@ const hints: Hint[] = [
     </ScrollArea>
   </div>
 
-  <div class="w-full mt-2">
+  <div class="w-full mt-2" v-for="room in roomStore.rooms">
     <div class="flex justify-between items-center">
-      <h3 class="text-xl my-2 font-medium">Zimmer 1</h3>
+      <h3 class="text-xl my-2 font-medium">{{ room.name }}</h3>
       <Button :aria-label="t('home.addRoom')" size="icon" variant="default">
         <CirclePlus />
       </Button>
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-      <HomeCard
-        v-for="x in 10"
-        :alert="x % 5 == 0"
-        :connectionLost="x % 3 == 0"
-        :siren="x % 4 == 0"
-        :wrench="x % 3 == 0"
-      ></HomeCard>
+      <HomeCard v-for="plant in room.plants" :plant="plant"></HomeCard>
     </div>
   </div>
 </template>

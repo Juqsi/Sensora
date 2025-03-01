@@ -19,6 +19,7 @@ defineProps({
   alert: Boolean,
   siren: Boolean,
   wrench: Boolean,
+  plant: Object,
 })
 </script>
 

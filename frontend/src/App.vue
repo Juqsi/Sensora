@@ -12,7 +12,7 @@ const mode = useColorMode()
     <router-view />
   </div>
   <bottom-nav-bar v-if="$route.path !== '/signup' && $route.path !== '/signin'" />
-  <Toaster richColors :theme="mode === 'dark' ? 'dark' : 'light'" />
+  <Toaster position="top-center" richColors :theme="mode === 'dark' ? 'dark' : 'light'" />
 </template>
 
 <style scoped>

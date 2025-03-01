@@ -5,6 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/frontend/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/frontend/android" />
       <excludeFolder url="file://$MODULE_DIR$/frontend/node_modules" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/dist" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

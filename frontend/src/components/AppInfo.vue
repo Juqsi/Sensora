@@ -10,8 +10,16 @@ import {
   Users,
 } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
-import { useDeviceStore, useGroupStore, usePlantStore, useRoomStore, useUserStore } from '@/stores'
+import {
+  useAuthStore,
+  useDeviceStore,
+  useGroupStore,
+  usePlantStore,
+  useRoomStore,
+  useUserStore,
+} from '@/stores'
 
+const authStore = useAuthStore()
 const { t } = useI18n()
 
 const delteData = () => {
@@ -89,6 +97,7 @@ const delteData = () => {
   <Card class="w-full">
     <CardContent class="grid gap-1 py-2 px-6">
       <div
+        @click="authStore.logout()"
         class="-mx-2 flex items-center space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
       >
         <LogOut class="mt-px h-5 w-5" />

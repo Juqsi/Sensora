@@ -5,6 +5,7 @@ import i18n from '@/i18n'
 import type { CustomAxiosRequestConfig } from '@/api/apiClient.ts'
 import { useDeviceStore, useGroupStore, usePlantStore, useRoomStore, useUserStore } from '@/stores'
 import type { AxiosResponse } from 'axios'
+import router from '@/router'
 
 const t = i18n.global?.t || ((key: string) => key)
 
@@ -50,6 +51,7 @@ export const useAuthStore = defineStore('auth', {
       plantStore.clearData()
       roomStore.clearData()
       groupStore.clearData()
+      router.push('/signin')
     },
   },
   persist: {
