@@ -32,15 +32,15 @@ const plantStore = usePlantStore()
 const roomStore = useRoomStore()
 
 const name = ref<string>('')
-const selectedRoom = ref<Room>()
+const selectedRoom = ref<Room | undefined>()
 const selectedSensor = ref<Controller | null>(null)
 const plantType = ref<string>('')
 const selectedAvatar = ref<{ label: string; value: string } | null>(null)
 const note = ref<string>('')
 
 const createPlant = () => {
-  if (!selectedRoom.value) {
-    toast.warning(t('Please enter a valid room'))
+  if (selectedRoom.value === undefined || selectedRoom.value.rid === undefined) {
+    toast.warning(t('HIer Please enter a valid room'))
   }
   const newPlant: createPlantBody = {
     name: name.value,
@@ -65,18 +65,18 @@ const createPlant = () => {
       <div class="grid gap-4">
         <div class="grid gap-2">
           <Label for="room">{{ t('plant.settings.Room') }}</Label>
-          <RoomSelection id="room" :room="selectedRoom" />
+          <RoomSelection id="room" v-model:room="selectedRoom" />
         </div>
         <div class="grid gap-2">
           <Label for="sensor">{{ t('plant.settings.SelectSensor') }}</Label>
-          <Select id="sensor" :value="selectedSensor">
+          <Select id="sensor" v-model:value="selectedSensor">
             <SelectTrigger>
               <SelectValue :placeholder="t('plant.settings.SelectSensorPlaceholder')" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>{{ t('plant.settings.sensors') }}</SelectLabel>
-                <SelectItem v-for="device in deviceStore.devices" :value="device.did">
+                <SelectItem v-for="device in deviceStore.devices" v-model:value="device.did">
                   {{ device.did }}
                 </SelectItem>
               </SelectGroup>
@@ -106,7 +106,7 @@ const createPlant = () => {
           <SelectContent>
             <SelectGroup>
               <SelectLabel>{{ t('plant.settings.avatar') }}</SelectLabel>
-              <SelectItem v-for="avatar in plantAvatars" :value="avatar.value">
+              <SelectItem v-for="avatar in plantAvatars" v-model:value="avatar.value">
                 {{ avatar.label }}
               </SelectItem>
             </SelectGroup>
