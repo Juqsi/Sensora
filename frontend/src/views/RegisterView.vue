@@ -8,5 +8,5 @@ const nextStep = () => {
 </script>
 
 <template>
-  <CreateAccountStep :next-step="nextStep"> </CreateAccountStep>
+  <CreateAccountStep class="w-full" :next-step="nextStep"> </CreateAccountStep>
 </template>
