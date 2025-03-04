@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">sensora-ui</string>
-    <string name="title_activity_main">sensora-ui</string>
+    <string name="app_name">Sensora</string>
+    <string name="title_activity_main">Sensora</string>
     <string name="package_name">de.justilian.sensora.app</string>
     <string name="custom_url_scheme">de.justilian.sensora.app</string>
 </resources>

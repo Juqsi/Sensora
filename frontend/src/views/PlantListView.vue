@@ -293,7 +293,7 @@ usePullToRefresh(async () => {
             :title="t('plantList.emptyPlantTitle')"
             :condition="plantStore.plants.length === 0"
             :subtitle="t('plantList.emptyPlantSubtitle')"
-            img-src="../../public/svg/undraw_new-entries_xw4m.svg"
+            img-src="/svg/undraw_new-entries_xw4m.svg"
           />
         </TabsContent>
 
@@ -353,7 +353,7 @@ usePullToRefresh(async () => {
             :title="t('sensorList.emptySensorTitle')"
             :condition="deviceStore.devices.length === 0"
             :subtitle="t('sensorList.emptySensorSubtitle')"
-            img-src="../../public/svg/undraw_new-entries_xw4m.svg"
+            img-src="/svg/undraw_new-entries_xw4m.svg"
           />
         </TabsContent>
       </Tabs>

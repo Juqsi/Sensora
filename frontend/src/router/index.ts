@@ -60,6 +60,12 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: '/sensor/:id',
+      name: 'SingleSensor',
+      component: () => import('../views/SingelSensorView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/setupAccount',
       name: 'Setup Account',
       component: () => import('../views/AccountCompletionView.vue'),

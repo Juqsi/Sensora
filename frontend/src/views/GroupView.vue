@@ -70,6 +70,6 @@ usePullToRefresh(async () => {
     :title="t('group.emptyGroupTitle')"
     :condition="groupStore.groups.length === 0"
     :subtitle="t('group.emptyGroupSubtitle')"
-    img-src="../../public/svg/undraw_social-sharing_t073.svg"
+    img-src="/svg/undraw_social-sharing_t073.svg"
   />
 </template>

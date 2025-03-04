@@ -10,7 +10,7 @@ const { t } = useI18n()
     :title="t('404view.title')"
     :condition="true"
     :subtitle="t('404view.subtitle')"
-    img-src="../../public/svg/undraw_page-not-found_6wni.svg"
+    img-src="/svg/undraw_page-not-found_6wni.svg"
   />
 </template>
 

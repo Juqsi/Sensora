@@ -81,6 +81,6 @@ usePullToRefresh(async () => {
     :title="t('home.emptyRoomsTitle')"
     :condition="roomStore.rooms.length === 0"
     :subtitle="t('home.emptyRoomsSubtitle')"
-    img-src="../../public/svg/undraw_complete-design_pzh6.svg"
+    img-src="/svg/undraw_complete-design_pzh6.svg"
   />
 </template>

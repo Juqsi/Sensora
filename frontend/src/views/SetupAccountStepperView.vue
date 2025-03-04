@@ -15,7 +15,7 @@ const { t } = useI18n()
 const stepIndex = ref(2)
 
 const nextStep = () => {
-  if (stepIndex.value < 3) {
+  if (stepIndex.value < 4) {
     stepIndex.value++
   }
 }

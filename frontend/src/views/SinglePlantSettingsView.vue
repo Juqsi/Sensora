@@ -58,7 +58,6 @@ const loadPlantDetails = async () => {
     }
   } catch (error) {
     console.error('Fehler beim Laden der Pflanzendetails:', error)
-    toast.error('Fehler beim Laden der Pflanzendetails - console')
   }
 }
 

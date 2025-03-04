@@ -81,7 +81,9 @@ const delteData = () => {
       >
         <Info class="mt-px h-5 w-5" />
         <div class="space-y-1">
-          <p class="text-md leading-none">{{ t('profile.AboutUs') }}</p>
+          <router-link to="/aboutus">
+            <p class="text-md leading-none">{{ t('profile.AboutUs') }}</p>
+          </router-link>
         </div>
       </div>
       <div

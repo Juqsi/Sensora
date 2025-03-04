@@ -8,11 +8,7 @@ const { t, tm, rt } = useI18n()
   <div class="flex flex-col items-center py-12">
     <!-- Logo Section -->
     <div class="mb-8">
-      <img
-        src="../../public/logo/icon.webp"
-        alt="Project Logo"
-        class="w-32 h-32 object-contain mx-auto"
-      />
+      <img src="/logo/icon.webp" alt="Project Logo" class="w-32 h-32 object-contain mx-auto" />
     </div>
 
     <!-- Project Info Section -->

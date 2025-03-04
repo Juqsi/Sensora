@@ -184,7 +184,6 @@
       "Logging of past watering actions",
       "Remote access via web interface",
       "Sensor integration for soil moisture, temperature, humidity, and brightness",
-      "Use of weather forecasts to adjust watering times",
       "Notification system (Email) for watering and system errors"
     ],
     "technologiesTitle": "Technologies We Use",
