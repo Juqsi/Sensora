@@ -77,6 +77,11 @@ const router = createRouter({
       component: () => import('../views/SinglePlantSettingsView.vue'),
       meta: { requiresAuth: true },
     },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: () => import('../views/404view.vue'), // Deine 404-Komponente
+    },
   ],
 })
 

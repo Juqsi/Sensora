@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useI18n } from 'vue-i18n'
 import { useRoomStore, useUserStore } from '@/stores'
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
+import EmtyState from '@/components/EmtyState.vue'
 
 const { t } = useI18n()
 
@@ -76,18 +77,10 @@ usePullToRefresh(async () => {
       <HomeCard v-for="plant in room.plants" :plant="plant"></HomeCard>
     </div>
   </div>
-  <div
-    class="flex justify-center flex-col items-center w-full flex-grow mt-10 py-6"
-    v-if="roomStore.rooms.length === 0"
-  >
-    <h2 class="mb-4 text-2xl font-semibold text-center">Create Your First Room</h2>
-    <p class="text-center text-gray-600 mb-6">
-      Start by creating your first room and add a plant to get started.
-    </p>
-    <img
-      class="w-32 h-32 object-contain mb-8"
-      src="../../public/svg/undraw_complete-design_pzh6.svg"
-      alt="Create group illustration"
-    />
-  </div>
+  <EmtyState
+    :title="t('home.emptyRoomsTitle')"
+    :condition="roomStore.rooms.length === 0"
+    :subtitle="t('home.emptyRoomsSubtitle')"
+    img-src="../../public/svg/undraw_complete-design_pzh6.svg"
+  />
 </template>

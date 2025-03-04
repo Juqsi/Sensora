@@ -14,6 +14,7 @@ import CreateGroupComponent from '@/components/CreateGroupComponent.vue'
 import GroupRoomCard from '@/components/GroupRoomCard.vue'
 import GroupCard from '@/components/GroupCard.vue'
 import { CirclePlus } from 'lucide-vue-next'
+import EmtyState from '@/components/EmtyState.vue'
 
 const groupStore = useGroupStore()
 const { t } = useI18n()
@@ -65,16 +66,10 @@ usePullToRefresh(async () => {
       </Card>
     </AccordionItem>
   </Accordion>
-  <div
-    class="flex justify-center flex-col items-center w-full flex-grow mt-20 py-6"
-    v-if="groupStore.groups.length === 0"
-  >
-    <h2 class="mb-4 text-2xl font-semibold text-center">Create Your First Group</h2>
-    <p class="text-center text-gray-600 mb-6">Start by creating your first group to get started.</p>
-    <img
-      class="w-32 h-32 object-contain mb-8"
-      src="../../public/svg/undraw_social-sharing_t073.svg"
-      alt="Create group illustration"
-    />
-  </div>
+  <EmtyState
+    :title="t('group.emptyGroupTitle')"
+    :condition="groupStore.groups.length === 0"
+    :subtitle="t('group.emptyGroupSubtitle')"
+    img-src="../../public/svg/undraw_social-sharing_t073.svg"
+  />
 </template>

@@ -1,0 +1,35 @@
+<script setup>
+import { defineProps } from 'vue'
+
+const props = defineProps({
+  imgSrc: {
+    type: String,
+    required: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  subtitle: {
+    type: String,
+    required: true,
+  },
+  condition: {
+    type: Boolean,
+    required: true,
+  },
+})
+</script>
+
+<template>
+  <div
+    class="flex justify-center flex-col items-center w-full flex-grow mt-10 py-6"
+    v-if="condition"
+  >
+    <h2 class="mb-4 text-2xl font-semibold text-center">{{ title }}</h2>
+    <p class="text-center text-gray-600 mb-6">{{ subtitle }}</p>
+    <img class="w-32 h-32 object-contain mb-8" :src="imgSrc" alt="Illustration" />
+  </div>
+</template>
+
+<style scoped></style>

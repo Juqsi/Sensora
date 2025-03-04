@@ -92,7 +92,9 @@
         "cancel": "Cancel",
         "confirm": "Remove"
       }
-    }
+    },
+    "emptyGroupTitle": "Create Your First Group",
+    "emptyGroupSubtitle": "Start by creating your first group to get started."
   },
   "user": {
     "updated": "User successfully updated!",
@@ -152,6 +154,20 @@
   },
   "home": {
     "welcome": "Hello {name}!",
-    "subtitle": "Overview of all rooms"
+    "subtitle": "Overview of all rooms",
+    "emptyRoomsSubtitle" : "Start by creating your first room and add a plant to get started.",
+    "emptyRoomsTitle" : "Create Your First Room"
+  },
+  "404view": {
+    "title": "404 - Page Not Found",
+    "subtitle": "The requested page does not exist."
+  },
+  "plantList": {
+    "emptyPlantTitle": "Create Your First Plant",
+    "emptyPlantSubtitle": "Create a plant so you can start collecting data with Sensora."
+  },
+  "sensorList": {
+    "emptySensorTitle": "Add Your First Sensor",
+    "emptySensorSubtitle": "Add a sensor through your profile to start using it."
   }
 }

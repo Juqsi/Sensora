@@ -92,7 +92,9 @@
         "cancel": "Abbrechen",
         "confirm": "Entfernen"
       }
-    }
+    },
+    "emptyGroupTitle": "Erstellen Sie Ihre erste Gruppe",
+    "emptyGroupSubtitle": "Beginnen Sie damit, Ihre erste Gruppe zu erstellen, um loszulegen."
   },
   "user": {
     "updated": "Benutzer erfolgreich aktualisiert!",
@@ -152,13 +154,20 @@
   },
   "home": {
     "welcome": "Hallo {name}!",
-    "subtitle": "Überblick über deine Räume"
+    "subtitle": "Überblick über deine Räume",
+    "emptyRoomsSubtitle": "Beginnen Sie damit, Ihren ersten Raum zu erstellen und eine Pflanze hinzuzufügen, um loszulegen.",
+    "emptyRoomsTitle": "Erstellen Sie Ihren ersten Raum"
   },
-  "customizations": {
-    "jetbrains": {
-      "settings": {
-        "com.intellij:app:HttpConfigurable.use_proxy_pac": true
-      }
-    }
+  "404view":{
+    "title": "404 - Seite nicht gefunden",
+    "subtitle" : "Die angeforderte Seite existiert nicht."
+  },
+  "plantList": {
+    "emptyPlantTitle": "Erstell deine erste Pflanze hinzu",
+    "emptyPlantSubtitle": "Erstell eine Pflanze damit du mit Sensora die Daten erfassen kannst."
+  },
+  "sensorList": {
+    "emptySensorTitle": "Füg deinen ersten Sensor hinzu",
+    "emptySensorSubtitle": "Füg einen Sensor über dein Profil hinzu um ihn zu benutzen."
   }
 }

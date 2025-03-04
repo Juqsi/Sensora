@@ -44,6 +44,10 @@ import {
 import { computed, ref } from 'vue'
 import { useDeviceStore, useGroupStore, usePlantStore } from '@/stores'
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
+import EmtyState from '@/components/EmtyState.vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const groupStore = useGroupStore()
 const deviceStore = useDeviceStore()
@@ -285,6 +289,12 @@ usePullToRefresh(async () => {
               </div>
             </CardFooter>
           </Card>
+          <EmtyState
+            :title="t('plantList.emptyPlantTitle')"
+            :condition="plantStore.plants.length === 0"
+            :subtitle="t('plantList.emptyPlantSubtitle')"
+            img-src="../../public/svg/undraw_new-entries_xw4m.svg"
+          />
         </TabsContent>
 
         <TabsContent value="sensors">
@@ -339,6 +349,12 @@ usePullToRefresh(async () => {
               </div>
             </CardFooter>
           </Card>
+          <EmtyState
+            :title="t('sensorList.emptySensorTitle')"
+            :condition="deviceStore.devices.length === 0"
+            :subtitle="t('sensorList.emptySensorSubtitle')"
+            img-src="../../public/svg/undraw_new-entries_xw4m.svg"
+          />
         </TabsContent>
       </Tabs>
     </main>
