@@ -26,8 +26,13 @@ export function usePullToRefresh(callback: () => Promise<void>) {
 
   const onPull = async () => {
     isRefreshing.value = true
-    await callback()
-    isRefreshing.value = false
+    try {
+      await callback()
+    } catch (error) {
+      console.error('Fehler beim Aktualisieren:', error)
+    } finally {
+      isRefreshing.value = false
+    }
   }
 
   onMounted(() => {

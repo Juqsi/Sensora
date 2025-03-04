@@ -149,5 +149,16 @@
       "Avatar1": "Avatar 1",
       "Avatar2": "Avatar 2"
     }
+  },
+  "home": {
+    "welcome": "Hallo {name}!",
+    "subtitle": "Überblick über deine Räume"
+  },
+  "customizations": {
+    "jetbrains": {
+      "settings": {
+        "com.intellij:app:HttpConfigurable.use_proxy_pac": true
+      }
+    }
   }
 }

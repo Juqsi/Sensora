@@ -42,10 +42,12 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog/index.ts'
 import { computed, ref } from 'vue'
-import { useDeviceStore, useGroupStore } from '@/stores'
+import { useDeviceStore, useGroupStore, usePlantStore } from '@/stores'
+import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 
 const groupStore = useGroupStore()
 const deviceStore = useDeviceStore()
+const plantStore = usePlantStore()
 
 const searchQuery = ref('')
 
@@ -142,10 +144,13 @@ const openDeleteEntryDialog = (id: string) => {
 }
 const deleteEntry = () => {
   alertDialog.value = false
-  console.log('Deleting entry with id:', deleteEntryId.value)
+  plantStore.deletePlant(deleteEntryId.value)
   deleteEntryId.value = ''
-  //TODO delete entry
 }
+usePullToRefresh(async () => {
+  await groupStore.fetchGroups(true)
+  await deviceStore.fetchDevices(true)
+})
 </script>
 
 <template>

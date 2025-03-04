@@ -76,7 +76,7 @@ const createPlant = () => {
     const newPlant: createPlantBody = {
       name: name.value,
       room: selectedRoom.value!.rid,
-      controllers: [selectedSensor.value as Controller],
+      controllers: selectedSensor.value ? [selectedSensor.value as Controller] : [],
       plantType: plantType.value,
       avatarId: selectedAvatar.value?.value,
       note: note.value,
@@ -90,7 +90,7 @@ const createPlant = () => {
     const editPlant: updatePlantBody = {
       name: name.value,
       room: selectedRoom.value!.rid,
-      controllers: [selectedSensor.value as Controller],
+      controllers: selectedSensor.value ? [selectedSensor.value as Controller] : [],
       plantType: plantType.value,
       avatarId: selectedAvatar.value?.value,
       note: note.value,

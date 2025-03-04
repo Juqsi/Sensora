@@ -1,17 +1,16 @@
 <script lang="ts" setup>
 import HomeCard from '@/components/HomeCard.vue'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { CirclePlus } from 'lucide-vue-next'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useI18n } from 'vue-i18n'
-import { useRoomStore } from '@/stores'
+import { useRoomStore, useUserStore } from '@/stores'
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 
 const { t } = useI18n()
 
 const roomStore = useRoomStore()
+const userStore = useUserStore()
 
 interface Hint {
   id: string
@@ -36,12 +35,14 @@ usePullToRefresh(async () => {
 <template>
   <div class="w-full flex justify-between mt-4">
     <div>
-      <h1 class="font-bold text-3xl">Hello Justus 👋</h1>
-      <p class="text-sm text-muted-foreground">Overview of all rooms</p>
+      <h1 class="font-bold text-3xl">
+        {{ t('home.welcome', { name: userStore.user?.firstname as string }) }} 👋
+      </h1>
+      <p class="text-sm text-muted-foreground">{{ t('home.subtitle') }}</p>
     </div>
     <Avatar>
       <AvatarImage
-        alt="Justus Siegert"
+        alt="profile Picture"
         src="https://avatars.githubusercontent.com/u/91261422?v=4&size=64"
       />
       <AvatarFallback>JS</AvatarFallback>
@@ -70,12 +71,23 @@ usePullToRefresh(async () => {
   <div class="w-full mt-2" v-for="room in roomStore.rooms">
     <div class="flex justify-between items-center">
       <h3 class="text-xl my-2 font-medium">{{ room.name }}</h3>
-      <Button :aria-label="t('home.addRoom')" size="icon" variant="default">
-        <CirclePlus />
-      </Button>
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
       <HomeCard v-for="plant in room.plants" :plant="plant"></HomeCard>
     </div>
+  </div>
+  <div
+    class="flex justify-center flex-col items-center w-full flex-grow mt-10 py-6"
+    v-if="roomStore.rooms.length === 0"
+  >
+    <h2 class="mb-4 text-2xl font-semibold text-center">Create Your First Room</h2>
+    <p class="text-center text-gray-600 mb-6">
+      Start by creating your first room and add a plant to get started.
+    </p>
+    <img
+      class="w-32 h-32 object-contain mb-8"
+      src="../../public/svg/undraw_complete-design_pzh6.svg"
+      alt="Create group illustration"
+    />
   </div>
 </template>

@@ -13,6 +13,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import CreateGroupComponent from '@/components/CreateGroupComponent.vue'
 import GroupRoomCard from '@/components/GroupRoomCard.vue'
 import GroupCard from '@/components/GroupCard.vue'
+import { CirclePlus } from 'lucide-vue-next'
 
 const groupStore = useGroupStore()
 const { t } = useI18n()
@@ -48,7 +49,17 @@ usePullToRefresh(async () => {
           </CardContent>
         </AccordionContent>
         <CardFooter class="grid grid-cols-1">
-          <p class="pb-4 pl-2 text-xl font-medium">Räume</p>
+          <div class="flex justify-between items-center">
+            <h3 class="text-xl pl-3 my-2 font-medium">Räume</h3>
+            <Button
+              class="text-primary"
+              :aria-label="t('group.addRoom')"
+              size="icon"
+              variant="default"
+            >
+              <CirclePlus class="w-5" />
+            </Button>
+          </div>
           <GroupRoomCard :group="group"></GroupRoomCard>
         </CardFooter>
       </Card>

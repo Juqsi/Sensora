@@ -149,5 +149,9 @@
       "Avatar1": "Avatar 1",
       "Avatar2": "Avatar 2"
     }
+  },
+  "home": {
+    "welcome": "Hello {name}!",
+    "subtitle": "Overview of all rooms"
   }
 }

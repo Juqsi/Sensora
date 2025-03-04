@@ -65,15 +65,36 @@ apiClient.interceptors.response.use(
       toast.dismiss()
     }
 
-    let errorMessage = ''
+    let errorMessage: string
 
     if (!error.response) {
       errorMessage = t('errors.networkError')
     } else {
+      const statusCode = error.response.status
       const errorCode = error?.response?.data?.code
-      const defaultErrorMessage = errorCode
+      let defaultErrorMessage = errorCode
         ? t(`errors.${errorCode}`, t('errors.unknownError'))
         : t('errors.unknownError')
+
+      switch (statusCode) {
+        case 400:
+          defaultErrorMessage = t('errors.badRequest')
+          break
+        case 401:
+          const authStore = useAuthStore()
+          defaultErrorMessage = t('errors.unauthorized')
+          authStore.logout()
+          break
+        case 403:
+          defaultErrorMessage = t('errors.forbidden')
+          break
+        case 404:
+          defaultErrorMessage = t('errors.notFound')
+          break
+        case 500:
+          defaultErrorMessage = t('errors.serverError')
+          break
+      }
 
       errorMessage = customConfig?.meta?.errorMessage || defaultErrorMessage
     }
