@@ -169,5 +169,33 @@
   "sensorList": {
     "emptySensorTitle": "Add Your First Sensor",
     "emptySensorSubtitle": "Add a sensor through your profile to start using it."
+  },
+  "about": {
+    "title": "About Us",
+    "description": "We are a team of students working on our final project to create a smart irrigation system. The goal is to automate and optimize plant watering for households, making plant care easier and more efficient.",
+    "teamTitle": "Our Team",
+    "teamMembers": ["Max", "Lukas", "Fynn", "Timon", "Justus"],
+    "projectGoalTitle": "Project Goal",
+    "projectGoalDescription": "The goal of this project is to develop a smart irrigation system that allows efficient and automated watering of plants. The system should be flexible and allow users to configure watering times, amounts, and have remote access via a web interface.",
+    "featuresTitle": "Key Features:",
+    "featuresList": [
+      "Automated watering system based on sensor data",
+      "Flexible configuration of watering times and amounts",
+      "Logging of past watering actions",
+      "Remote access via web interface",
+      "Sensor integration for soil moisture, temperature, humidity, and brightness",
+      "Use of weather forecasts to adjust watering times",
+      "Notification system (Email) for watering and system errors"
+    ],
+    "technologiesTitle": "Technologies We Use",
+    "technologiesList": [
+      "Frontend: Vue.js with TypeScript, Tailwind CSS",
+      "Backend: Rust (BFF), Python microservices for sensor data and email validation",
+      "Microcontrollers: ESP32 with sensors (temperature, humidity, soil moisture, brightness), pump",
+      "Communication: Solace messaging between microcontrollers and microservices"
+    ],
+    "outcomeTitle": "Project Outcome",
+    "outcomeDescription": "By the end of the project, we will have a fully functional prototype of the smart irrigation system, capable of controlling watering remotely, logging watering actions, and providing detailed sensor readings.",
+    "githubLink": "https://github.com/Juqsi/Sensora"
   }
 }

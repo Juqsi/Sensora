@@ -18,6 +18,7 @@ import {
   useRoomStore,
   useUserStore,
 } from '@/stores'
+import { toast } from 'vue-sonner'
 
 const authStore = useAuthStore()
 const { t } = useI18n()
@@ -33,7 +34,7 @@ const delteData = () => {
   plantStore.clearData()
   roomStore.clearData()
   groupStore.clearData()
-  alert('Daten gelöscht')
+  toast.success('Cache gelöscht')
 }
 </script>
 

@@ -169,5 +169,33 @@
   "sensorList": {
     "emptySensorTitle": "Füg deinen ersten Sensor hinzu",
     "emptySensorSubtitle": "Füg einen Sensor über dein Profil hinzu um ihn zu benutzen."
+  },
+  "about": {
+    "title": "Über uns",
+    "description": "Wir sind ein Team von Studierenden, das an unserem Abschlussprojekt arbeitet, um ein smartes Bewässerungssystem zu entwickeln. Das Ziel ist es, die Pflanzenbewässerung für Haushalte zu automatisieren und zu optimieren, wodurch die Pflanzenpflege einfacher und effizienter wird.",
+    "teamTitle": "Unser Team",
+    "teamMembers": ["Max", "Lukas", "Fynn", "Timon", "Justus"],
+    "projectGoalTitle": "Projektziel",
+    "projectGoalDescription": "Das Ziel dieses Projekts ist es, ein smartes Bewässerungssystem zu entwickeln, das eine effiziente und automatisierte Bewässerung von Pflanzen ermöglicht. Das System sollte flexibel sein und den Nutzern erlauben, Bewässerungszeiten und -mengen zu konfigurieren und über eine Web-Oberfläche auf das System zuzugreifen.",
+    "featuresTitle": "Hauptfunktionen:",
+    "featuresList": [
+      "Automatisiertes Bewässerungssystem basierend auf Sensordaten",
+      "Flexible Konfiguration der Bewässerungszeiten und -mengen",
+      "Protokollierung vergangener Bewässerungsaktionen",
+      "Fernzugriff über Web-Oberfläche",
+      "Sensorintegration für Bodenfeuchtigkeit, Temperatur, Luftfeuchtigkeit und Helligkeit",
+      "Verwendung von Wettervorhersagen zur Anpassung der Bewässerungszeiten",
+      "Benachrichtigungssystem (E-Mail) für Bewässerung und Systemfehler"
+    ],
+    "technologiesTitle": "Verwendete Technologien",
+    "technologiesList": [
+      "Frontend: Vue.js mit TypeScript, Tailwind CSS",
+      "Backend: Rust (BFF), Python-Microservices für Sensordaten und E-Mail-Validierung",
+      "Microcontroller: ESP32 mit Sensoren (Temperatur, Luftfeuchtigkeit, Bodenfeuchtigkeit, Helligkeit), Pumpe",
+      "Kommunikation: Solace Messaging zwischen Microcontrollern und Microservices"
+    ],
+    "outcomeTitle": "Projektergebnis",
+    "outcomeDescription": "Am Ende des Projekts werden wir einen voll funktionsfähigen Prototyp des smarten Bewässerungssystems haben, der die Bewässerung aus der Ferne steuern, vergangene Bewässerungsaktionen protokollieren und detaillierte Sensordaten bereitstellen kann.",
+    "githubLink": "https://github.com/Juqsi/Sensora"
   }
 }
