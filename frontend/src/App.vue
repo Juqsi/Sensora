@@ -3,8 +3,17 @@ import { RouterView } from 'vue-router'
 import BottomNavBar from '@/components/BottomNavBar.vue'
 import { Toaster } from 'vue-sonner'
 import { useColorMode } from '@vueuse/core'
+import { App as CapacitorApp } from '@capacitor/app'
 
 const mode = useColorMode()
+
+CapacitorApp.addListener('backButton', ({ canGoBack }) => {
+  if (!canGoBack) {
+    CapacitorApp.exitApp()
+  } else {
+    window.history.back()
+  }
+})
 </script>
 
 <template>
