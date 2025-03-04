@@ -34,7 +34,7 @@ usePullToRefresh(async () => {
       v-for="group in groupStore.groups"
       :key="group.gid"
       :value="group.gid"
-      class="mb-4"
+      class="mb-4 rounded-lg"
     >
       <Card>
         <AccordionTrigger class="p-2 text-left pr-6">
