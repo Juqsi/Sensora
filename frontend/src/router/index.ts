@@ -71,6 +71,12 @@ const router = createRouter({
       component: () => import('../views/GroupView.vue'),
       meta: { requiresAuth: true },
     },
+    {
+      path: '/newplant',
+      name: 'createPlant',
+      component: () => import('../views/SinglePlantSettingsView.vue'),
+      meta: { requiresAuth: true },
+    },
   ],
 })
 

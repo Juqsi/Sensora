@@ -1,13 +1,12 @@
 <script lang="ts" setup>
 import { CardContent, CardFooter } from '@/components/ui/card'
-import { Label } from '@/components/ui/label/index.ts'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input/index.ts'
 import { Textarea } from '@/components/ui/textarea/index.ts'
 import { useI18n } from 'vue-i18n'
 import RoomSelection from '@/components/RoomSelection.vue'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import NavCard from '@/components/NavCard.vue'
 import { useDeviceStore, usePlantStore, useRoomStore } from '@/stores'
 import {
@@ -20,36 +19,87 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { plantAvatars } from '@/components/plant3d/plantAvatars'
-import { type Controller, type createPlantBody, type Room } from '@/api'
+import { type Controller, type createPlantBody, type Room, type updatePlantBody } from '@/api'
 import { toast } from 'vue-sonner'
 
 const router = useRouter()
+const route = useRoute()
+
 const { t } = useI18n()
 
 const deviceStore = useDeviceStore()
+const roomStore = useRoomStore()
 const plantStore = usePlantStore()
 
-const roomStore = useRoomStore()
-
 const name = ref<string>('')
-const selectedRoom = ref<Room | undefined>()
+const selectedRoom = ref<Room | undefined>(undefined)
 const selectedSensor = ref<Controller | null>(null)
 const plantType = ref<string>('')
 const selectedAvatar = ref<{ label: string; value: string } | null>(null)
 const note = ref<string>('')
 
+const loadPlantDetails = async () => {
+  try {
+    const editPlant = await plantStore.getPlantDetails(route.params.id as string)
+
+    if (editPlant) {
+      name.value = editPlant?.name ?? ''
+      selectedRoom.value = (await roomStore.getRoomDetails(editPlant?.room as string)) ?? undefined
+      selectedSensor.value = editPlant?.controllers[0] ?? null
+      plantType.value = editPlant?.plantType ?? ''
+
+      const avatar = plantAvatars.find((avatar) => avatar.value === (editPlant?.avatarId ?? ''))
+      selectedAvatar.value =
+        avatar && avatar.label !== '' && avatar.value !== ''
+          ? { label: avatar.label, value: avatar.value }
+          : null
+
+      note.value = editPlant?.note ?? ''
+    }
+  } catch (error) {
+    console.error('Fehler beim Laden der Pflanzendetails:', error)
+    toast.error('Fehler beim Laden der Pflanzendetails - console')
+  }
+}
+
+onMounted(() => {
+  if (route.params.id !== undefined) {
+    loadPlantDetails()
+  }
+})
+
 const createPlant = () => {
   if (selectedRoom.value === undefined || selectedRoom.value.rid === undefined) {
     toast.warning(t('HIer Please enter a valid room'))
   }
-  const newPlant: createPlantBody = {
-    name: name.value,
-    room: selectedRoom.value!.rid,
-  }
-  try {
-    plantStore.createPlant(newPlant)
-  } catch (error) {
-    console.log(error)
+  if (route.params.id === undefined) {
+    const newPlant: createPlantBody = {
+      name: name.value,
+      room: selectedRoom.value!.rid,
+      controllers: [selectedSensor.value as Controller],
+      plantType: plantType.value,
+      avatarId: selectedAvatar.value?.value,
+      note: note.value,
+    }
+    try {
+      plantStore.createPlant(newPlant)
+    } catch (error) {
+      console.log(error)
+    }
+  } else {
+    const editPlant: updatePlantBody = {
+      name: name.value,
+      room: selectedRoom.value!.rid,
+      controllers: [selectedSensor.value as Controller],
+      plantType: plantType.value,
+      avatarId: selectedAvatar.value?.value,
+      note: note.value,
+    }
+    try {
+      plantStore.updatePlant(route.params.id as string, editPlant)
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 </script>

@@ -234,11 +234,12 @@ const deleteEntry = () => {
                 </form>
               </DropdownMenuContent>
             </DropdownMenu>
-
-            <Button class="h-7 gap-1" size="sm">
-              <PlusCircle class="h-3.5 w-3.5" />
-              <span class="sr-only sm:not-sr-only sm:whitespace-nowrap"> Add Plant </span>
-            </Button>
+            <router-link to="/newPlant">
+              <Button class="h-7 gap-1" size="sm">
+                <PlusCircle class="h-3.5 w-3.5" />
+                <span class="sr-only sm:not-sr-only sm:whitespace-nowrap"> Add Plant </span>
+              </Button>
+            </router-link>
           </div>
         </div>
         <TabsContent value="plants">
