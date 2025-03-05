@@ -1,0 +1,23 @@
+# PostgreSQL Hier müssen die tatsächlichen credentials und params der datenbank eingetragen werden!
+DB_NAME=sensora
+DB_USER=postgres
+DB_PASS=postgres
+DB_HOST=host.docker.internal
+DB_PORT=5432
+
+# SMTP (E-Mail-Versand)
+SMTP_USER=SensoraMailVerify@gmail.com
+SMTP_PASS= # Message Fynn Thierling for smtp credentials
+
+# Mailservice
+DATABASE_URL=postgresql://postgres:postgres@host.docker.internal/sensora
+SERVER_HOST=http://192.168.0.86:8000 # live dann-> https://fynnsmailservice.maxtar.de
+
+# Solace
+SOLACE_HOST=tcp://solace:55555
+Solcae_Host_SEMP=http://solace:8080
+SOLACE_VPN=default
+SOLACE_USER=#you can create users here
+SOLACE_PASS=#user pwd here
+SOLACE_ADMIN_USER=admin
+SOLACE_ADMIN_PASS=#setze hier ein admin pwd

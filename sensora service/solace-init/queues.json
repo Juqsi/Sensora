@@ -1,0 +1,38 @@
+{
+    "queues": [
+      {
+        "queueName": "sensor_data",
+        "ingressEnabled": true,
+        "egressEnabled": true,
+        "accessType": "exclusive",
+        "permission": "consume",
+        "subscriptions": [
+          {
+            "subscriptionTopic": "sensor/data"
+          },
+          {
+            "subscriptionTopic": "sensor/status"
+          },
+          {
+            "subscriptionTopic": "sensor/data/>"
+          },
+          {
+            "subscriptionTopic": "sensor/status/>"
+          }
+        ]
+      },
+      {
+        "queueName": "sensor_setpoints",
+        "ingressEnabled": true,
+        "egressEnabled": true,
+        "accessType": "exclusive",
+        "permission": "consume",
+        "subscriptions": [
+          {
+            "subscriptionTopic": "sensor/setpoints/>"
+          }
+        ]
+      }
+    ]
+  }
+  

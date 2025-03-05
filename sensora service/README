@@ -1,0 +1,38 @@
+Dieses Docker Netzwerk stellt die Grundstruktur für drei services bereit und konfiguriert Solace für die Sensora App. Dies ist noch nicht Final und stell nur die testing Grundlage dar und lässt sich bezüglich weiterer schnittstellen zwischen datenbank und solace einfach erweitern und anpssen.
+
+1. Mailservice API-> ermöglicht dem Backend über eine REST schnittstelle Verifikations Mails an Nutzer zu schicken. Soweit fertig.
+2. Databasewriter-> liest werte aus solace queues und schreibt sie in die Datenbank
+    -> aktuell nur sensor werte ist aber flexibel erweiterbar auf andere Queues und werte.
+3. setpoint_api-> ermöglicht dem Backend über eine REST Schnittstelle commands an einzelne sensoren und controller zu senden
+    -> aktuell nur Sollwerte für Sensoren, ist aber sehr einfach erweiterbar auf weitere commands
+4. solace-init-> konfiguriert nutzer, queues und subscriptions in solace per SEMP
+
+
+PREPARATION:
+1. create the .env file according to the structure in env_struct (Message Fynn Thierling for smtp credentials)
+2. Verify that the databse is running and reachable for the docker network (also put the right credentials into the .env) 
+    ->for testing purposes you can use the "psql -U postgres -h localhost -f "<patho to this script>\sensora service\database_setup.sql"" then you cann execute the dummy data script to fill few datapoints. 
+3. For lokal testing of the mail service you need to change the ip adresses in the .env to your device for production on the server the reverse proxy should handle the connection to "localhost:8000"
+
+
+START SERVICES:
+1. start solace via the docker compose file (just solace not the whole file)-> wait till it is completely running and you cann sign in in the UI
+2. start solace init via the docker compose file (just this service)
+3. start the rest of the services
+
+TESTING:
+1. you can use your Browser on  localhost:8000 to test the endpoints via a UI 
+    -> you need to create a user in the database with the mail adress you want to test, then execute the verify endpoint.
+    -> a verification mail should be send to the mail adress, when the link is klicked the flag in the databses should be changed from f to t
+
+2. to test the setpooint api you can just use: "curl.exe -X POST http://localhost:5000/sollwert -H "Content-Type: application/json" -d '{\"sensor_id\":\"sensor123\",\"sollwert\":42.5}'"
+    -> then verify that the value is queued in the solace UI on port 8080 in the queue setpoint_values
+
+3. you can either use a real mqtt input or use the databasewriter_test.py to queue some sample values in sensor_data and see if the database writer inserts those values into the database
+    -> You may need to change some parameters there if you are on another operating system/version
+
+
+
+
+
+

@@ -1,0 +1,51 @@
+
+services:
+  mailservice:
+    build: ./mailservice
+    container_name: mailservice
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+
+  databasewriter:
+    build: ./databasewriter
+    container_name: databasewriter
+    env_file:
+      - .env
+
+  setpointapi:
+    build: ./setpointapi
+    container_name: setpointapi
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+
+
+  solace:
+    image: solace/solace-pubsub-standard:latest
+    container_name: solace
+    ports:
+      - "55555:55555"
+      - "8080:8080"
+      - "8008:8008"
+      - "1883:1883"
+      - "5672:5672"
+      - "9000:9000"
+      - "2222:22"
+    environment:
+      - username_admin_globalaccesslevel=${SOLACE_ADMIN_USER}
+      - username_admin_password=${SOLACE_ADMIN_PASS}
+    ulimits:
+      nofile:
+        soft: 2448
+        hard: 6592
+    shm_size: 2g
+
+  solace-init:
+    build: ./solace-init
+    environment:
+      - SOLACE_USER=${SOLACE_ADMIN_USER}
+      - SOLACE_PASS=${SOLACE_ADMIN_PASS}
+      - SOLACE_HOST=http://solace:8080
