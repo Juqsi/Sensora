@@ -62,7 +62,7 @@ const router = createRouter({
     {
       path: '/sensor/:id',
       name: 'SingleSensor',
-      component: () => import('../views/SingelSensorView.vue'),
+      component: () => import('../views/SingleSensorView.vue'),
       meta: { requiresAuth: true },
     },
     {
