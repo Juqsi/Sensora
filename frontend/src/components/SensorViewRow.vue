@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { MoreHorizontal } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
+import { computed } from 'vue'
 
 const status = {
   active: { label: 'active', value: 'default' },
@@ -28,8 +29,18 @@ const props = defineProps({
 
 defineEmits(['delete'])
 
-const badgeVariant = status[props.plant.status as StatusKey]?.value || 'outline'
-const badgeLabel = status[props.plant.status as StatusKey]?.label || 'unknown'
+const getStatus = computed(() => {
+  if (props.plant.status !== undefined) {
+    return status[props.plant.status as StatusKey]
+  }
+  if (props.plant.controllers.length === 0) {
+    return status.inactive
+  }
+  return status.unknown
+})
+
+const badgeVariant = getStatus.value.value
+const badgeLabel = getStatus.value.label
 </script>
 
 <template>
@@ -53,7 +64,7 @@ const badgeLabel = status[props.plant.status as StatusKey]?.label || 'unknown'
       {{ room }}
     </TableCell>
     <TableCell class="hidden md:table-cell">
-      {{ plant.controllers[0].ilk }}
+      {{ plant.controllers[0]?.ilk }}
     </TableCell>
     <TableCell>
       <DropdownMenu>

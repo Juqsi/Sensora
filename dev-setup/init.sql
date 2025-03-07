@@ -1,9 +1,8 @@
--- init.sql
--- Verbinde dich mit der sensora-Datenbank (nur nötig, wenn du dies über psql manuell machst)
-\c sensora;
+create database sensora;
 
--- Erstelle das Schema 'sensora'
-create schema if not exists sensora;
+\c sensora
+
+create schema sensora;
 
 create type sensora.avatar as enum ('Peashooter', 'Sunflower', 'Cherry Bomb', 'Wall-nut', 'Potato Mine', 'Snow Pea', 'Chomper', 'Marigold');
 
@@ -127,7 +126,10 @@ create table sensora.sensors
         constraint sensors_plants_pid_fk
             references sensora.plants
             on update cascade on delete set null,
-    controller varchar                                         not null
+    controller varchar                                         not null,
+    "group"    varchar
+        constraint sensors_groups_gid_fk
+            references sensora.groups
 );
 
 alter table sensora.sensors
@@ -161,8 +163,12 @@ create table sensora.values
     timestamp timestamp default CURRENT_TIMESTAMP not null,
     sensor    varchar                             not null
         constraint values_sensors_sid_fk
-            references sensora.sensors
+            references sensora.sensors,
+    plant     varchar                             not null
+        constraint values_plants_pid_fk
+            references sensora.plants
 );
 
 alter table sensora.values
     owner to postgres;
+

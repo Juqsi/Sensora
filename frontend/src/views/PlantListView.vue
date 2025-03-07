@@ -69,9 +69,11 @@ const flatPlantList = computed(() =>
 
 const filteredPlantList = computed(() => {
   return flatPlantList.value.filter((item) => {
-    const matchesStatus = item.plant.controllers.some((controller) =>
-      controller.sensors.some((sensor) => values.items!.includes(sensor.status)),
-    )
+    const matchesStatus =
+      item.plant.controllers.some((controller) =>
+        controller.sensors.some((sensor) => values.items!.includes(sensor.status)),
+      ) ||
+      (item.plant.controllers.length === 0 && values.items!.includes('inactive'))
     const matchesSearch =
       searchQuery.value.trim() === '' ||
       item.plant.name.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -152,8 +154,16 @@ const deleteEntry = () => {
   deleteEntryId.value = ''
 }
 usePullToRefresh(async () => {
-  await groupStore.fetchGroups(true)
-  await deviceStore.fetchDevices(true)
+  try {
+    await deviceStore.fetchDevices(true)
+  } catch (e) {
+    console.error(e)
+  }
+  try {
+    await groupStore.fetchGroups(true)
+  } catch (e) {
+    console.error(e)
+  }
 })
 </script>
 
