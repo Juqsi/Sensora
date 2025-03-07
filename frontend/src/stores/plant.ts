@@ -47,18 +47,12 @@ const updateRoomWithPlant = async (roomId: string, updatedPlant: Plant) => {
 const updateGroupWithPlant = async (updatedPlant: Plant) => {
   const groupStore = useGroupStore()
   groupStore.groups.forEach((group) => {
-    if (group.gid) {
-      group.rooms?.forEach((room) => {
-        if (room.plants) {
-          const plantIndex = room.plants.findIndex(
-            (plant) => plant.plantId === updatedPlant.plantId,
-          )
-          if (plantIndex !== -1) {
-            room.plants.splice(plantIndex, 1, updatedPlant)
-          }
-        }
-      })
-    }
+    group.rooms?.forEach((room) => {
+      const plantIndex = room.plants?.findIndex((plant) => plant.plantId === updatedPlant.plantId)
+      if (plantIndex !== undefined && plantIndex !== -1) {
+        room.plants.splice(plantIndex, 1, updatedPlant)
+      }
+    })
   })
 }
 
