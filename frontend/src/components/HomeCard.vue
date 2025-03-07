@@ -25,7 +25,7 @@ defineProps({
 
 <template>
   <Card>
-    <CardHeader class="text-lg py-4">Pflanze Berta</CardHeader>
+    <CardHeader class="text-lg py-4">{{ plant.name }}</CardHeader>
     <CardContent>
       <div class="grid gap-4 grid-cols-2">
         <div class="grid gap-2 iconWithLabel">

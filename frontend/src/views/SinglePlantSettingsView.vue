@@ -67,7 +67,7 @@ onMounted(() => {
   }
 })
 
-const createPlant = () => {
+const createPlant = async () => {
   if (selectedRoom.value === undefined || selectedRoom.value.rid === undefined) {
     toast.warning(t('HIer Please enter a valid room'))
   }
@@ -81,7 +81,8 @@ const createPlant = () => {
       note: note.value,
     }
     try {
-      plantStore.createPlant(newPlant)
+      await plantStore.createPlant(newPlant)
+      router.back()
     } catch (error) {
       console.log(error)
     }
@@ -95,7 +96,8 @@ const createPlant = () => {
       note: note.value,
     }
     try {
-      plantStore.updatePlant(route.params.id as string, editPlant)
+      await plantStore.updatePlant(route.params.id as string, editPlant)
+      router.back()
     } catch (error) {
       console.log(error)
     }

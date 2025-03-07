@@ -46,12 +46,12 @@ const badgeLabel = getStatus.value.label
 <template>
   <TableRow>
     <TableCell class="overflow-hidden font-medium">
-      <router-link :to="`/plant/${plant.id}`">
+      <router-link :to="`/plant/${plant.plantId}`">
         {{ plant.name }}
       </router-link>
     </TableCell>
     <TableCell>
-      <router-link :to="`/plant/${plant.id}`">
+      <router-link :to="`/plant/${plant.plantId}`">
         <Badge :variant="badgeVariant" class="w-full justify-center">
           {{ badgeLabel }}
         </Badge>
@@ -76,10 +76,10 @@ const badgeLabel = getStatus.value.label
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <router-link :to="`/plant/${plant.id}/edit`">
+          <router-link :to="`/plant/${plant.plantId}/edit`">
             <DropdownMenuItem>Edit</DropdownMenuItem>
           </router-link>
-          <DropdownMenuItem @click="$emit('delete', plant.id)">Delete</DropdownMenuItem>
+          <DropdownMenuItem @click="$emit('delete', plant.plantId)">Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </TableCell>

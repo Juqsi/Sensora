@@ -14,10 +14,10 @@ import PlantMeassuredValuesChart from '@/components/PlantMeassuredValuesChart.vu
 import { computed, ref } from 'vue'
 import { measuredValues } from '@/composables/useMeasuredValues.ts'
 
-import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import NavCard from '@/components/NavCard.vue'
 
-const router = useRouter()
+const route = useRoute()
 
 const defaultValue = 'item-1'
 
@@ -115,7 +115,7 @@ const activeData = computed(() => values[activeKey.value] || [])
 <template>
   <NavCard sub-title=" Wohnzimmer" title="Pflanze Berta">
     <template #TitleRight>
-      <router-link to="/plant/123/edit">
+      <router-link :to="`/plant/${route.params.id}/edit`">
         <Button size="icon" variant="ghost">
           <Settings />
         </Button>

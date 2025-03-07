@@ -29,12 +29,17 @@ const removePlantFromGroup = (plantId: string) => {
 }
 
 const updateRoomWithPlant = async (roomId: string, updatedPlant: Plant) => {
-  const groupStore = useRoomStore()
-  groupStore.rooms.forEach((room) => {
+  const roomStore = useRoomStore()
+
+  roomStore.rooms.forEach((room) => {
     if (room.rid === roomId) {
-      room.plants = room.plants?.map((plant) =>
-        plant.plantId === updatedPlant.plantId ? updatedPlant : plant,
-      ) || [updatedPlant]
+      const plantIndex = room.plants?.findIndex((plant) => plant.plantId === updatedPlant.plantId)
+
+      if (plantIndex !== undefined && plantIndex !== -1) {
+        room.plants?.splice(plantIndex, 1, updatedPlant)
+      } else {
+        room.plants?.push(updatedPlant)
+      }
     }
   })
 }
@@ -45,9 +50,12 @@ const updateGroupWithPlant = async (updatedPlant: Plant) => {
     if (group.gid) {
       group.rooms?.forEach((room) => {
         if (room.plants) {
-          room.plants = room.plants.map((plant) =>
-            plant.plantId === updatedPlant.plantId ? updatedPlant : plant,
+          const plantIndex = room.plants.findIndex(
+            (plant) => plant.plantId === updatedPlant.plantId,
           )
+          if (plantIndex !== -1) {
+            room.plants.splice(plantIndex, 1, updatedPlant)
+          }
         }
       })
     }
@@ -100,7 +108,6 @@ export const usePlantStore = defineStore('plant', {
       const newPlant = response.data
 
       this.plants.push(newPlant)
-
       await Promise.all([
         updateRoomWithPlant(plantData.room, newPlant),
         updateGroupWithPlant(newPlant),
@@ -108,7 +115,7 @@ export const usePlantStore = defineStore('plant', {
     },
 
     async deletePlant(plantId: string) {
-      await plansApiClient.delete(plantId)
+      //await plansApiClient.delete(plantId)
 
       const plantToDelete = this.plants.find((plant) => plant.plantId === plantId)
 
