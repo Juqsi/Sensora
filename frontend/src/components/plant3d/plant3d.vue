@@ -3,6 +3,9 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { onMounted, ref } from 'vue' // Importiere Vue-spezifische Funktionen
+import { useColorMode } from '@vueuse/core'
+
+const mode = useColorMode()
 
 // Typisierung für das HTML-Element des Containers
 const threeContainer = ref<HTMLElement | null>(null) // Ref für das DOM-Element, wo das 3D-Modell gerendert wird
@@ -13,7 +16,7 @@ onMounted(() => {
 
   // Szene erstellen
   const scene = new THREE.Scene()
-  scene.background = new THREE.Color(0xffffff)
+  scene.background = new THREE.Color(mode.value === 'dark' ? 0x000000 : 0xffffff)
 
   // Kamera erstellen
   const camera = new THREE.PerspectiveCamera(
