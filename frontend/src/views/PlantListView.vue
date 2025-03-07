@@ -41,7 +41,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog/index.ts'
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useDeviceStore, useGroupStore, usePlantStore } from '@/stores'
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 import EmtyState from '@/components/EmtyState.vue'
@@ -54,6 +54,7 @@ const deviceStore = useDeviceStore()
 const plantStore = usePlantStore()
 
 const searchQuery = ref('')
+const tab = ref<string>('plants')
 
 const flatPlantList = computed(() =>
   groupStore.groups.flatMap((group) =>
@@ -154,16 +155,25 @@ const deleteEntry = () => {
   deleteEntryId.value = ''
 }
 usePullToRefresh(async () => {
-  try {
-    await deviceStore.fetchDevices(true)
-  } catch (e) {
-    console.error(e)
+  console.log(tab.value)
+  if (tab.value === 'plants') {
+    try {
+      await groupStore.fetchGroups(true)
+    } catch (e) {
+      console.error(e)
+    }
+  } else if (tab.value === 'sensors') {
+    try {
+      await deviceStore.fetchDevices(true)
+    } catch (e) {
+      console.error(e)
+    }
   }
-  try {
-    await groupStore.fetchGroups(true)
-  } catch (e) {
-    console.error(e)
-  }
+})
+onMounted(() => {
+  deviceStore.fetchDevices()
+  groupStore.fetchGroups()
+  plantStore.fetchPlants()
 })
 </script>
 
@@ -202,7 +212,7 @@ usePullToRefresh(async () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Tabs class="overflow-hidden" default-value="plants">
+      <Tabs v-model:modelValue="tab" class="overflow-hidden">
         <div class="flex items-center w-full justify-between">
           <TabsList class="my-2">
             <TabsTrigger value="plants">Plants</TabsTrigger>
@@ -369,5 +379,4 @@ usePullToRefresh(async () => {
       </Tabs>
     </main>
   </div>
-  <div class="mb-6"></div>
 </template>

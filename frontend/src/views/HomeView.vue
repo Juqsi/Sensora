@@ -7,11 +7,13 @@ import { useI18n } from 'vue-i18n'
 import { useRoomStore, useUserStore, usePlantStore } from '@/stores'
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 import EmtyState from '@/components/EmtyState.vue'
+import { onMounted } from 'vue'
 
 const { t } = useI18n()
 
 const roomStore = useRoomStore()
 const userStore = useUserStore()
+const plantStore = usePlantStore()
 
 interface Hint {
   id: string
@@ -30,6 +32,10 @@ const hints: Hint[] = [
 ]
 usePullToRefresh(async () => {
   await roomStore.fetchRooms(true)
+})
+onMounted(() => {
+  plantStore.fetchPlants()
+  roomStore.fetchRooms()
 })
 </script>
 
@@ -75,7 +81,9 @@ usePullToRefresh(async () => {
         <h3 class="text-xl my-2 font-medium">{{ room.name }}</h3>
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        <HomeCard v-for="plant in room.plants" :plant="plant"></HomeCard>
+        <router-link v-for="plant in room.plants" :to="`/plant/${plant.plantId}`">
+          <HomeCard :plant="plant"></HomeCard>
+        </router-link>
       </div>
     </div>
   </template>
@@ -87,7 +95,7 @@ usePullToRefresh(async () => {
   />
   <EmtyState
     :title="t('plantList.emptyPlantTitle')"
-    :condition="usePlantStore().plants.length === 0 && !(roomStore.rooms.length === 0)"
+    :condition="plantStore.plants.length === 0 && !(roomStore.rooms.length === 0)"
     :subtitle="t('plantList.emptyPlantSubtitle')"
     img-src="/svg/undraw_new-entries_xw4m.svg"
   />

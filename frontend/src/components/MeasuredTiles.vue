@@ -2,6 +2,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Droplet, Sun, Thermometer } from 'lucide-vue-next'
 import { measuredValues } from '@/composables/useMeasuredValues.ts'
+
+const props = defineProps({
+  plant: { type: Object, required: true },
+})
+
 defineEmits(['updateActiveKey'])
 </script>
 

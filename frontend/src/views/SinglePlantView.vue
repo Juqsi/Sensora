@@ -16,8 +16,22 @@ import { measuredValues } from '@/composables/useMeasuredValues.ts'
 
 import { useRoute } from 'vue-router'
 import NavCard from '@/components/NavCard.vue'
+import { plantAvatars } from '@/components/plant3d/plantAvatars.ts'
+import { usePlantStore } from '@/stores'
+import { onMounted } from 'vue'
+import type { Plant } from '@/api'
 
 const route = useRoute()
+
+const plantStore = usePlantStore()
+
+const plant = ref<Plant>()
+
+onMounted(async () => {
+  if (route.params.id !== undefined) {
+    plant.value = await plantStore.getPlantDetails(route.params.id as string)
+  }
+})
 
 const defaultValue = 'item-1'
 
@@ -130,7 +144,7 @@ const activeData = computed(() => values[activeKey.value] || [])
       <TabsTrigger value="infos"> Infos</TabsTrigger>
     </TabsList>
     <TabsContent value="values">
-      <MeasuredTiles @updateActiveKey="updateActiveKey" />
+      <MeasuredTiles @updateActiveKey="updateActiveKey" :plant="plant" />
       <PlantMeassuredValuesChart :data="activeData" />
     </TabsContent>
     <TabsContent value="infos">
