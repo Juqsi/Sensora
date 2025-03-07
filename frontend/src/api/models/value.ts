@@ -12,7 +12,7 @@ export interface Value {
    * @memberof Value
    * @example 2024-12-16T12:00:00Z
    */
-  timestamp?: string
+  timestamp: string
 
   /**
    * Wert
@@ -21,5 +21,5 @@ export interface Value {
    * @memberof Value
    * @example 5.3
    */
-  value?: number
+  value: number
 }

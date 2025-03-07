@@ -13,6 +13,7 @@ import {
   Wrench,
 } from 'lucide-vue-next'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { ilk, type Sensor, type Value } from '@/api'
 
 defineProps({
   connectionLost: Boolean,
@@ -30,19 +31,55 @@ defineProps({
       <div class="grid gap-4 grid-cols-2">
         <div class="grid gap-2 iconWithLabel">
           <Thermometer id="temperature" />
-          <Label for="temperature"> 20</Label>
+          <Label for="temperature">
+            {{
+              plant.controllers[0]?.sensors
+                .find((sensor: Sensor) => sensor.ilk === ilk.temperature)
+                ?.reduce((prev: Value, curr: Value) =>
+                  new Date(curr.timestamp).getTime() > new Date(prev.timestamp).getTime()
+                    ? curr
+                    : prev,
+                ) ?? '--'
+            }}</Label
+          >
         </div>
         <div class="grid gap-2 iconWithLabel">
           <CloudHail id="humidity" />
-          <Label for="humidity">50 </Label>
+          <Label for="humidity"
+            >{{
+              plant.controllers[0]?.sensors
+                .find((sensor: Sensor) => sensor.ilk === ilk.humidity)
+                ?.reduce((prev: Value, curr: Value) =>
+                  new Date(curr.timestamp).getTime() > new Date(prev.timestamp).getTime()
+                    ? curr
+                    : prev,
+                ) ?? '--'
+            }}
+          </Label>
         </div>
         <div class="grid gap-2 iconWithLabel">
           <Sun id="light" />
-          <Label for="light">10</Label>
+          <Label for="light">{{
+            plant.controllers[0]?.sensors
+              .find((sensor: Sensor) => sensor.ilk === ilk.brightness)
+              ?.reduce((prev: Value, curr: Value) =>
+                new Date(curr.timestamp).getTime() > new Date(prev.timestamp).getTime()
+                  ? curr
+                  : prev,
+              ) ?? '--'
+          }}</Label>
         </div>
         <div class="grid gap-2 iconWithLabel">
           <Droplet id="water" />
-          <Label for="light">10</Label>
+          <Label for="water">{{
+            plant.controllers[0]?.sensors
+              .find((sensor: Sensor) => sensor.ilk === ilk.soilMoisture)
+              ?.reduce((prev: Value, curr: Value) =>
+                new Date(curr.timestamp).getTime() > new Date(prev.timestamp).getTime()
+                  ? curr
+                  : prev,
+              ) ?? '--'
+          }}</Label>
         </div>
         <TooltipProvider v-if="connectionLost">
           <Tooltip>
