@@ -19,13 +19,13 @@ defineProps({
   alert: Boolean,
   siren: Boolean,
   wrench: Boolean,
-  plant: Object,
+  plant: { type: Object, required: true },
 })
 </script>
 
 <template>
   <Card>
-    <CardHeader class="text-lg py-4">{{ plant.name }}</CardHeader>
+    <CardHeader class="text-lg py-4 truncate">{{ plant.name }}</CardHeader>
     <CardContent>
       <div class="grid gap-4 grid-cols-2">
         <div class="grid gap-2 iconWithLabel">
