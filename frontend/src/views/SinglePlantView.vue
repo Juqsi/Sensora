@@ -12,14 +12,13 @@ import {
 } from '@/components/ui/accordion/index.ts'
 import PlantMeassuredValuesChart from '@/components/PlantMeassuredValuesChart.vue'
 import { computed, ref } from 'vue'
-import { measuredValues } from '@/composables/useMeasuredValues.ts'
 
 import { useRoute } from 'vue-router'
 import NavCard from '@/components/NavCard.vue'
 import { plantAvatars } from '@/components/plant3d/plantAvatars.ts'
 import { usePlantStore } from '@/stores'
 import { onMounted } from 'vue'
-import type { Plant } from '@/api'
+import { ilk, type Plant } from '@/api'
 
 const route = useRoute()
 
@@ -118,9 +117,9 @@ const values = {
   ],
 }
 
-const activeKey = ref<measuredValues>(measuredValues.temperature)
+const activeKey = ref<ilk>(ilk.temperature)
 
-const updateActiveKey = (key: measuredValues) => {
+const updateActiveKey = (key: ilk) => {
   activeKey.value = key
 }
 const activeData = computed(() => values[activeKey.value] || [])

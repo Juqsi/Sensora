@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { MoreHorizontal } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
-import { computed } from 'vue'
+import { computed, type PropType } from 'vue'
 
 const status = {
   active: { label: 'active', value: 'default' },
@@ -22,9 +22,9 @@ const status = {
 type StatusKey = keyof typeof status
 
 const props = defineProps({
-  plant: { type: Object, required: true },
-  group: { type: Object, required: true },
-  room: { type: Object, required: true },
+  plant: { type: Object as PropType<Plant>, required: true },
+  group: { type: Object as PropType<Group>, required: true },
+  room: { type: Object as PropType<Room>, required: true },
 })
 
 defineEmits(['delete'])

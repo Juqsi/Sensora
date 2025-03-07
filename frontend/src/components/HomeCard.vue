@@ -15,13 +15,14 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { ilk, type Sensor, type Value, type Plant } from '@/api'
 import { latestSensorValue } from '@/composables/useLatestSensorValue.ts'
+import { type PropType } from 'vue'
 
 defineProps({
   connectionLost: Boolean,
   alert: Boolean,
   siren: Boolean,
   wrench: Boolean,
-  plant: { type: Object, required: true },
+  plant: { type: Object as PropType<Plant>, required: true },
 })
 </script>
 
@@ -33,25 +34,23 @@ defineProps({
         <div class="grid gap-2 iconWithLabel">
           <Thermometer id="temperature" />
           <Label for="temperature">
-            {{ latestSensorValue([plant as Plant], ilk.temperature) ?? '--' }}</Label
+            {{ latestSensorValue([plant], ilk.temperature)?.value ?? '--' }}</Label
           >
         </div>
         <div class="grid gap-2 iconWithLabel">
           <CloudHail id="humidity" />
           <Label for="humidity"
-            >{{ latestSensorValue([plant as Plant], ilk.humidity) ?? '--' }}
+            >{{ latestSensorValue([plant], ilk.humidity)?.value ?? '--' }}
           </Label>
         </div>
         <div class="grid gap-2 iconWithLabel">
           <Sun id="light" />
-          <Label for="light">{{
-            latestSensorValue([plant as Plant], ilk.brightness) ?? '--'
-          }}</Label>
+          <Label for="light">{{ latestSensorValue([plant], ilk.brightness)?.value ?? '--' }}</Label>
         </div>
         <div class="grid gap-2 iconWithLabel">
           <Droplet id="water" />
           <Label for="water">{{
-            latestSensorValue([plant as Plant], ilk.soilMoisture) ?? '--'
+            latestSensorValue([plant], ilk.soilMoisture)?.value ?? '--'
           }}</Label>
         </div>
         <TooltipProvider v-if="connectionLost">
