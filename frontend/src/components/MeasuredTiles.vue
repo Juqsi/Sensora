@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Droplet, Sun, Thermometer } from 'lucide-vue-next'
+import { Droplet, Sun, Thermometer, ArrowUp, ArrowDown, ArrowLeft } from 'lucide-vue-next'
 import { ilk, type Plant, type Value } from '@/api'
 import { latestSensorValue } from '@/composables/useLatestSensorValue.ts'
 import type { PropType } from 'vue'
@@ -30,8 +30,8 @@ const humidity = ref<Value | undefined>(latestSensorValue([props.plant as Plant]
         <Thermometer class="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div class="text-2xl font-bold">
-          {{ temperature?.value ?? '--' }}
+        <div class="text-2xl font-bold flex-row flex justify-between items-center">
+          {{ temperature?.value ?? '--' }} <ArrowUp class="w-4 h-4" />
         </div>
         <p class="text-xs text-muted-foreground">{{ temperature?.timestamp ?? '' }}</p>
       </CardContent>
@@ -42,8 +42,8 @@ const humidity = ref<Value | undefined>(latestSensorValue([props.plant as Plant]
         <Droplet class="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div class="text-2xl font-bold">
-          {{ soilMoisture?.value ?? '--' }}
+        <div class="text-2xl font-bold flex-row flex justify-between items-center">
+          {{ soilMoisture?.value ?? '--' }} <ArrowDown class="w-4 h-4" />
         </div>
         <p class="text-xs text-muted-foreground">{{ soilMoisture?.timestamp ?? '' }}</p>
       </CardContent>
@@ -54,8 +54,8 @@ const humidity = ref<Value | undefined>(latestSensorValue([props.plant as Plant]
         <Sun class="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div class="text-2xl font-bold">
-          {{ humidity?.value ?? '--' }}
+        <div class="text-2xl font-bold flex-row flex justify-between items-center">
+          {{ humidity?.value ?? '--' }} <ArrowLeft class="w-4 h-4" />
         </div>
         <p class="text-xs text-muted-foreground">{{ humidity?.timestamp ?? '' }}</p>
       </CardContent>
@@ -66,8 +66,8 @@ const humidity = ref<Value | undefined>(latestSensorValue([props.plant as Plant]
         <Sun class="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div class="text-2xl font-bold">
-          {{ brightness?.value ?? '--' }}
+        <div class="text-2xl font-bold flex-row flex justify-between items-center">
+          {{ brightness?.value ?? '--' }} <ArrowLeft class="w-4 h-4" />
         </div>
         <p class="text-xs text-muted-foreground">{{ brightness?.timestamp ?? '' }}</p>
       </CardContent>
