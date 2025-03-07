@@ -369,4 +369,5 @@ usePullToRefresh(async () => {
       </Tabs>
     </main>
   </div>
+  <div class="mb-6"></div>
 </template>

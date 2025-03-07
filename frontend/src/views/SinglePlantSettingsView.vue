@@ -140,7 +140,7 @@ const createPlant = async () => {
         <Label for="plantType">{{ t('plant.settings.PlantType') }}</Label>
         <Input
           id="plantType"
-          v-model:value="plantType"
+          v-model="plantType"
           :placeholder="t('plant.settings.PlantTypePlaceholder')"
         />
       </div>
@@ -169,7 +169,7 @@ const createPlant = async () => {
         <Label for="description">{{ t('plant.settings.Description') }}</Label>
         <Textarea
           id="description"
-          v-model:value="note"
+          v-model="note"
           :placeholder="t('plant.settings.DescriptionPlaceholder')"
         />
       </div>
