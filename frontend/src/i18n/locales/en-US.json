@@ -93,6 +93,9 @@
         "confirm": "Remove"
       }
     },
+    "create": {
+      "RoomEntity" : "Kitchen"
+    },
     "emptyGroupTitle": "Create Your First Group",
     "emptyGroupSubtitle": "Start by creating your first group to get started."
   },

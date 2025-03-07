@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useI18n } from 'vue-i18n'
-import { useRoomStore, useUserStore } from '@/stores'
+import { useRoomStore, useUserStore, usePlantStore } from '@/stores'
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 import EmtyState from '@/components/EmtyState.vue'
 
@@ -69,18 +69,26 @@ usePullToRefresh(async () => {
     </ScrollArea>
   </div>
 
-  <div class="w-full mt-2" v-for="room in roomStore.rooms">
-    <div class="flex justify-between items-center">
-      <h3 class="text-xl my-2 font-medium">{{ room.name }}</h3>
+  <template v-for="room in roomStore.rooms" :key="room.rid">
+    <div class="w-full mt-2" v-if="room.plants.length !== 0">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xl my-2 font-medium">{{ room.name }}</h3>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <HomeCard v-for="plant in room.plants" :plant="plant"></HomeCard>
+      </div>
     </div>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-      <HomeCard v-for="plant in room.plants" :plant="plant"></HomeCard>
-    </div>
-  </div>
+  </template>
   <EmtyState
     :title="t('home.emptyRoomsTitle')"
     :condition="roomStore.rooms.length === 0"
     :subtitle="t('home.emptyRoomsSubtitle')"
     img-src="/svg/undraw_complete-design_pzh6.svg"
+  />
+  <EmtyState
+    :title="t('plantList.emptyPlantTitle')"
+    :condition="usePlantStore().plants.length === 0 && !(roomStore.rooms.length === 0)"
+    :subtitle="t('plantList.emptyPlantSubtitle')"
+    img-src="/svg/undraw_new-entries_xw4m.svg"
   />
 </template>

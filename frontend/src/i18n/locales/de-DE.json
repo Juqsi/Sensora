@@ -93,6 +93,9 @@
         "confirm": "Entfernen"
       }
     },
+    "create": {
+      "RoomEntity" : "Küche"
+    },
     "emptyGroupTitle": "Erstellen Sie Ihre erste Gruppe",
     "emptyGroupSubtitle": "Beginnen Sie damit, Ihre erste Gruppe zu erstellen, um loszulegen."
   },
@@ -163,7 +166,7 @@
     "subtitle" : "Die angeforderte Seite existiert nicht."
   },
   "plantList": {
-    "emptyPlantTitle": "Erstell deine erste Pflanze hinzu",
+    "emptyPlantTitle": "Erstell deine erste Pflanze ",
     "emptyPlantSubtitle": "Erstell eine Pflanze damit du mit Sensora die Daten erfassen kannst."
   },
   "sensorList": {

@@ -4,6 +4,7 @@ import BottomNavBar from '@/components/BottomNavBar.vue'
 import { Toaster } from 'vue-sonner'
 import { useColorMode } from '@vueuse/core'
 import { App as CapacitorApp } from '@capacitor/app'
+import { useAuthStore } from '@/stores'
 
 const mode = useColorMode()
 
@@ -20,7 +21,7 @@ CapacitorApp.addListener('backButton', ({ canGoBack }) => {
   <div class="app-container">
     <router-view />
   </div>
-  <bottom-nav-bar v-if="$route.path !== '/signup' && $route.path !== '/signin'" />
+  <bottom-nav-bar v-if="useAuthStore().isAuthenticated" />
   <Toaster position="top-center" richColors :theme="mode === 'dark' ? 'dark' : 'light'" />
 </template>
 
