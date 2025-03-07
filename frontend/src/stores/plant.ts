@@ -115,7 +115,7 @@ export const usePlantStore = defineStore('plant', {
     },
 
     async deletePlant(plantId: string) {
-      //await plansApiClient.delete(plantId)
+      await plansApiClient.delete(plantId)
 
       const plantToDelete = this.plants.find((plant) => plant.plantId === plantId)
 
