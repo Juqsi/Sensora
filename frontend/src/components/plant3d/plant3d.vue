@@ -2,17 +2,28 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { onMounted, ref } from 'vue' // Importiere Vue-spezifische Funktionen
+import { onMounted, ref, defineProps } from 'vue'
 import { useColorMode } from '@vueuse/core'
 
+// Definiere Props für den Modelltyp, beide optional
+const props = defineProps({
+  modelType: {
+    type: Array as () => string[],
+    required: false,
+    default: () => [],
+  },
+  plantModelPath: { type: String, required: true }, // Pfad zum Pflanzenmodell
+})
+
+// Hole die Farbeinstellung des Modus
 const mode = useColorMode()
 
-// Typisierung für das HTML-Element des Containers
-const threeContainer = ref<HTMLElement | null>(null) // Ref für das DOM-Element, wo das 3D-Modell gerendert wird
+// Ref für das DOM-Element, in dem die Szene gerendert wird
+const threeContainer = ref<HTMLElement | null>(null)
 
 onMounted(() => {
   const container = threeContainer.value
-  if (!container) return // Sicherstellen, dass der Container vorhanden ist
+  if (!container) return
 
   // Szene erstellen
   const scene = new THREE.Scene()
@@ -25,7 +36,7 @@ onMounted(() => {
     0.1,
     1000,
   )
-  camera.position.set(0, 5, 0) // Kamera Position
+  camera.position.set(0, 5, 3) // Stelle die Kamera so, dass sie alle Objekte sehen kann
 
   // Renderer erstellen
   const renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -37,21 +48,46 @@ onMounted(() => {
 
   // OrbitControls (Zoom und Pan deaktivieren, nur horizontale Drehung erlauben)
   const controls = new OrbitControls(camera, renderer.domElement)
-  controls.enableZoom = false // Zoom deaktivieren
-  controls.enablePan = false // Panoramabewegung deaktivieren
-  controls.minPolarAngle = Math.PI / 2 // Vertikale Drehung verhindern (nach oben)
-  controls.maxPolarAngle = Math.PI / 2 // Vertikale Drehung verhindern (nach unten)
+  controls.enableZoom = false
+  controls.enablePan = false
+  controls.minPolarAngle = Math.PI / 2
+  controls.maxPolarAngle = Math.PI / 2
 
-  // Modell laden
+  // Modell der Pflanze laden (immer geladen)
   const loader = new GLTFLoader()
-  loader.load('/models3d/plant.glb', (gltf) => {
-    scene.add(gltf.scene)
+  loader.load(props.plantModelPath, (gltf) => {
+    // Position der Pflanze festlegen
+    const plant = gltf.scene
+    plant.position.set(0, 0, 0) // Pflanze in der Mitte platzieren
+    scene.add(plant)
 
-    // Zielpunkt explizit setzen
-    const targetPosition = new THREE.Vector3(0, 4, 0) // Beispielzielpunkt: (0, 4, 0)
-    controls.target.copy(targetPosition) // Setzt das Ziel explizit
-    controls.update() // Steuerung aktualisieren
+    // Zielpunkt explizit setzen, damit die Kamera auf die Pflanze schaut
+    const targetPosition = new THREE.Vector3(0, 4, 0) // Zielpunkt auf der Pflanze
+    controls.target.copy(targetPosition)
+    controls.update()
   })
+
+  // Modell basierend auf `modelType` laden
+  const loadAdditionalModel = (modelType: string, modelPath: string, position: THREE.Vector3) => {
+    loader.load(modelPath, (gltf) => {
+      const model = gltf.scene
+      model.position.set(position.x, position.y, position.z) // Setzt die Position des Modells
+      scene.add(model)
+
+      // Zielpunkt explizit setzen, damit die Kamera auch auf die Sonne oder Wolke schaut
+      //controls.target.copy(position)
+      controls.update()
+    })
+  }
+
+  // Lade Modelle, falls sie in `modelType` übergeben wurden
+  if (props.modelType.includes('sun')) {
+    loadAdditionalModel('sun', '/models3d/cloud.glb', new THREE.Vector3(0, 6, 0)) // Sonne 10 Einheiten nach oben
+  }
+
+  if (props.modelType.includes('cloud')) {
+    loadAdditionalModel('cloud', '/models3d/cloud.glb', new THREE.Vector3(0, 1, 0)) // Wolke 5 Einheiten nach oben und 5 Einheiten nach hinten
+  }
 
   // Rendering-Schleife
   const animate = () => {

@@ -136,7 +136,7 @@ const activeData = computed(() => values[activeKey.value] || [])
     </template>
   </NavCard>
 
-  <Plant3d />
+  <Plant3d plant-model-path="/models3d/plant.glb" />
   <Tabs class="w-full" default-value="values">
     <TabsList class="grid w-full grid-cols-2">
       <TabsTrigger value="values"> Values</TabsTrigger>
