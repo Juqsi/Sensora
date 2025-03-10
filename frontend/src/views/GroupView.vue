@@ -52,14 +52,28 @@ usePullToRefresh(async () => {
         <CardFooter class="grid grid-cols-1">
           <div class="flex justify-between items-center">
             <h3 class="text-xl pl-3 my-2 font-medium">Räume</h3>
-            <Button
-              class="text-primary"
-              :aria-label="t('group.addRoom')"
-              size="icon"
-              variant="default"
-            >
-              <CirclePlus class="w-5" />
-            </Button>
+            <CreateGroupComponent :group="group">
+              <template #desktop>
+                <Button
+                  class="text-primary"
+                  :aria-label="t('group.addRoom')"
+                  size="icon"
+                  variant="default"
+                >
+                  <CirclePlus class="w-5" />
+                </Button>
+              </template>
+              <template #mobile>
+                <Button
+                  class="text-primary"
+                  :aria-label="t('group.addRoom')"
+                  size="icon"
+                  variant="default"
+                >
+                  <CirclePlus class="w-5" />
+                </Button>
+              </template>
+            </CreateGroupComponent>
           </div>
           <GroupRoomCard :group="group"></GroupRoomCard>
         </CardFooter>

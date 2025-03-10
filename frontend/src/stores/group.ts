@@ -44,19 +44,21 @@ export const useGroupStore = defineStore('group', {
       this.groups = this.groups.filter((g) => g.gid !== groupId)
     },
 
-    async updateGroup(groupId: string, body: GroupPatchBody) {
+    async updateGroup(groupId: string, body: GroupPatchBody): Promise<Group> {
       const response = await groupApiClient.update(body, groupId, {
         meta: { successMessage: t('group.updated') },
       } as CustomAxiosRequestConfig)
       const updatedGroup = response.data
       this.groups = this.groups.map((g) => (g.gid === groupId ? updatedGroup : g))
+      return updatedGroup
     },
 
-    async joinGroup(token: string) {
+    async joinGroup(token: string): Promise<Group> {
       const response = await groupApiClient.join(token, {
         meta: { successMessage: t('group.joined') },
       } as CustomAxiosRequestConfig)
       this.groups.push(response.data)
+      return response.data
     },
 
     async createGroup(body: createGroupBody): Promise<Group> {

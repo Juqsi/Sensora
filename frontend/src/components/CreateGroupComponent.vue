@@ -21,7 +21,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
-import { ref } from 'vue'
+import { type PropType, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   TagsInput,
@@ -31,11 +31,15 @@ import {
   TagsInputItemText,
 } from '@/components/ui/tags-input'
 import { CirclePlus } from 'lucide-vue-next'
-import type { createGroupBody, Group } from '@/api'
+import type { createGroupBody, Group, GroupPatchBody, Room } from '@/api'
 import { useGroupStore, useRoomStore } from '@/stores'
 
 const groupStore = useGroupStore()
 const roomStore = useRoomStore()
+
+const props = defineProps({
+  group: { type: Object as PropType<Group>, required: false, default: undefined },
+})
 
 const [UseTemplate, GridForm] = createReusableTemplate()
 const isDesktop = useMediaQuery('(min-width: 768px)')
@@ -43,10 +47,12 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
 const { t } = useI18n()
 const isOpen = ref(false)
 
-const groupName = ref<string>('')
-const rooms = ref<Array<string>>([t('group.create.RoomEntity') as string])
+const groupName = ref<string>(props.group?.name ?? '')
+const rooms = ref<Array<string>>(
+  props.group?.rooms?.map((room: Room) => room.name) ?? [t('group.create.RoomEntity') as string],
+)
 
-const createGroupSubmit = async () => {
+const createGroup = async () => {
   let group: Group
   try {
     let newGroup: createGroupBody = { name: groupName.value, members: [] }
@@ -62,17 +68,63 @@ const createGroupSubmit = async () => {
     isOpen.value = false
   }
 }
+
+const updateGroup = async () => {
+  let group: Group
+  try {
+    let newGroup: GroupPatchBody = { name: groupName.value }
+    group = await groupStore.updateGroup(props.group!.gid, newGroup)
+
+    const originalRooms = props.group?.rooms || []
+
+    // 1. Finde neue Räume (Räume, die in `rooms.value` sind, aber nicht in `originalRooms`)
+    const newRooms = rooms.value.filter(
+      (room) => !originalRooms.some((originalRoom) => originalRoom.name === room),
+    )
+
+    // 2. Finde entfernte Räume (Räume, die in `originalRooms` sind, aber nicht in `rooms.value`)
+    const removedRooms = originalRooms.filter(
+      (originalRoom) => !rooms.value.includes(originalRoom.name),
+    )
+
+    // 3. Erstelle neue Räume
+    for (const room of newRooms) {
+      await roomStore.createRoom({ groupId: group.gid, name: room })
+    }
+
+    // 4. Lösche entfernte Räume
+    for (const room of removedRooms) {
+      try {
+        await roomStore.deleteRoom(room.rid, group.gid)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  } catch (error) {
+    console.log(error)
+  } finally {
+    isOpen.value = false
+  }
+}
+
+const submit = async () => {
+  if (props.group !== undefined) {
+    await updateGroup()
+  } else {
+    await createGroup()
+  }
+}
 </script>
 
 <template>
   <UseTemplate>
-    <form class="grid items-start gap-4 px-4" @submit.prevent="createGroupSubmit">
+    <form class="grid items-start gap-4 px-4" @submit.prevent="submit">
       <div class="grid gap-2">
         <Label html-for="groupName">{{ t('group.create.groupName') }}</Label>
         <Input id="name" v-model="groupName" :placeholder="t('group.create.namePlaceholder')" />
       </div>
       <div>
-        <Label html-for="rooms">{{ t('group.create.groupName') }}</Label>
+        <Label html-for="rooms">{{ t('group.create.roomName') }}</Label>
         <TagsInput id="rooms" v-model="rooms">
           <TagsInputItem v-for="item in rooms" :key="item" :value="item">
             <TagsInputItemText />
@@ -81,19 +133,26 @@ const createGroupSubmit = async () => {
           <TagsInputInput :placeholder="t('group.create.roomPlaceholder')" />
         </TagsInput>
       </div>
-      <Button type="submit">{{ t('group.create.save') }}</Button>
+      <Button type="submit">{{
+        props.group ? t('group.update.save') : t('group.create.save')
+      }}</Button>
     </form>
   </UseTemplate>
 
   <Dialog v-if="isDesktop" v-model:open="isOpen">
     <DialogTrigger as-child>
-      <Button variant="default">{{ t('group.create.create') }}</Button>
+      <slot name="desktop" v-if="$slots.desktop"></slot>
+      <Button v-else variant="default">{{
+        props.group ? t('group.update.create') : t('group.create.create')
+      }}</Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle> {{ t('group.create.title') }}</DialogTitle>
+        <DialogTitle>
+          {{ props.group ? t('group.update.title') : t('group.create.title') }}</DialogTitle
+        >
         <DialogDescription>
-          {{ t('group.create.description') }}
+          {{ props.group ? t('group.update.description') : t('group.create.description') }}
         </DialogDescription>
       </DialogHeader>
       <GridForm />
@@ -102,15 +161,23 @@ const createGroupSubmit = async () => {
 
   <Drawer v-else v-model:open="isOpen">
     <DrawerTrigger as-child>
-      <Button :aria-label="t('group.create.create')" size="icon" variant="outline">
+      <slot name="mobile" v-if="$slots.mobile"></slot>
+      <Button
+        v-else
+        :aria-label="props.group ? t('group.update.create') : t('group.create.create')"
+        size="icon"
+        variant="outline"
+      >
         <CirclePlus />
       </Button>
     </DrawerTrigger>
     <DrawerContent>
       <DrawerHeader class="text-left">
-        <DrawerTitle>{{ t('group.create.title') }}</DrawerTitle>
+        <DrawerTitle>{{
+          props.group ? t('group.update.title') : t('group.create.title')
+        }}</DrawerTitle>
         <DrawerDescription>
-          {{ t('group.create.description') }}
+          {{ props.group ? t('group.update.description') : t('group.create.description') }}
         </DrawerDescription>
       </DrawerHeader>
       <GridForm />
