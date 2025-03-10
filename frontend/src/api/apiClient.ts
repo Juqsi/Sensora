@@ -55,6 +55,9 @@ apiClient.interceptors.response.use(
     toast.success(successMessage, {
       id: (response.config as CustomAxiosRequestConfig).meta!.toastId,
     })
+    setTimeout(() => {
+      toast.dismiss((response.config as CustomAxiosRequestConfig).meta!.toastId)
+    }, 500)
     return response
   },
   (error) => {
@@ -101,6 +104,9 @@ apiClient.interceptors.response.use(
     toast.error(errorMessage, {
       id: toastId,
     })
+    setTimeout(() => {
+      toast.dismiss(toastId)
+    }, 5000)
 
     return Promise.reject(error)
   },
