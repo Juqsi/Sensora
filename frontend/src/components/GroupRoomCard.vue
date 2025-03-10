@@ -44,7 +44,7 @@ const openDialog = (member: Room) => {
           <p class="text-sm font-medium leading-none">
             {{ room.name }}
           </p>
-          <p class="text-xs text-muted-foreground">{{ room.groupId }}</p>
+          <p class="text-xs text-muted-foreground">{{ room.rid }}</p>
         </div>
       </div>
       <Button class="text-destructive" size="icon" variant="ghost" @click="openDialog(room)">

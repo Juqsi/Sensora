@@ -11,6 +11,7 @@ import { TableCell, TableRow } from '@/components/ui/table'
 import { MoreHorizontal } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
 import { computed, type PropType } from 'vue'
+import type { Group, Plant, Room } from '@/api'
 
 const status = {
   active: { label: 'active', value: 'default' },
@@ -26,12 +27,17 @@ const props = defineProps({
   group: { type: Object as PropType<Group>, required: true },
   room: { type: Object as PropType<Room>, required: true },
 })
-
 defineEmits(['delete'])
 
 const getStatus = computed(() => {
-  if (props.plant.status !== undefined) {
-    return status[props.plant.status as StatusKey]
+  if (props.plant.controllers.length !== 0) {
+    props.plant.controllers.filter((controller) => {
+      const matchesStatus = controller.sensors.some((sensor) => ['error'].includes(sensor.status))
+      if (matchesStatus) {
+        return status.error
+      }
+    })
+    return status.active
   }
   if (props.plant.controllers.length === 0) {
     return status.inactive
@@ -51,20 +57,27 @@ const badgeLabel = getStatus.value.label
       </router-link>
     </TableCell>
     <TableCell>
-      <router-link :to="`/plant/${plant.plantId}`">
+      <router-link :to="plant.controllers[0] ? `/sensor/${plant.controllers[0].did}` : '#'">
         <Badge :variant="badgeVariant" class="w-full justify-center">
           {{ badgeLabel }}
         </Badge>
       </router-link>
     </TableCell>
     <TableCell class="hidden md:table-cell">
-      {{ group }}
+      <router-link :to="`/groups#${group.gid}`">
+        {{ group.name }}
+      </router-link>
+    </TableCell>
+
+    <TableCell class="hidden md:table-cell">
+      <router-link :to="`/groups#${room.rid}`">
+        {{ room.name }}
+      </router-link>
     </TableCell>
     <TableCell class="hidden md:table-cell">
-      {{ room }}
-    </TableCell>
-    <TableCell class="hidden md:table-cell">
-      {{ plant.controllers[0]?.ilk }}
+      <router-link :to="plant.controllers[0] ? `/sensor/${plant.controllers[0].did}` : '#'">
+        {{ plant.controllers[0]?.did ?? '--' }}
+      </router-link>
     </TableCell>
     <TableCell>
       <DropdownMenu>
