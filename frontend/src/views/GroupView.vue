@@ -13,8 +13,8 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import CreateGroupComponent from '@/components/CreateGroupComponent.vue'
 import GroupRoomCard from '@/components/GroupRoomCard.vue'
 import GroupCard from '@/components/GroupCard.vue'
-import { CirclePlus } from 'lucide-vue-next'
 import EmtyState from '@/components/EmtyState.vue'
+import { Settings } from 'lucide-vue-next'
 
 const groupStore = useGroupStore()
 const { t } = useI18n()
@@ -54,23 +54,13 @@ usePullToRefresh(async () => {
             <h3 class="text-xl pl-3 my-2 font-medium">Räume</h3>
             <CreateGroupComponent :group="group">
               <template #desktop>
-                <Button
-                  class="text-primary"
-                  :aria-label="t('group.addRoom')"
-                  size="icon"
-                  variant="default"
-                >
-                  <CirclePlus class="w-5" />
+                <Button :aria-label="t('group.addRoom')" size="icon" variant="default">
+                  <Settings class="w-4" />
                 </Button>
               </template>
               <template #mobile>
-                <Button
-                  class="text-primary"
-                  :aria-label="t('group.addRoom')"
-                  size="icon"
-                  variant="default"
-                >
-                  <CirclePlus class="w-5" />
+                <Button :aria-label="t('group.addRoom')" size="icon" variant="default">
+                  <Settings class="w-4" />
                 </Button>
               </template>
             </CreateGroupComponent>
