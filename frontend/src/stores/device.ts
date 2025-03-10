@@ -28,7 +28,7 @@ export const useDeviceStore = defineStore('device', {
 
         return device
       } else {
-        return this.devices.find((d) => d.did === deviceId) || null
+        return this.devices.find((d) => d.did === deviceId)
       }
     },
 
