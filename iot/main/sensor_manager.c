@@ -6,14 +6,19 @@
 #include <time.h>
 #include "solace_manager.h"
 #include "sensor_manager.h"
+#include "cJSON.h"
 
-#define SAMPLES 4
+#define SAMPLES 3
+#define MEAN_COUNT 4
 #define MOISTURE_TAG "MOISTURE_SENSOR"
 #define MOISTURE_SENSOR_PIN ADC1_CHANNEL_5	// GPIO 33
 
+int value_counts[] = {4, 4, 4, 4};
+int num_sensors = 4;
+
 
 // Funktion zum Berechnen des Mittelwertes
-int compute_mean(int values[]) {
+int compute_mean(const int values[]) {
 	int sum = 0;
 	for (int i = 0; i < SAMPLES; i++) {
 		sum += values[i];
@@ -41,34 +46,49 @@ char* get_timestamp() {
 	return timestamp;
 }
 
-// Bodenfeuchtigkeit regelmäßig lesen
-void read_moisture(void *pvParameter) {
+// Sensordaten regelmäßig lesen
+void read_sensordata(void *pvParameter) {
 	int values[SAMPLES];
-	char timestamps[SAMPLES][20];
-	int index = 0;
-	int moisture_mean = 0;
+	int moistureMeans[MEAN_COUNT];
+	//char timestamps[SAMPLES][20];
+	int valueIndex = 0;
+	int meanIndex = 0;
 
 	while (1) {
 		// ADC-Wert einlesen
 		int adc_reading = adc1_get_raw(MOISTURE_SENSOR_PIN);
-		values[index] = adc_reading;
+		values[valueIndex] = adc_reading;
 
-		// Zeitstempel einlesen und im Array speichern
+		send_message("test init");
+
+		// TODO: Zeitstempel einlesen und im Array speichern
 		//sprintf(timestamps[index], "%s", get_timestamp());  // Zeitstempel in das Array schreiben
 
-		if (index >= SAMPLES) {
-			moisture_mean = compute_mean(values);
+		// Prüfen ob 3 Messungen vorliegen
+		if (valueIndex >= SAMPLES - 1) {
+			moistureMeans[meanIndex] = compute_mean(values);
 
-			char str[50];
-			sprintf(str, "Moisture: %d", moisture_mean);
-			send_message(str);
+			if (meanIndex >= MEAN_COUNT - 1) {
+				// JSON Nachricht erstellen und schicken
+				send_message("test inner if");
+				cJSON *moisture_sensor = create_json_sensor("sid", "did", moistureMeans, "moisture", "%", "active");
+				char *msg = create_json_message("did", moisture_sensor, 4);
+				send_message("test msg");
+				send_message(msg);
 
-			index = 0;
+				// Indizes zurücksetzen
+				meanIndex = 0;
+			} else {
+				meanIndex++;
+				send_message("test inner else");
+			}
+			send_message("test outer if");
+			valueIndex = 0;
 		} else {
-			index++;
+			valueIndex++;
+			send_message("test outer else");
 		}
-
-		vTaskDelay(pdMS_TO_TICKS(10000)); // Warte 30 Sekunden
+		vTaskDelay(pdMS_TO_TICKS(10000)); // Warte 10 Sekunden
 	}
 }
 
@@ -76,5 +96,5 @@ void read_moisture(void *pvParameter) {
 void adc_init(void) {
 	adc1_config_width(ADC_WIDTH_BIT_12);            // 12-Bit-Auflösung (0 - 4095)
 	adc1_config_channel_atten(MOISTURE_SENSOR_PIN, ADC_ATTEN_DB_0);
-	xTaskCreate(&read_moisture, "read_moisture", 2048, NULL, 5, NULL);
+	xTaskCreate(&read_sensordata, "read_sensordata", 2048, NULL, 5, NULL);
 }

@@ -15,20 +15,53 @@ static const char *TAG = "MQTT_JSON_EXAMPLE";
 #define MQTT_CLIENT_ID	"ESP32-1"
 #define MQTT_TOPIC_SEND     "sensora/v1/send/id"
 #define MQTT_TOPIC_RECEIVE     "sensora/v1/receive/id"
+#define MODEL	"FullControll-4-Sensors"
 
 // Globaler MQTT-Client
 static esp_mqtt_client_handle_t client;
 
-// Funktion um JSON zu erstellen
-char* create_json_message(const int value_counts[], int num_sensors) {
-	// Variablen für JSON-Objekt TODO: Variabel Werte zuweisen
-	char did[] = "55197b05-56e7-4923-acb5-3cc1f1ea1fe5";
-	char model[] = "FullControll-4-Sensors";
-	char sid_prefix[] = "sensor-";
-	char ilk[] = "temperature";
-	char unit[] = "°C";
-	char status[] = "active";
+int get_array_length(const int input[]) {
+	int count = 0;
+	while (input[count] != -1) count++;
+	return count;
+}
 
+// Funktion um JSON für einen Sensor zu erstellen
+cJSON* create_json_sensor(char sid[], char did[], int values[], char ilk[], char unit[], char status[]) {
+	// Sensor-Objekt erstellen
+	cJSON *sensor_obj = cJSON_CreateObject();
+
+	cJSON_AddStringToObject(sensor_obj, "sid", sid);
+	cJSON_AddStringToObject(sensor_obj, "lastCall", "2024-12-16T12:00:00Z");
+	cJSON_AddStringToObject(sensor_obj, "controller", did);
+
+	// Values pro Sensor hinzufügen
+	cJSON *values_array = cJSON_CreateArray();
+	int n = get_array_length(values);
+	for (int i = 0; i < n; i++) {
+		// Value-Objekt erstellen
+		cJSON *value_obj = cJSON_CreateObject();
+
+		// Value-Objekt füllen
+		cJSON_AddStringToObject(value_obj, "timestamp", "timestamp");
+		cJSON_AddNumberToObject(value_obj, "value", values[i]);
+
+		// Value-Objekt zum Array hinzufügen
+		cJSON_AddItemToArray(values_array, value_obj);
+	}
+
+	// Values-Array zum Sensor hinzufügen
+	cJSON_AddItemToObject(sensor_obj, "values", values_array);
+
+	cJSON_AddStringToObject(sensor_obj, "ilk", ilk);
+	cJSON_AddStringToObject(sensor_obj, "unit", unit);
+	cJSON_AddStringToObject(sensor_obj, "status", status);
+
+	return sensor_obj;
+}
+
+// Funktion um JSON für Controller zu erstellen
+char* create_json_message(char did[], cJSON sensors[], int num_sensors) {
 	// Root-Objekt erstellen
 	cJSON *root = cJSON_CreateObject();
 	if (root == NULL) {
@@ -37,54 +70,15 @@ char* create_json_message(const int value_counts[], int num_sensors) {
 	}
 
 	cJSON_AddStringToObject(root, "did", did);
-	cJSON_AddStringToObject(root, "model", model);
+	cJSON_AddStringToObject(root, "model", MODEL);
 
 	// Array für "sensors" erstellen
 	cJSON *sensors_array = cJSON_CreateArray();
 
 	// Sensoren hinzufügen
 	for (int i = 0; i < num_sensors; ++i) {
-		// Sensor-Objekt erstellen
-		cJSON *sensor_obj = cJSON_CreateObject();
-
-		// Dynamische Sensor-ID erstellen
-		char sid[64];
-		snprintf(sid, sizeof(sid), "%s%d", sid_prefix, i + 1);
-		cJSON_AddStringToObject(sensor_obj, "sid", sid);
-
-		cJSON_AddStringToObject(sensor_obj, "lastCall", "2024-12-16T12:00:00Z");
-		cJSON_AddStringToObject(sensor_obj, "controller", did);
-
-		// Values pro Sensor hinzufügen
-		cJSON *values_array = cJSON_CreateArray();
-		for (int j = 0; j < value_counts[i]; j++) {
-			// Value-Objekt erstellen
-			cJSON *value_obj = cJSON_CreateObject();
-
-			// Dynamischer Timestamp (Beispiel: Inkrement um j Minuten)
-			char timestamp[64];
-			snprintf(timestamp, sizeof(timestamp), "2024-12-16T12:%02d:00Z", j);
-
-			// Beispielwert (kann dynamisch berechnet oder gesetzt werden)
-			double value = 20.0 + (i * 2) + (j * 0.5);
-
-			// Value-Objekt füllen
-			cJSON_AddStringToObject(value_obj, "timestamp", timestamp);
-			cJSON_AddNumberToObject(value_obj, "value", value);
-
-			// Value-Objekt zum Array hinzufügen
-			cJSON_AddItemToArray(values_array, value_obj);
-		}
-
-		// Values-Array zum Sensor hinzufügen
-		cJSON_AddItemToObject(sensor_obj, "values", values_array);
-
 		// Sensor-Objekt zum Sensors-Array hinzufügen
-		cJSON_AddItemToArray(sensors_array, sensor_obj);
-
-		cJSON_AddStringToObject(sensor_obj, "ilk", ilk);
-		cJSON_AddStringToObject(sensor_obj, "unit", unit);
-		cJSON_AddStringToObject(sensor_obj, "status", status);
+		cJSON_AddItemToArray(sensors_array, &sensors[i]);
 	}
 
 	// Sensors-Array zum Root hinzufügen
@@ -125,13 +119,6 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 
 		// Topic abonnieren
 		esp_mqtt_client_subscribe(client, MQTT_TOPIC_RECEIVE, 1);
-
-		// JSON-Objekt an Solace senden
-		int value_counts[] = {4, 4, 4, 4};
-		int num_sensors = 4;
-		char *json_str = create_json_message(value_counts, num_sensors);
-		send_message(json_str);
-		free(json_str);
 		break;
 
 	case MQTT_EVENT_DISCONNECTED:
