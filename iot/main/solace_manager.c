@@ -16,6 +16,9 @@ static const char *TAG = "MQTT_JSON_EXAMPLE";
 #define MQTT_TOPIC_SEND     "sensora/v1/send/id"
 #define MQTT_TOPIC_RECEIVE     "sensora/v1/receive/id"
 
+// Globaler MQTT-Client
+static esp_mqtt_client_handle_t client;
+
 // Funktion um JSON zu erstellen
 char* create_json_message(const int value_counts[], int num_sensors) {
 	// Variablen für JSON-Objekt TODO: Variabel Werte zuweisen
@@ -101,10 +104,20 @@ void process_json_object() {
 	// TODO: JSON mit unbekannter Struktur verarbeiten und dynamisch Daten extrahieren
 }
 
+// Funktion zum Senden von Nachrichten
+void send_message(const char *message) {
+	if (message != NULL) {
+		esp_mqtt_client_enqueue(client, MQTT_TOPIC_SEND, message, 0, 1, 1, true);
+		ESP_LOGI(TAG, "📡 Daten gesendet: %s", message);
+	} else {
+	ESP_LOGE(TAG, "❌ Fehler beim Senden an Solace");
+	}
+}
+
 // MQTT Event Handler
 static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data) {
 	esp_mqtt_event_handle_t event = (esp_mqtt_event_handle_t)event_data;
-	esp_mqtt_client_handle_t client = event->client;
+	client = event->client;
 
 	switch (event->event_id) {
 	case MQTT_EVENT_CONNECTED:
@@ -117,13 +130,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 		int value_counts[] = {4, 4, 4, 4};
 		int num_sensors = 4;
 		char *json_str = create_json_message(value_counts, num_sensors);
-		if (json_str != NULL) {
-			esp_mqtt_client_enqueue(client, MQTT_TOPIC_SEND, json_str, 0, 1, 1, true);
-			ESP_LOGI(TAG, "📡 Daten gesendet: %s", json_str);
-		} else {
-			ESP_LOGE(TAG, "❌ Fehler beim Senden an Solace");
-		}
-
+		send_message(json_str);
 		free(json_str);
 		break;
 
@@ -138,7 +145,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 	case MQTT_EVENT_DATA:
 		ESP_LOGI(TAG, "📨 Nachricht erhalten");
 		// JSON parsen
-		cJSON *root = cJSON_Parse(json_str);
+		/*cJSON *root = cJSON_Parse(json_str);
 		if (root == NULL) {
 			ESP_LOGE(TAG, "❌ Fehler beim Parsen der JSON-Daten");
 			return;
@@ -147,8 +154,8 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 		// Speicher freigeben
 		cJSON_Delete(root);
 		led_blink_start();
-		esp_mqtt_client_enqueue(client, MQTT_TOPIC_SEND, "Nachricht erhalten!", 0, 1, 1, true);
-		break;
+		send_message("Nachricht erhalten!");  //esp_mqtt_client_enqueue(client, MQTT_TOPIC_SEND, "Nachricht erhalten!", 0, 1, 1, true);
+		*/break;
 
 	default:
 		break;
@@ -168,7 +175,7 @@ void solace_init(void) {
 		.session.keepalive = 10,
 	};
 
-	esp_mqtt_client_handle_t client = esp_mqtt_client_init(&mqtt_cfg);
+	client = esp_mqtt_client_init(&mqtt_cfg);
 	esp_mqtt_client_register_event(client, ESP_EVENT_ANY_ID, mqtt_event_handler, client);
 	esp_mqtt_client_start(client);
 }

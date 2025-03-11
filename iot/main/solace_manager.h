@@ -3,6 +3,7 @@
 
 #include "esp_event.h"
 
-void solace_init();
+void send_message(const char *message);
+void solace_init(void);
 
 #endif // SOLACE_MANAGER_H
