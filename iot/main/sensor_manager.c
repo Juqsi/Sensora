@@ -10,11 +10,7 @@
 
 #define SAMPLES 3
 #define MEAN_COUNT 4
-#define MOISTURE_TAG "MOISTURE_SENSOR"
 #define MOISTURE_SENSOR_PIN ADC1_CHANNEL_5	// GPIO 33
-
-int value_counts[] = {4, 4, 4, 4};
-int num_sensors = 4;
 
 
 // Funktion zum Berechnen des Mittelwertes
@@ -46,6 +42,11 @@ char* get_timestamp() {
 	return timestamp;
 }
 
+// Umrechnung des ADC-Werts auf Prozent
+float adc_to_percentage(int adc_value) {
+	return ((float)adc_value / 4095) * 100.0f;
+}
+
 // Sensordaten regelmäßig lesen
 void read_sensordata(void *pvParameter) {
 	int values[SAMPLES];
@@ -59,8 +60,6 @@ void read_sensordata(void *pvParameter) {
 		int adc_reading = adc1_get_raw(MOISTURE_SENSOR_PIN);
 		values[valueIndex] = adc_reading;
 
-		send_message("test init");
-
 		// TODO: Zeitstempel einlesen und im Array speichern
 		//sprintf(timestamps[index], "%s", get_timestamp());  // Zeitstempel in das Array schreiben
 
@@ -70,23 +69,18 @@ void read_sensordata(void *pvParameter) {
 
 			if (meanIndex >= MEAN_COUNT - 1) {
 				// JSON Nachricht erstellen und schicken
-				send_message("test inner if");
-				cJSON *moisture_sensor = create_json_sensor("sid", "did", moistureMeans, "moisture", "%", "active");
-				char *msg = create_json_message("did", moisture_sensor, 4);
-				send_message("test msg");
+				cJSON *sensors[1];
+				sensors[0] = create_json_sensor("sid", "did", moistureMeans, MEAN_COUNT, "moisture", "%", "active");
+				char *msg = create_json_message("did", sensors, 1);
 				send_message(msg);
 
-				// Indizes zurücksetzen
 				meanIndex = 0;
 			} else {
 				meanIndex++;
-				send_message("test inner else");
 			}
-			send_message("test outer if");
 			valueIndex = 0;
 		} else {
 			valueIndex++;
-			send_message("test outer else");
 		}
 		vTaskDelay(pdMS_TO_TICKS(10000)); // Warte 10 Sekunden
 	}
@@ -96,5 +90,5 @@ void read_sensordata(void *pvParameter) {
 void adc_init(void) {
 	adc1_config_width(ADC_WIDTH_BIT_12);            // 12-Bit-Auflösung (0 - 4095)
 	adc1_config_channel_atten(MOISTURE_SENSOR_PIN, ADC_ATTEN_DB_0);
-	xTaskCreate(&read_sensordata, "read_sensordata", 2048, NULL, 5, NULL);
+	xTaskCreate(&read_sensordata, "read_sensordata", 8192, NULL, 5, NULL);
 }

@@ -20,14 +20,8 @@ static const char *TAG = "MQTT_JSON_EXAMPLE";
 // Globaler MQTT-Client
 static esp_mqtt_client_handle_t client;
 
-int get_array_length(const int input[]) {
-	int count = 0;
-	while (input[count] != -1) count++;
-	return count;
-}
-
 // Funktion um JSON für einen Sensor zu erstellen
-cJSON* create_json_sensor(char sid[], char did[], int values[], char ilk[], char unit[], char status[]) {
+cJSON* create_json_sensor(char sid[], char did[], int values[], int valueCount, char ilk[], char unit[], char status[]) {
 	// Sensor-Objekt erstellen
 	cJSON *sensor_obj = cJSON_CreateObject();
 
@@ -37,8 +31,7 @@ cJSON* create_json_sensor(char sid[], char did[], int values[], char ilk[], char
 
 	// Values pro Sensor hinzufügen
 	cJSON *values_array = cJSON_CreateArray();
-	int n = get_array_length(values);
-	for (int i = 0; i < n; i++) {
+	for (int i = 0; i < valueCount; i++) {
 		// Value-Objekt erstellen
 		cJSON *value_obj = cJSON_CreateObject();
 
@@ -61,7 +54,7 @@ cJSON* create_json_sensor(char sid[], char did[], int values[], char ilk[], char
 }
 
 // Funktion um JSON für Controller zu erstellen
-char* create_json_message(char did[], cJSON sensors[], int num_sensors) {
+char* create_json_message(char did[], cJSON *sensors[], int num_sensors) {
 	// Root-Objekt erstellen
 	cJSON *root = cJSON_CreateObject();
 	if (root == NULL) {
@@ -78,7 +71,7 @@ char* create_json_message(char did[], cJSON sensors[], int num_sensors) {
 	// Sensoren hinzufügen
 	for (int i = 0; i < num_sensors; ++i) {
 		// Sensor-Objekt zum Sensors-Array hinzufügen
-		cJSON_AddItemToArray(sensors_array, &sensors[i]);
+		cJSON_AddItemToArray(sensors_array, sensors[i]);
 	}
 
 	// Sensors-Array zum Root hinzufügen
