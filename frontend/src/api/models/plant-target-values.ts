@@ -5,6 +5,7 @@
  * @interface PlantTargetValues
  */
 export interface PlantTargetValues {
+  tid?: string
   /**
    * Zielwert
    *

@@ -6,7 +6,7 @@ import type { Plant, Sensor } from '@/api'
  * @export
  * @interface updatePlantBody
  */
-export interface updatePlantBody extends Omit<Plant, 'plantId'> {
+export interface updatePlantBody extends Omit<Plant, 'plantId' | 'controllers'> {
   /**
    * @type {Array<PlantplantIdSensors>}
    * @memberof updatePlantBody

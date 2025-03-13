@@ -19,8 +19,25 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { plantAvatars } from '@/components/plant3d/plantAvatars'
-import { type Controller, type createPlantBody, type Room, type updatePlantBody } from '@/api'
+import {
+  type Controller,
+  type createPlantBody,
+  ilk,
+  type PlantTargetValues,
+  type Room,
+  type updatePlantBody,
+  type Value,
+} from '@/api'
 import { toast } from 'vue-sonner'
+import {
+  NumberField,
+  NumberFieldContent,
+  NumberFieldDecrement,
+  NumberFieldIncrement,
+  NumberFieldInput,
+} from '@/components/ui/number-field'
+import { Switch } from '@/components/ui/switch'
+import { v4 as uuid } from 'uuid'
 
 const router = useRouter()
 const route = useRoute()
@@ -37,6 +54,17 @@ const selectedSensor = ref<Controller | null>(null)
 const plantType = ref<string>('')
 const selectedAvatar = ref<{ label: string; value: string } | null>(null)
 const note = ref<string>('')
+
+const targetValuesTemperature = ref<number>(24)
+var targetValuesTemperatureTid = uuid()
+const targetValuesSoilMoisture = ref<number>(30)
+var targetValuesSoilMoistureTid = uuid()
+const targetValuesHumidity = ref<number>(50)
+var targetValuesHumidityTid = uuid()
+const targetValuesBrightness = ref<number>(10)
+var targetValuesBrightnessTid = uuid()
+
+const activateTargetValues = ref<Boolean>(false)
 
 const loadPlantDetails = async () => {
   try {
@@ -55,6 +83,33 @@ const loadPlantDetails = async () => {
           : null
 
       note.value = editPlant?.note ?? ''
+      if (editPlant?.targetValues !== undefined && editPlant?.targetValues.length !== 0) {
+        for (let value of editPlant?.targetValues) {
+          switch (value.ilk as ilk) {
+            case ilk.temperature: {
+              targetValuesTemperature.value = value.value
+              targetValuesTemperatureTid = value.tid ?? uuid()
+              break
+            }
+            case ilk.humidity: {
+              targetValuesHumidity.value = value.value
+              targetValuesHumidityTid = value.tid ?? uuid()
+              break
+            }
+            case ilk.soilMoisture: {
+              targetValuesSoilMoisture.value = value.value
+              targetValuesSoilMoistureTid = value.tid ?? uuid()
+              break
+            }
+            case ilk.brightness: {
+              targetValuesBrightness.value = value.value
+              targetValuesBrightnessTid = value.tid ?? uuid()
+              break
+            }
+          }
+          activateTargetValues.value = true
+        }
+      }
     }
   } catch (error) {
     console.error('Fehler beim Laden der Pflanzendetails:', error)
@@ -69,17 +124,27 @@ onMounted(() => {
 
 const createPlant = async () => {
   if (selectedRoom.value === undefined || selectedRoom.value.rid === undefined) {
-    toast.warning(t('HIer Please enter a valid room'))
+    toast.warning(t('Please enter a valid room'))
   }
   if (route.params.id === undefined) {
     const newPlant: createPlantBody = {
       name: name.value,
       room: selectedRoom.value!.rid,
-      controllers: selectedSensor.value ? [selectedSensor.value as Controller] : [],
+      assignFullDevice: selectedSensor.value ? [selectedSensor.value.did] : [],
       plantType: plantType.value,
       avatarId: selectedAvatar.value?.value,
       note: note.value,
     }
+
+    if (activateTargetValues.value === true) {
+      newPlant.targetValues = [
+        { value: targetValuesTemperature.value, ilk: ilk.temperature },
+        { value: targetValuesHumidity.value, ilk: ilk.humidity },
+        { value: targetValuesSoilMoisture.value, ilk: ilk.soilMoisture },
+        { value: targetValuesBrightness.value, ilk: ilk.brightness },
+      ]
+    }
+
     try {
       await plantStore.createPlant(newPlant)
       router.back()
@@ -90,10 +155,30 @@ const createPlant = async () => {
     const editPlant: updatePlantBody = {
       name: name.value,
       room: selectedRoom.value!.rid,
-      controllers: selectedSensor.value ? [selectedSensor.value as Controller] : [],
+      assignFullDevice: selectedSensor.value ? [selectedSensor.value.did] : [],
       plantType: plantType.value,
       avatarId: selectedAvatar.value?.value,
       note: note.value,
+    }
+    if (activateTargetValues.value === true) {
+      editPlant.targetValues = [
+        {
+          value: targetValuesTemperature.value,
+          ilk: ilk.temperature,
+          tid: targetValuesTemperatureTid,
+        },
+        { value: targetValuesHumidity.value, ilk: ilk.humidity, tid: targetValuesHumidityTid },
+        {
+          value: targetValuesSoilMoisture.value,
+          ilk: ilk.soilMoisture,
+          tid: targetValuesSoilMoistureTid,
+        },
+        {
+          value: targetValuesBrightness.value,
+          ilk: ilk.brightness,
+          tid: targetValuesBrightnessTid,
+        },
+      ]
     }
     try {
       await plantStore.updatePlant(route.params.id as string, editPlant)
@@ -133,6 +218,52 @@ const createPlant = async () => {
               </SelectGroup>
             </SelectContent>
           </Select>
+        </div>
+      </div>
+
+      <div class="w-full">
+        <div class="flex items-center justify-between w-full gap-5">
+          <Label for="targetValues">{{ t('plant.settings.targetValues') }}</Label>
+          <Switch v-model="activateTargetValues" id="temperaturSwitch" />
+        </div>
+        <div
+          v-if="activateTargetValues"
+          class="mx-2 grid gap-2 md:grid-cols-2 mt-2"
+          id="targetValues"
+        >
+          <NumberField id="temperature" v-model="targetValuesTemperature" :min="0">
+            <Label for="temperature">
+              {{ t('values.temperature') }}
+            </Label>
+            <NumberFieldContent v-if="activateTargetValues">
+              <NumberFieldDecrement />
+              <NumberFieldInput />
+              <NumberFieldIncrement />
+            </NumberFieldContent>
+          </NumberField>
+          <NumberField id="soilMoisture" v-model="targetValuesSoilMoisture" :max="100" :min="0">
+            <Label for="soilMoisture">{{ t('values.soilMoisture') }}</Label>
+            <NumberFieldContent>
+              <NumberFieldDecrement />
+              <NumberFieldInput />
+              <NumberFieldIncrement />
+            </NumberFieldContent> </NumberField
+          ><NumberField id="humidity" v-model="targetValuesHumidity" :max="100" :min="0">
+            <Label for="humidity">{{ t('values.humidity') }}</Label>
+            <NumberFieldContent>
+              <NumberFieldDecrement />
+              <NumberFieldInput />
+              <NumberFieldIncrement />
+            </NumberFieldContent>
+          </NumberField>
+          <NumberField id="brightness" v-model="targetValuesBrightness" :min="0">
+            <Label for="brightness">{{ t('values.brightness') }}</Label>
+            <NumberFieldContent>
+              <NumberFieldDecrement />
+              <NumberFieldInput />
+              <NumberFieldIncrement />
+            </NumberFieldContent>
+          </NumberField>
         </div>
       </div>
 
