@@ -25,9 +25,8 @@ const yFormatter = (tick: number | Date, i: number, ticks: (number | Date)[]) =>
 
 // Formatierung der X-Achse für Zeit
 const xFormatter = (tick: number | Date, i: number, ticks: (number | Date)[]) => {
-  console.log('hier', tick)
   if (typeof tick === 'number') {
-    return new Date(props.data.values[tick]?.timestamp).toLocaleTimeString('de-DE', {
+    return new Date(props.data.values[tick]?.timestamp).toLocaleTimeString(locale.value, {
       hour: '2-digit',
       minute: '2-digit',
     })

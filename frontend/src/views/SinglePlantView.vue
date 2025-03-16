@@ -19,9 +19,7 @@ import { usePlantStore } from '@/stores'
 import { onMounted } from 'vue'
 import { ilk, type Plant } from '@/api'
 import { useI18n } from 'vue-i18n'
-import TestDia from '@/components/testDia.vue'
 
-const { locale } = useI18n()
 const route = useRoute()
 
 const plantStore = usePlantStore()
@@ -33,7 +31,7 @@ onMounted(async () => {
   if (route.params.id !== undefined) {
     plant.value = await plantStore.getPlantDetails(route.params.id as string)
     values = await plantStore.getCombinedSensorData(plant.value?.plantId ?? '', yesterday, today)
-    //updateActiveKey(ilk.temperature, true)
+    updateActiveKey(ilk.temperature, true)
   }
 })
 
@@ -98,22 +96,19 @@ const updateActiveKey = (key: ilk, force: Boolean = false) => {
         unit: '',
         ilk: activeKey.value,
       }
-      console.log('no activeData')
       return
     }
 
     const rawData = values[activeKey.value] || []
     const unit = rawData[0]?.unit ?? ''
-    console.log('rawData', rawData)
     activeData.value = {
       values: rawData.map(({ timestamp, value }) => ({
-        timestamp: new Date(timestamp).getTime(), // X-Achse benötigt UNIX-Zeitstempel
+        timestamp: new Date(timestamp).getTime(),
         [activeKey.value]: value, // Dynamischer Key basierend auf `ilk`
       })),
       unit: unit,
       ilk: activeKey.value,
     }
-    console.log('activeData', activeData.value)
   }
 }
 </script>
