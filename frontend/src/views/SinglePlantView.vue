@@ -26,9 +26,12 @@ const plantStore = usePlantStore()
 
 const plant = ref<Plant>()
 
+let values: Record<string, { timestamp: Date; value: number; unit: string }[]> | null
 onMounted(async () => {
   if (route.params.id !== undefined) {
     plant.value = await plantStore.getPlantDetails(route.params.id as string)
+    values = await plantStore.getCombinedSensorData(plant.value?.plantId ?? '', yesterday, today)
+    updateActiveKey(ilk.temperature, true)
   }
 })
 
@@ -66,67 +69,55 @@ const accordionItems = [
       'Aloe Vera thrives in bright, indirect sunlight but can also tolerate some direct sunlight. It should not be placed in dark, low-light areas.',
   },
 ]
-const values = {
-  temperature: [
-    {
-      year: 1970,
-      'Export Growth Rate': 2.04,
-      'Import Growth Rate': 1.53,
-    },
-    {
-      year: 1971,
-      'Export Growth Rate': 1.96,
-      'Import Growth Rate': 1.58,
-    },
-  ],
-  soilMoisture: [
-    {
-      year: 1970,
-      'Export Growth Rate': 3.04,
-      'Import Growth Rate': 4.53,
-    },
-    {
-      year: 1971,
-      'Export Growth Rate': 1.96,
-      'Import Growth Rate': 1.58,
-    },
-  ],
-  brightness: [
-    {
-      year: 1970,
-      'Export Growth Rate': 3.04,
-      'Import Growth Rate': 4.53,
-    },
-    {
-      year: 1971,
-      'Export Growth Rate': 1.96,
-      'Import Growth Rate': 1.58,
-    },
-  ],
-  humidity: [
-    {
-      year: 1970,
-      'Export Growth Rate': 3.04,
-      'Import Growth Rate': 4.53,
-    },
-    {
-      year: 1971,
-      'Export Growth Rate': 1.96,
-      'Import Growth Rate': 1.58,
-    },
-  ],
-}
+
+const today = new Date()
+const yesterday = new Date()
+yesterday.setDate(today.getDate() - 1)
 
 const activeKey = ref<ilk>(ilk.temperature)
 
-const updateActiveKey = (key: ilk) => {
-  activeKey.value = key
+const activeData = ref<{
+  values: { timestamp: number; [key: string]: number }[]
+  ilk: ilk
+  unit: string
+}>({
+  values: [],
+  unit: '',
+  ilk: ilk.temperature,
+})
+
+const updateActiveKey = (key: ilk, force: Boolean = false) => {
+  if (force || activeKey.value !== key) {
+    activeKey.value = key
+
+    if (values === null) {
+      activeData.value = {
+        values: [],
+        unit: '',
+        ilk: activeKey.value,
+      }
+      console.log('no activeData')
+      return
+    }
+
+    const rawData = values[activeKey.value] || []
+    const unit = rawData[0]?.unit ?? ''
+    console.log('rawData', rawData)
+    activeData.value = {
+      values: rawData.map(({ timestamp, value }) => ({
+        timestamp: new Date(timestamp).getTime(), // X-Achse benötigt UNIX-Zeitstempel
+        [activeKey.value]: value, // Dynamischer Key basierend auf `ilk`
+      })),
+      unit: unit,
+      ilk: activeKey.value,
+    }
+    console.log('activeData', activeData.value)
+  }
 }
-const activeData = computed(() => values[activeKey.value] || [])
 </script>
 
 <template>
-  <NavCard sub-title=" Wohnzimmer" title="Pflanze Berta">
+  <NavCard sub-title="Wohnzimmer" :title="plant?.name ?? ''">
     <template #TitleRight>
       <router-link :to="`/plant/${route.params.id}/edit`">
         <Button size="icon" variant="ghost">
@@ -144,7 +135,7 @@ const activeData = computed(() => values[activeKey.value] || [])
     </TabsList>
     <TabsContent value="values">
       <MeasuredTiles @updateActiveKey="updateActiveKey" :plant="plant" />
-      <PlantMeassuredValuesChart :data="activeData" />
+      <PlantMeassuredValuesChart v-if="activeData.values.length !== 3" :data="activeData" />
     </TabsContent>
     <TabsContent value="infos">
       <Accordion :default-value="defaultValue" class="w-full" collapsible type="single">

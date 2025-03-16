@@ -23,7 +23,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <NavCard :sub-title="controller?.model" :title="controller?.did ?? 'error'"> </NavCard>
+  <NavCard :sub-title="controller?.model" :title="controller?.did ?? ''"> </NavCard>
   <Card>
     <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
       <CardTitle class="text-sm font-medium rounded-full bg-border p-2 border-2 border-foreground">
