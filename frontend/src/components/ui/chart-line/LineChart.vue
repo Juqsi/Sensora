@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { Axis, type BulletLegendItemInterface, CurveType, Line } from '@unovis/ts'
 import { VisAxis, VisLine, VisXYContainer } from '@unovis/vue'
 import { useMounted } from '@vueuse/core'
-import { type Component, computed, ref } from 'vue'
+import { type Component, computed, ref, onBeforeUnmount, onMounted } from 'vue'
 
 const props = withDefaults(
   defineProps<
@@ -54,14 +54,47 @@ const legendItems = computed<BulletLegendItemInterface[]>(() => {
 })
 
 const isMounted = useMounted()
+const chartContainer = ref<HTMLElement | null>(null)
 
 function handleLegendItemClick(d: BulletLegendItemInterface, i: number) {
   emits('legendItemClick', d, i)
 }
+
+// Touch-Unterstützung für Tooltip
+const handleTouchMove = (event: TouchEvent | PointerEvent) => {
+  if (!chartContainer.value) return
+
+  const rect = chartContainer.value.getBoundingClientRect()
+  const xPos = 'touches' in event ? event.touches[0].clientX : event.clientX
+  const yPos = 'touches' in event ? event.touches[0].clientY : event.clientY
+
+  // Prüfen, ob Touch innerhalb des Diagramms ist
+  if (xPos >= rect.left && xPos <= rect.right && yPos >= rect.top && yPos <= rect.bottom) {
+    event.preventDefault() // Verhindert unerwünschtes Scrollen
+  }
+}
+
+onMounted(() => {
+  if (chartContainer.value) {
+    chartContainer.value.addEventListener('pointermove', handleTouchMove, { passive: false })
+    chartContainer.value.addEventListener('touchmove', handleTouchMove, { passive: false })
+  }
+})
+
+onBeforeUnmount(() => {
+  if (chartContainer.value) {
+    chartContainer.value.removeEventListener('pointermove', handleTouchMove)
+    chartContainer.value.removeEventListener('touchmove', handleTouchMove)
+  }
+})
 </script>
 
 <template>
-  <div :class="cn('w-full h-[400px] flex flex-col items-end', $attrs.class ?? '')">
+  <div
+    ref="chartContainer"
+    :class="cn('w-full h-[400px] flex flex-col items-end', $attrs.class ?? '')"
+    style="touch-action: none"
+  >
     <ChartLegend
       v-if="showLegend"
       v-model:items="legendItems"
@@ -94,12 +127,8 @@ function handleLegendItemClick(d: BulletLegendItemInterface, i: number) {
           }"
           :color="colors[i]"
           :curve-type="curveType"
-          :x="
-            (d: Data, i: number) => {
-              return d?.[props.index]
-            }
-          "
-          :y="(d: Data) => d[category]"
+          :x="(d) => d?.[props.index]"
+          :y="(d) => d[category]"
         />
       </template>
 
@@ -114,11 +143,7 @@ function handleLegendItemClick(d: BulletLegendItemInterface, i: number) {
       />
       <VisAxis
         v-if="showYAxis"
-        :attributes="{
-          [Axis.selectors.grid]: {
-            class: 'text-muted',
-          },
-        }"
+        :attributes="{ [Axis.selectors.grid]: { class: 'text-muted' } }"
         :domain-line="false"
         :grid-line="showGridLine"
         :tick-format="yFormatter"
