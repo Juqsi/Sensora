@@ -206,12 +206,17 @@ export const usePlantStore = defineStore('plant', {
 
     async getCombinedSensorData(plantId: string, startTime?: Date, endTime?: Date) {
       const MAX_DATA_POINTS = 500 // Kritische Grenze, z. B. max. 500 Punkte pro Sensor
-      const plant = this.plants.find((plant) => plant.plantId === plantId)
-      if (!plant) return null
-
       const start = startTime || new Date(0)
       const end = endTime || new Date()
-
+      let plant: Plant | undefined
+      try {
+        plant = await this.getPlantDetails(plantId, start, end)
+      } catch (error) {
+        toast.error('kann pflanze nicht laden')
+      }
+      if (!plant) {
+        return null
+      }
       // 1. Alle Werte extrahieren und in ein flaches Array umwandeln
       const allSensorValues =
         plant.controllers?.flatMap(

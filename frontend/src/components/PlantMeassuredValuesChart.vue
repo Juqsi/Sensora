@@ -25,30 +25,15 @@ const yFormatter = (tick: number | Date, i: number, ticks: (number | Date)[]) =>
 
 // Formatierung der X-Achse für Zeit
 const xFormatter = (tick: number | Date, i: number, ticks: (number | Date)[]) => {
-  console.log(typeof tick)
-  console.log(
-    new Date(tick).toLocaleTimeString('de-DE', {
-      hour: '2-digit',
-      minute: '2-digit',
-    }),
-  )
-  console.log(tick)
+  console.log('hier', tick)
   if (typeof tick === 'number') {
-    return new Date(tick).toLocaleTimeString('de-DE', {
+    return new Date(props.data.values[tick]?.timestamp).toLocaleTimeString('de-DE', {
       hour: '2-digit',
       minute: '2-digit',
     })
   }
   return ''
 }
-
-// Berechnung der Y-Achsen-Skala (die den maximalen und minimalen Wert abdeckt)
-const yDomain = computed(() => {
-  const allValues = props.data.values.flatMap((item) => Object.values(item).filter((value) => true))
-  const minValue = Math.min(...allValues)
-  const maxValue = Math.max(...allValues)
-  return [minValue - (maxValue - minValue) * 0.05, maxValue + (maxValue - minValue) * 0.05]
-})
 </script>
 
 <template>
@@ -58,7 +43,6 @@ const yDomain = computed(() => {
     :data="props.data.values"
     :y-formatter="yFormatter"
     index="timestamp"
-    :y-domain="yDomain"
     :x-formatter="xFormatter"
   />
 </template>

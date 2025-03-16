@@ -15,11 +15,13 @@ import { computed, ref } from 'vue'
 
 import { useRoute } from 'vue-router'
 import NavCard from '@/components/NavCard.vue'
-import { plantAvatars } from '@/components/plant3d/plantAvatars.ts'
 import { usePlantStore } from '@/stores'
 import { onMounted } from 'vue'
 import { ilk, type Plant } from '@/api'
+import { useI18n } from 'vue-i18n'
+import TestDia from '@/components/testDia.vue'
 
+const { locale } = useI18n()
 const route = useRoute()
 
 const plantStore = usePlantStore()
@@ -31,7 +33,7 @@ onMounted(async () => {
   if (route.params.id !== undefined) {
     plant.value = await plantStore.getPlantDetails(route.params.id as string)
     values = await plantStore.getCombinedSensorData(plant.value?.plantId ?? '', yesterday, today)
-    updateActiveKey(ilk.temperature, true)
+    //updateActiveKey(ilk.temperature, true)
   }
 })
 
@@ -126,7 +128,6 @@ const updateActiveKey = (key: ilk, force: Boolean = false) => {
       </router-link>
     </template>
   </NavCard>
-
   <Plant3d plant-model-path="/models3d/plant.glb" />
   <Tabs class="w-full" default-value="values">
     <TabsList class="grid w-full grid-cols-2">
@@ -135,7 +136,7 @@ const updateActiveKey = (key: ilk, force: Boolean = false) => {
     </TabsList>
     <TabsContent value="values">
       <MeasuredTiles @updateActiveKey="updateActiveKey" :plant="plant" />
-      <PlantMeassuredValuesChart v-if="activeData.values.length !== 3" :data="activeData" />
+      <PlantMeassuredValuesChart :data="activeData" />
     </TabsContent>
     <TabsContent value="infos">
       <Accordion :default-value="defaultValue" class="w-full" collapsible type="single">

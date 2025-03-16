@@ -40,6 +40,11 @@ const data = [
     Helligkeit: 1600,
   },
 ]
+
+const xFormatter = (tick: number | Date, i: number, ticks: (number | Date)[]) => {
+  console.log(ticks)
+  return tick
+}
 </script>
 
 <template>
@@ -65,6 +70,7 @@ const data = [
         return ''
       }
     "
+    :x-formatter="xFormatter"
     index="Stunde"
   />
 </template>
