@@ -18,6 +18,7 @@ const props = withDefaults(
        * Type of curve
        */
       curveType?: CurveType
+      tickValuesX?: Array<number>
     }
   >(),
   {
@@ -108,6 +109,7 @@ function handleLegendItemClick(d: BulletLegendItemInterface, i: number) {
         :tick-format="xFormatter ?? ((v: number) => data[v]?.[index])"
         :tick-line="false"
         tick-text-color="hsl(var(--vis-text-color))"
+        :tickValues="props.tickValuesX"
         type="x"
       />
       <VisAxis
