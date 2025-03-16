@@ -214,9 +214,11 @@ export const usePlantStore = defineStore('plant', {
       } catch (error) {
         toast.error('kann pflanze nicht laden')
       }
+
       if (!plant) {
         return null
       }
+
       // 1. Alle Werte extrahieren und in ein flaches Array umwandeln
       const allSensorValues =
         plant.controllers?.flatMap(
@@ -227,15 +229,15 @@ export const usePlantStore = defineStore('plant', {
                   timestamp: new Date(value.timestamp),
                   value: value.value,
                   ilk: sensor.ilk,
-                  unit: sensor.unit, // Füge die Einheit hier hinzu
+                  unit: sensor.unit,
                 })) || [],
             ) || [],
         ) || []
 
-      // 2. Nach Zeitraum filtern
-      const filteredValues = allSensorValues.filter(
-        (entry) => entry.timestamp >= start && entry.timestamp <= end,
-      )
+      // 2. Nach Zeitraum filtern und direkt sortieren
+      const filteredValues = allSensorValues
+        .filter((entry) => entry.timestamp >= start && entry.timestamp <= end)
+        .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
 
       // 3. Werte nach ilk gruppieren
       const groupedByIlk = filteredValues.reduce<
@@ -245,7 +247,7 @@ export const usePlantStore = defineStore('plant', {
         acc[entry.ilk].push({
           timestamp: entry.timestamp,
           value: entry.value,
-          unit: entry.unit, // Die Einheit hier auch speichern
+          unit: entry.unit,
         })
         return acc
       }, {})
@@ -254,15 +256,15 @@ export const usePlantStore = defineStore('plant', {
       const aggregatedData = Object.fromEntries(
         Object.entries(groupedByIlk).map(([ilk, values]) => {
           if (values.length <= MAX_DATA_POINTS) {
-            return [ilk, values] // 🔹 Keine Reduktion notwendig
+            return [ilk, values] //  Keine Reduktion notwendig
           }
 
-          // Berechne die Aggregationsstufe (z. B. alle X Minuten/Stunden)
-          const factor = Math.ceil(values.length / MAX_DATA_POINTS) // Wie stark reduzieren?
+          // Berechne die Aggregationsstufe
+          const factor = Math.ceil(values.length / MAX_DATA_POINTS)
           const groupedByTime: Record<string, { sum: number; count: number }> = {}
 
-          values.forEach(({ timestamp, value, unit }, index) => {
-            if (index % factor !== 0) return // 🔹 Nur jede factor-te Messung berücksichtigen
+          values.forEach(({ timestamp, value }, index) => {
+            if (index % factor !== 0) return
 
             const timeKey = timestamp.toISOString().substring(0, 13) // "YYYY-MM-DDTHH" → Stündlich
             if (!groupedByTime[timeKey]) groupedByTime[timeKey] = { sum: 0, count: 0 }
@@ -270,11 +272,13 @@ export const usePlantStore = defineStore('plant', {
             groupedByTime[timeKey].count += 1
           })
 
-          const averagedValues = Object.entries(groupedByTime).map(([hour, { sum, count }]) => ({
-            timestamp: new Date(hour + ':00:00Z'),
-            value: sum / count, // Durchschnittswert
-            unit: values[0]?.unit, // Einheit aus dem ersten Wert des `ilk` übernehmen
-          }))
+          const averagedValues = Object.entries(groupedByTime)
+            .map(([hour, { sum, count }]) => ({
+              timestamp: new Date(hour + ':00:00Z'),
+              value: sum / count,
+              unit: values[0]?.unit,
+            }))
+            .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime()) //  Sortierung nach Zeit
 
           return [ilk, averagedValues]
         }),

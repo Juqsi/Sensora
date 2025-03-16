@@ -17,7 +17,7 @@ defineProps<{
       <div v-for="(item, key) in data" :key="key" class="flex justify-between items-center">
         <div class="flex items-center">
           <span :style="{ background: item.color }" class="w-1 h-7 mr-4 rounded-full" />
-          <span>{{ item.groupName }}</span>
+          <span>{{ title }}</span>
         </div>
         <span class="font-semibold ml-4">{{ item.value }}</span>
       </div>

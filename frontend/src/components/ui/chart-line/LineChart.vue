@@ -78,6 +78,8 @@ function handleLegendItemClick(d: BulletLegendItemInterface, i: number) {
         :custom-tooltip="customTooltip"
         :index="index"
         :items="legendItems"
+        :x-formatter="xFormatter"
+        :y-formatter="yFormatter"
       />
 
       <template v-for="(category, i) in categories" :key="category">
@@ -91,7 +93,11 @@ function handleLegendItemClick(d: BulletLegendItemInterface, i: number) {
           }"
           :color="colors[i]"
           :curve-type="curveType"
-          :x="(d: Data, i: number) => i"
+          :x="
+            (d: Data, i: number) => {
+              return d?.[props.index]
+            }
+          "
           :y="(d: Data) => d[category]"
         />
       </template>
