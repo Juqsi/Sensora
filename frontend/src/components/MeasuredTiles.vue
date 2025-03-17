@@ -3,24 +3,31 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowDown, ArrowLeft, ArrowUp, Droplet, Sun, Thermometer } from 'lucide-vue-next'
 import { ilk, type Plant, type Value } from '@/api'
 import { latestSensorValue } from '@/composables/useLatestSensorValue.ts'
-import { ref } from 'vue'
+import { ref, onMounted, type PropType } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { locale } = useI18n()
 const plant = ref<Plant | undefined>()
 
+const props = defineProps({ plant: { type: Object as PropType<Plant>, required: false } })
+
 defineEmits(['updateActiveKey'])
 
 const initializeWithPlant = (newPlant: Plant) => {
-  console.log('hier')
-  console.log('plant', newPlant)
   plant.value = newPlant
-  console.log('latestValues', latestSensorValue([newPlant], ilk.temperature))
   temperature.value = latestSensorValue([newPlant], ilk.temperature)
   soilMoisture.value = latestSensorValue([newPlant], ilk.soilMoisture)
   brightness.value = latestSensorValue([newPlant], ilk.brightness)
   humidity.value = latestSensorValue([newPlant], ilk.humidity)
 }
+
+onMounted(() => {
+  console.log('Mounted')
+  console.log(props.plant)
+  if (props.plant !== undefined && plant.value === undefined) {
+    initializeWithPlant(props.plant as Plant)
+  }
+})
 
 const temperature = ref<Value | undefined>()
 const soilMoisture = ref<Value | undefined>()
@@ -66,7 +73,7 @@ const formatTimestamp = (timestamp?: string | number) => {
       </CardHeader>
       <CardContent>
         <div class="text-2xl font-bold flex-row flex justify-between items-center">
-          {{ temperature?.value ?? '--' }} <ArrowUp class="w-4 h-4" />
+          {{ temperature?.value ?? '--' }}
         </div>
         <p class="text-xs text-muted-foreground">{{ formatTimestamp(temperature?.timestamp) }}</p>
       </CardContent>
@@ -78,7 +85,7 @@ const formatTimestamp = (timestamp?: string | number) => {
       </CardHeader>
       <CardContent>
         <div class="text-2xl font-bold flex-row flex justify-between items-center">
-          {{ soilMoisture?.value ?? '--' }} <ArrowDown class="w-4 h-4" />
+          {{ soilMoisture?.value ?? '--' }}
         </div>
         <p class="text-xs text-muted-foreground">{{ formatTimestamp(soilMoisture?.timestamp) }}</p>
       </CardContent>
@@ -90,7 +97,7 @@ const formatTimestamp = (timestamp?: string | number) => {
       </CardHeader>
       <CardContent>
         <div class="text-2xl font-bold flex-row flex justify-between items-center">
-          {{ humidity?.value ?? '--' }} <ArrowLeft class="w-4 h-4" />
+          {{ humidity?.value ?? '--' }}
         </div>
         <p class="text-xs text-muted-foreground">{{ formatTimestamp(humidity?.timestamp) }}</p>
       </CardContent>
@@ -102,7 +109,7 @@ const formatTimestamp = (timestamp?: string | number) => {
       </CardHeader>
       <CardContent>
         <div class="text-2xl font-bold flex-row flex justify-between items-center">
-          {{ brightness?.value ?? '--' }} <ArrowLeft class="w-4 h-4" />
+          {{ brightness?.value ?? '--' }}
         </div>
         <p class="text-xs text-muted-foreground">{{ formatTimestamp(brightness?.timestamp) }}</p>
       </CardContent>

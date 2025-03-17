@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import MeasuredTiles from '@/components/MeasuredTiles.vue' // Importiere das Child-Komponent
 import { useRoute } from 'vue-router'
 import NavCard from '@/components/NavCard.vue'
 import { usePlantStore } from '@/stores'
-import { onMounted } from 'vue'
 import { ilk, type Plant } from '@/api'
 import { Accordion, AccordionContent } from '@/components/ui/accordion'
 import { AccordionItem, AccordionTrigger } from '@/components/ui/custom-accordion'
@@ -24,13 +23,7 @@ let values: Record<string, { timestamp: Date; value: number; unit: string }[]> |
 onMounted(async () => {
   console.log('Mounted')
   if (route.params.id !== undefined) {
-    const loadedPlant = await plantStore.getPlantDetails(
-      route.params.id as string,
-      oneHourAgo,
-      today,
-    )
-    console.log('geladenen Pflanze', loadedPlant)
-    plant.value = loadedPlant
+    plant.value = await plantStore.getPlantDetails(route.params.id as string, oneHourAgo, today)
     values = await plantStore.getCombinedSensorData(plant.value?.plantId ?? '', yesterday, today)
 
     // Stelle sicher, dass measuredTiles existiert, bevor du die Methode aufrufst
@@ -78,9 +71,9 @@ const accordionItems = [
 
 const today = new Date()
 const oneHourAgo = new Date()
-oneHourAgo.setHours(oneHourAgo.getHours() - 1)
+oneHourAgo.setHours(oneHourAgo.getHours() - 5)
 const yesterday = new Date()
-yesterday.setDate(today.getDate() - 1)
+yesterday.setDate(today.getDate() - 3)
 
 const activeKey = ref<ilk>(ilk.temperature)
 
@@ -138,7 +131,7 @@ const updateActiveKey = (key: ilk, force: Boolean = false) => {
       <TabsTrigger value="infos"> Infos</TabsTrigger>
     </TabsList>
     <TabsContent value="values">
-      <MeasuredTiles @updateActiveKey="updateActiveKey" ref="measuredTiles" />
+      <MeasuredTiles :plant="plant" @updateActiveKey="updateActiveKey" ref="measuredTiles" />
       <PlantMeassuredValuesChart :data="activeData" />
     </TabsContent>
     <TabsContent value="infos">
