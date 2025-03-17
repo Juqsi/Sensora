@@ -171,9 +171,21 @@ usePullToRefresh(async () => {
   }
 })
 onMounted(() => {
-  deviceStore.fetchDevices()
-  groupStore.fetchGroups()
-  plantStore.fetchPlants()
+  try {
+    deviceStore.fetchDevices()
+  } catch (e) {
+    console.error(e)
+  }
+  try {
+    groupStore.fetchGroups()
+  } catch (e) {
+    console.error(e)
+  }
+  try {
+    plantStore.fetchPlants()
+  } catch (e) {
+    console.error(e)
+  }
 })
 </script>
 

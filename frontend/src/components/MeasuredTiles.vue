@@ -3,23 +3,58 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowDown, ArrowLeft, ArrowUp, Droplet, Sun, Thermometer } from 'lucide-vue-next'
 import { ilk, type Plant, type Value } from '@/api'
 import { latestSensorValue } from '@/composables/useLatestSensorValue.ts'
-import type { PropType } from 'vue'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-const props = defineProps({
-  plant: { type: Object as PropType<Plant | undefined>, required: true },
-})
+const { locale } = useI18n()
+const plant = ref<Plant | undefined>()
 
 defineEmits(['updateActiveKey'])
 
-const temperature = ref<Value | undefined>(
-  latestSensorValue([props.plant as Plant], ilk.temperature),
-)
-const soilMoisture = ref<Value | undefined>(
-  latestSensorValue([props.plant as Plant], ilk.soilMoisture),
-)
-const brightness = ref<Value | undefined>(latestSensorValue([props.plant as Plant], ilk.brightness))
-const humidity = ref<Value | undefined>(latestSensorValue([props.plant as Plant], ilk.humidity))
+const initializeWithPlant = (newPlant: Plant) => {
+  console.log('hier')
+  console.log('plant', newPlant)
+  plant.value = newPlant
+  console.log('latestValues', latestSensorValue([newPlant], ilk.temperature))
+  temperature.value = latestSensorValue([newPlant], ilk.temperature)
+  soilMoisture.value = latestSensorValue([newPlant], ilk.soilMoisture)
+  brightness.value = latestSensorValue([newPlant], ilk.brightness)
+  humidity.value = latestSensorValue([newPlant], ilk.humidity)
+}
+
+const temperature = ref<Value | undefined>()
+const soilMoisture = ref<Value | undefined>()
+const brightness = ref<Value | undefined>()
+const humidity = ref<Value | undefined>()
+
+defineExpose({
+  initializeWithPlant,
+})
+
+const formatTimestamp = (timestamp?: string | number) => {
+  if (!timestamp) return '--'
+
+  const date = new Date(timestamp)
+  const today = new Date()
+
+  // Prüfen, ob das Datum heute ist
+  const isToday =
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+
+  if (isToday) {
+    // Nur die Uhrzeit anzeigen (HH:mm)
+    return date.toLocaleTimeString(locale.value, { hour: '2-digit', minute: '2-digit' })
+  } else {
+    // Datum im Format DD.MM und Uhrzeit anzeigen
+    return (
+      date.toLocaleDateString(locale.value, { day: '2-digit', month: '2-digit' }) +
+      ' ' +
+      date.toLocaleTimeString(locale.value, { hour: '2-digit', minute: '2-digit' })
+    )
+  }
+}
 </script>
 
 <template>
@@ -33,7 +68,7 @@ const humidity = ref<Value | undefined>(latestSensorValue([props.plant as Plant]
         <div class="text-2xl font-bold flex-row flex justify-between items-center">
           {{ temperature?.value ?? '--' }} <ArrowUp class="w-4 h-4" />
         </div>
-        <p class="text-xs text-muted-foreground">{{ temperature?.timestamp ?? '' }}</p>
+        <p class="text-xs text-muted-foreground">{{ formatTimestamp(temperature?.timestamp) }}</p>
       </CardContent>
     </Card>
     <Card @click="$emit('updateActiveKey', ilk.soilMoisture)">
@@ -45,7 +80,7 @@ const humidity = ref<Value | undefined>(latestSensorValue([props.plant as Plant]
         <div class="text-2xl font-bold flex-row flex justify-between items-center">
           {{ soilMoisture?.value ?? '--' }} <ArrowDown class="w-4 h-4" />
         </div>
-        <p class="text-xs text-muted-foreground">{{ soilMoisture?.timestamp ?? '' }}</p>
+        <p class="text-xs text-muted-foreground">{{ formatTimestamp(soilMoisture?.timestamp) }}</p>
       </CardContent>
     </Card>
     <Card @click="$emit('updateActiveKey', ilk.humidity)">
@@ -57,7 +92,7 @@ const humidity = ref<Value | undefined>(latestSensorValue([props.plant as Plant]
         <div class="text-2xl font-bold flex-row flex justify-between items-center">
           {{ humidity?.value ?? '--' }} <ArrowLeft class="w-4 h-4" />
         </div>
-        <p class="text-xs text-muted-foreground">{{ humidity?.timestamp ?? '' }}</p>
+        <p class="text-xs text-muted-foreground">{{ formatTimestamp(humidity?.timestamp) }}</p>
       </CardContent>
     </Card>
     <Card @click="$emit('updateActiveKey', ilk.brightness)">
@@ -69,7 +104,7 @@ const humidity = ref<Value | undefined>(latestSensorValue([props.plant as Plant]
         <div class="text-2xl font-bold flex-row flex justify-between items-center">
           {{ brightness?.value ?? '--' }} <ArrowLeft class="w-4 h-4" />
         </div>
-        <p class="text-xs text-muted-foreground">{{ brightness?.timestamp ?? '' }}</p>
+        <p class="text-xs text-muted-foreground">{{ formatTimestamp(brightness?.timestamp) }}</p>
       </CardContent>
     </Card>
   </div>

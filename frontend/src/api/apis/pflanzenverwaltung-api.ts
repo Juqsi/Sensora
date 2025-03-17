@@ -1,8 +1,8 @@
-import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
-import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import type {createPlantBody, Plant, updatePlantBody} from '@/api/models'
+import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
+import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
+import type { createPlantBody, Plant, updatePlantBody } from '@/api/models'
 
-import type {CustomAxiosRequestConfig} from '@/api/apiClient.ts'
+import type { CustomAxiosRequestConfig } from '@/api/apiClient.ts'
 
 /**
  * PflanzenverwaltungApi - axios parameter creator
@@ -101,12 +101,16 @@ export const PflanzenverwaltungApiAxiosParamCreator = function () {
 
       if (startTime !== undefined) {
         localVarQueryParameter['startTime'] =
-          (startTime as any) instanceof Date ? (startTime as any).toISOString() : startTime
+          (startTime as any) instanceof Date
+            ? (startTime as any).toISOString().split('.')[0] + 'Z'
+            : startTime
       }
 
       if (endTime !== undefined) {
         localVarQueryParameter['endTime'] =
-          (endTime as any) instanceof Date ? (endTime as any).toISOString() : endTime
+          (endTime as any) instanceof Date
+            ? (endTime as any).toISOString().split('.')[0] + 'Z'
+            : endTime
       }
 
       const query = new URLSearchParams(localVarUrlObj.search)

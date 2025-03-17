@@ -1,36 +1,42 @@
 <script lang="ts" setup>
-import Plant3d from '@/components/plant3d/plant3d.vue'
-import MeasuredTiles from '@/components/MeasuredTiles.vue'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs/index.ts'
-import { Settings } from 'lucide-vue-next'
-import { Button } from '@/components/ui/button'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion/index.ts'
-import PlantMeassuredValuesChart from '@/components/PlantMeassuredValuesChart.vue'
-import { computed, ref } from 'vue'
-
+import { ref } from 'vue'
+import MeasuredTiles from '@/components/MeasuredTiles.vue' // Importiere das Child-Komponent
 import { useRoute } from 'vue-router'
 import NavCard from '@/components/NavCard.vue'
 import { usePlantStore } from '@/stores'
 import { onMounted } from 'vue'
 import { ilk, type Plant } from '@/api'
-import { useI18n } from 'vue-i18n'
+import { Accordion, AccordionContent } from '@/components/ui/accordion'
+import { AccordionItem, AccordionTrigger } from '@/components/ui/custom-accordion'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import PlantMeassuredValuesChart from '@/components/PlantMeassuredValuesChart.vue'
+import Plant3d from '@/components/plant3d/plant3d.vue'
+import { Settings } from 'lucide-vue-next'
 
 const route = useRoute()
-
 const plantStore = usePlantStore()
-
 const plant = ref<Plant>()
 
+const measuredTiles = ref<InstanceType<typeof MeasuredTiles> | null>(null)
+
 let values: Record<string, { timestamp: Date; value: number; unit: string }[]> | null
+
 onMounted(async () => {
+  console.log('Mounted')
   if (route.params.id !== undefined) {
-    plant.value = await plantStore.getPlantDetails(route.params.id as string)
+    const loadedPlant = await plantStore.getPlantDetails(
+      route.params.id as string,
+      oneHourAgo,
+      today,
+    )
+    console.log('geladenen Pflanze', loadedPlant)
+    plant.value = loadedPlant
     values = await plantStore.getCombinedSensorData(plant.value?.plantId ?? '', yesterday, today)
+
+    // Stelle sicher, dass measuredTiles existiert, bevor du die Methode aufrufst
+    if (plant.value && measuredTiles.value) {
+      measuredTiles.value.initializeWithPlant(plant.value) // Aufruf der Methode im Child-Komponent
+    }
     updateActiveKey(ilk.temperature, true)
   }
 })
@@ -71,8 +77,10 @@ const accordionItems = [
 ]
 
 const today = new Date()
+const oneHourAgo = new Date()
+oneHourAgo.setHours(oneHourAgo.getHours() - 1)
 const yesterday = new Date()
-yesterday.setDate(today.getDate() - 2)
+yesterday.setDate(today.getDate() - 1)
 
 const activeKey = ref<ilk>(ilk.temperature)
 
@@ -104,7 +112,7 @@ const updateActiveKey = (key: ilk, force: Boolean = false) => {
     activeData.value = {
       values: rawData.map(({ timestamp, value }) => ({
         timestamp: new Date(timestamp).getTime(),
-        [activeKey.value]: value, // Dynamischer Key basierend auf `ilk`
+        [activeKey.value]: value,
       })),
       unit: unit,
       ilk: activeKey.value,
@@ -130,7 +138,7 @@ const updateActiveKey = (key: ilk, force: Boolean = false) => {
       <TabsTrigger value="infos"> Infos</TabsTrigger>
     </TabsList>
     <TabsContent value="values">
-      <MeasuredTiles @updateActiveKey="updateActiveKey" :plant="plant" />
+      <MeasuredTiles @updateActiveKey="updateActiveKey" ref="measuredTiles" />
       <PlantMeassuredValuesChart :data="activeData" />
     </TabsContent>
     <TabsContent value="infos">

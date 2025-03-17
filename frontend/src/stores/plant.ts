@@ -149,7 +149,7 @@ export const usePlantStore = defineStore('plant', {
     ) {
       const existingPlant = this.plants.find((plant) => plant.plantId === plantId)
 
-      if (force || (existingPlant && startTime && endTime)) {
+      if (!force && existingPlant && startTime && endTime) {
         const start = startTime || new Date(0)
         const end = endTime || new Date()
 

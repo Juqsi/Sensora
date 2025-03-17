@@ -9,7 +9,14 @@ import router from './router'
 
 import i18n from '@/i18n'
 
-import { useAuthStore, useUserStore } from '@/stores'
+import {
+  useAuthStore,
+  useDeviceStore,
+  useGroupStore,
+  usePlantStore,
+  useRoomStore,
+  useUserStore,
+} from '@/stores'
 
 const app = createApp(App)
 
@@ -18,9 +25,12 @@ pinia.use(piniaPluginPersistedstate)
 app.use(pinia)
 
 const authStore = useAuthStore()
-const userStore = useUserStore()
 if (authStore.token && authStore.isAuthenticated) {
-  userStore.fetchUser()
+  useUserStore().fetchUser()
+  useGroupStore().fetchGroups()
+  usePlantStore().fetchPlants()
+  useDeviceStore().fetchDevices()
+  useRoomStore().fetchRooms()
 } else {
   authStore.logout()
 }
