@@ -57,7 +57,13 @@ const { t, tm, rt } = useI18n()
 
       <!-- Links Section -->
       <div class="flex justify-center space-x-8 mt-8">
-        <a :href="t('about.githubLink')" target="_blank" class="text-primary text-lg"> GitHub </a>
+        <a
+          :href="t('about.githubLink')"
+          target="https://github.com/Juqsi/Sensora"
+          class="text-primary text-lg"
+        >
+          GitHub
+        </a>
       </div>
     </div>
   </div>
