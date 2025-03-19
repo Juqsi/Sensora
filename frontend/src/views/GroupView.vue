@@ -71,9 +71,9 @@ usePullToRefresh(async () => {
     </AccordionItem>
   </Accordion>
   <EmtyState
-    :title="t('group.emptyGroupTitle')"
     :condition="groupStore.groups.length === 0"
     :subtitle="t('group.emptyGroupSubtitle')"
+    :title="t('group.emptyGroupTitle')"
     img-src="/svg/undraw_social-sharing_t073.svg"
   />
 </template>

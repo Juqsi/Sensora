@@ -100,8 +100,8 @@ const delteData = () => {
   <Card class="w-full">
     <CardContent class="grid gap-1 py-2 px-6">
       <div
-        @click="authStore.logout()"
         class="-mx-2 flex items-center space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
+        @click="authStore.logout()"
       >
         <LogOut class="mt-px h-5 w-5" />
         <div class="space-y-1">

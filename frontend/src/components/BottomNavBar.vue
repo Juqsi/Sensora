@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { CircuitBoard, Flower2, HomeIcon, Users } from 'lucide-vue-next'
+import { Flower2, HomeIcon, Users } from 'lucide-vue-next'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 

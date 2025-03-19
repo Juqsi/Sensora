@@ -1,4 +1,4 @@
-import {type Room} from '@/api'
+import { type Room } from '@/api'
 
 /**
  *

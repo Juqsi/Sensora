@@ -94,7 +94,7 @@
       }
     },
     "create": {
-      "RoomEntity" : "Kitchen"
+      "RoomEntity": "Kitchen"
     },
     "emptyGroupTitle": "Create Your First Group",
     "emptyGroupSubtitle": "Start by creating your first group to get started."
@@ -158,8 +158,8 @@
   "home": {
     "welcome": "Hello {name}!",
     "subtitle": "Overview of all rooms",
-    "emptyRoomsSubtitle" : "Start by creating your first room and add a plant to get started.",
-    "emptyRoomsTitle" : "Create Your First Room"
+    "emptyRoomsSubtitle": "Start by creating your first room and add a plant to get started.",
+    "emptyRoomsTitle": "Create Your First Room"
   },
   "404view": {
     "title": "404 - Page Not Found",
@@ -177,7 +177,13 @@
     "title": "About Us",
     "description": "We are a team of students working on our final project to create a smart irrigation system. The goal is to automate and optimize plant watering for households, making plant care easier and more efficient.",
     "teamTitle": "Our Team",
-    "teamMembers": ["Max", "Lukas", "Fynn", "Timon", "Justus"],
+    "teamMembers": [
+      "Max",
+      "Lukas",
+      "Fynn",
+      "Timon",
+      "Justus"
+    ],
     "projectGoalTitle": "Project Goal",
     "projectGoalDescription": "The goal of this project is to develop a smart irrigation system that allows efficient and automated watering of plants. The system should be flexible and allow users to configure watering times, amounts, and have remote access via a web interface.",
     "featuresTitle": "Key Features:",

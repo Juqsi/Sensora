@@ -1,9 +1,9 @@
-import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
+import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
 
-import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import type {createGroupBody, Group, GroupPatchBody} from '@/api/models'
+import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
+import type { createGroupBody, Group, GroupPatchBody } from '@/api/models'
 
-import type {CustomAxiosRequestConfig} from '@/api/apiClient.ts'
+import type { CustomAxiosRequestConfig } from '@/api/apiClient.ts'
 
 /**
  * GruppenverwaltungApi - axios parameter creator

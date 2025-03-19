@@ -87,7 +87,7 @@ const activeData = ref<{
   ilk: ilk.temperature,
 })
 
-const updateActiveKey = (key: ilk, force: Boolean = false) => {
+const updateActiveKey = (key: ilk, force: boolean = false) => {
   if (force || activeKey.value !== key) {
     activeKey.value = key
 
@@ -115,7 +115,7 @@ const updateActiveKey = (key: ilk, force: Boolean = false) => {
 </script>
 
 <template>
-  <NavCard sub-title="Wohnzimmer" :title="plant?.name ?? ''">
+  <NavCard :title="plant?.name ?? ''" sub-title="Wohnzimmer">
     <template #TitleRight>
       <router-link :to="`/plant/${route.params.id}/edit`">
         <Button size="icon" variant="ghost">
@@ -131,7 +131,7 @@ const updateActiveKey = (key: ilk, force: Boolean = false) => {
       <TabsTrigger value="infos"> Infos</TabsTrigger>
     </TabsList>
     <TabsContent value="values">
-      <MeasuredTiles :plant="plant" @updateActiveKey="updateActiveKey" ref="measuredTiles" />
+      <MeasuredTiles ref="measuredTiles" :plant="plant" @updateActiveKey="updateActiveKey" />
       <PlantMeassuredValuesChart :data="activeData" />
     </TabsContent>
     <TabsContent value="infos">

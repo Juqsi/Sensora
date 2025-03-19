@@ -40,8 +40,8 @@ import {
               </SelectTrigger>
               <SelectContent position="popper">
                 <SelectItem value="plant"> Plant</SelectItem>
-                <SelectItem value="sensor"> Sensor </SelectItem>
-                <SelectItem value="group"> Group </SelectItem>
+                <SelectItem value="sensor"> Sensor</SelectItem>
+                <SelectItem value="group"> Group</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -49,7 +49,7 @@ import {
       </form>
     </CardContent>
     <CardFooter class="flex justify-between px-6 pb-6">
-      <Button variant="outline"> Cancel </Button>
+      <Button variant="outline"> Cancel</Button>
       <Button>Create</Button>
     </CardFooter>
   </Card>

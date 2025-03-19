@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 defineProps<{
@@ -22,11 +22,11 @@ defineProps<{
       <div v-for="(item, key) in data" :key="key" class="flex justify-between">
         <div class="flex items-center">
           <span class="w-2.5 h-2.5 mr-2">
-            <svg width="100%" height="100%" viewBox="0 0 30 30">
+            <svg height="100%" viewBox="0 0 30 30" width="100%">
               <path
-                d=" M 15 15 m -14, 0 a 14,14 0 1,1 28,0 a 14,14 0 1,1 -28,0"
-                :stroke="item.color"
                 :fill="item.color"
+                :stroke="item.color"
+                d=" M 15 15 m -14, 0 a 14,14 0 1,1 28,0 a 14,14 0 1,1 -28,0"
                 stroke-width="1"
               />
             </svg>

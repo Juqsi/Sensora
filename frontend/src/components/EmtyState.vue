@@ -23,12 +23,12 @@ const props = defineProps({
 
 <template>
   <div
-    class="flex justify-center flex-col items-center w-full flex-grow mt-10 py-6"
     v-if="condition"
+    class="flex justify-center flex-col items-center w-full flex-grow mt-10 py-6"
   >
     <h2 class="mb-4 text-2xl font-semibold text-center">{{ title }}</h2>
     <p class="text-center text-muted-foreground mb-6">{{ subtitle }}</p>
-    <img class="w-32 h-32 object-contain mb-8" :src="imgSrc" alt="Illustration" />
+    <img :src="imgSrc" alt="Illustration" class="w-32 h-32 object-contain mb-8" />
   </div>
 </template>
 

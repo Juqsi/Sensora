@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import SetupAccountStepperView from '@/views/SetupAccountStepperView.vue'
 </script>
 

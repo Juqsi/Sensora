@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { StepperTitleProps } from 'radix-vue'
-import { cn } from '@/lib/utils'
 import { StepperTitle, useForwardProps } from 'radix-vue'
+import { cn } from '@/lib/utils'
 
 import { computed, type HTMLAttributes } from 'vue'
 
@@ -17,7 +17,10 @@ const forwarded = useForwardProps(delegatedProps)
 </script>
 
 <template>
-  <StepperTitle v-bind="forwarded" :class="cn('text-md font-semibold whitespace-nowrap', props.class)">
+  <StepperTitle
+    :class="cn('text-md font-semibold whitespace-nowrap', props.class)"
+    v-bind="forwarded"
+  >
     <slot />
   </StepperTitle>
 </template>

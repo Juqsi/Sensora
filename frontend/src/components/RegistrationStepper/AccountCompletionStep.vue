@@ -36,11 +36,11 @@ async function handleSubmit() {
         <div class="grid gap-4">
           <div class="grid gap-2">
             <Label for="forename"> {{ t('account.forename') }}* </Label>
-            <Input v-model="forename" id="forename" type="text" />
+            <Input id="forename" v-model="forename" type="text" />
           </div>
           <div class="grid gap-2">
             <Label for="surname">{{ t('account.surname') }}</Label>
-            <Input v-model="surname" id="surname" type="text" />
+            <Input id="surname" v-model="surname" type="text" />
           </div>
           <Button class="w-full" type="submit">{{ t('register.Continue') }}</Button>
         </div>

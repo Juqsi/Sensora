@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useI18n } from 'vue-i18n'
-import { useRoomStore, useUserStore, usePlantStore } from '@/stores'
+import { usePlantStore, useRoomStore, useUserStore } from '@/stores'
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 import EmtyState from '@/components/EmtyState.vue'
 import { onMounted } from 'vue'
@@ -76,7 +76,7 @@ onMounted(() => {
   </div>
 
   <template v-for="room in roomStore.rooms" :key="room.rid">
-    <div class="w-full mt-2" v-if="room.plants.length !== 0">
+    <div v-if="room.plants.length !== 0" class="w-full mt-2">
       <div class="flex justify-between items-center">
         <h3 class="text-xl my-2 font-medium">{{ room.name }}</h3>
       </div>
@@ -88,15 +88,15 @@ onMounted(() => {
     </div>
   </template>
   <EmtyState
-    :title="t('home.emptyRoomsTitle')"
     :condition="roomStore.rooms.length === 0"
     :subtitle="t('home.emptyRoomsSubtitle')"
+    :title="t('home.emptyRoomsTitle')"
     img-src="/svg/undraw_complete-design_pzh6.svg"
   />
   <EmtyState
-    :title="t('plantList.emptyPlantTitle')"
     :condition="plantStore.plants.length === 0 && !(roomStore.rooms.length === 0)"
     :subtitle="t('plantList.emptyPlantSubtitle')"
+    :title="t('plantList.emptyPlantTitle')"
     img-src="/svg/undraw_new-entries_xw4m.svg"
   />
 </template>

@@ -1,4 +1,4 @@
-import type {Plant, User} from '@/api'
+import type { Plant, User } from '@/api'
 
 /**
  *

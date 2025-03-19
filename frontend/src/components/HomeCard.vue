@@ -13,7 +13,7 @@ import {
   Wrench,
 } from 'lucide-vue-next'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { ilk, type Sensor, type Value, type Plant } from '@/api'
+import { ilk, type Plant } from '@/api'
 import { latestSensorValue } from '@/composables/useLatestSensorValue.ts'
 import { type PropType } from 'vue'
 

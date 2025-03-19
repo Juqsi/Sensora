@@ -1,5 +1,4 @@
 import type { Plant, Sensor, Value } from '@/api'
-import { usePlantStore } from '@/stores'
 
 export function latestSensorValue(plants: Plant[], ilk: string): Value | undefined {
   const allValues: Value[] = []

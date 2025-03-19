@@ -1,6 +1,6 @@
-import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
-import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import type {CustomAxiosRequestConfig} from '@/api/apiClient.ts'
+import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
+import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
+import type { CustomAxiosRequestConfig } from '@/api/apiClient.ts'
 
 /**
  * StatischApi - axios parameter creator

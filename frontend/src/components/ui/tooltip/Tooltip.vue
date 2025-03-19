@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { TooltipRootEmits, TooltipRootProps } from 'radix-vue'
 import { TooltipRoot, useForwardPropsEmits } from 'radix-vue'
 

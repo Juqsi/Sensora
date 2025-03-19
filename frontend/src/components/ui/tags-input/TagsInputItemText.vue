@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { cn } from '@/lib/utils'
 import { TagsInputItemText, type TagsInputItemTextProps, useForwardProps } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
@@ -15,5 +15,8 @@ const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
-  <TagsInputItemText v-bind="forwardedProps" :class="cn('py-1 px-2 text-sm rounded bg-transparent', props.class)" />
+  <TagsInputItemText
+    :class="cn('py-1 px-2 text-sm rounded bg-transparent', props.class)"
+    v-bind="forwardedProps"
+  />
 </template>

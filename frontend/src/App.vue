@@ -22,7 +22,7 @@ CapacitorApp.addListener('backButton', ({ canGoBack }) => {
     <router-view />
   </div>
   <bottom-nav-bar v-if="useAuthStore().isAuthenticated" />
-  <Toaster position="top-center" richColors :theme="mode === 'dark' ? 'dark' : 'light'" />
+  <Toaster :theme="mode === 'dark' ? 'dark' : 'light'" position="top-center" richColors />
 </template>
 
 <style scoped>

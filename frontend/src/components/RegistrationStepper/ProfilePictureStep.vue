@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref } from 'vue'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -44,19 +44,19 @@ const handleSubmit = async () => {
                 'border-4 border-primary ring-2 ring-green-400': selectedAvatar === avatar,
                 'border-gray-300': selectedAvatar !== avatar,
               }"
-              @click="selectedAvatar = avatar"
               class="flex items-center justify-center w-16 h-16 rounded-full cursor-pointer transition-all"
+              @click="selectedAvatar = avatar"
             >
               <img
-                src="https://avatars.githubusercontent.com/u/91261422?v=4&size=64"
                 :alt="avatar"
                 class="w-15 h-15 rounded-full"
+                src="https://avatars.githubusercontent.com/u/91261422?v=4&size=64"
               />
             </div>
             <Label :for="`avatar-${avatar}`" class="text-sm text-center">{{ avatar }}</Label>
           </div>
         </RadioGroup>
-        <Button class="w-full mt-4" type="submit" :disabled="!selectedAvatar">Continue</Button>
+        <Button :disabled="!selectedAvatar" class="w-full mt-4" type="submit">Continue</Button>
       </form>
     </CardContent>
   </Card>

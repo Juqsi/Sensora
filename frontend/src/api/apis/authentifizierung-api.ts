@@ -1,8 +1,8 @@
-import globalAxios, {type AxiosInstance, type AxiosRequestConfig, type AxiosResponse} from 'axios'
-import {BASE_PATH, BaseAPI, type RequestArgs, RequiredError} from '@/api/base'
-import type {AuthLoginBody, AuthRegisterBody, User} from '@/api/models'
-import type {AuthResponse} from '@/api/models/authResponse.ts'
-import type {CustomAxiosRequestConfig} from '@/api/apiClient.ts'
+import globalAxios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
+import { BASE_PATH, BaseAPI, type RequestArgs, RequiredError } from '@/api/base'
+import type { AuthLoginBody, AuthRegisterBody, User } from '@/api/models'
+import type { AuthResponse } from '@/api/models/authResponse.ts'
+import type { CustomAxiosRequestConfig } from '@/api/apiClient.ts'
 
 /**
  * AuthentifizierungApi - axios parameter creator

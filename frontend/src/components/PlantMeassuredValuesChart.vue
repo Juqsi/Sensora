@@ -2,7 +2,7 @@
 import { LineChart } from '@/components/ui/chart-line'
 import CustomChartTooltip from '@/components/ui/chart-line/CustomChartTooltip.vue'
 import { useI18n } from 'vue-i18n'
-import { type PropType, computed } from 'vue'
+import { computed, type PropType } from 'vue'
 import { ilk } from '@/api'
 
 const { locale } = useI18n()
@@ -82,9 +82,9 @@ const tickValuesX = computed(() => calculateXTicks(props.data.values))
     :categories="[props.data.ilk]"
     :custom-tooltip="CustomChartTooltip"
     :data="props.data.values"
+    :tick-values-x="tickValuesX"
+    :x-formatter="xFormatter"
     :y-formatter="yFormatter"
     index="timestamp"
-    :x-formatter="xFormatter"
-    :tick-values-x="tickValuesX"
   />
 </template>

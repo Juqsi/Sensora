@@ -132,8 +132,8 @@ const onCreateNewTeam = (event: Event) => {
             <Input
               id="name"
               v-model="newTeamName"
-              required
               :placeholder="t('group.createRoom.EntityPlaceholder')"
+              required
             />
           </div>
 

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { cn } from '@/lib/utils'
 import { X } from 'lucide-vue-next'
 import { TagsInputItemDelete, type TagsInputItemDeleteProps, useForwardProps } from 'reka-ui'
@@ -16,7 +16,10 @@ const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
-  <TagsInputItemDelete v-bind="forwardedProps" :class="cn('flex rounded bg-transparent mr-1', props.class)">
+  <TagsInputItemDelete
+    :class="cn('flex rounded bg-transparent mr-1', props.class)"
+    v-bind="forwardedProps"
+  >
     <slot>
       <X class="w-4 h-4" />
     </slot>

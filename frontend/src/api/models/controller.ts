@@ -1,4 +1,4 @@
-import type {Sensor, User} from '@/api'
+import type { Sensor, User } from '@/api'
 
 /**
  *

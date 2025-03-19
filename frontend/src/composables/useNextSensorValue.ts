@@ -1,4 +1,4 @@
-import type { Plant, Value, Sensor } from '@/api'
+import type { Plant, Value } from '@/api'
 
 export function nextValue(
   plantData: Plant[],

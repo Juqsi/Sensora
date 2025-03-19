@@ -1,4 +1,4 @@
-import type {Group} from '@/api'
+import type { Group } from '@/api'
 
 /**
  *

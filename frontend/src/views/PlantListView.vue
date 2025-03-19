@@ -41,7 +41,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog/index.ts'
-import { computed, ref, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useDeviceStore, useGroupStore, usePlantStore } from '@/stores'
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 import EmtyState from '@/components/EmtyState.vue'
@@ -197,10 +197,10 @@ onMounted(() => {
       <div class="relative w-full ml-auto flex-1 md:grow-0">
         <Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
+          v-model="searchQuery"
           class="w-full rounded-lg bg-background pl-8"
           placeholder="Search..."
           type="search"
-          v-model="searchQuery"
         />
       </div>
     </header>
@@ -322,9 +322,9 @@ onMounted(() => {
             </CardFooter>
           </Card>
           <EmtyState
-            :title="t('plantList.emptyPlantTitle')"
             :condition="plantStore.plants.length === 0"
             :subtitle="t('plantList.emptyPlantSubtitle')"
+            :title="t('plantList.emptyPlantTitle')"
             img-src="/svg/undraw_new-entries_xw4m.svg"
           />
         </TabsContent>
@@ -347,7 +347,7 @@ onMounted(() => {
                 </TableHeader>
                 <TableBody>
                   <TableRow v-for="sensor in filteredControllerList">
-                    <TableCell class="hidden sm:table-cell"> </TableCell>
+                    <TableCell class="hidden sm:table-cell"></TableCell>
                     <TableCell class="overflow-hidden font-medium">
                       <router-link :to="`/sensor/${sensor.did}`">
                         {{ sensor.did }}
@@ -382,9 +382,9 @@ onMounted(() => {
             </CardFooter>
           </Card>
           <EmtyState
-            :title="t('sensorList.emptySensorTitle')"
             :condition="deviceStore.devices.length === 0"
             :subtitle="t('sensorList.emptySensorSubtitle')"
+            :title="t('sensorList.emptySensorTitle')"
             img-src="/svg/undraw_new-entries_xw4m.svg"
           />
         </TabsContent>

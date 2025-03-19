@@ -1,25 +1,22 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import NavCard from '@/components/NavCard.vue'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { useDeviceStore } from '@/stores'
 import {
+  Clock,
   CloudHail,
-  Users,
-  User,
-  Flower2,
-  Waves,
-  Clock9,
+  Cpu,
   Droplet,
+  Flower2,
   Sun,
   Thermometer,
-  Cpu,
+  User,
+  Users,
+  Waves,
 } from 'lucide-vue-next'
-
 import { onMounted, ref } from 'vue'
-
 import { useRoute } from 'vue-router'
 import { type Controller } from '@/api'
-import { Button } from '@/components/ui/button'
 
 const route = useRoute()
 
@@ -35,7 +32,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <NavCard :title="controller?.model ?? 'Fullcontroller 4+1'" :sub-title="controller?.did ?? ''">
+  <NavCard
+    :sub-title="controller?.did ?? ''"
+    :title="controller?.model ?? 'Fullcontroller 4+1'"
+    class="max-w-md"
+  >
   </NavCard>
 
   <Card class="w-full mt-4 max-w-md">
@@ -69,7 +70,7 @@ onMounted(async () => {
       <div class="ml-2 w-full block">
         <h3 class="text-2xl font-medium">Temperature</h3>
         <div class="flex items-center gap-2">
-          <Clock9 class="w-5 h-5" />
+          <Clock class="w-5 h-5" />
           <p class="font-medium">16:15 18.03.2025</p>
         </div>
       </div>
@@ -84,7 +85,7 @@ onMounted(async () => {
       <div class="ml-2 w-full block">
         <h3 class="text-2xl font-medium">Humidity</h3>
         <div class="flex items-center gap-2">
-          <Clock9 class="w-5 h-5" />
+          <Clock class="w-5 h-5" />
           <p class="font-medium">16:15 18.03.2025</p>
         </div>
       </div>
@@ -99,7 +100,7 @@ onMounted(async () => {
       <div class="ml-2 w-full block">
         <h3 class="text-2xl font-medium">Soil moisture</h3>
         <div class="flex items-center gap-2">
-          <Clock9 class="w-5 h-5" />
+          <Clock class="w-5 h-5" />
           <p class="font-medium">16:15 18.03.2025</p>
         </div>
       </div>
@@ -114,7 +115,7 @@ onMounted(async () => {
       <div class="ml-2 w-full block">
         <h3 class="text-2xl font-medium">Brightness</h3>
         <div class="flex items-center gap-2">
-          <Clock9 class="w-5 h-5" />
+          <Clock class="w-5 h-5" />
           <p class="font-medium">16:15 18.03.2025</p>
         </div>
       </div>
@@ -129,7 +130,7 @@ onMounted(async () => {
       <div class="ml-2 w-full block">
         <h3 class="text-2xl font-medium">Pump</h3>
         <div class="flex items-center gap-2">
-          <Clock9 class="w-5 h-5" />
+          <Clock class="w-5 h-5" />
           <p class="font-medium">16:15 18.03.2025</p>
         </div>
       </div>

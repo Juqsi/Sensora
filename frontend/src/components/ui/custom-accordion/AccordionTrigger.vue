@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { cn } from '@/lib/utils'
 import { ChevronDown } from 'lucide-vue-next'
 import { AccordionHeader, AccordionTrigger, type AccordionTriggerProps } from 'radix-vue'
@@ -16,13 +16,13 @@ const delegatedProps = computed(() => {
 <template>
   <AccordionHeader class="flex">
     <AccordionTrigger
-      v-bind="delegatedProps"
       :class="
         cn(
           'flex flex-1 items-center justify-between py-4 font-medium transition-all [&[data-state=open]>svg]:rotate-180',
           props.class,
         )
       "
+      v-bind="delegatedProps"
     >
       <slot />
       <slot name="icon">

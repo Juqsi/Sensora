@@ -133,24 +133,24 @@ const submit = async () => {
           <TagsInputInput :placeholder="t('group.create.roomPlaceholder')" />
         </TagsInput>
       </div>
-      <Button type="submit">{{
-        props.group ? t('group.update.save') : t('group.create.save')
-      }}</Button>
+      <Button type="submit"
+        >{{ props.group ? t('group.update.save') : t('group.create.save') }}
+      </Button>
     </form>
   </UseTemplate>
 
   <Dialog v-if="isDesktop" v-model:open="isOpen">
     <DialogTrigger as-child>
-      <slot name="desktop" v-if="$slots.desktop"></slot>
-      <Button v-else variant="default">{{
-        props.group ? t('group.update.create') : t('group.create.create')
-      }}</Button>
+      <slot v-if="$slots.desktop" name="desktop"></slot>
+      <Button v-else variant="default"
+        >{{ props.group ? t('group.update.create') : t('group.create.create') }}
+      </Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
         <DialogTitle>
-          {{ props.group ? t('group.update.title') : t('group.create.title') }}</DialogTitle
-        >
+          {{ props.group ? t('group.update.title') : t('group.create.title') }}
+        </DialogTitle>
         <DialogDescription>
           {{ props.group ? t('group.update.description') : t('group.create.description') }}
         </DialogDescription>
@@ -161,7 +161,7 @@ const submit = async () => {
 
   <Drawer v-else v-model:open="isOpen">
     <DrawerTrigger as-child>
-      <slot name="mobile" v-if="$slots.mobile"></slot>
+      <slot v-if="$slots.mobile" name="mobile"></slot>
       <Button
         v-else
         :aria-label="props.group ? t('group.update.create') : t('group.create.create')"
@@ -173,9 +173,9 @@ const submit = async () => {
     </DrawerTrigger>
     <DrawerContent>
       <DrawerHeader class="text-left">
-        <DrawerTitle>{{
-          props.group ? t('group.update.title') : t('group.create.title')
-        }}</DrawerTitle>
+        <DrawerTitle
+          >{{ props.group ? t('group.update.title') : t('group.create.title') }}
+        </DrawerTitle>
         <DrawerDescription>
           {{ props.group ? t('group.update.description') : t('group.create.description') }}
         </DrawerDescription>

@@ -1,12 +1,15 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { ComboboxContentEmits, ComboboxContentProps } from 'radix-vue'
-import { cn } from '@/lib/utils'
 import { ComboboxContent, useForwardPropsEmits } from 'radix-vue'
+import { cn } from '@/lib/utils'
 import { computed, type HTMLAttributes } from 'vue'
 
-const props = withDefaults(defineProps<ComboboxContentProps & { class?: HTMLAttributes['class'] }>(), {
-  dismissable: false,
-})
+const props = withDefaults(
+  defineProps<ComboboxContentProps & { class?: HTMLAttributes['class'] }>(),
+  {
+    dismissable: false,
+  },
+)
 const emits = defineEmits<ComboboxContentEmits>()
 
 const delegatedProps = computed(() => {
@@ -19,7 +22,10 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 
 <template>
-  <ComboboxContent v-bind="forwarded" :class="cn('max-h-[300px] overflow-y-auto overflow-x-hidden', props.class)">
+  <ComboboxContent
+    :class="cn('max-h-[300px] overflow-y-auto overflow-x-hidden', props.class)"
+    v-bind="forwarded"
+  >
     <div role="presentation">
       <slot />
     </div>

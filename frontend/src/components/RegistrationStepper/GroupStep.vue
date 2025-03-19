@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
@@ -45,7 +45,7 @@ const createGroupSubmit = async () => {
   <Card class="mx-auto max-w-sm w-full">
     <CardHeader>
       <CardTitle class="text-xl">Create your Home</CardTitle>
-      <CardDescription>Create your Home and manage the access with groups </CardDescription>
+      <CardDescription>Create your Home and manage the access with groups</CardDescription>
     </CardHeader>
     <CardContent>
       <form class="grid items-start gap-4" @submit.prevent="createGroupSubmit">

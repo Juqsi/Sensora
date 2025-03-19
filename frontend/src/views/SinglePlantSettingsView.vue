@@ -19,15 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { plantAvatars } from '@/components/plant3d/plantAvatars'
-import {
-  type Controller,
-  type createPlantBody,
-  ilk,
-  type PlantTargetValues,
-  type Room,
-  type updatePlantBody,
-  type Value,
-} from '@/api'
+import { type Controller, type createPlantBody, ilk, type Room, type updatePlantBody } from '@/api'
 import { toast } from 'vue-sonner'
 import {
   NumberField,
@@ -64,7 +56,7 @@ var targetValuesHumidityTid = uuid()
 const targetValuesBrightness = ref<number>(10)
 var targetValuesBrightnessTid = uuid()
 
-const activateTargetValues = ref<Boolean>(false)
+const activateTargetValues = ref<boolean>(false)
 
 const loadPlantDetails = async () => {
   try {
@@ -224,12 +216,12 @@ const createPlant = async () => {
       <div class="w-full">
         <div class="flex items-center justify-between w-full gap-5">
           <Label for="targetValues">{{ t('plant.settings.targetValues') }}</Label>
-          <Switch v-model="activateTargetValues" id="temperaturSwitch" />
+          <Switch id="temperaturSwitch" v-model="activateTargetValues" />
         </div>
         <div
           v-if="activateTargetValues"
-          class="mx-2 grid gap-2 md:grid-cols-2 mt-2"
           id="targetValues"
+          class="mx-2 grid gap-2 md:grid-cols-2 mt-2"
         >
           <NumberField id="temperature" v-model="targetValuesTemperature" :min="0">
             <Label for="temperature">
@@ -247,8 +239,9 @@ const createPlant = async () => {
               <NumberFieldDecrement />
               <NumberFieldInput />
               <NumberFieldIncrement />
-            </NumberFieldContent> </NumberField
-          ><NumberField id="humidity" v-model="targetValuesHumidity" :max="100" :min="0">
+            </NumberFieldContent>
+          </NumberField>
+          <NumberField id="humidity" v-model="targetValuesHumidity" :max="100" :min="0">
             <Label for="humidity">{{ t('values.humidity') }}</Label>
             <NumberFieldContent>
               <NumberFieldDecrement />

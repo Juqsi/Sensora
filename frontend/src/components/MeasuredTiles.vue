@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowDown, ArrowLeft, ArrowUp, Droplet, Sun, Thermometer } from 'lucide-vue-next'
+import { Droplet, Sun, Thermometer } from 'lucide-vue-next'
 import { ilk, type Plant, type Value } from '@/api'
 import { latestSensorValue } from '@/composables/useLatestSensorValue.ts'
-import { ref, onMounted, type PropType } from 'vue'
+import { onMounted, type PropType, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { locale } = useI18n()

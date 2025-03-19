@@ -6,6 +6,5 @@ export const plantAvatars = [
   {
     label: 'plant.settings.Group2',
     value: 'uuid-2-der-gruppe',
-
   },
 ]

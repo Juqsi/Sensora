@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { Axis, type BulletLegendItemInterface, CurveType, Line } from '@unovis/ts'
 import { VisAxis, VisLine, VisXYContainer } from '@unovis/vue'
 import { useMounted } from '@vueuse/core'
-import { type Component, computed, ref, onBeforeUnmount, onMounted } from 'vue'
+import { type Component, computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 const props = withDefaults(
   defineProps<
@@ -137,8 +137,8 @@ onBeforeUnmount(() => {
         :grid-line="false"
         :tick-format="xFormatter ?? ((v: number) => data[v]?.[index])"
         :tick-line="false"
-        tick-text-color="hsl(var(--vis-text-color))"
         :tickValues="props.tickValuesX"
+        tick-text-color="hsl(var(--vis-text-color))"
         type="x"
       />
       <VisAxis

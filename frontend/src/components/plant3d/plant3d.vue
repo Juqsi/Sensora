@@ -2,7 +2,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { onMounted, ref, defineProps } from 'vue'
+import { defineProps, onMounted, ref } from 'vue'
 import { useColorMode } from '@vueuse/core'
 
 // Definiere Props für den Modelltyp, beide optional
