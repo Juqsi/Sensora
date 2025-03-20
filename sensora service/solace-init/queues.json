@@ -9,6 +9,7 @@
         "subscriptions": [
           {
             "subscriptionTopic": "sensor/data"
+
           },
           {
             "subscriptionTopic": "sensor/status"
@@ -17,8 +18,12 @@
             "subscriptionTopic": "sensor/data/>"
           },
           {
-            "subscriptionTopic": "sensor/status/>"
+            "subscriptionTopic": "sensor/status"
+          },
+          {
+            "subscriptionTopic": "sensora/v1/send/>"
           }
+
         ]
       },
       {

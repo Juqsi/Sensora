@@ -5,8 +5,9 @@ import time
 # 🔹 Solace MQTT Konfiguration
 BROKER = "localhost"
 PORT = 1883
-TOPIC = "sensor/data/sensor1"
-SUBSCRIPTION = "sensor/data/#"  # Für alle Sensoren
+CONTROLLER_ID = "controller1"  # Simulierter ESP-Controller
+TOPIC = f"sensora/v1/send/{CONTROLLER_ID}"
+SUBSCRIPTION = "sensora/v1/send/#"  # Alle Controller-IDs empfangen
 
 # 🔹 Callback für Verbindung (wichtig für Subscription)
 def on_connect(client, userdata, flags, rc):
@@ -18,19 +19,45 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.connect(BROKER, PORT, 60)
 
-sensor_id = "sensor1"
+time.sleep(2)  # Kurz warten, bis die Verbindung stabil ist
 
-time.sleep(2)
+# 🔹 Simulierte Sensordaten
+sensors = [
+    {
+        "sid": "sensor1",
+        "ilk": "temperature",
+        "unit": "°C",
+        "status": "active",
+        "values": [
+            {"timestamp": "2025-03-02T12:00:00Z", "value": 21.5},
+            {"timestamp": "2025-03-02T12:05:00Z", "value": 22.1}
+        ]
+    },
+    {
+        "sid": "sensor2",
+        "ilk": "humidity",
+        "unit": "%",
+        "status": "active",
+        "values": [
+            {"timestamp": "2025-03-02T12:00:00Z", "value": 60.2},
+            {"timestamp": "2025-03-02T12:05:00Z", "value": 61.0}
+        ]
+    }
+]
 
-for temp in [222.5, 23.0, 24.5, 26.0]:
-    value_payload = json.dumps({
-        "type": "value",
-        "sensor_id": sensor_id,
-        "value": temp
-    })
-    client.publish(TOPIC, value_payload, qos=1)
-    print(f"📡 Messwert gesendet: {value_payload}")
-    time.sleep(1)
+# 🔹 JSON-Payload für das neue Format
+payload = json.dumps({
+    "did": CONTROLLER_ID,
+    "model": "FullControll-4-Sensors",
+    "sensors": sensors
+})
+
+# 🔹 Senden an Solace MQTT-Broker
+client.publish(TOPIC, payload, qos=1)
+print(f"📡 Messwerte gesendet an {TOPIC}:")
+print(json.dumps(json.loads(payload), indent=4))
+
+time.sleep(1)  # Warten, damit das MQTT-Message-Handling Zeit hat
 
 print("✅ Test abgeschlossen!")
 

@@ -49,11 +49,14 @@ def post_sollwert():
         return jsonify({"error": "sensor_id und sollwert erforderlich"}), 400
 
     payload = json.dumps({
-        "sensor_id": sensor_id,
-        "sollwert": sollwert
-    })
+        "targetValues": [
+        {
+        "sid": sensor_id,
+        "value": sollwert
+    }]})
+    
 
-    topic = Topic.of(f"sensor/setpoints/{sensor_id}")
+    topic = Topic.of(f"sensor/setpoints/{sensor_id}") # ändern zu: sensora/v1/receive/<id>/targetValues (id ist controller id muss durch sql)
     publisher.publish(messaging_service.message_builder().build(payload), topic)
 
     print(f"✅ Sollwert gesendet -> Sensor: {sensor_id}, Sollwert: {sollwert}")
