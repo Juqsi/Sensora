@@ -206,25 +206,25 @@
     "close": "Schließen",
     "copy": "Kopieren"
   },
-  "user": {
-    "deleted": "Benutzer erfolgreich gelöscht!",
-    "updated": "Benutzer erfolgreich aktualisiert!"
-  },
   "title": {
+    "aboutUs": "Über uns",
+    "groups": "Gruppen",
     "home": "Übersicht",
     "login": "Anmelden",
-    "register": "Registrieren",
-    "profile": "Profil",
-    "settings": "Einstellungen",
+    "notFound": "Seite nicht gefunden",
     "plant": "Pflanzendetails",
     "plantSettings": "Pflanze bearbeiten",
     "plants": "Meine Pflanzen",
-    "sensors": "Sensoren",
+    "profile": "Profil",
+    "register": "Registrieren",
     "sensor": "Sensordetails",
+    "sensors": "Sensoren",
+    "settings": "Einstellungen",
     "setupAccount": "Account vervollständigen",
-    "groups": "Gruppen",
-    "createPlant": "Pflanze erstellen",
-    "aboutUs": "Über uns",
-    "notFound": "Seite nicht gefunden"
+    "uploadPlant": "Pflanze erkennen"
+  },
+  "user": {
+    "deleted": "Benutzer erfolgreich gelöscht!",
+    "updated": "Benutzer erfolgreich aktualisiert!"
   }
 }

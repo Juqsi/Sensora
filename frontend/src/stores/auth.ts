@@ -38,7 +38,6 @@ export const useAuthStore = defineStore('auth', {
       } catch (error) {}
     },
     logout() {
-      console.log('logout')
       this.token = null
       this.isAuthenticated = false
       const userStore = useUserStore()

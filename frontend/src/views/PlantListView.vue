@@ -139,7 +139,6 @@ const { handleSubmit, values } = useForm({
 
 const handleCheckboxChange = () => {
   console.log(buttonVariants)
-  console.log('Current selected items:', values.items)
 }
 
 const alertDialog = ref(false)
@@ -155,7 +154,6 @@ const deleteEntry = () => {
   deleteEntryId.value = ''
 }
 usePullToRefresh(async () => {
-  console.log(tab.value)
   if (tab.value === 'plants') {
     try {
       await groupStore.fetchGroups(true)

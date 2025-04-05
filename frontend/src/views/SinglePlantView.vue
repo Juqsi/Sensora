@@ -21,7 +21,6 @@ const measuredTiles = ref<InstanceType<typeof MeasuredTiles> | null>(null)
 let values: Record<string, { timestamp: Date; value: number; unit: string }[]> | null
 
 onMounted(async () => {
-  console.log('Mounted')
   if (route.params.id !== undefined) {
     plant.value = await plantStore.getPlantDetails(route.params.id as string, oneHourAgo, today)
     values = await plantStore.getCombinedSensorData(plant.value?.plantId ?? '', yesterday, today)

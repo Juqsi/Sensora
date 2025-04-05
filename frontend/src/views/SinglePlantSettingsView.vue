@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/number-field'
 import { Switch } from '@/components/ui/switch'
 import { v4 as uuid } from 'uuid'
+import { Sparkles } from 'lucide-vue-next'
 
 const router = useRouter()
 const route = useRoute()
@@ -47,13 +48,13 @@ const selectedAvatar = ref<{ label: string; value: string } | null>(null)
 const note = ref<string>('')
 
 const targetValuesTemperature = ref<number>(24)
-var targetValuesTemperatureTid = uuid()
+let targetValuesTemperatureTid = uuid()
 const targetValuesSoilMoisture = ref<number>(30)
-var targetValuesSoilMoistureTid = uuid()
+let targetValuesSoilMoistureTid = uuid()
 const targetValuesHumidity = ref<number>(50)
-var targetValuesHumidityTid = uuid()
+let targetValuesHumidityTid = uuid()
 const targetValuesBrightness = ref<number>(10)
-var targetValuesBrightnessTid = uuid()
+let targetValuesBrightnessTid = uuid()
 
 const activateTargetValues = ref<boolean>(false)
 
@@ -110,6 +111,33 @@ const loadPlantDetails = async () => {
 onMounted(() => {
   if (route.params.id !== undefined) {
     loadPlantDetails()
+  }else{
+    const query = route.query
+    if (query.commonName) {
+      name.value = query.commonName as string
+    }
+    if (query.scientificName) {
+      plantType.value = query.scientificName as string
+    }
+    if (query.note) {
+      note.value = query.note as string
+    }
+    if (query.targetValuesTemperature) {
+      activateTargetValues.value = true
+      targetValuesTemperature.value = Number(query.targetValuesTemperature)
+    }
+    if (query.targetValuesSoilMoisture) {
+      activateTargetValues.value = true
+      targetValuesSoilMoisture.value = Number(query.targetValuesSoilMoisture)
+    }
+    if (query.targetValuesHumidity) {
+      activateTargetValues.value = true
+      targetValuesHumidity.value = Number(query.targetValuesHumidity)
+    }
+    if (query.targetValuesBrightness) {
+      activateTargetValues.value = true
+      targetValuesBrightness.value = Number(query.targetValuesBrightness)
+    }
   }
 })
 
@@ -183,122 +211,131 @@ const createPlant = async () => {
 
 <template>
   <NavCard :sub-title="t('plant.settings.SubTitle')" :title="t('plant.settings.Title')">
-    <CardContent class="grid gap-6">
-      <div class="grid gap-2">
-        <Label for="subject">{{ t('plant.settings.NameOfPlant') }}</Label>
-        <Input id="subject" v-model="name" :placeholder="t('plant.settings.NamePlaceholder')" />
-      </div>
-
-      <div class="grid gap-4">
+    <template #TitleRight>
+      <router-link :to="{ name: 'PlantUpload' }">
+        <Button variant="outline" size="icon">
+          <Sparkles class="text-blue-400" />
+        </Button>
+      </router-link>
+    </template>
+    <template #default>
+      <CardContent class="grid gap-6">
         <div class="grid gap-2">
-          <Label for="room">{{ t('plant.settings.Room') }}</Label>
-          <RoomSelection id="room" v-model:room="selectedRoom" />
+          <Label for="subject">{{ t('plant.settings.NameOfPlant') }}</Label>
+          <Input id="subject" v-model="name" :placeholder="t('plant.settings.NamePlaceholder')" />
         </div>
+
+        <div class="grid gap-4">
+          <div class="grid gap-2">
+            <Label for="room">{{ t('plant.settings.Room') }}</Label>
+            <RoomSelection id="room" v-model:room="selectedRoom" />
+          </div>
+          <div class="grid gap-2">
+            <Label for="sensor">{{ t('plant.settings.SelectSensor') }}</Label>
+            <Select id="sensor" v-model:value="selectedSensor">
+              <SelectTrigger>
+                <SelectValue :placeholder="t('plant.settings.SelectSensorPlaceholder')" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem v-for="device in deviceStore.devices" v-model:value="device.did">
+                    {{ device.did }}
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex items-center justify-between w-full gap-5">
+            <Label for="targetValues">{{ t('plant.settings.targetValues') }}</Label>
+            <Switch id="temperaturSwitch" v-model="activateTargetValues" />
+          </div>
+          <div
+            v-if="activateTargetValues"
+            id="targetValues"
+            class="mx-2 grid gap-2 md:grid-cols-2 mt-2"
+          >
+            <NumberField id="temperature" v-model="targetValuesTemperature" :min="0">
+              <Label for="temperature">
+                {{ t('values.temperature') }}
+              </Label>
+              <NumberFieldContent v-if="activateTargetValues">
+                <NumberFieldDecrement />
+                <NumberFieldInput />
+                <NumberFieldIncrement />
+              </NumberFieldContent>
+            </NumberField>
+            <NumberField id="soilMoisture" v-model="targetValuesSoilMoisture" :max="100" :min="0">
+              <Label for="soilMoisture">{{ t('values.soilMoisture') }}</Label>
+              <NumberFieldContent>
+                <NumberFieldDecrement />
+                <NumberFieldInput />
+                <NumberFieldIncrement />
+              </NumberFieldContent>
+            </NumberField>
+            <NumberField id="humidity" v-model="targetValuesHumidity" :max="100" :min="0">
+              <Label for="humidity">{{ t('values.humidity') }}</Label>
+              <NumberFieldContent>
+                <NumberFieldDecrement />
+                <NumberFieldInput />
+                <NumberFieldIncrement />
+              </NumberFieldContent>
+            </NumberField>
+            <NumberField id="brightness" v-model="targetValuesBrightness" :min="0">
+              <Label for="brightness">{{ t('values.brightness') }}</Label>
+              <NumberFieldContent>
+                <NumberFieldDecrement />
+                <NumberFieldInput />
+                <NumberFieldIncrement />
+              </NumberFieldContent>
+            </NumberField>
+          </div>
+        </div>
+
         <div class="grid gap-2">
-          <Label for="sensor">{{ t('plant.settings.SelectSensor') }}</Label>
-          <Select id="sensor" v-model:value="selectedSensor">
+          <Label for="plantType">{{ t('plant.settings.PlantType') }}</Label>
+          <Input
+            id="plantType"
+            v-model="plantType"
+            :placeholder="t('plant.settings.PlantTypePlaceholder')"
+          />
+        </div>
+
+        <div class="grid gap-2">
+          <Label for="avatar">{{ t('plant.settings.Avatar') }}</Label>
+          <Select id="avatar">
             <SelectTrigger>
-              <SelectValue :placeholder="t('plant.settings.SelectSensorPlaceholder')" />
+              <SelectValue
+                v-model:value="selectedAvatar"
+                :placeholder="t('plant.settings.AvatarPlaceholder')"
+              />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem v-for="device in deviceStore.devices" v-model:value="device.did">
-                  {{ device.did }}
+                <SelectItem v-for="avatar in plantAvatars" v-model:value="avatar.value">
+                  {{ avatar.label }}
                 </SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
         </div>
-      </div>
 
-      <div class="w-full">
-        <div class="flex items-center justify-between w-full gap-5">
-          <Label for="targetValues">{{ t('plant.settings.targetValues') }}</Label>
-          <Switch id="temperaturSwitch" v-model="activateTargetValues" />
+        <div class="grid gap-2">
+          <Label for="description">{{ t('plant.settings.Description') }}</Label>
+          <Textarea
+            id="description"
+            v-model="note"
+            :placeholder="t('plant.settings.DescriptionPlaceholder')"
+          />
         </div>
-        <div
-          v-if="activateTargetValues"
-          id="targetValues"
-          class="mx-2 grid gap-2 md:grid-cols-2 mt-2"
-        >
-          <NumberField id="temperature" v-model="targetValuesTemperature" :min="0">
-            <Label for="temperature">
-              {{ t('values.temperature') }}
-            </Label>
-            <NumberFieldContent v-if="activateTargetValues">
-              <NumberFieldDecrement />
-              <NumberFieldInput />
-              <NumberFieldIncrement />
-            </NumberFieldContent>
-          </NumberField>
-          <NumberField id="soilMoisture" v-model="targetValuesSoilMoisture" :max="100" :min="0">
-            <Label for="soilMoisture">{{ t('values.soilMoisture') }}</Label>
-            <NumberFieldContent>
-              <NumberFieldDecrement />
-              <NumberFieldInput />
-              <NumberFieldIncrement />
-            </NumberFieldContent>
-          </NumberField>
-          <NumberField id="humidity" v-model="targetValuesHumidity" :max="100" :min="0">
-            <Label for="humidity">{{ t('values.humidity') }}</Label>
-            <NumberFieldContent>
-              <NumberFieldDecrement />
-              <NumberFieldInput />
-              <NumberFieldIncrement />
-            </NumberFieldContent>
-          </NumberField>
-          <NumberField id="brightness" v-model="targetValuesBrightness" :min="0">
-            <Label for="brightness">{{ t('values.brightness') }}</Label>
-            <NumberFieldContent>
-              <NumberFieldDecrement />
-              <NumberFieldInput />
-              <NumberFieldIncrement />
-            </NumberFieldContent>
-          </NumberField>
-        </div>
-      </div>
-
-      <div class="grid gap-2">
-        <Label for="plantType">{{ t('plant.settings.PlantType') }}</Label>
-        <Input
-          id="plantType"
-          v-model="plantType"
-          :placeholder="t('plant.settings.PlantTypePlaceholder')"
-        />
-      </div>
-
-      <div class="grid gap-2">
-        <Label for="avatar">{{ t('plant.settings.Avatar') }}</Label>
-        <Select id="avatar">
-          <SelectTrigger>
-            <SelectValue
-              v-model:value="selectedAvatar"
-              :placeholder="t('plant.settings.AvatarPlaceholder')"
-            />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem v-for="avatar in plantAvatars" v-model:value="avatar.value">
-                {{ avatar.label }}
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div class="grid gap-2">
-        <Label for="description">{{ t('plant.settings.Description') }}</Label>
-        <Textarea
-          id="description"
-          v-model="note"
-          :placeholder="t('plant.settings.DescriptionPlaceholder')"
-        />
-      </div>
-    </CardContent>
-    <CardFooter class="justify-between space-x-2">
-      <Button variant="ghost" @click="router.back()">{{ t('plant.settings.Cancel') }}</Button>
-      <Button @click="createPlant">{{ t('plant.settings.Submit') }}</Button>
-    </CardFooter>
+      </CardContent>
+      <CardFooter class="justify-between space-x-2">
+        <Button variant="ghost" @click="router.back()">{{ t('plant.settings.Cancel') }}</Button>
+        <Button @click="createPlant">{{ t('plant.settings.Submit') }}</Button>
+      </CardFooter>
+    </template>
   </NavCard>
 </template>
 

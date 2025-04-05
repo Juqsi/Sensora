@@ -4,9 +4,7 @@ export function latestSensorValue(plants: Plant[], ilk: string): Value | undefin
   const allValues: Value[] = []
   // 1. Iteriere über alle Pflanzen
   plants.forEach((plant) => {
-    console.log(plant)
     if (!plant) {
-      console.log(plant)
       return // Überspringe, wenn plant undefined ist
     }
     // 2. Iteriere über alle Controller der Pflanze

@@ -85,6 +85,12 @@ const router = createRouter({
       meta: { requiresAuth: true, title: 'title.createPlant' },
     },
     {
+      path: '/plant-upload',
+      name: 'PlantUpload',
+      component: () => import('../views/UploadPhotoView.vue'),
+      meta: { requiresAuth: true, title: 'title.createPlant' },
+    },
+    {
       path: '/aboutus',
       name: 'About us',
       component: () => import('../views/AboutUsView.vue'),

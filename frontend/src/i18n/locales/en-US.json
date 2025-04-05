@@ -206,25 +206,25 @@
     "close": "Close",
     "copy": "Copy"
   },
-  "user": {
-    "deleted": "User successfully deleted!",
-    "updated": "User successfully updated!"
-  },
   "title": {
+    "aboutUs": "About Us",
+    "groups": "Groups",
     "home": "Dashboard",
     "login": "Login",
-    "register": "Register",
-    "profile": "Profile",
-    "settings": "Settings",
+    "notFound": "Page Not Found",
     "plant": "Plant Details",
     "plantSettings": "Edit Plant",
     "plants": "My Plants",
-    "sensors": "Sensors",
+    "profile": "Profile",
+    "register": "Register",
     "sensor": "Sensor Details",
+    "sensors": "Sensors",
+    "settings": "Settings",
     "setupAccount": "Complete Your Account",
-    "groups": "Groups",
-    "createPlant": "Create Plant",
-    "aboutUs": "About Us",
-    "notFound": "Page Not Found"
+    "uploadPlant": "Recognize Plant"
+  },
+  "user": {
+    "deleted": "User successfully deleted!",
+    "updated": "User successfully updated!"
   }
 }

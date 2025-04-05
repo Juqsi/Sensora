@@ -22,8 +22,6 @@ const initializeWithPlant = (newPlant: Plant) => {
 }
 
 onMounted(() => {
-  console.log('Mounted')
-  console.log(props.plant)
   if (props.plant !== undefined && plant.value === undefined) {
     initializeWithPlant(props.plant as Plant)
   }
