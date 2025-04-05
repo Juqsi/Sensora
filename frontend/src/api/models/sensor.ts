@@ -1,4 +1,4 @@
-import { type Value } from '@/api'
+import { ilk, type Value } from '@/api'
 
 /**
  *
@@ -47,7 +47,7 @@ export interface Sensor {
    * @memberof Sensor
    * @example temperature
    */
-  ilk: string
+  ilk: ilk
 
   /**
    * Maßeinheit

@@ -15,6 +15,7 @@ import GroupRoomCard from '@/components/GroupRoomCard.vue'
 import GroupCard from '@/components/GroupCard.vue'
 import EmtyState from '@/components/EmtyState.vue'
 import { Settings } from 'lucide-vue-next'
+import ShareLink from '@/components/ShareLink.vue'
 
 const groupStore = useGroupStore()
 const { t } = useI18n()
@@ -41,7 +42,14 @@ usePullToRefresh(async () => {
       <Card>
         <AccordionTrigger class="p-2 text-left pr-6">
           <CardHeader>
-            <CardTitle>{{ group.name }}</CardTitle>
+            <CardTitle>
+              {{ group.name }}
+              <ShareLink
+                description="Anyone who has this link will be able to join this group."
+                link="https://sensora.de/join/asdasdasdasdasd"
+                title="Share link"
+              />
+            </CardTitle>
           </CardHeader>
         </AccordionTrigger>
         <AccordionContent>

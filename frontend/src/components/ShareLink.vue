@@ -1,0 +1,67 @@
+<script lang="ts" setup>
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Copy, Link } from 'lucide-vue-next'
+import { toast } from 'vue-sonner'
+
+const props = defineProps({
+  link: { type: String, required: true },
+  description: { type: String, required: false, default: '' },
+  title: { type: String, required: true },
+})
+
+function copyText() {
+  navigator.clipboard
+    .writeText(props.link)
+    .then(() => {
+      toast.success('Text wurde kopiert')
+    })
+    .catch((err) => {
+      toast.error('Kopieren fehlgeschlagen')
+    })
+}
+</script>
+
+<template>
+  <Dialog>
+    <DialogTrigger as-child>
+      <Button size="icon" variant="ghost" @click.stop.prevent>
+        <Link class="text-primary" />
+      </Button>
+    </DialogTrigger>
+    <DialogContent class="sm:max-w-md">
+      <DialogHeader>
+        <DialogTitle>{{ props.title }}</DialogTitle>
+        <DialogDescription>
+          {{ props.description }}
+        </DialogDescription>
+      </DialogHeader>
+      <div class="flex items-center space-x-2">
+        <div class="grid flex-1 gap-2">
+          <Label class="sr-only" for="link"> Link </Label>
+          <Input id="link" v-model="props.link" readonly />
+        </div>
+        <Button class="px-3" size="sm" type="submit" @click="copyText">
+          <span class="sr-only">Copy</span>
+          <Copy class="w-4 h-4" />
+        </Button>
+      </div>
+      <DialogFooter class="sm:justify-start">
+        <DialogClose as-child>
+          <Button type="button" variant="secondary"> Close</Button>
+        </DialogClose>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
+</template>

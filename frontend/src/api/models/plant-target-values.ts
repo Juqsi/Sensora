@@ -30,4 +30,5 @@ export enum ilk {
   soilMoisture = 'soilMoisture',
   brightness = 'brightness',
   humidity = 'humidity',
+  pump = 'pump',
 }
