@@ -14,7 +14,8 @@
     "lint:oxlint": "oxlint . --fix -D correctness --ignore-path .gitignore",
     "lint:eslint": "eslint . --fix",
     "lint": "run-s lint:*",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "i18n:extract": "vue-i18n-extract report --vueFiles \"./src/**/*.{vue,ts}\" --languageFiles \"./src/i18n/locales/*.{json,yml,yaml,js}\""
   },
   "dependencies": {
     "@capacitor/android": "^7.0.1",
@@ -84,6 +85,7 @@
     "vite": "^6.0.5",
     "vite-plugin-vue-devtools": "^7.6.8",
     "vitest": "^2.1.8",
+    "vue-i18n-extract": "^2.0.7",
     "vue-tsc": "^2.1.10"
   }
 }

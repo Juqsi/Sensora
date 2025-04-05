@@ -1,57 +1,55 @@
 {
-  "login": {
-    "SignIn": "Anmelden",
-    "SignInInfo": "Geben Sie Ihre E-Mail-Adresse ein, um sich in Ihrem Konto anzumelden",
-    "ForgotPassword": "Passwort vergessen?",
-    "DontHaveAccount": "Haben Sie noch kein Konto?",
-    "SignInWithA": "Melden Sie sich mit A an",
-    "SignUp": "Registrieren",
-    "SignUpInfo": "Geben Sie Ihre Daten ein, um ein Konto zu erstellen",
-    "FirstName": "Vorname",
-    "LastName": "Nachname",
-    "Email": "E-Mail",
-    "Password": "Passwort",
-    "CreateAccount": "Konto erstellen",
-    "AlreadyHaveAccount": "Haben Sie bereits ein Konto?",
-    "SignUpWithA": "Registrieren Sie sich mit A",
-    "Or": "oder",
-    "Success": "Erfolgreich angemeldet!"
+  "404view": {
+    "subtitle": "Die angeforderte Seite existiert nicht.",
+    "title": "404 - Seite nicht gefunden"
+  },
+  "about": {
+    "description": "Wir sind ein Team von Studierenden, das an unserem Abschlussprojekt arbeitet, um ein smartes Bewässerungssystem zu entwickeln. Das Ziel ist es, die Pflanzenbewässerung für Haushalte zu automatisieren und zu optimieren, wodurch die Pflanzenpflege einfacher und effizienter wird.",
+    "featuresList": [
+      "Automatisiertes Bewässerungssystem basierend auf Sensordaten",
+      "Flexible Konfiguration der Bewässerungszeiten und -mengen",
+      "Protokollierung vergangener Bewässerungsaktionen",
+      "Fernzugriff über Web-Oberfläche",
+      "Sensorintegration für Bodenfeuchtigkeit, Temperatur, Luftfeuchtigkeit und Helligkeit",
+      "Benachrichtigungssystem (E-Mail) für Bewässerung und Systemfehler"
+    ],
+    "featuresTitle": "Hauptfunktionen:",
+    "githubLink": "https://github.com/Juqsi/Sensora",
+    "outcomeDescription": "Am Ende des Projekts werden wir einen voll funktionsfähigen Prototyp des smarten Bewässerungssystems haben, der die Bewässerung aus der Ferne steuern, vergangene Bewässerungsaktionen protokollieren und detaillierte Sensordaten bereitstellen kann.",
+    "outcomeTitle": "Projektergebnis",
+    "projectGoalDescription": "Das Ziel dieses Projekts ist es, ein smartes Bewässerungssystem zu entwickeln, das eine effiziente und automatisierte Bewässerung von Pflanzen ermöglicht. Das System sollte flexibel sein und den Nutzern erlauben, Bewässerungszeiten und -mengen zu konfigurieren und über eine Web-Oberfläche auf das System zuzugreifen.",
+    "projectGoalTitle": "Projektziel",
+    "teamMembers": [
+      "Max",
+      "Lukas",
+      "Fynn",
+      "Timon",
+      "Justus"
+    ],
+    "teamTitle": "Unser Team",
+    "technologiesList": [
+      "Frontend: Vue.js mit TypeScript, Tailwind CSS",
+      "Backend: Rust (BFF), Python-Microservices für Sensordaten und E-Mail-Validierung",
+      "Microcontroller: ESP32 mit Sensoren (Temperatur, Luftfeuchtigkeit, Bodenfeuchtigkeit, Helligkeit), Pumpe",
+      "Kommunikation: Solace Messaging zwischen Microcontrollern und Microservices"
+    ],
+    "technologiesTitle": "Verwendete Technologien",
+    "title": "Über uns"
   },
   "appearance": {
-    "Title": "Erscheinungsbild",
-    "Description": "Passen Sie das Erscheinungsbild der App an.",
-    "ThemeLabel": "Thema",
-    "ThemeDescription": "Wählen Sie das Thema für die App.",
-    "Light": "Hell",
     "Dark": "Dunkel",
+    "Description": "Passen Sie das Erscheinungsbild der App an.",
+    "Light": "Hell",
     "OSPreference": "Gerät",
     "SetToOS": "Erscheinungsbild auf Betriebssystem-Voreinstellung gesetzt",
     "SwitchToDarkMode": "Erscheinungsbild auf Dunkelmodus umgeschaltet",
     "SwitchToLightMode": "Erscheinungsbild auf Hellmodus umgeschaltet",
+    "ThemeDescription": "Wählen Sie das Thema für die App.",
+    "ThemeLabel": "Thema",
+    "Title": "Erscheinungsbild",
     "UpdatePreferences": "Einstellungen aktualisieren"
   },
-  "language": {
-    "LanguageSelectionTitle": "Wählen Sie Ihre Sprache",
-    "LanguageSelectionDescription": "Bitte wählen Sie die bevorzugte Sprache.",
-    "LanguageLabel": "Sprache",
-    "LanguageDescription": "Wählen Sie eine Sprache aus.",
-    "English": "Englisch",
-    "German": "Deutsch",
-    "SetToEnglish": "Sprache auf Englisch gesetzt.",
-    "SetToGerman": "Sprache auf Deutsch gesetzt.",
-    "UpdateLanguage": "Sprache aktualisieren"
-  },
   "errors": {
-    "badRequest": "Ungültige Anfrage!",
-    "unauthorized": "Sitzung abgelaufen! Bitte erneut einloggen.",
-    "sessionExpired": "Nicht autorisiert!",
-    "forbidden": "Zugriff verweigert!",
-    "notFound": "Ressource nicht gefunden!",
-    "serverError": "Interner Serverfehler! Bitte später versuchen.",
-    "unknownError": "Unbekannter Fehler!",
-    "networkError": "Netzwerkfehler! Bitte Internetverbindung prüfen.",
-    "loading": "Lädt...",
-    "requestCompleted": "Erfolgreich",
     "E000": "Die Abfrage konnte nicht geparst werden.",
     "E100": "Autorisierungsheader erforderlich: Verwenden Sie 'Authorization: Bearer <token>'.",
     "E101": "Autorisierungsheader konnte nicht geparst werden: Überprüfen Sie die Kodierung.",
@@ -70,140 +68,146 @@
     "E406": "Der Einladungstoken ist abgelaufen oder ungültig.",
     "E500": "Der Raum existiert nicht. Überprüfen Sie die Schreibweise.",
     "E601": "Die Pflanzen-ID im Pfad ist erforderlich. Überprüfen Sie die Dokumentation.",
-    "E603": "Sie haben keine Berechtigung für diese Aktion. Fragen Sie ein Gruppenmitglied oder den Raum-Eigentümer."
+    "E603": "Sie haben keine Berechtigung für diese Aktion. Fragen Sie ein Gruppenmitglied oder den Raum-Eigentümer.",
+    "badRequest": "Ungültige Anfrage!",
+    "forbidden": "Zugriff verweigert!",
+    "loading": "Lädt...",
+    "networkError": "Netzwerkfehler! Bitte Internetverbindung prüfen.",
+    "notFound": "Ressource nicht gefunden!",
+    "requestCompleted": "Erfolgreich",
+    "serverError": "Interner Serverfehler! Bitte später versuchen.",
+    "sessionExpired": "Nicht autorisiert!",
+    "unauthorized": "Sitzung abgelaufen! Bitte erneut einloggen.",
+    "unknownError": "Unbekannter Fehler!"
   },
   "group": {
-    "deleted": "Gruppe erfolgreich gelöscht",
-    "userRemoved": "Benutzer wurde entfernt",
-    "left": "Gruppe erfolgreich verlassen",
-    "updated": "Gruppe aktualisiert",
-    "joined": "Erfolgreich der Gruppe beigetreten",
-    "created": "Gruppe erstellt",
     "alert": {
-      "title": "Bist du sicher?",
-      "description": "Möchtest du wirklich {name} aus der Gruppe entfernen? Diese Aktion kann nicht rückgängig gemacht werden.",
       "cancel": "Abbrechen",
-      "confirm": "Löschen"
-    },
-    "room": {
-      "alert": {
-        "title": "Raum entfernen",
-        "description": "Bist du sicher, dass du den Raum \"{groupName}\" aus der Gruppe entfernen möchtest?",
-        "cancel": "Abbrechen",
-        "confirm": "Entfernen"
-      }
+      "confirm": "Löschen",
+      "description": "Möchtest du wirklich {name} aus der Gruppe entfernen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "title": "Bist du sicher?"
     },
     "create": {
       "RoomEntity": "Küche"
     },
+    "created": "Gruppe erstellt",
+    "deleted": "Gruppe erfolgreich gelöscht",
+    "emptyGroupSubtitle": "Beginnen Sie damit, Ihre erste Gruppe zu erstellen, um loszulegen.",
     "emptyGroupTitle": "Erstellen Sie Ihre erste Gruppe",
-    "emptyGroupSubtitle": "Beginnen Sie damit, Ihre erste Gruppe zu erstellen, um loszulegen."
-  },
-  "user": {
-    "updated": "Benutzer erfolgreich aktualisiert!",
-    "deleted": "Benutzer erfolgreich gelöscht!"
-  },
-  "register": {
-    "SpecialCharRequired": "Das Passwort muss mindestens ein Sonderzeichen enthalten (!\"#$%&'()*+,-./:;<=>?[]^_{}|~).",
-    "MinLength": "Das Passwort muss mindestens 8 Zeichen lang sein."
-  },
-  "setupAccountStepper": {
-    "1": {
-      "title": "Kontoerstellung",
-      "description": "Richten Sie Ihr Konto ein, um zu starten"
+    "joined": "Erfolgreich der Gruppe beigetreten",
+    "left": "Gruppe erfolgreich verlassen",
+    "room": {
+      "alert": {
+        "cancel": "Abbrechen",
+        "confirm": "Entfernen",
+        "description": "Bist du sicher, dass du den Raum \"{groupName}\" aus der Gruppe entfernen möchtest?",
+        "title": "Raum entfernen"
+      }
     },
-    "2": {
-      "title": "Persönliche Informationen",
-      "description": "Geben Sie Ihren Vornamen und Nachnamen ein"
-    },
-    "3": {
-      "title": "Profilbild",
-      "description": "Wählen Sie ein Profilbild, das Sie repräsentiert"
-    },
-    "4": {
-      "title": "Erstelle Wohnung",
-      "description": "Beginnen Sie mit der Erstellung Ihrer Wohnung und dem Einrichten Ihres Raums"
-    }
+    "updated": "Gruppe aktualisiert",
+    "userRemoved": "Benutzer wurde entfernt"
+  },
+  "home": {
+    "emptyRoomsSubtitle": "Beginnen Sie damit, Ihren ersten Raum zu erstellen und eine Pflanze hinzuzufügen, um loszulegen.",
+    "emptyRoomsTitle": "Erstellen Sie Ihren ersten Raum",
+    "subtitle": "Überblick über deine Räume",
+    "welcome": "Hallo {name}!"
+  },
+  "language": {
+    "English": "Englisch",
+    "German": "Deutsch",
+    "LanguageDescription": "Wählen Sie eine Sprache aus.",
+    "LanguageLabel": "Sprache",
+    "LanguageSelectionDescription": "Bitte wählen Sie die bevorzugte Sprache.",
+    "LanguageSelectionTitle": "Wählen Sie Ihre Sprache",
+    "SetToEnglish": "Sprache auf Englisch gesetzt.",
+    "SetToGerman": "Sprache auf Deutsch gesetzt.",
+    "UpdateLanguage": "Sprache aktualisieren"
+  },
+  "login": {
+    "AlreadyHaveAccount": "Haben Sie bereits ein Konto?",
+    "CreateAccount": "Konto erstellen",
+    "DontHaveAccount": "Haben Sie noch kein Konto?",
+    "Email": "E-Mail",
+    "FirstName": "Vorname",
+    "ForgotPassword": "Passwort vergessen?",
+    "LastName": "Nachname",
+    "Or": "oder",
+    "Password": "Passwort",
+    "SignIn": "Anmelden",
+    "SignInInfo": "Geben Sie Ihre E-Mail-Adresse ein, um sich in Ihrem Konto anzumelden",
+    "SignInWithA": "Melden Sie sich mit A an",
+    "SignUp": "Registrieren",
+    "SignUpInfo": "Geben Sie Ihre Daten ein, um ein Konto zu erstellen",
+    "SignUpWithA": "Registrieren Sie sich mit A",
+    "Success": "Erfolgreich angemeldet!"
   },
   "plant": {
     "settings": {
-      "Title": "Pflanzeneinstellungen",
-      "SubTitle": "Verwalte deine Pflanzeninformationen",
-      "NameOfPlant": "Name der Pflanze",
-      "NamePlaceholder": "Gib den Namen der Pflanze ein",
-      "Room": "Raum",
-      "SelectRoom": "Raum auswählen",
-      "SelectSensor": "Sensor auswählen",
-      "PlantType": "Pflanzentyp",
-      "PlantTypePlaceholder": "Gib den Pflanzentyp ein",
       "Avatar": "Avatar",
+      "Avatar1": "Avatar 1",
+      "Avatar2": "Avatar 2",
+      "Avatars": "Avatare",
+      "Cancel": "Abbrechen",
       "Description": "Beschreibung",
       "DescriptionPlaceholder": "Bitte gib alle relevanten Informationen ein",
-      "Cancel": "Abbrechen",
-      "Submit": "Speichern",
       "Group1": "Gruppe 1",
       "Group2": "Gruppe 2",
+      "NameOfPlant": "Name der Pflanze",
+      "NamePlaceholder": "Gib den Namen der Pflanze ein",
+      "PlantType": "Pflanzentyp",
+      "PlantTypePlaceholder": "Gib den Pflanzentyp ein",
+      "Room": "Raum",
       "Room1": "Raum 1",
       "Room2": "Raum 2",
       "Room3": "Raum 3",
       "Room4": "Raum 4",
-      "Sensors": "Sensoren",
+      "SelectRoom": "Raum auswählen",
+      "SelectSensor": "Sensor auswählen",
       "Sensor1": "Sensor 1",
       "Sensor2": "Sensor 2",
-      "Avatars": "Avatare",
-      "Avatar1": "Avatar 1",
-      "Avatar2": "Avatar 2"
+      "Sensors": "Sensoren",
+      "SubTitle": "Verwalte deine Pflanzeninformationen",
+      "Submit": "Speichern",
+      "Title": "Pflanzeneinstellungen"
     }
   },
-  "home": {
-    "welcome": "Hallo {name}!",
-    "subtitle": "Überblick über deine Räume",
-    "emptyRoomsSubtitle": "Beginnen Sie damit, Ihren ersten Raum zu erstellen und eine Pflanze hinzuzufügen, um loszulegen.",
-    "emptyRoomsTitle": "Erstellen Sie Ihren ersten Raum"
-  },
-  "404view": {
-    "title": "404 - Seite nicht gefunden",
-    "subtitle": "Die angeforderte Seite existiert nicht."
-  },
   "plantList": {
-    "emptyPlantTitle": "Erstell deine erste Pflanze ",
-    "emptyPlantSubtitle": "Erstell eine Pflanze damit du mit Sensora die Daten erfassen kannst."
+    "emptyPlantSubtitle": "Erstell eine Pflanze damit du mit Sensora die Daten erfassen kannst.",
+    "emptyPlantTitle": "Erstell deine erste Pflanze "
+  },
+  "register": {
+    "MinLength": "Das Passwort muss mindestens 8 Zeichen lang sein.",
+    "SpecialCharRequired": "Das Passwort muss mindestens ein Sonderzeichen enthalten (!\"#$%&'()*+,-./:;<=>?[]^_{}|~)."
   },
   "sensorList": {
-    "emptySensorTitle": "Füg deinen ersten Sensor hinzu",
-    "emptySensorSubtitle": "Füg einen Sensor über dein Profil hinzu um ihn zu benutzen."
+    "emptySensorSubtitle": "Füg einen Sensor über dein Profil hinzu um ihn zu benutzen.",
+    "emptySensorTitle": "Füg deinen ersten Sensor hinzu"
   },
-  "about": {
-    "title": "Über uns",
-    "description": "Wir sind ein Team von Studierenden, das an unserem Abschlussprojekt arbeitet, um ein smartes Bewässerungssystem zu entwickeln. Das Ziel ist es, die Pflanzenbewässerung für Haushalte zu automatisieren und zu optimieren, wodurch die Pflanzenpflege einfacher und effizienter wird.",
-    "teamTitle": "Unser Team",
-    "teamMembers": [
-      "Max",
-      "Lukas",
-      "Fynn",
-      "Timon",
-      "Justus"
-    ],
-    "projectGoalTitle": "Projektziel",
-    "projectGoalDescription": "Das Ziel dieses Projekts ist es, ein smartes Bewässerungssystem zu entwickeln, das eine effiziente und automatisierte Bewässerung von Pflanzen ermöglicht. Das System sollte flexibel sein und den Nutzern erlauben, Bewässerungszeiten und -mengen zu konfigurieren und über eine Web-Oberfläche auf das System zuzugreifen.",
-    "featuresTitle": "Hauptfunktionen:",
-    "featuresList": [
-      "Automatisiertes Bewässerungssystem basierend auf Sensordaten",
-      "Flexible Konfiguration der Bewässerungszeiten und -mengen",
-      "Protokollierung vergangener Bewässerungsaktionen",
-      "Fernzugriff über Web-Oberfläche",
-      "Sensorintegration für Bodenfeuchtigkeit, Temperatur, Luftfeuchtigkeit und Helligkeit",
-      "Benachrichtigungssystem (E-Mail) für Bewässerung und Systemfehler"
-    ],
-    "technologiesTitle": "Verwendete Technologien",
-    "technologiesList": [
-      "Frontend: Vue.js mit TypeScript, Tailwind CSS",
-      "Backend: Rust (BFF), Python-Microservices für Sensordaten und E-Mail-Validierung",
-      "Microcontroller: ESP32 mit Sensoren (Temperatur, Luftfeuchtigkeit, Bodenfeuchtigkeit, Helligkeit), Pumpe",
-      "Kommunikation: Solace Messaging zwischen Microcontrollern und Microservices"
-    ],
-    "outcomeTitle": "Projektergebnis",
-    "outcomeDescription": "Am Ende des Projekts werden wir einen voll funktionsfähigen Prototyp des smarten Bewässerungssystems haben, der die Bewässerung aus der Ferne steuern, vergangene Bewässerungsaktionen protokollieren und detaillierte Sensordaten bereitstellen kann.",
-    "githubLink": "https://github.com/Juqsi/Sensora"
+  "setupAccountStepper": {
+    "1": {
+      "description": "Richten Sie Ihr Konto ein, um zu starten",
+      "title": "Kontoerstellung"
+    },
+    "2": {
+      "description": "Geben Sie Ihren Vornamen und Nachnamen ein",
+      "title": "Persönliche Informationen"
+    },
+    "3": {
+      "description": "Wählen Sie ein Profilbild, das Sie repräsentiert",
+      "title": "Profilbild"
+    },
+    "4": {
+      "description": "Beginnen Sie mit der Erstellung Ihrer Wohnung und dem Einrichten Ihres Raums",
+      "title": "Erstelle Wohnung"
+    }
+  },
+  "shareLink": {
+    "close": "Schließen",
+    "copy": "Kopieren"
+  },
+  "user": {
+    "deleted": "Benutzer erfolgreich gelöscht!",
+    "updated": "Benutzer erfolgreich aktualisiert!"
   }
 }

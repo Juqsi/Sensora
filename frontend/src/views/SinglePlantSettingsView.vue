@@ -14,7 +14,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
@@ -128,7 +127,7 @@ const createPlant = async () => {
       note: note.value,
     }
 
-    if (activateTargetValues.value === true) {
+    if (activateTargetValues.value) {
       newPlant.targetValues = [
         { value: targetValuesTemperature.value, ilk: ilk.temperature },
         { value: targetValuesHumidity.value, ilk: ilk.humidity },
@@ -152,7 +151,7 @@ const createPlant = async () => {
       avatarId: selectedAvatar.value?.value,
       note: note.value,
     }
-    if (activateTargetValues.value === true) {
+    if (activateTargetValues.value) {
       editPlant.targetValues = [
         {
           value: targetValuesTemperature.value,
@@ -203,7 +202,6 @@ const createPlant = async () => {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>{{ t('plant.settings.sensors') }}</SelectLabel>
                 <SelectItem v-for="device in deviceStore.devices" v-model:value="device.did">
                   {{ device.did }}
                 </SelectItem>
@@ -280,7 +278,6 @@ const createPlant = async () => {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>{{ t('plant.settings.avatar') }}</SelectLabel>
               <SelectItem v-for="avatar in plantAvatars" v-model:value="avatar.value">
                 {{ avatar.label }}
               </SelectItem>

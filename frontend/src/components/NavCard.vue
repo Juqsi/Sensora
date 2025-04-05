@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { ChevronLeft } from 'lucide-vue-next'
 
@@ -11,8 +10,6 @@ defineProps({
   title: { type: String, required: true },
   subTitle: String,
 })
-
-const { t } = useI18n()
 </script>
 
 <template>

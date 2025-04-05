@@ -39,7 +39,7 @@ export const useGroupStore = defineStore('group', {
 
     async leaveGroup(groupId: string) {
       await groupApiClient.leave(groupId, {
-        meta: { successMessage: t('group.leaved') },
+        meta: { successMessage: t('group.left') },
       } as CustomAxiosRequestConfig)
       this.groups = this.groups.filter((g) => g.gid !== groupId)
     },

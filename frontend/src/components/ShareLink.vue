@@ -14,6 +14,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Copy, Link } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   link: { type: String, required: true },
@@ -53,13 +56,13 @@ function copyText() {
           <Input id="link" v-model="props.link" readonly />
         </div>
         <Button class="px-3" size="sm" type="submit" @click="copyText">
-          <span class="sr-only">Copy</span>
+          <span class="sr-only">{{ t('shareLink.copy') }}</span>
           <Copy class="w-4 h-4" />
         </Button>
       </div>
       <DialogFooter class="sm:justify-start">
         <DialogClose as-child>
-          <Button type="button" variant="secondary"> Close</Button>
+          <Button type="button" variant="secondary"> {{ t('shareLink.close') }}Close</Button>
         </DialogClose>
       </DialogFooter>
     </DialogContent>

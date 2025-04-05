@@ -1,57 +1,55 @@
 {
-  "login": {
-    "SignIn": "Sign In",
-    "SignInInfo": "Enter your email below to login to your account",
-    "ForgotPassword": "Forgot your password?",
-    "DontHaveAccount": "Don't have an account?",
-    "SignInWithA": "Sign in with A",
-    "SignUp": "Sign Up",
-    "SignUpInfo": "Enter your information to create an account",
-    "FirstName": "First name",
-    "LastName": "Last name",
-    "Email": "Email",
-    "Password": "Password",
-    "CreateAccount": "Create Account",
-    "AlreadyHaveAccount": "Already have an account?",
-    "SignUpWithA": "Sign up with A",
-    "Or": "or",
-    "Success": "Login successful"
+  "404view": {
+    "subtitle": "The requested page does not exist.",
+    "title": "404 - Page Not Found"
+  },
+  "about": {
+    "description": "We are a team of students working on our final project to create a smart irrigation system. The goal is to automate and optimize plant watering for households, making plant care easier and more efficient.",
+    "featuresList": [
+      "Automated watering system based on sensor data",
+      "Flexible configuration of watering times and amounts",
+      "Logging of past watering actions",
+      "Remote access via web interface",
+      "Sensor integration for soil moisture, temperature, humidity, and brightness",
+      "Notification system (Email) for watering and system errors"
+    ],
+    "featuresTitle": "Key Features:",
+    "githubLink": "https://github.com/Juqsi/Sensora",
+    "outcomeDescription": "By the end of the project, we will have a fully functional prototype of the smart irrigation system, capable of controlling watering remotely, logging watering actions, and providing detailed sensor readings.",
+    "outcomeTitle": "Project Outcome",
+    "projectGoalDescription": "The goal of this project is to develop a smart irrigation system that allows efficient and automated watering of plants. The system should be flexible and allow users to configure watering times, amounts, and have remote access via a web interface.",
+    "projectGoalTitle": "Project Goal",
+    "teamMembers": [
+      "Max",
+      "Lukas",
+      "Fynn",
+      "Timon",
+      "Justus"
+    ],
+    "teamTitle": "Our Team",
+    "technologiesList": [
+      "Frontend: Vue.js with TypeScript, Tailwind CSS",
+      "Backend: Rust (BFF), Python microservices for sensor data and email validation",
+      "Microcontrollers: ESP32 with sensors (temperature, humidity, soil moisture, brightness), pump",
+      "Communication: Solace messaging between microcontrollers and microservices"
+    ],
+    "technologiesTitle": "Technologies We Use",
+    "title": "About Us"
   },
   "appearance": {
-    "Title": "Appearance",
-    "Description": "Customize the appearance of the app.",
-    "ThemeLabel": "Theme",
-    "ThemeDescription": "Select the theme for the App.",
-    "Light": "Light",
     "Dark": "Dark",
+    "Description": "Customize the appearance of the app.",
+    "Light": "Light",
     "OSPreference": "Device",
     "SetToOS": "Appearance set to OS preference",
     "SwitchToDarkMode": "Appearance switched to Dark Mode",
     "SwitchToLightMode": "Appearance switched to Light Mode",
+    "ThemeDescription": "Select the theme for the App.",
+    "ThemeLabel": "Theme",
+    "Title": "Appearance",
     "UpdatePreferences": "Update preferences"
   },
-  "language": {
-    "LanguageSelectionTitle": "Select Your Language",
-    "LanguageSelectionDescription": "Please choose your preferred language.",
-    "LanguageLabel": "Language",
-    "LanguageDescription": "Select a language.",
-    "English": "English",
-    "German": "German",
-    "SetToEnglish": "Language set to English.",
-    "SetToGerman": "Language set to German.",
-    "UpdateLanguage": "Update Language"
-  },
   "errors": {
-    "badRequest": "Invalid request!",
-    "unauthorized": "Session expired! Please log in again.",
-    "sessionExpired": "Unauthorized!",
-    "forbidden": "Access denied!",
-    "notFound": "Resource not found!",
-    "serverError": "Internal server error! Please try again later.",
-    "unknownError": "Unknown error!",
-    "networkError": "Network error! Please check your internet connection.",
-    "loading": "Loading...",
-    "requestCompleted": "Successful",
     "E000": "Unable to parse query.",
     "E100": "Authorization header required: use 'Authorization: Bearer <token>'.",
     "E101": "Unable to parse authorization header string: check encoding.",
@@ -70,140 +68,146 @@
     "E406": "The invitation token has expired or is incorrect.",
     "E500": "The room does not exist. Check your spelling.",
     "E601": "The plant ID in the path is required. Check the documentation.",
-    "E603": "You don't have permission to do this. Ask a group member or the room owner."
+    "E603": "You don't have permission to do this. Ask a group member or the room owner.",
+    "badRequest": "Invalid request!",
+    "forbidden": "Access denied!",
+    "loading": "Loading...",
+    "networkError": "Network error! Please check your internet connection.",
+    "notFound": "Resource not found!",
+    "requestCompleted": "Successful",
+    "serverError": "Internal server error! Please try again later.",
+    "sessionExpired": "Unauthorized!",
+    "unauthorized": "Session expired! Please log in again.",
+    "unknownError": "Unknown error!"
   },
   "group": {
-    "deleted": "Group successfully deleted",
-    "userRemoved": "User was removed",
-    "left": "Successfully left the group",
-    "updated": "Group updated",
-    "joined": "Successfully joined the group",
-    "created": "Group created",
     "alert": {
-      "title": "Are you sure?",
-      "description": "Do you really want to remove {name} from the group? This action cannot be undone.",
       "cancel": "Cancel",
-      "confirm": "Delete"
-    },
-    "room": {
-      "alert": {
-        "title": "Remove Room",
-        "description": "Are you sure you want to remove the room \"{groupName}\" from the group?",
-        "cancel": "Cancel",
-        "confirm": "Remove"
-      }
+      "confirm": "Delete",
+      "description": "Do you really want to remove {name} from the group? This action cannot be undone.",
+      "title": "Are you sure?"
     },
     "create": {
       "RoomEntity": "Kitchen"
     },
+    "created": "Group created",
+    "deleted": "Group successfully deleted",
+    "emptyGroupSubtitle": "Start by creating your first group to get started.",
     "emptyGroupTitle": "Create Your First Group",
-    "emptyGroupSubtitle": "Start by creating your first group to get started."
-  },
-  "user": {
-    "updated": "User successfully updated!",
-    "deleted": "User successfully deleted!"
-  },
-  "register": {
-    "SpecialCharRequired": "The password must contain at least one special character (!\"#$%&'()*+,-./:;<=>?[]^_{}|~).",
-    "MinLength": "The password must be at least 8 characters long."
-  },
-  "setupAccountStepper": {
-    "1": {
-      "title": "Account Creation",
-      "description": "Set up your account to get started"
+    "joined": "Successfully joined the group",
+    "left": "Successfully left the group",
+    "room": {
+      "alert": {
+        "cancel": "Cancel",
+        "confirm": "Remove",
+        "description": "Are you sure you want to remove the room \"{groupName}\" from the group?",
+        "title": "Remove Room"
+      }
     },
-    "2": {
-      "title": "Personal Information",
-      "description": "Enter your first name and last name"
-    },
-    "3": {
-      "title": "Profile Picture",
-      "description": "Choose a profile picture to represent yourself"
-    },
-    "4": {
-      "title": "Create Flat",
-      "description": "Begin creating your flat and setting up your space"
-    }
+    "updated": "Group updated",
+    "userRemoved": "User was removed"
+  },
+  "home": {
+    "emptyRoomsSubtitle": "Start by creating your first room and add a plant to get started.",
+    "emptyRoomsTitle": "Create Your First Room",
+    "subtitle": "Overview of all rooms",
+    "welcome": "Hello {name}!"
+  },
+  "language": {
+    "English": "English",
+    "German": "German",
+    "LanguageDescription": "Select a language.",
+    "LanguageLabel": "Language",
+    "LanguageSelectionDescription": "Please choose your preferred language.",
+    "LanguageSelectionTitle": "Select Your Language",
+    "SetToEnglish": "Language set to English.",
+    "SetToGerman": "Language set to German.",
+    "UpdateLanguage": "Update Language"
+  },
+  "login": {
+    "AlreadyHaveAccount": "Already have an account?",
+    "CreateAccount": "Create Account",
+    "DontHaveAccount": "Don't have an account?",
+    "Email": "Email",
+    "FirstName": "First name",
+    "ForgotPassword": "Forgot your password?",
+    "LastName": "Last name",
+    "Or": "or",
+    "Password": "Password",
+    "SignIn": "Sign In",
+    "SignInInfo": "Enter your email below to login to your account",
+    "SignInWithA": "Sign in with A",
+    "SignUp": "Sign Up",
+    "SignUpInfo": "Enter your information to create an account",
+    "SignUpWithA": "Sign up with A",
+    "Success": "Login successful"
   },
   "plant": {
     "settings": {
-      "Title": "Plant Settings",
-      "SubTitle": "Manage your plant information",
-      "NameOfPlant": "Name of Plant",
-      "NamePlaceholder": "Enter the name of the plant",
-      "Room": "Room",
-      "SelectRoom": "Select Room",
-      "SelectSensor": "Select Sensor",
-      "PlantType": "Plant Type",
-      "PlantTypePlaceholder": "Enter the plant type",
       "Avatar": "Avatar",
+      "Avatar1": "Avatar 1",
+      "Avatar2": "Avatar 2",
+      "Avatars": "Avatars",
+      "Cancel": "Cancel",
       "Description": "Description",
       "DescriptionPlaceholder": "Please include all relevant information",
-      "Cancel": "Cancel",
-      "Submit": "Submit",
       "Group1": "Group 1",
       "Group2": "Group 2",
+      "NameOfPlant": "Name of Plant",
+      "NamePlaceholder": "Enter the name of the plant",
+      "PlantType": "Plant Type",
+      "PlantTypePlaceholder": "Enter the plant type",
+      "Room": "Room",
       "Room1": "Room 1",
       "Room2": "Room 2",
       "Room3": "Room 3",
       "Room4": "Room 4",
-      "Sensors": "Sensors",
+      "SelectRoom": "Select Room",
+      "SelectSensor": "Select Sensor",
       "Sensor1": "Sensor 1",
       "Sensor2": "Sensor 2",
-      "Avatars": "Avatars",
-      "Avatar1": "Avatar 1",
-      "Avatar2": "Avatar 2"
+      "Sensors": "Sensors",
+      "SubTitle": "Manage your plant information",
+      "Submit": "Submit",
+      "Title": "Plant Settings"
     }
   },
-  "home": {
-    "welcome": "Hello {name}!",
-    "subtitle": "Overview of all rooms",
-    "emptyRoomsSubtitle": "Start by creating your first room and add a plant to get started.",
-    "emptyRoomsTitle": "Create Your First Room"
-  },
-  "404view": {
-    "title": "404 - Page Not Found",
-    "subtitle": "The requested page does not exist."
-  },
   "plantList": {
-    "emptyPlantTitle": "Create Your First Plant",
-    "emptyPlantSubtitle": "Create a plant so you can start collecting data with Sensora."
+    "emptyPlantSubtitle": "Create a plant so you can start collecting data with Sensora.",
+    "emptyPlantTitle": "Create Your First Plant"
+  },
+  "register": {
+    "MinLength": "The password must be at least 8 characters long.",
+    "SpecialCharRequired": "The password must contain at least one special character (!\"#$%&'()*+,-./:;<=>?[]^_{}|~)."
   },
   "sensorList": {
-    "emptySensorTitle": "Add Your First Sensor",
-    "emptySensorSubtitle": "Add a sensor through your profile to start using it."
+    "emptySensorSubtitle": "Add a sensor through your profile to start using it.",
+    "emptySensorTitle": "Add Your First Sensor"
   },
-  "about": {
-    "title": "About Us",
-    "description": "We are a team of students working on our final project to create a smart irrigation system. The goal is to automate and optimize plant watering for households, making plant care easier and more efficient.",
-    "teamTitle": "Our Team",
-    "teamMembers": [
-      "Max",
-      "Lukas",
-      "Fynn",
-      "Timon",
-      "Justus"
-    ],
-    "projectGoalTitle": "Project Goal",
-    "projectGoalDescription": "The goal of this project is to develop a smart irrigation system that allows efficient and automated watering of plants. The system should be flexible and allow users to configure watering times, amounts, and have remote access via a web interface.",
-    "featuresTitle": "Key Features:",
-    "featuresList": [
-      "Automated watering system based on sensor data",
-      "Flexible configuration of watering times and amounts",
-      "Logging of past watering actions",
-      "Remote access via web interface",
-      "Sensor integration for soil moisture, temperature, humidity, and brightness",
-      "Notification system (Email) for watering and system errors"
-    ],
-    "technologiesTitle": "Technologies We Use",
-    "technologiesList": [
-      "Frontend: Vue.js with TypeScript, Tailwind CSS",
-      "Backend: Rust (BFF), Python microservices for sensor data and email validation",
-      "Microcontrollers: ESP32 with sensors (temperature, humidity, soil moisture, brightness), pump",
-      "Communication: Solace messaging between microcontrollers and microservices"
-    ],
-    "outcomeTitle": "Project Outcome",
-    "outcomeDescription": "By the end of the project, we will have a fully functional prototype of the smart irrigation system, capable of controlling watering remotely, logging watering actions, and providing detailed sensor readings.",
-    "githubLink": "https://github.com/Juqsi/Sensora"
+  "setupAccountStepper": {
+    "1": {
+      "description": "Set up your account to get started",
+      "title": "Account Creation"
+    },
+    "2": {
+      "description": "Enter your first name and last name",
+      "title": "Personal Information"
+    },
+    "3": {
+      "description": "Choose a profile picture to represent yourself",
+      "title": "Profile Picture"
+    },
+    "4": {
+      "description": "Begin creating your flat and setting up your space",
+      "title": "Create Flat"
+    }
+  },
+  "shareLink": {
+    "close": "Close",
+    "copy": "Copy"
+  },
+  "user": {
+    "deleted": "User successfully deleted!",
+    "updated": "User successfully updated!"
   }
 }
