@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import NavCard from '@/components/NavCard.vue'
 import { Card, CardContent } from '@/components/ui/card'
-import { useDeviceStore } from '@/stores'
+import { useDeviceStore, usePlantStore } from '@/stores'
 import {
   Clock,
   CloudHail,
@@ -45,14 +45,18 @@ onMounted(async () => {
         <Cpu class="w-8 h-8" />
       </div>
       <div class="ml-2 w-full block">
-        <h3 class="text-2xl font-medium">55197b05d</h3>
+        <h3 class="text-2xl font-medium">{{ controller?.did.split('-')[0] }}</h3>
         <div class="flex items-center gap-2">
           <User class="w-5 h-5" />
-          <p class="font-medium">Justus Siegert</p>
+          <p class="font-medium">{{ controller?.owner?.username ?? '-' }}</p>
         </div>
         <div class="flex items-center gap-2">
           <Flower2 class="w-5 h-5" />
-          <p class="font-medium">Pflanze Berta</p>
+          <p class="font-medium">
+            {{
+
+            }}
+          </p>
         </div>
         <div class="flex items-center gap-2">
           <Users class="w-5 h-5" />

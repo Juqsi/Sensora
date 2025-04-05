@@ -9,11 +9,7 @@ services:
   #    - db
 
   backend:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
-      args:
-        GIT_TOKEN: ${GIT_TOKEN}
+    image: comtols/sensora-frontend-api
     ports:
       - "8080:8080"
     depends_on:
