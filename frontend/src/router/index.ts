@@ -92,7 +92,8 @@ const router = createRouter({
     {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
-      component: () => import('../views/404view.vue'), // Deine 404-Komponente
+      component: () => import('../views/404view.vue'),
+      meta: { requiresAuth: true },
     },
   ],
 })
@@ -100,7 +101,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    next({ name: 'login' })
+    next({ name: 'login', query: { redirect: to.fullPath.startsWith('/') ? to.fullPath : '/' } })
   } else if (to.meta.requiresUnauth && authStore.isAuthenticated) {
     next({ name: 'home' })
   } else {

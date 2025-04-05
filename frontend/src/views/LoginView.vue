@@ -8,6 +8,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import type { AuthLoginBody } from '@/api'
+import { useAuthRedirect } from '@/composables/useAuthRedirect.ts'
+
+const { redirectAfterLogin } = useAuthRedirect()
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -36,7 +39,7 @@ const handleSubmit = async () => {
       password: password.value,
     }
     await auth.login(credentials)
-    router.push({ name: 'home' })
+    redirectAfterLogin()
   } catch (error) {
     errorMessage.value = t('login.Failed') // Fehlermeldung anzeigen
   } finally {
@@ -76,7 +79,10 @@ const handleSubmit = async () => {
 
         <div class="mt-4 text-center text-sm">
           {{ t('login.DontHaveAccount') }}
-          <router-link :to="{ name: 'register' }" class="underline">
+          <router-link
+            :to="{ name: 'register', query: { redirect: $route.query.redirect } }"
+            class="underline"
+          >
             {{ t('login.SignUp') }}
           </router-link>
         </div>

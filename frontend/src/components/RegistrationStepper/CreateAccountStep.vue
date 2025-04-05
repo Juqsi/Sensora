@@ -96,7 +96,10 @@ const handleSubmit = async () => {
         </form>
         <div class="mt-4 text-center text-sm">
           {{ t('login.AlreadyHaveAccount') }}
-          <router-link :to="{ name: 'login' }" class="underline">
+          <router-link
+            :to="{ name: 'login', query: { redirect: $route.query.redirect } }"
+            class="underline"
+          >
             {{ t('login.SignIn') }}
           </router-link>
         </div>

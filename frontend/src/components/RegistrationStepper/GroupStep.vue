@@ -14,7 +14,9 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { createGroupBody, Group } from '@/api'
 import { useGroupStore, useRoomStore } from '@/stores'
-import router from '@/router'
+import { useAuthRedirect } from '@/composables/useAuthRedirect.ts'
+
+const { redirectAfterLogin } = useAuthRedirect()
 
 const groupStore = useGroupStore()
 const roomStore = useRoomStore()
@@ -34,7 +36,7 @@ const createGroupSubmit = async () => {
       await roomStore.createRoom({ groupId: group.gid, name: room })
     }
     rooms.value = [t('group.create.RoomEntity') as string]
-    router.push('/')
+    redirectAfterLogin()
   } catch (error) {
     console.log(error)
   }
