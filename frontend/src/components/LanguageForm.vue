@@ -62,7 +62,7 @@ const updateLanguage = (newLanguage: string) => {
               <div class="items-center rounded-md border-2 p-1 hover:border-accent">
                 <div class="space-y-2 rounded-sm bg-card-foreground p-2">
                   <div
-                    class="flex items-center justify-center space-x-2 rounded-md bg-card p-2 shadow-sm"
+                    class="flex items-center justify-center space-x-2 rounded-md bg-card p-2 shadow-xs"
                   >
                     <!-- Flag Icon for English -->
                     <div class="flag-icon flag-icon-us w-8 h-8"></div>
@@ -84,7 +84,7 @@ const updateLanguage = (newLanguage: string) => {
               <div class="items-center rounded-md border-2 p-1 hover:border-accent">
                 <div class="space-y-2 rounded-sm bg-card-foreground p-2">
                   <div
-                    class="flex items-center justify-center space-x-2 rounded-md bg-card p-2 shadow-sm"
+                    class="flex items-center justify-center space-x-2 rounded-md bg-card p-2 shadow-xs"
                   >
                     <!-- Flag Icon for German -->
                     <div class="flag-icon flag-icon-de w-8 h-8"></div>

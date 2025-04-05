@@ -21,7 +21,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="h-10 flex-col justify-between bg-background z-[9999999999]">
+  <div class="h-10 flex-col justify-between bg-background z-9999999999">
     <div
       :class="{ hidden: isKeyboardOpen }"
       class="fixed bottom-0 left-0 right-0 border-muted-background border-t-2 mx-auto w-full bg-background shadow-lg p-3"
