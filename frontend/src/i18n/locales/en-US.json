@@ -209,5 +209,22 @@
   "user": {
     "deleted": "User successfully deleted!",
     "updated": "User successfully updated!"
+  },
+  "title": {
+    "home": "Dashboard",
+    "login": "Login",
+    "register": "Register",
+    "profile": "Profile",
+    "settings": "Settings",
+    "plant": "Plant Details",
+    "plantSettings": "Edit Plant",
+    "plants": "My Plants",
+    "sensors": "Sensors",
+    "sensor": "Sensor Details",
+    "setupAccount": "Complete Your Account",
+    "groups": "Groups",
+    "createPlant": "Create Plant",
+    "aboutUs": "About Us",
+    "notFound": "Page Not Found"
   }
 }

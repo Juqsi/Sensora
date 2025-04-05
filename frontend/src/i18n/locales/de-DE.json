@@ -209,5 +209,22 @@
   "user": {
     "deleted": "Benutzer erfolgreich gelöscht!",
     "updated": "Benutzer erfolgreich aktualisiert!"
+  },
+  "title": {
+    "home": "Übersicht",
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "profile": "Profil",
+    "settings": "Einstellungen",
+    "plant": "Pflanzendetails",
+    "plantSettings": "Pflanze bearbeiten",
+    "plants": "Meine Pflanzen",
+    "sensors": "Sensoren",
+    "sensor": "Sensordetails",
+    "setupAccount": "Account vervollständigen",
+    "groups": "Gruppen",
+    "createPlant": "Pflanze erstellen",
+    "aboutUs": "Über uns",
+    "notFound": "Seite nicht gefunden"
   }
 }
