@@ -72,9 +72,12 @@ const filteredPlantList = computed(() => {
   return flatPlantList.value.filter((item) => {
     const matchesStatus =
       item.plant.controllers.some((controller) =>
-        controller.sensors.some((sensor) => values.items!.includes(sensor.status)),
+        controller.sensors.some((sensor) =>
+          sensor.currently_assigned && values.items!.includes(sensor.status)
+        )
       ) ||
       (item.plant.controllers.length === 0 && values.items!.includes('inactive'))
+
     const matchesSearch =
       searchQuery.value.trim() === '' ||
       item.plant.name.toLowerCase().includes(searchQuery.value.toLowerCase())

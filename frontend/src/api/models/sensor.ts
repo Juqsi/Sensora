@@ -64,6 +64,8 @@ export interface Sensor {
    * @example active
    */
   status: SensorStatusEnum
+
+  currently_assigned: boolean
 }
 
 /**

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Droplet, Sun, Thermometer } from 'lucide-vue-next'
+import { Droplet, Sun, Thermometer,CloudHail } from 'lucide-vue-next'
 import { ilk, type Plant, type Value } from '@/api'
 import { latestSensorValue } from '@/composables/useLatestSensorValue.ts'
 import { onMounted, type PropType, ref } from 'vue'
@@ -91,7 +91,7 @@ const formatTimestamp = (timestamp?: string | number) => {
     <Card @click="$emit('updateActiveKey', ilk.humidity)">
       <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle class="text-sm font-medium">Humidity</CardTitle>
-        <Sun class="h-4 w-4" />
+        <CloudHail class="size-4" id="humidity" />
       </CardHeader>
       <CardContent>
         <div class="text-2xl font-bold flex-row flex justify-between items-center">

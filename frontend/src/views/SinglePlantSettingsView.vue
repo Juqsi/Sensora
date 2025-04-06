@@ -67,7 +67,7 @@ const loadPlantDetails = async () => {
       name.value = editPlant?.name ?? ''
       selectedRoom.value = (await roomStore.getRoomDetails(editPlant?.room as string)) ?? undefined
       selectedSensor.value = editPlant?.controllers[0]?.did ?? ""
-      activateSensor.value = selectedSensor.value ? true : false
+      activateSensor.value = !!selectedSensor.value
       plantType.value = editPlant?.plantType ?? ''
 
       const avatar = plantAvatars.find((avatar) => avatar.value === (editPlant?.avatarId ?? ''))
@@ -210,7 +210,6 @@ const createPlant = async () => {
 </script>
 
 <template>
-  <p>{{ selectedSensor }}<- Sensor{{ selectedRoom?.name }} {{selectedAvatar}}</p>
   <NavCard :sub-title="t('plant.settings.SubTitle')" :title="t('plant.settings.Title')">
     <template #TitleRight>
       <router-link :to="{ name: 'PlantUpload' }">

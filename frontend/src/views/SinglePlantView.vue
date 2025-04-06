@@ -1,20 +1,29 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
-import MeasuredTiles from '@/components/MeasuredTiles.vue' // Importiere das Child-Komponent
+import MeasuredTiles from '@/components/MeasuredTiles.vue'
 import { useRoute } from 'vue-router'
 import NavCard from '@/components/NavCard.vue'
-import { usePlantStore } from '@/stores'
-import { ilk, type Plant } from '@/api'
-import { Accordion, AccordionContent } from '@/components/ui/accordion'
-import { AccordionItem, AccordionTrigger } from '@/components/ui/custom-accordion'
+import { usePlantStore, useRoomStore } from '@/stores'
+import { ilk, type Plant, type Room } from '@/api'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import PlantMeassuredValuesChart from '@/components/PlantMeassuredValuesChart.vue'
 import Plant3d from '@/components/plant3d/plant3d.vue'
 import { Settings } from 'lucide-vue-next'
+import { useSearch } from '@/composables/useSearch.ts'
+import {  type Recognition } from '@/composables/useImageUpload.ts'
+import PlantInformationCard from '@/components/PlantInformationCard.vue'
+import EmtyState from '@/components/EmtyState.vue'
+import {useI18n} from 'vue-i18n'
+
+const {t} = useI18n()
 
 const route = useRoute()
 const plantStore = usePlantStore()
+const roomStore = useRoomStore()
 const plant = ref<Plant>()
+const room = ref<Room | undefined>()
+
+const {searchPlant} = useSearch()
 
 const measuredTiles = ref<InstanceType<typeof MeasuredTiles> | null>(null)
 
@@ -24,49 +33,18 @@ onMounted(async () => {
   if (route.params.id !== undefined) {
     plant.value = await plantStore.getPlantDetails(route.params.id as string, oneHourAgo, today)
     values = await plantStore.getCombinedSensorData(plant.value?.plantId ?? '', yesterday, today)
+    room.value = await roomStore.getRoomDetails(plant.value?.room??'')?? undefined
+    const plantInfos : Recognition[] = await searchPlant(plant.value?.plantType && plant.value?.plantType.length !== 0 ? plant.value?.plantType:plant.value?.name) ?? []
+    plantInformation.value = plantInfos[0]
 
-    // Stelle sicher, dass measuredTiles existiert, bevor du die Methode aufrufst
     if (plant.value && measuredTiles.value) {
-      measuredTiles.value.initializeWithPlant(plant.value) // Aufruf der Methode im Child-Komponent
+      measuredTiles.value.initializeWithPlant(plant.value)
     }
     updateActiveKey(ilk.temperature, true)
   }
 })
 
-const defaultValue = 'item-1'
-
-const accordionItems = [
-  {
-    value: 'item-1',
-    title: "What is the plant's groupName?",
-    content:
-      "The plant is called 'Aloe Vera'. It is known for its medicinal properties and its ability to thrive in dry conditions.",
-  },
-  {
-    value: 'item-2',
-    title: 'Is it easy to care for?',
-    content:
-      'Yes. Aloe Vera is a low-maintenance plant that requires minimal watering and can grow in a variety of light conditions.',
-  },
-  {
-    value: 'item-3',
-    title: 'What are its benefits?',
-    content:
-      'Aloe Vera is famous for its soothing gel that can be used to treat burns, skin irritations, and as a natural moisturizer.',
-  },
-  {
-    value: 'item-4',
-    title: 'How tall does it grow?',
-    content:
-      'Aloe Vera plants typically grow up to 12-18 inches tall, though some varieties can grow larger with optimal conditions.',
-  },
-  {
-    value: 'item-5',
-    title: 'What kind of light does it need?',
-    content:
-      'Aloe Vera thrives in bright, indirect sunlight but can also tolerate some direct sunlight. It should not be placed in dark, low-light areas.',
-  },
-]
+const plantInformation = ref<Recognition>()
 
 const today = new Date()
 const oneHourAgo = new Date()
@@ -114,7 +92,7 @@ const updateActiveKey = (key: ilk, force: boolean = false) => {
 </script>
 
 <template>
-  <NavCard :title="plant?.name ?? ''" sub-title="Wohnzimmer">
+  <NavCard :title="plant?.name ?? ''" :sub-title="room?.name">
     <template #TitleRight>
       <router-link :to="`/plant/${route.params.id}/edit`">
         <Button size="icon" variant="ghost">
@@ -134,14 +112,7 @@ const updateActiveKey = (key: ilk, force: boolean = false) => {
       <PlantMeassuredValuesChart :data="activeData" />
     </TabsContent>
     <TabsContent value="infos">
-      <Accordion :default-value="defaultValue" class="w-full" collapsible type="single">
-        <AccordionItem v-for="item in accordionItems" :key="item.value" :value="item.value">
-          <AccordionTrigger>{{ item.title }}</AccordionTrigger>
-          <AccordionContent>
-            {{ item.content }}
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+     <PlantInformationCard v-if="plantInformation" :recognition="plantInformation ?? {} as Recognition " />
     </TabsContent>
   </Tabs>
 </template>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineProps, defineEmits } from 'vue'
+import { defineProps, defineEmits,type PropType   } from 'vue'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -17,8 +17,12 @@ import {
 } from '@/components/ui/accordion'
 import { Droplet, GaugeCircle, Leaf, Ruler, Sparkles, Sun, TreePine } from 'lucide-vue-next'
 import type { Plant, Recognition } from '@/composables/useImageUpload.ts'
+import EmtyState from '@/components/EmtyState.vue'
+import {useI18n} from 'vue-i18n'
 
-const props = defineProps<{ recognition: Recognition }>()
+const {t} = useI18n()
+
+const props = defineProps({ recognition: {type: Object as PropType<Recognition>, required: true}, useUse: {type: Object as PropType<Boolean>, required: false, default: false} })
 const emit = defineEmits<{ (e: 'use', plant: Plant): void }>()
 
 function handleUse() {
@@ -123,7 +127,7 @@ function handleUse() {
             more information
           </a>
         </CardDescription>
-        <Button size="sm" @click="handleUse">
+        <Button v-if="useUse" size="sm" @click="handleUse">
           Benutzen
         </Button>
       </CardFooter>
@@ -144,7 +148,7 @@ function handleUse() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        Plant information not available in our Database.
+        <EmtyState :title="t('plant.NoInformationTitle')" :condition="true" :subtitle="t('plant.NoInformationSubtitle')" img-src="/svg/undraw_no-data_ig65.svg" />
       </CardContent>
       <CardFooter v-if="props.recognition.wikipedia">
         <div class="text-center w-full">
