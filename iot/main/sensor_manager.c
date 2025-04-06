@@ -11,6 +11,9 @@
 #define SAMPLES 3
 #define MEAN_COUNT 4
 #define MOISTURE_SENSOR_PIN ADC1_CHANNEL_5	// GPIO 33
+#ifndef ADC_ATTEN_11db
+#define ADC_ATTEN_11db ADC_ATTEN_DB_11
+#endif
 
 
 // Funktion zum Berechnen des Mittelwertes
@@ -44,7 +47,21 @@ char* get_timestamp() {
 
 // Umrechnung des ADC-Werts auf Prozent
 float adc_to_percentage(int adc_value) {
-	return ((float)adc_value / 4095) * 100.0f;
+	/*
+	if (feuchtigkeit > 75) {Erde ist sehr nass → nicht gießen}
+	else if (feuchtigkeit > 45) {Alles im grünen Bereich → kein Gießen nötig}
+	else if (feuchtigkeit > 30) {Wird langsam trocken → Gießen bald empfehlenswert}
+	else {Sehr trocken → Gießen JETZT!}
+	 */
+	const int dry = 4095;   // maximal trocken
+	const int wet = 1450;   // maximal nass
+
+	// Clamp ADC value to [wet, dry]
+	if (adc_value > dry) adc_value = dry;
+	if (adc_value < wet) adc_value = wet;
+
+	// Linear mapping
+	return ((float)(dry - adc_value) / (float)(dry - wet)) * 100.0f;
 }
 
 // Sensordaten regelmäßig lesen
@@ -65,7 +82,9 @@ void read_sensordata(void *pvParameter) {
 
 		// Prüfen ob 3 Messungen vorliegen
 		if (valueIndex >= SAMPLES - 1) {
-			moistureMeans[meanIndex] = compute_mean(values);
+			int mean_adc = compute_mean(values);
+			float moisture_percentage = adc_to_percentage(mean_adc);
+			moistureMeans[meanIndex] = (int)moisture_percentage;
 
 			if (meanIndex >= MEAN_COUNT - 1) {
 				// JSON Nachricht erstellen und schicken
@@ -89,6 +108,6 @@ void read_sensordata(void *pvParameter) {
 // Funktion zur Initialisierung des ADC (Analog-Digital-Wandler)
 void adc_init(void) {
 	adc1_config_width(ADC_WIDTH_BIT_12);            // 12-Bit-Auflösung (0 - 4095)
-	adc1_config_channel_atten(MOISTURE_SENSOR_PIN, ADC_ATTEN_DB_0);
+	adc1_config_channel_atten(MOISTURE_SENSOR_PIN, ADC_ATTEN_11db);
 	xTaskCreate(&read_sensordata, "read_sensordata", 8192, NULL, 5, NULL);
 }
