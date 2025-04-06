@@ -44,7 +44,6 @@ const submitImages = async () => {
   try {
     const response = await uploadImages(imageFiles.value)
     if (response) {
-      toast.success('Upload erfolg  reich abgeschlossen.')
       emit('uploadComplete', response)
       images.value = []
       imageFiles.value = []

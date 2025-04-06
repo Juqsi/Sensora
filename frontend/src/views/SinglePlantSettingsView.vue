@@ -42,9 +42,9 @@ const plantStore = usePlantStore()
 
 const name = ref<string>('')
 const selectedRoom = ref<Room | undefined>(undefined)
-const selectedSensor = ref<Controller | null>(null)
+const selectedSensor = ref<string>('')
 const plantType = ref<string>('')
-const selectedAvatar = ref<{ label: string; value: string } | null>(null)
+const selectedAvatar = ref<string>("")
 const note = ref<string>('')
 
 const targetValuesTemperature = ref<number>(24)
@@ -57,6 +57,7 @@ const targetValuesBrightness = ref<number>(10)
 let targetValuesBrightnessTid = uuid()
 
 const activateTargetValues = ref<boolean>(false)
+const activateSensor = ref<boolean>(false)
 
 const loadPlantDetails = async () => {
   try {
@@ -65,14 +66,12 @@ const loadPlantDetails = async () => {
     if (editPlant) {
       name.value = editPlant?.name ?? ''
       selectedRoom.value = (await roomStore.getRoomDetails(editPlant?.room as string)) ?? undefined
-      selectedSensor.value = editPlant?.controllers[0] ?? null
+      selectedSensor.value = editPlant?.controllers[0]?.did ?? ""
+      activateSensor.value = selectedSensor.value ? true : false
       plantType.value = editPlant?.plantType ?? ''
 
       const avatar = plantAvatars.find((avatar) => avatar.value === (editPlant?.avatarId ?? ''))
-      selectedAvatar.value =
-        avatar && avatar.label !== '' && avatar.value !== ''
-          ? { label: avatar.label, value: avatar.value }
-          : null
+      selectedAvatar.value = avatar?.value ? avatar!.value : selectedAvatar.value
 
       note.value = editPlant?.note ?? ''
       if (editPlant?.targetValues !== undefined && editPlant?.targetValues.length !== 0) {
@@ -149,9 +148,9 @@ const createPlant = async () => {
     const newPlant: createPlantBody = {
       name: name.value,
       room: selectedRoom.value!.rid,
-      assignFullDevice: selectedSensor.value ? [selectedSensor.value.did] : [],
+      assignFullDevice: activateSensor.value && selectedSensor.value ? [selectedSensor.value] : [],
       plantType: plantType.value,
-      avatarId: selectedAvatar.value?.value,
+      avatarId: selectedAvatar.value,
       note: note.value,
     }
 
@@ -171,12 +170,13 @@ const createPlant = async () => {
       console.log(error)
     }
   } else {
+    console.log(selectedSensor.value)
     const editPlant: updatePlantBody = {
       name: name.value,
       room: selectedRoom.value!.rid,
-      assignFullDevice: selectedSensor.value ? [selectedSensor.value.did] : [],
+      assignFullDevice: activateSensor.value &&  selectedSensor.value ? [selectedSensor.value] : [],
       plantType: plantType.value,
-      avatarId: selectedAvatar.value?.value,
+      avatarId: selectedAvatar.value,
       note: note.value,
     }
     if (activateTargetValues.value) {
@@ -201,7 +201,7 @@ const createPlant = async () => {
     }
     try {
       await plantStore.updatePlant(route.params.id as string, editPlant)
-      router.back()
+      router.push("/plants")
     } catch (error) {
       console.log(error)
     }
@@ -210,6 +210,7 @@ const createPlant = async () => {
 </script>
 
 <template>
+  <p>{{ selectedSensor }}<- Sensor{{ selectedRoom?.name }} {{selectedAvatar}}</p>
   <NavCard :sub-title="t('plant.settings.SubTitle')" :title="t('plant.settings.Title')">
     <template #TitleRight>
       <router-link :to="{ name: 'PlantUpload' }">
@@ -231,14 +232,20 @@ const createPlant = async () => {
             <RoomSelection id="room" v-model:room="selectedRoom" />
           </div>
           <div class="grid gap-2">
-            <Label for="sensor">{{ t('plant.settings.SelectSensor') }}</Label>
-            <Select id="sensor" v-model:value="selectedSensor">
+            <div class="flex items-center justify-between w-full gap-5">
+              <Label for="sensor">{{ t('plant.settings.SelectSensor') }}</Label>
+              <Switch id="sensorSwitch" v-model="activateSensor" />
+            </div>
+            <Select v-if="activateSensor" id="sensor" v-model="selectedSensor">
               <SelectTrigger>
                 <SelectValue :placeholder="t('plant.settings.SelectSensorPlaceholder')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem v-for="device in deviceStore.devices" v-model:value="device.did">
+                  <SelectItem
+                    v-for="device in deviceStore.devices"
+                    :key="device.did"
+                    :value="device.did">
                     {{ device.did }}
                   </SelectItem>
                 </SelectGroup>
@@ -305,16 +312,15 @@ const createPlant = async () => {
 
         <div class="grid gap-2">
           <Label for="avatar">{{ t('plant.settings.Avatar') }}</Label>
-          <Select id="avatar">
+          <Select id="avatar"  v-model="selectedAvatar">
             <SelectTrigger>
               <SelectValue
-                v-model:value="selectedAvatar"
                 :placeholder="t('plant.settings.AvatarPlaceholder')"
               />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem v-for="avatar in plantAvatars" v-model:value="avatar.value">
+                <SelectItem v-for="avatar in plantAvatars" :value="avatar.value" :key="avatar.value">
                   {{ avatar.label }}
                 </SelectItem>
               </SelectGroup>
