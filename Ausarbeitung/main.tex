@@ -1,10 +1,10 @@
 % ============= Package Einstellungen & Sonstiges ============= 
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,12pt]{report}
 \usepackage[left= 2.5 cm,right = 2.5 cm, bottom = 2.5 cm]{geometry}
 \usepackage[onehalfspacing]{setspace}
 
 \usepackage[
-pdftitle={Srtudienarbeit},
+pdftitle={Studienarbeit},
 pdfsubject={Entwicklung einer smarten Bewässerungslösung mit Web-Anbindung},
 pdfauthor={Maximilian Schüller, Fynn Thierling, Justus Siegert, Lukas Maier, Timon Kleinknecht},
 pdfkeywords={},	
@@ -48,6 +48,7 @@ hidelinks %Links nicht einrahmen
 \renewcommand*{\aclabelfont}[1]{\textbf{\acsfont{#1}\acspace}}
 \makeatother
 
+
 \newcommand{\source}[1]{\vspace{1ex}\noindent{\small \textit{Quelle: #1}}}
 
 \newcommand{\initializeBibliography}{
@@ -86,62 +87,114 @@ hidelinks %Links nicht einrahmen
 % Label für Listings ändern
 \renewcommand{\lstlistingname}{Beispiel}
 
+\usepackage{titlesec}
+\titleformat{\chapter}[hang]
+  {\normalfont\huge\bfseries}
+  {\thechapter\quad}
+  {0pt}
+  {} 
+
 
 % ============= Dokumentbeginn =============
 \begin{document}
 	
 	%Titelseite
-	\input{titel}
+	\input{./Präamble/titel}
 	
 	\cleardoublepage
 	\pagenumbering{roman}
 	
-	\include{acronyms}
+	%------------- Erklärung der Eigenleistung-----------
+
+	\input{Präamble/Eigenleistung.tex}
+	\newpage
+
+	%------------- Abstract -------------
+	\input{./Präamble/abstract}
+	\newpage
 	
-	%Inhaltsverzeichnis
+	%------------- Inhaltsverzeichnis -------------
 	\tableofcontents
 	
-	
-	
-	%Verzeichnis aller Abbildungen
-	%\addcontentsline{toc}{section}{\listfigurename}
-	%\listoffigures
-	
-	%Verzeichnis aller Tabellen
-	%\listoftables
-	
+	%------------- Abkürzungsverzeichnis -------------
+	\include{./Präamble/acronyms}
 	\newpage
+	
+	%------------- Abbildungsverzeichnis -------------
+	\section*{Abbildungsverzeichnis}
+	\addcontentsline{toc}{section}{Abbildungsverzeichnis}
+	\renewcommand{\listfigurename}{} % Verhindert doppelten großen Titel
+	\newpage
+
+	
+	%------------- Tabellenverzeichnis -------------
+	\section*{\listtablename}
+	\addcontentsline{toc}{section}{\listtablename}
+	\renewcommand{\listtablename}{} % Verhindert doppelten großen Titel
+	\newpage
+
 	
 	% pagestyle für restliches Dokument aktivieren
 	\pagestyle{fancy}
 	\pagenumbering{arabic}
 	
-	\input{einleitung}
+
+
+	%------------- Einleitung -------------
+	\chapter{Einleitung}
+	\input{./Einleitung/Motivation}
+	\newpage
+	\input{./Einleitung/Zielsetzung}
+	\newpage
+	\input{./Einleitung/Ziel der Arbeit}
 	\newpage
 	
 	% ------------- Hauptteil -------------
 
-	\input{Teil 1}
+	\chapter{Theoretische Grundlagen}
+	%\input{Theroretische Grundlagen/TG_example}
 	\newpage
-	\input{Teil 2 ...}
+	\chapter{Anforderungen}
+	%\input{Anforderungen/Anforderungen_example}
+	\newpage
+	\chapter{Auswahl der Technologien}
+	%\input{Auswahl der Technologien/AdT_example}
+	\newpage
+	\chapter{Umsetzung}
+	%\input{Umsetzung/Umsetzung_example}
 	\newpage
 	
 	% ------------- Ende Hautpteil -------------
 	
-	\input{schluss}
-	
-	%\newpage
-	%\thispagestyle{fancy} % fancyhdr aktivieren
-	%\fancyhead[R]{LITERATUR}
-
-	%\newpage
-	%\thispagestyle{fancy} % fancyhdr aktivieren
-	%\fancyhead[R]{ANHANG}	
-	
+	\chapter{Kritische Reflexion}
+	%\input{Kritische Reflexion/Kritische_Reflexion_example}
+	\newpage 
+	\chapter{Ausblick}
+	%\input{Ausblick/Ausblick_example}
 	\newpage
-	%Literaturverzeichnis
-	%\bibliographystyle{unsrtdin}
-	%\bibliography{literatur}
+	
+	%------------- Literaturverzeichnis -------------
+	\newpage
+	\pagestyle{fancy}
+	\fancyhead[R]{LITERATUR}
+
+	\chapter*{Literaturverzeichnis}
+	\addcontentsline{toc}{chapter}{Literaturverzeichnis}
 	\printbibliography
+	\newpage
+
+	%------------- Anhang -------------
+	\cleardoublepage
+	\fancyhead[R]{ANHANG}
+
+	\chapter*{Anhang}
+	\addcontentsline{toc}{chapter}{Anhang}
+
+	% Hier Anhänge einfügen:
+	%\input{./Anhang/sensorwerte}
+	%\input{./Anhang/schaltplan}
+
+\newpage
+
 	
 \end{document}
