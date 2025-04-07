@@ -1,8 +1,32 @@
 #include "nvs_flash.h"
+#include "esp_sntp.h"
+#include <time.h>
 #include "led_control.h"
 #include "wifi_manager.h"
 #include "solace_manager.h"
 #include "sensor_manager.h"
+
+
+void initialize_sntp(void) {
+	esp_sntp_setoperatingmode(SNTP_OPMODE_POLL);
+	esp_sntp_setservername(0, "pool.ntp.org");
+	esp_sntp_init();
+}
+
+
+void wait_for_time_sync(void) {
+	time_t now;
+	struct tm timeinfo;
+	time(&now);
+	localtime_r(&now, &timeinfo);
+
+	while (timeinfo.tm_year < (2016 - 1900)) {
+		vTaskDelay(pdMS_TO_TICKS(2000));
+		time(&now);
+		localtime_r(&now, &timeinfo);
+	}
+}
+
 
 void app_main(void) {
 	// Initialisierung von NVS
@@ -15,6 +39,8 @@ void app_main(void) {
 
 	led_init();
 	wifi_init();
+	initialize_sntp();
+	wait_for_time_sync();
 	solace_init();
 	adc_init();
 }

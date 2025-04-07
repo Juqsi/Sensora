@@ -21,12 +21,12 @@ static const char *TAG = "MQTT_JSON_EXAMPLE";
 static esp_mqtt_client_handle_t client;
 
 // Funktion um JSON für einen Sensor zu erstellen
-cJSON* create_json_sensor(char sid[], char did[], int values[], int valueCount, char ilk[], char unit[], char status[]) {
+cJSON* create_json_sensor(char sid[], char did[], int values[], int valueCount, char ilk[], char unit[], char status[], char timestamps[][20], char lastCall[20]) {
 	// Sensor-Objekt erstellen
 	cJSON *sensor_obj = cJSON_CreateObject();
 
 	cJSON_AddStringToObject(sensor_obj, "sid", sid);
-	cJSON_AddStringToObject(sensor_obj, "lastCall", "2024-12-16T12:00:00Z");
+	cJSON_AddStringToObject(sensor_obj, "lastCall", lastCall);
 	cJSON_AddStringToObject(sensor_obj, "controller", did);
 
 	// Values pro Sensor hinzufügen
@@ -36,7 +36,7 @@ cJSON* create_json_sensor(char sid[], char did[], int values[], int valueCount, 
 		cJSON *value_obj = cJSON_CreateObject();
 
 		// Value-Objekt füllen
-		cJSON_AddStringToObject(value_obj, "timestamp", "timestamp");
+		cJSON_AddStringToObject(value_obj, "timestamp", timestamps[i]);
 		cJSON_AddNumberToObject(value_obj, "value", values[i]);
 
 		// Value-Objekt zum Array hinzufügen

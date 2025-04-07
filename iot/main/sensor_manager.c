@@ -1,12 +1,13 @@
-#include <stdio.h>
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "driver/adc.h"
-#include "esp_log.h"
-#include <time.h>
-#include "solace_manager.h"
 #include "sensor_manager.h"
 #include "cJSON.h"
+#include "driver/adc.h"
+#include "esp_log.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "solace_manager.h"
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
 
 #define SAMPLES 3
 #define MEAN_COUNT 4
@@ -64,21 +65,34 @@ float adc_to_percentage(int adc_value) {
 	return ((float)(dry - adc_value) / (float)(dry - wet)) * 100.0f;
 }
 
+// Prüfung ob Sensor aktiv
+bool is_sensor_active(const int values[], int sampleCount) {
+	for (int i = 0; i < sampleCount; i++) {
+		if (values[i] <= 0 || values[i] >= 4095) {
+			return false;
+		}
+	}
+	return true;
+}
+
 // Sensordaten regelmäßig lesen
 void read_sensordata(void *pvParameter) {
 	int values[SAMPLES];
 	int moistureMeans[MEAN_COUNT];
-	//char timestamps[SAMPLES][20];
+	char timestamps[SAMPLES][20];
+	char meanTimestamps[MEAN_COUNT][20];
+	char lastCall[20];
 	int valueIndex = 0;
 	int meanIndex = 0;
+	char status[10];
 
 	while (1) {
 		// ADC-Wert einlesen
 		int adc_reading = adc1_get_raw(MOISTURE_SENSOR_PIN);
 		values[valueIndex] = adc_reading;
 
-		// TODO: Zeitstempel einlesen und im Array speichern
-		//sprintf(timestamps[index], "%s", get_timestamp());  // Zeitstempel in das Array schreiben
+		// Zeitstempel speichern
+		sprintf(timestamps[valueIndex], "%s", get_timestamp());
 
 		// Prüfen ob 3 Messungen vorliegen
 		if (valueIndex >= SAMPLES - 1) {
@@ -86,10 +100,19 @@ void read_sensordata(void *pvParameter) {
 			float moisture_percentage = adc_to_percentage(mean_adc);
 			moistureMeans[meanIndex] = (int)moisture_percentage;
 
+			bool sensor_active = is_sensor_active(values, SAMPLES);
+			strcpy(status, sensor_active ? "active" : "inactive");
+
+			// Timestamp des letzten Samples als Zeitstempel für den Mittelwert verwenden
+			strcpy(meanTimestamps[meanIndex], timestamps[1]);
+
+			// Zeitpunkt des letzten Einzel-Samples
+			strcpy(lastCall, timestamps[SAMPLES - 1]);
+
 			if (meanIndex >= MEAN_COUNT - 1) {
 				// JSON Nachricht erstellen und schicken
 				cJSON *sensors[1];
-				sensors[0] = create_json_sensor("sid", "did", moistureMeans, MEAN_COUNT, "moisture", "%", "active");
+				sensors[0] = create_json_sensor("sid", "did", moistureMeans, MEAN_COUNT, "moisture", "%", status, meanTimestamps, lastCall);
 				char *msg = create_json_message("did", sensors, 1);
 				send_message(msg);
 
