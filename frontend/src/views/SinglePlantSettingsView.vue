@@ -170,7 +170,6 @@ const createPlant = async () => {
       console.log(error)
     }
   } else {
-    console.log(selectedSensor.value)
     const editPlant: updatePlantBody = {
       name: name.value,
       room: selectedRoom.value!.rid,
@@ -219,14 +218,14 @@ const createPlant = async () => {
       </router-link>
     </template>
     <template #default>
-      <CardContent class="grid gap-6">
+      <CardContent class="grid gap-6 max-w-full ">
         <div class="grid gap-2">
           <Label for="subject">{{ t('plant.settings.NameOfPlant') }}</Label>
           <Input id="subject" v-model="name" :placeholder="t('plant.settings.NamePlaceholder')" />
         </div>
 
         <div class="grid gap-4">
-          <div class="grid gap-2">
+          <div class="grid gap-2 max-w-full ">
             <Label for="room">{{ t('plant.settings.Room') }}</Label>
             <RoomSelection id="room" v-model:room="selectedRoom" />
           </div>

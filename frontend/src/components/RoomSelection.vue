@@ -68,7 +68,7 @@ const onCreateNewTeam = (event: Event) => {
     <Popover v-model:open="open">
       <PopoverTrigger as-child>
         <Button
-          :class="cn('justify-between', $attrs.class ?? '')"
+          :class="cn('justify-between truncate', $attrs.class ?? '')"
           aria-expanded="true"
           aria-label="Select a team"
           role="combobox"
@@ -117,7 +117,7 @@ const onCreateNewTeam = (event: Event) => {
       </PopoverContent>
     </Popover>
 
-    <DialogContent>
+    <DialogContent class="max-w-full w-fit">
       <DialogHeader>
         <DialogTitle>{{ t('group.createRoom.NewEntityTitle') }}</DialogTitle>
         <DialogDescription>
@@ -125,7 +125,7 @@ const onCreateNewTeam = (event: Event) => {
         </DialogDescription>
       </DialogHeader>
 
-      <form @submit="onCreateNewTeam">
+      <form @submit="onCreateNewTeam" class="max-w-full">
         <div class="space-y-4">
           <div>
             <Label for="name">{{ t('group.createRoom.Entity') }}</Label>

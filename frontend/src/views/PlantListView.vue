@@ -88,7 +88,7 @@ const filteredPlantList = computed(() => {
 
 const filteredControllerList = computed(() => {
   return deviceStore.devices.filter((controller) => {
-    const matchesStatus = controller.sensors.some((sensor) => values.items!.includes(sensor.status))
+    const matchesStatus = controller.sensors.some((sensor) => values.items!.includes(sensor.status ?? 'unknown'))
 
     const matchesSearch =
       searchQuery.value.trim() === '' ||
