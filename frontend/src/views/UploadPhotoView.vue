@@ -8,6 +8,7 @@ import PlantSearch from '@/components/PlantSearch.vue'
 import PlantInformationList from '@/components/PlantInformationList.vue'
 import type { Plant, RecognizedImage } from '@/composables/useImageUpload.ts'
 import router from '@/router'
+import NavCard from '@/components/NavCard.vue'
 
 const { t } = useI18n()
 
@@ -126,6 +127,7 @@ function onSearchResults(results: RecognizedImage[]) {
 </script>
 
 <template>
+  <NavCard title="KI erkennung" />
   <div class="p-4">
     <div class="w-full max-w-md bg-background bg-opacity-80 backdrop-blur-md p-6 rounded-xl shadow-lg mx-auto">
       <Tabs default-value="capturePhoto">

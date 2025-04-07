@@ -2,6 +2,10 @@
 import { defineProps, defineEmits, computed } from 'vue'
 import PlantInformationCard from '@/components/PlantInformationCard.vue'
 import type { Plant, RecognizedImage } from '@/composables/useImageUpload.ts'
+import EmtyState from '@/components/EmtyState.vue'
+import {useI18n} from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps<{ plants: RecognizedImage [] }>()
 const emit = defineEmits<{ (e: 'plantUsed', plant: Plant): void }>()
@@ -22,6 +26,7 @@ function handleUse(plant: Plant) {
       >
         <div class="grid gap-4">
           <PlantInformationCard
+            :use-use="true"
             v-for="(rec, index) in result.recognitions"
             :key="index"
             :recognition="rec"
@@ -32,7 +37,7 @@ function handleUse(plant: Plant) {
     </div>
   </div>
   <div v-else class="text-center text-muted-foreground mt-4">
-    Keine Erkennungsdaten vorhanden.
+    <EmtyState :title="t('plant.upload.NoScanDoneTitle')" :condition="true" :subtitle="t('plant.upload.NoScanDoneSubtitle')" img-src="/svg/undraw_going-up_g8av.svg" />
   </div>
 </template>
 

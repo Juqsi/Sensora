@@ -21,7 +21,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
-import { type PropType, ref } from 'vue'
+import { type PropType, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
   TagsInput,
@@ -68,6 +68,11 @@ const createGroup = async () => {
     isOpen.value = false
   }
 }
+console.log(props.group)
+onMounted(()=>{
+  console.log("Mount:",props.group)
+  console.log("Mount2:",props.group?.rooms)
+})
 
 const updateGroup = async () => {
   let group: Group
