@@ -38,7 +38,7 @@ const { t } = useI18n()
 const groupStore = useGroupStore()
 const roomStore = useRoomStore()
 
-const model = defineModel<Room | undefined>('room', { required: true })
+const room = defineModel<Room | undefined>('room', { required: true })
 
 const open = ref(false)
 const showNewTeamDialog = ref(false)
@@ -46,7 +46,7 @@ const newTeamName = ref('')
 const selectedGroup = ref('')
 
 const selectEntity = (entity: Room) => {
-  model.value = entity
+  room.value = entity
   open.value = false
 }
 
@@ -69,12 +69,9 @@ const onCreateNewTeam = (event: Event) => {
       <PopoverTrigger as-child>
         <Button
           :class="cn('justify-between truncate', $attrs.class ?? '')"
-          aria-expanded="true"
-          aria-label="Select a team"
-          role="combobox"
           variant="outline"
         >
-          {{ model?.name ?? t('group.createRoom.SelectPlaceholder') }}
+          {{ room?.name ?? t('group.createRoom.SelectPlaceholder') }}
           <ChevronDown class="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -94,7 +91,7 @@ const onCreateNewTeam = (event: Event) => {
                 {{ room.name }}
                 <CheckIcon
                   :class="
-                    cn('ml-auto h-4 w-4', model?.rid === room.rid ? 'opacity-100' : 'opacity-0')
+                    cn('ml-auto h-4 w-4', room?.rid === room.rid ? 'opacity-100' : 'opacity-0')
                   "
                 />
               </CommandItem>

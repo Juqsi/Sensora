@@ -14,7 +14,7 @@ const { t } = useI18n()
     img-src="/svg/undraw_page-not-found_6wni.svg"
   />
   <router-link to="/">
-    <Button variant="link"> Home</Button>
+    <Button variant="link">{{t('Hom')}}</Button>
   </router-link>
 </template>
 

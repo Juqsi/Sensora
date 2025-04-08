@@ -5,6 +5,9 @@ import { ChevronLeft, Languages, Lock, SunMoon } from 'lucide-vue-next'
 import AccountModification from '@/components/AccountModification.vue'
 import Appearance from '@/components/AppearanceForm.vue'
 import LanguageForm from '@/components/LanguageForm.vue'
+import {useI18n} from 'vue-i18n'
+
+const { t } = useI18n()
 
 enum Views {
   MAIN = 'main',
@@ -55,8 +58,8 @@ const switchView = (view: Views) => {
         >
           <Lock class="mt-px h-5 w-5" />
           <div class="space-y-1">
-            <p class="text-md font-medium leading-none">Account</p>
-            <p class="text-sm text-muted-foreground">Name, Username and Password</p>
+            <p class="text-md font-medium leading-none">{{t('Settings.Account')}}</p>
+            <p class="text-sm text-muted-foreground">{{t('Settings.AccountDescription')}}</p>
           </div>
         </div>
         <div
@@ -65,8 +68,8 @@ const switchView = (view: Views) => {
         >
           <Languages class="mt-px h-5 w-5" />
           <div class="space-y-1">
-            <p class="text-md font-medium leading-none">Language</p>
-            <p class="text-sm text-muted-foreground">Only mentions and comments.</p>
+            <p class="text-md font-medium leading-none">{{t('Settings.Language')}}</p>
+            <p class="text-sm text-muted-foreground">{{t('Settings.LanguageDescription')}}</p>
           </div>
         </div>
         <div
@@ -75,8 +78,8 @@ const switchView = (view: Views) => {
         >
           <SunMoon class="mt-px h-5 w-5" />
           <div class="space-y-1">
-            <p class="text-md font-medium leading-none">Appearance</p>
-            <p class="text-sm text-muted-foreground">Turn off all notifications.</p>
+            <p class="text-md font-medium leading-none">{{t('Settings.Appearance')}}</p>
+            <p class="text-sm text-muted-foreground">{{t('Settings.AppearanceDescription')}}</p>
           </div>
         </div>
       </template>

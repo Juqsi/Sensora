@@ -6,7 +6,7 @@ import { latestSensorValue } from '@/composables/useLatestSensorValue.ts'
 import { onMounted, type PropType, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 const plant = ref<Plant | undefined>()
 
 const props = defineProps({ plant: { type: Object as PropType<Plant>, required: false } })
@@ -66,7 +66,7 @@ const formatTimestamp = (timestamp?: string | number) => {
   <div class="grid gap-4 grid-cols-2 sm:grid-cols-4">
     <Card @click="$emit('updateActiveKey', ilk.temperature)">
       <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle class="text-sm font-medium"> Temperature</CardTitle>
+        <CardTitle class="text-sm font-medium">{{t('temperature')}}</CardTitle>
         <Thermometer class="h-4 w-4" />
       </CardHeader>
       <CardContent>
@@ -78,7 +78,7 @@ const formatTimestamp = (timestamp?: string | number) => {
     </Card>
     <Card @click="$emit('updateActiveKey', ilk.soilMoisture)">
       <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-1">
-        <CardTitle class="text-sm font-medium"> Soil moisture</CardTitle>
+        <CardTitle class="text-sm font-medium">{{t('soilMoisture')}}</CardTitle>
         <Droplet class="h-4 w-4" />
       </CardHeader>
       <CardContent>
@@ -90,7 +90,7 @@ const formatTimestamp = (timestamp?: string | number) => {
     </Card>
     <Card @click="$emit('updateActiveKey', ilk.humidity)">
       <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle class="text-sm font-medium">Humidity</CardTitle>
+        <CardTitle class="text-sm font-medium">{{t('humidity')}}</CardTitle>
         <CloudHail class="size-4" id="humidity" />
       </CardHeader>
       <CardContent>
@@ -102,7 +102,7 @@ const formatTimestamp = (timestamp?: string | number) => {
     </Card>
     <Card @click="$emit('updateActiveKey', ilk.brightness)">
       <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-1">
-        <CardTitle class="text-sm font-medium">Brightness</CardTitle>
+        <CardTitle class="text-sm font-medium">{{t('brightness')}}</CardTitle>
         <Sun class="h-4 w-4" />
       </CardHeader>
       <CardContent>

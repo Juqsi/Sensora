@@ -2,16 +2,18 @@
 import { Flower2, HomeIcon, Users } from 'lucide-vue-next'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
+import {useUserStore} from '@/stores'
 
+const userStore = useUserStore()
 const isKeyboardOpen = ref(false)
-let initialHeight = window.innerHeight // Speichert die ursprüngliche Höhe
+let initialHeight = window.innerHeight
 
 const checkKeyboard = () => {
   isKeyboardOpen.value = window.innerHeight < initialHeight * 0.75
 }
 
 onMounted(() => {
-  initialHeight = window.innerHeight // Speichert die Höhe beim Start
+  initialHeight = window.innerHeight
   window.addEventListener('resize', checkKeyboard)
 })
 
@@ -53,14 +55,14 @@ onBeforeUnmount(() => {
 
         <router-link class="flex flex-col items-center" to="/profile">
           <Avatar
-            :class="{ 'border-solid border-2 border-primary': $route.path === '/profile' }"
-            class="w-6 h-6"
+            :class="{ 'border-primary': $route.path === '/profile','border-foreground': $route.path !== '/profile'}"
+            class="w-6 h-6 border-solid border-2 "
           >
             <AvatarImage
-              alt="Justus Siegert"
-              src="https://avatars.githubusercontent.com/u/91261422?v=4&size=64"
+              :alt="userStore.user?.firstname + ' ' + userStore.user?.lastname"
+              :src="userStore.user?.avatarRef ?? ''"
             />
-            <AvatarFallback>JS</AvatarFallback>
+            <AvatarFallback >{{userStore.user?.firstname[0]??''}}</AvatarFallback>
           </Avatar>
         </router-link>
       </div>

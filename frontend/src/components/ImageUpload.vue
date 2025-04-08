@@ -5,11 +5,14 @@ import { Button } from '@/components/ui/button'
 import { TrashIcon } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import { defineEmits } from 'vue'
+import { useI18n} from 'vue-i18n'
 
 interface ImagePreview {
   name: string
   src: string
 }
+
+const {t} = useI18n()
 
 const images = ref<ImagePreview[]>([])
 const imageFiles = ref<File[]>([])
@@ -50,7 +53,7 @@ const submitImages = async () => {
     }
   } catch (error) {
     console.error(error)
-    toast.error('Fehler beim Upload.')
+    toast.error(t('Camera.UploadError'))
   }
 }
 </script>
@@ -69,13 +72,13 @@ const submitImages = async () => {
       for="file-upload"
       class="cursor-pointer p-4 border border-dashed border-border rounded-xl text-muted-foreground text-center hover:bg-background transition-colors duration-200 w-full"
     >
-      Select Images
+      {{t('Camera.SelectImages')}}
     </label>
     <div v-if="images.length" class="grid grid-cols-3 gap-2">
       <div v-for="(image, index) in images" :key="index" class="relative group">
         <img
           :src="image.src"
-          alt="hochgeladenes Foto"
+          :alt="t('Camera.SelectedImages')"
           class="w-24 h-24 object-cover rounded-lg border border-border transition-transform duration-200 group-hover:scale-105"
         />
         <Button
@@ -89,7 +92,7 @@ const submitImages = async () => {
       </div>
     </div>
     <Button :disabled="images.length === 0 || isUploading" class="w-full" @click="submitImages">
-      {{ isUploading ? 'Upload...' : 'Upload Images' }}
+      {{ isUploading ? t('Camera.isUpload') : t('Camera.Upload') }}
     </Button>
   </div>
 </template>

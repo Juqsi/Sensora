@@ -127,8 +127,8 @@ function onSearchResults(results: RecognizedImage[]) {
 </script>
 
 <template>
-  <NavCard title="KI erkennung" />
-  <div class="p-4">
+  <NavCard :title="t('AI.Title')" :sub-title="t('AI.Subtitle')"/>
+  <div class="mt-6">
     <div class="w-full max-w-md bg-background bg-opacity-80 backdrop-blur-md p-6 rounded-xl shadow-lg mx-auto">
       <Tabs default-value="capturePhoto">
         <TabsList class="grid w-full grid-cols-3 mb-4">

@@ -142,7 +142,7 @@ onMounted(() => {
 
 const createPlant = async () => {
   if (selectedRoom.value === undefined || selectedRoom.value.rid === undefined) {
-    toast.warning(t('Please enter a valid room'))
+    toast.warning(t('SinglePlant.EnterValidRoom'))
   }
   if (route.params.id === undefined) {
     const newPlant: createPlantBody = {
@@ -264,7 +264,7 @@ const createPlant = async () => {
           >
             <NumberField id="temperature" v-model="targetValuesTemperature" :min="0">
               <Label for="temperature">
-                {{ t('values.temperature') }}
+                {{ t('temperature') }}
               </Label>
               <NumberFieldContent v-if="activateTargetValues">
                 <NumberFieldDecrement />
@@ -273,7 +273,7 @@ const createPlant = async () => {
               </NumberFieldContent>
             </NumberField>
             <NumberField id="soilMoisture" v-model="targetValuesSoilMoisture" :max="100" :min="0">
-              <Label for="soilMoisture">{{ t('values.soilMoisture') }}</Label>
+              <Label for="soilMoisture">{{ t('soilMoisture') }}</Label>
               <NumberFieldContent>
                 <NumberFieldDecrement />
                 <NumberFieldInput />
@@ -281,7 +281,7 @@ const createPlant = async () => {
               </NumberFieldContent>
             </NumberField>
             <NumberField id="humidity" v-model="targetValuesHumidity" :max="100" :min="0">
-              <Label for="humidity">{{ t('values.humidity') }}</Label>
+              <Label for="humidity">{{ t('humidity') }}</Label>
               <NumberFieldContent>
                 <NumberFieldDecrement />
                 <NumberFieldInput />
@@ -289,7 +289,7 @@ const createPlant = async () => {
               </NumberFieldContent>
             </NumberField>
             <NumberField id="brightness" v-model="targetValuesBrightness" :min="0">
-              <Label for="brightness">{{ t('values.brightness') }}</Label>
+              <Label for="brightness">{{ t('brightness') }}</Label>
               <NumberFieldContent>
                 <NumberFieldDecrement />
                 <NumberFieldInput />

@@ -29,7 +29,7 @@ const startCamera = async () => {
     isCameraActive.value = true
   } catch (err) {
     console.error('Camera error:', err)
-    toast.error('Fehler: Zugriff auf Kamera verweigert oder nicht verfügbar.')
+    toast.error(t('Camera.errorAccess'))
   }
 }
 
@@ -54,12 +54,12 @@ onBeforeUnmount(() => {
 
 const capturePhoto = () => {
   if (!canvas.value || !camera.value) {
-    toast.error('Fehler: Kamera oder Canvas nicht verfügbar.')
+    toast.error(t('Camera.errorCanvas'))
     return
   }
   const ctx = canvas.value.getContext('2d')
   if (!ctx) {
-    toast.error('Fehler: Canvas-Kontext konnte nicht erstellt werden.')
+    toast.error(t('Camera.errorCanvasContext'))
     return
   }
   canvas.value.width = camera.value.videoWidth
@@ -75,27 +75,27 @@ const removePhoto = (index: number) => {
 
 const emitPhotos = async () => {
   if (!photos.value.length) {
-    toast.error('Keine Bilder zum Hochladen.')
+    toast.error(t('Camera.NoImage'))
     return
   }
   try {
     const response = await uploadImages([...photos.value])
     if (response ) {
       emit('uploadComplete', response)
-      toast.success('Upload erfolgreich abgeschlossen.')
+      toast.success(t('Camera.UploadFinished'),{duration: 500})
       photos.value = []
     } else {
-      toast.error('Upload fehlgeschlagen oder ungültige Response.')
+      toast.error(t('Camera.ErrorResponse'))
     }
   } catch (error) {
     console.error('Upload error:', error)
-    toast.error('Fehler beim Upload.')
+    toast.error(t('Camera.UploadError'))
   }
 }
 
 const onVideoError = (event: Event) => {
   console.error('Video error:', event)
-  toast.error('Video-Fehler: Kamera funktioniert nicht. Bitte prüfe die Kameraeinstellungen.')
+  toast.error(t('Camera.ErrorCamera'))
 }
 </script>
 
@@ -107,17 +107,17 @@ const onVideoError = (event: Event) => {
           <CameraIcon class="w-6 h-6 text-muted-foreground" />
         </div>
         <div>
-          <h2 class="text-lg font-medium">Capture Photo</h2>
-          <p class="text-muted-foreground text-sm">Take a picture of your plant</p>
+          <h2 class="text-lg font-medium">{{t('Camera.CapturePhoto')}}</h2>
+          <p class="text-muted-foreground text-sm">{{t('Camera.CapturePhotoDescription')}}</p>
         </div>
       </div>
-      <Button class="w-full" @click="startCamera">Start Camera</Button>
+      <Button class="w-full" @click="startCamera">{{t('Camera.StartCamera')}}</Button>
     </div>
     <div v-else>
       <video ref="camera" autoplay class="w-full rounded-lg mb-4" muted playsinline @error="onVideoError"></video>
       <div class="flex justify-between items-center mb-4">
-        <Button variant="outline" @click="stopCamera">Exit</Button>
-        <Button :disabled="photos.length >= 3" @click="capturePhoto">Capture</Button>
+        <Button variant="outline" @click="stopCamera">{{t('Camera.Exit')}}</Button>
+        <Button :disabled="photos.length >= 3" @click="capturePhoto">{{t('Camera.Capture')}}</Button>
       </div>
       <div class="grid grid-cols-3 gap-3">
         <div v-for="(photo, index) in photos" :key="index" class="relative group">

@@ -53,33 +53,33 @@ function handleUse() {
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="flex items-center gap-3">
             <GaugeCircle class="text-green-600 w-5 h-5" />
-            <span><strong>Cycle:</strong> {{ props.recognition.plant.cycle }}</span>
+            <span><strong>{{t('plantInformation.Cycle')}}:</strong> {{ props.recognition.plant.cycle }}</span>
           </div>
           <div class="flex items-center gap-3">
             <Droplet class="text-blue-500 w-5 h-5" />
-            <span><strong>Watering:</strong> {{ props.recognition.plant.watering_short }}</span>
+            <span><strong>{{t('PlantInformation.Watering')}}:</strong> {{ props.recognition.plant.watering_short }}</span>
           </div>
           <div class="flex items-center gap-3">
             <Sun class="text-yellow-500 w-5 h-5" />
-            <span><strong>Sun:</strong> {{ props.recognition.plant.sun }}</span>
+            <span><strong>{{t('PlantInformation.Sun')}}:</strong> {{ props.recognition.plant.sun }}</span>
           </div>
           <div class="flex items-center gap-3">
             <TreePine class="text-emerald-600 w-5 h-5" />
             <span
-            ><strong>Hardiness Zone:</strong> {{ props.recognition.plant.hardiness_zone }}</span
+            ><strong>{{t('PlantInformation.HardinessZone')}}:</strong> {{ props.recognition.plant.hardiness_zone }}</span
             >
           </div>
           <div class="flex items-center gap-3">
             <Leaf class="text-lime-600 w-5 h-5" />
-            <span><strong>Leaf:</strong> {{ props.recognition.plant.leaf }}</span>
+            <span><strong>{{t('PlantInformation.Leaf')}}:</strong> {{ props.recognition.plant.leaf }}</span>
           </div>
           <div class="flex items-center gap-3">
             <Sparkles class="text-purple-500 w-5 h-5" />
-            <span><strong>Growth Rate:</strong> {{ props.recognition.plant.growth_rate }}</span>
+            <span><strong>{{t('PlantInformation.GrowthRate')}}:</strong> {{ props.recognition.plant.growth_rate }}</span>
           </div>
           <div class="flex items-center gap-3">
             <Ruler class="text-gray-500 w-5 h-5" />
-            <span><strong>Care Level:</strong> {{ props.recognition.plant.care_level }}</span>
+            <span><strong>{{t('PlantInformation.CareLevel')}}:</strong> {{ props.recognition.plant.care_level }}</span>
           </div>
         </div>
 
@@ -124,11 +124,11 @@ function handleUse() {
             rel="noopener noreferrer"
             target="_blank"
           >
-            more information
+            {{t('PlantInformation.MoreInformation')}}
           </a>
         </CardDescription>
         <Button v-if="useUse" size="sm" @click="handleUse">
-          Benutzen
+          {{t('PlantInformation.Use')}}
         </Button>
       </CardFooter>
     </Card>
@@ -153,7 +153,7 @@ function handleUse() {
       <CardFooter v-if="props.recognition.wikipedia">
         <div class="text-center w-full">
           <a :href="props.recognition.wikipedia" class="text-primary hover:underline">
-            wikipedia
+            Wikipedia
           </a>
         </div>
       </CardFooter>

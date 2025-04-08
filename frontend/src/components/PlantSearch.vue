@@ -20,7 +20,7 @@ const performSearch = async () => {
       const tmp: RecognizedImage[] = [{ image: "", recognitions: results }]
       emit('searchResults', tmp)
     } else {
-      toast.info(t('upload.noResults'))
+      toast.info(t('PlantSearch.noResults'))
     }
   }
 }
@@ -32,12 +32,12 @@ const performSearch = async () => {
       id="search"
       type="text"
       v-model="searchQuery"
-      placeholder="Pflanze suchen..."
+      :placeholder="t('PlantSearch.Search')"
       class="w-full rounded-md h-10 border border-border px-3 py-6 focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
     />
 
     <Button @click="performSearch" class="w-full">
-      {{ isLoading ? 'Search...' : t('upload.searchButton') }}
+      {{ isLoading ? t('PlantSearch.isSearching') : t('PlantSearch.searchButton') }}
     </Button>
   </div>
 </template>

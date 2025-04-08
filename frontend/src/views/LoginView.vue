@@ -32,7 +32,6 @@ const handleSubmit = async () => {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   const isEmail = emailRegex.test(email.value)
-  try {
     const credentials: AuthLoginBody = {
       mail: isEmail ? email.value : undefined,
       username: isEmail ? undefined : email.value,
@@ -40,11 +39,7 @@ const handleSubmit = async () => {
     }
     await auth.login(credentials)
     redirectAfterLogin()
-  } catch (error) {
-    errorMessage.value = t('login.Failed') // Fehlermeldung anzeigen
-  } finally {
     loading.value = false
-  }
 }
 </script>
 

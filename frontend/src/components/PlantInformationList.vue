@@ -18,7 +18,7 @@ function handleUse(plant: Plant) {
 
 <template>
   <div v-if="hasPlants" class="mt-6">
-    <h2 class="text-2xl font-bold mb-4 text-center">Erkannte Pflanzen</h2>
+    <h2 class="text-2xl font-bold mb-4 text-center">{{t('plant.upload.RecognizedPlants')}}</h2>
     <div class="grid gap-4">
       <template
         v-for="(result, idx) in props.plants"

@@ -1,5 +1,8 @@
 import { ref } from 'vue'
 import { toast } from 'vue-sonner'
+import i18n from '@/i18n'
+
+const t = i18n.global?.t || ((key: string) => key)
 
 export const BASE_PATH = import.meta.env.VITE_PLANT_AI_BASE || ''
 
@@ -106,7 +109,7 @@ export function useImageUpload(apiUrl = BASE_PATH) {
 
   const uploadImages = async (imageSources: (File | string)[]):Promise<RecognizedImage[] | undefined> => {
     if (!imageSources.length) {
-      toast.error('Please select images first.')
+      toast.error(t('Camera.NoImage'))
       return
     }
 
@@ -168,7 +171,7 @@ export function useImageUpload(apiUrl = BASE_PATH) {
     }
 
     const payload = { images: base64Images }
-    const toastId = toast.loading('Upload image...')
+    const toastId = toast.loading(t('Camera.Uploading'))
 
     isUploading.value = true
     error.value = null
@@ -183,7 +186,7 @@ export function useImageUpload(apiUrl = BASE_PATH) {
       })
 
       if (response.status === 413) {
-        toast.error(`One or more images exceed the maximum file size (${MAX_FILE_SIZE_MB} MB).`, {
+        toast.error(t('Camera.ErrorMaxSize')+` (${MAX_FILE_SIZE_MB} MB).`, {
           id: toastId,
         })
         return
@@ -200,10 +203,10 @@ export function useImageUpload(apiUrl = BASE_PATH) {
       }
 
       const data = await response.json()
-      toast.success('Upload successfully completed', { id: toastId })
+      toast.success(t('Camera.UploadDone'), { id: toastId })
       return (data.results as RecognizedImage[])
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown Error'
+      const errorMessage = err instanceof Error ? err.message : t('errors.unknownError')
       console.error('Upload error:', errorMessage)
       error.value = errorMessage
       toast.error(`Error: ${errorMessage}`, { id: toastId })

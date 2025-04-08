@@ -68,11 +68,6 @@ const createGroup = async () => {
     isOpen.value = false
   }
 }
-console.log(props.group)
-onMounted(()=>{
-  console.log("Mount:",props.group)
-  console.log("Mount2:",props.group?.rooms)
-})
 
 const updateGroup = async () => {
   let group: Group
@@ -125,11 +120,13 @@ const submit = async () => {
   <UseTemplate>
     <form class="grid items-start gap-4 px-4" @submit.prevent="submit">
       <div class="grid gap-2">
-        <Label html-for="groupName">{{ t('group.create.groupName') }}</Label>
-        <Input id="name" v-model="groupName" :placeholder="t('group.create.namePlaceholder')" />
+        <Label for="groupName">{{ t('group.create.groupName') }}</Label>
+        <Input id="groupName" v-model="groupName" :placeholder="t('group.create.namePlaceholder')" />
       </div>
       <div>
-        <Label html-for="rooms">{{ t('group.create.roomName') }}</Label>
+        <Label for="rooms">
+          {{ t('group.create.roomName') }}
+        </Label>
         <TagsInput id="rooms" v-model="rooms">
           <TagsInputItem v-for="item in rooms" :key="item" :value="item">
             <TagsInputItemText />

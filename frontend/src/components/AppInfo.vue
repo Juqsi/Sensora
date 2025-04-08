@@ -113,7 +113,7 @@ const delteData = () => {
       >
         <FileX2 class="mt-px h-5 w-5" />
         <div class="space-y-1" @click="delteData()">
-          <p class="text-md leading-none">Cache Daten löschen</p>
+          <p class="text-md leading-none">{{t('profile.ClearCache')}}</p>
         </div>
       </div>
     </CardContent>

@@ -20,6 +20,7 @@ export const useAuthStore = defineStore('auth', {
         const response: AxiosResponse<AuthResponse> = await authApiClient.Login(credentials, {
           meta: {
             successMessage: t('login.Success'),
+            errorMessage: t('login.Error')
           },
         } as CustomAxiosRequestConfig)
         this.token = response.data.token

@@ -46,6 +46,7 @@ import { useDeviceStore, useGroupStore, usePlantStore } from '@/stores'
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 import EmtyState from '@/components/EmtyState.vue'
 import { useI18n } from 'vue-i18n'
+import PlantListView from './PlantListView.vue'
 
 const { t } = useI18n()
 
@@ -107,27 +108,27 @@ const controllerMap = new Map(
 const filter = [
   {
     id: 'active',
-    label: 'active',
+    label: t('active'),
   },
   {
     id: 'error',
-    label: 'error',
+    label: t('error'),
   },
 
   {
     id: 'inactive',
-    label: 'inactive',
+    label: t('inactive'),
   },
   {
     id: 'unknown',
-    label: 'unknown',
+    label: t('unknown'),
   },
 ] as const
 
 const formSchema = toTypedSchema(
   z.object({
     items: z.array(z.string()).refine((value) => value.some((item) => item), {
-      message: 'You have to select at least one item.',
+      message: t('PlantList.ErrorFilter'),
     }),
   }),
 )
@@ -209,18 +210,17 @@ onMounted(() => {
       <AlertDialog :open="alertDialog">
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>{{t('PlantList.DeletePlantWarningTitle')}}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your plant and remove all
-              related data from our servers.
+              {{t('PlantList.DeletePlantWarningDescription')}}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel @click="((alertDialog = false), (deleteEntryId = ''))">
-              Cancel
+             {{t('PlantList.Cancel')}}
             </AlertDialogCancel>
             <AlertDialogAction variant="destructive" @click="deleteEntry">
-              Delete
+              {{t('PlantList.Delete')}}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -228,19 +228,19 @@ onMounted(() => {
       <Tabs v-model:modelValue="tab" class="overflow-hidden">
         <div class="flex items-center w-full justify-between">
           <TabsList class="my-2">
-            <TabsTrigger value="plants">Plants</TabsTrigger>
-            <TabsTrigger value="sensors">Sensors</TabsTrigger>
+            <TabsTrigger value="plants">{{t('PlantList.Plants')}}</TabsTrigger>
+            <TabsTrigger value="sensors">{{t('PlantList.Sensors')}}</TabsTrigger>
           </TabsList>
           <div class="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger as-child>
                 <Button class="h-7 gap-1" size="sm" variant="outline">
                   <ListFilter class="h-3.5 w-3.5" />
-                  <span class="sr-only sm:not-sr-only sm:whitespace-nowrap"> Filter </span>
+                  <span class="sr-only sm:not-sr-only sm:whitespace-nowrap">{{t('PlantList.Filter')}}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Filter by</DropdownMenuLabel>
+                <DropdownMenuLabel>{{t('PlantList.FilterBy')}}</DropdownMenuLabel>
                 <form class="px-2">
                   <FormField name="items">
                     <FormItem>
@@ -279,7 +279,7 @@ onMounted(() => {
             <router-link to="/newPlant">
               <Button class="h-7 gap-1" size="sm">
                 <PlusCircle class="h-3.5 w-3.5" />
-                <span class="sr-only sm:not-sr-only sm:whitespace-nowrap"> Add Plant </span>
+                <span class="sr-only sm:not-sr-only sm:whitespace-nowrap"> {{t('PlantList.AddPlant')}} </span>
               </Button>
             </router-link>
           </div>
@@ -287,18 +287,18 @@ onMounted(() => {
         <TabsContent value="plants">
           <Card>
             <CardHeader>
-              <CardTitle>Plants</CardTitle>
-              <CardDescription> Manage your Plants</CardDescription>
+              <CardTitle>{{t('PlantList.Plants')}}</CardTitle>
+              <CardDescription>{{t('PlantList.PlantsDescription')}}</CardDescription>
             </CardHeader>
             <CardContent class="p-3">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead class="text-center max-w-fit">Status</TableHead>
-                    <TableHead class="hidden md:table-cell"> Group</TableHead>
-                    <TableHead class="hidden md:table-cell"> Room</TableHead>
-                    <TableHead class="hidden md:table-cell"> Sensor</TableHead>
+                    <TableHead>{{t('PlantList.Name')}}</TableHead>
+                    <TableHead class="text-center max-w-fit">{{t('PlantList.Status')}}</TableHead>
+                    <TableHead class="hidden md:table-cell">{{t('PlantList.Group')}}</TableHead>
+                    <TableHead class="hidden md:table-cell">{{t('PlantList.Room')}}</TableHead>
+                    <TableHead class="hidden md:table-cell">{{t('PlantList.Sensor')}}</TableHead>
                     <TableHead>
                       <span class="sr-only">Actions</span>
                     </TableHead>
@@ -318,7 +318,7 @@ onMounted(() => {
             </CardContent>
             <CardFooter>
               <div class="text-xs text-muted-foreground">
-                Showing <strong>{{ filteredPlantList.length }}</strong> Plants
+                {{t('PlantList.Showing')}} <strong>{{ filteredPlantList.length }}</strong> {{t('PlantList.Plants')}}
               </div>
             </CardFooter>
           </Card>
@@ -333,17 +333,17 @@ onMounted(() => {
         <TabsContent value="sensors">
           <Card>
             <CardHeader>
-              <CardTitle>Sensors</CardTitle>
-              <CardDescription> Manage your Sensors</CardDescription>
+              <CardTitle>{{t('PlantList.Sensors')}}</CardTitle>
+              <CardDescription>{{t('PlantList.SensorsDescription')}}</CardDescription>
             </CardHeader>
             <CardContent class="p-3">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>ID</TableHead>
-                    <TableHead class="text-center max-w-fit">Pflanze</TableHead>
-                    <TableHead class="hidden md:table-cell">Letzer Kontakt</TableHead>
-                    <TableHead class="hidden md:table-cell">Modell</TableHead>
+                    <TableHead>{{t('PlantList.ID')}}</TableHead>
+                    <TableHead class="text-center max-w-fit">{{t('PlantList.Plant')}}</TableHead>
+                    <TableHead class="hidden md:table-cell">{{t('PlantList.LastCall')}}</TableHead>
+                    <TableHead class="hidden md:table-cell">{{t('PlantList.Model')}}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -378,7 +378,7 @@ onMounted(() => {
             </CardContent>
             <CardFooter>
               <div class="text-xs text-muted-foreground">
-                Showing <strong>{{ filteredControllerList.length }}</strong> Sensors
+                {{t('PlantList.Showing')}} <strong>{{ filteredControllerList.length }}</strong> {{t('PlantList.Sensors')}}
               </div>
             </CardFooter>
           </Card>

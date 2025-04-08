@@ -3,6 +3,116 @@
     "subtitle": "The requested page does not exist.",
     "title": "404 - Page Not Found"
   },
+  "AI": {
+    "Subtitle": "Take a picture to recognize your plant or simply search for it.",
+    "Title": "Plant AI"
+  },
+  "Account": {
+    "Account": "Account",
+    "AccountDescription": " Make changes to your account here.",
+    "CurrentPassword": "Current Password",
+    "FistName": "First name",
+    "NewPassword": "New Password",
+    "Password": "Password",
+    "PasswordDescription": "Change your Password",
+    "SaveChanges": "Save Changes",
+    "SavePassword": "Save Password",
+    "SurName": "Surname",
+    "Username": "Username"
+  },
+  "Camera": {
+    "Capture": "Capture",
+    "CapturePhoto": "Capture Photo",
+    "CapturePhotoDescription": "Take a picture of your plant, to recognize the planttype with AI",
+    "ErrorCamera": "Camera issues, check settings",
+    "ErrorMaxSize": "One or more images exceed the maximum file size",
+    "ErrorResponse": "Upload or response error ",
+    "Exit": "Exit",
+    "NoImage": "Select an image first!",
+    "SelectImages": "Select Images",
+    "SelectedImages": "Selected images",
+    "StartCamera": "Start Camera",
+    "Upload": "Upload",
+    "UploadDone": "Upload successfully completed",
+    "UploadError": "Upload error",
+    "UploadFinished": "Upload successful",
+    "Uploading": "Upload image...",
+    "errorAccess": "Access to the camera is forbitten or not possible",
+    "errorCanvas": "Camera or Canvas not available.",
+    "errorCanvasContext": "Can't create canvas context.",
+    "isUpload": "Upload..."
+  },
+  "Group": {
+    "Rooms": "Rooms"
+  },
+  "Hom": "Home",
+  "Home": {
+    "Hints": "Hints"
+  },
+  "PlantInformation": {
+    "CareLevel": "Care Level",
+    "Cycle": "Cycle",
+    "GrowthRate": "Growth Rate",
+    "HardinessZone": "Hardiness Zone",
+    "Leaf": "Leaf",
+    "MoreInformation": "more information",
+    "Sun": "Sun",
+    "Use": "Use",
+    "Watering": "Watering"
+  },
+  "PlantList": {
+    "AddPlant": "Add Plant",
+    "Cancel": "Cancel",
+    "Delete": "Delete",
+    "DeletePlantWarningDescription": "This action cannot be undone. This will permanently delete your plant and remove all related data from our servers",
+    "DeletePlantWarningTitle": "Are you absolutely sure?",
+    "ErrorFilter": "You have to select at least one item.",
+    "Filter": "Filter",
+    "FilterBy": "Filter by",
+    "Group": "Apartment",
+    "ID": "ID",
+    "LastCall": "Last call",
+    "Model": "Model",
+    "Name": "Name",
+    "Plant": "Plant",
+    "Plants": "Plants",
+    "PlantsDescription": "Manage your Plants",
+    "Room": "Room",
+    "Sensor": "Sensor",
+    "Sensors": "Sensors",
+    "SensorsDescription": "Manage your Sensors",
+    "Showing": "Showing",
+    "Status": "Status"
+  },
+  "PlantSearch": {
+    "Search": "Search plant",
+    "isSearching": "Search...",
+    "noResults": "No plant found",
+    "searchButton": "Search"
+  },
+  "Profile": {
+    "ProfilePicture": "Profilepicture"
+  },
+  "SensorViewRow": {
+    "Actions": "Actions",
+    "Delete": "Delete",
+    "Edit": "Edit"
+  },
+  "Settings": {
+    "Account": "Account",
+    "AccountDescription": "Name, Username and Password",
+    "Appearance": "Appearance",
+    "AppearanceDescription": "Change the appearance of the app",
+    "Language": "Language",
+    "LanguageDescription": "Change the app language"
+  },
+  "ShareLink": {
+    "Copied": "Copied",
+    "ErrorCopy": "Error during copying"
+  },
+  "SinglePlant": {
+    "EnterValidRoom": "Please enter a valid room"
+  },
   "about": {
     "description": "We are a team of students working on our final project to create a smart irrigation system. The goal is to automate and optimize plant watering for households, making plant care easier and more efficient.",
     "featuresList": [
@@ -36,6 +146,7 @@
     "technologiesTitle": "Technologies We Use",
     "title": "About Us"
   },
+  "active": "Active",
   "appearance": {
     "Dark": "Dark",
     "Description": "Customize the appearance of the app.",
@@ -49,6 +160,8 @@
     "Title": "Appearance",
     "UpdatePreferences": "Update preferences"
   },
+  "brightness": "Brightness",
+  "error": "Error",
   "errors": {
     "E000": "Unable to parse query.",
     "E100": "Authorization header required: use 'Authorization: Bearer <token>'.",
@@ -88,7 +201,28 @@
       "title": "Are you sure?"
     },
     "create": {
-      "RoomEntity": "Kitchen"
+      "RoomEntity": "Kitchen",
+      "cancel": "Cancel",
+      "create": "Create group",
+      "description": "Create a group to create plants and mangage them together",
+      "groupName": "Groupname",
+      "namePlaceholder": "Flat Mannheim",
+      "roomName": "Rooms",
+      "roomPlaceholder": "create your rooms",
+      "save": "Save",
+      "title": "Edit group"
+    },
+    "createRoom": {
+      "Entity": "Room",
+      "EntityPlaceholder": "Livingroom",
+      "NewEntity": "Add a room in an apartment",
+      "NewEntityCancel": "Cancel",
+      "NewEntitySelectionGroup": "Apartment",
+      "NewEntitySelectionGroupPlaceholder": "Select",
+      "NewEntitySubtitle": "Create a room in your existing apartments for a plant",
+      "NewEntityTitle": "Add Room",
+      "NoEntity": " No room available in apartment",
+      "SelectPlaceholder": "Select room"
     },
     "created": "Group created",
     "deleted": "Group successfully deleted",
@@ -104,6 +238,12 @@
         "title": "Remove Room"
       }
     },
+    "update": {
+      "create": "Create group",
+      "description": "Modify groupname and the rooms",
+      "save": "Save",
+      "title": "Edit group"
+    },
     "updated": "Group updated",
     "userRemoved": "User was removed"
   },
@@ -113,6 +253,8 @@
     "subtitle": "Overview of all rooms",
     "welcome": "Hello {name}!"
   },
+  "humidity": "Humidity",
+  "inactive": "Inactive",
   "language": {
     "English": "English",
     "German": "German",
@@ -129,9 +271,11 @@
     "CreateAccount": "Create Account",
     "DontHaveAccount": "Don't have an account?",
     "Email": "Email",
+    "Error": "Wrong username or password",
     "FirstName": "First name",
     "ForgotPassword": "Forgot your password?",
     "LastName": "Last name",
+    "Loading": "Login...",
     "Or": "or",
     "Password": "Password",
     "SignIn": "Sign In",
@@ -143,14 +287,17 @@
     "Success": "Login successful"
   },
   "plant": {
+    "NoInformationSubtitle": "Sadly, we have currently no data about this plant in our datebase.",
+    "NoInformationTitle": "No Data available",
     "settings": {
       "Avatar": "Avatar",
       "Avatar1": "Avatar 1",
       "Avatar2": "Avatar 2",
+      "AvatarPlaceholder": "Select an avatar for the plant",
       "Avatars": "Avatars",
       "Cancel": "Cancel",
       "Description": "Description",
-      "DescriptionPlaceholder": "Please include all relevant information",
+      "DescriptionPlaceholder": "More private notes",
       "Group1": "Group 1",
       "Group2": "Group 2",
       "NameOfPlant": "Name of Plant",
@@ -163,18 +310,31 @@
       "Room3": "Room 3",
       "Room4": "Room 4",
       "SelectRoom": "Select Room",
-      "SelectSensor": "Select Sensor",
+      "SelectSensor": "Select",
+      "SelectSensorPlaceholder": "Select a sensor",
       "Sensor1": "Sensor 1",
       "Sensor2": "Sensor 2",
       "Sensors": "Sensors",
       "SubTitle": "Manage your plant information",
       "Submit": "Submit",
-      "Title": "Plant Settings"
+      "Title": "Plant Settings",
+      "targetValues": "Target values"
     }
   },
   "plantList": {
     "emptyPlantSubtitle": "Create a plant so you can start collecting data with Sensora.",
     "emptyPlantTitle": "Create Your First Plant"
+  },
+  "profile": {
+    "AboutUs": "About Us",
+    "AddDevice": "Add Device",
+    "ClearCache": "Clear Cache",
+    "FAQ": "FAQ",
+    "Group": "Groups",
+    "Logout": "Logout",
+    "Privacy": "Privacy",
+    "Sensora": "Sensora",
+    "Support": "Support"
   },
   "register": {
     "MinLength": "The password must be at least 8 characters long.",
@@ -206,8 +366,11 @@
     "close": "Close",
     "copy": "Copy"
   },
+  "soilMoisture": "Soil Moisture",
+  "temperature": "Temperature",
   "title": {
     "aboutUs": "About Us",
+    "createPlant": "Create Plant",
     "groups": "Groups",
     "home": "Dashboard",
     "login": "Login",
@@ -222,6 +385,12 @@
     "settings": "Settings",
     "setupAccount": "Complete Your Account",
     "uploadPlant": "Recognize Plant"
+  },
+  "unknown": "Unknown",
+  "upload": {
+    "capture": "Capture",
+    "search": "Search",
+    "upload": "Upload"
   },
   "user": {
     "deleted": "User successfully deleted!",

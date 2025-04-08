@@ -50,14 +50,14 @@ onMounted(() => {
     <Avatar>
       <AvatarImage
         alt="profile Picture"
-        src="https://avatars.githubusercontent.com/u/91261422?v=4&size=64"
+        :src="userStore.user?.avatarRef ?? ''"
       />
-      <AvatarFallback>JS</AvatarFallback>
+      <AvatarFallback>{{userStore.user?.firstname[0] ?? ''}}</AvatarFallback>
     </Avatar>
   </div>
 
   <div class="w-full my-2">
-    <h2 class="text-xl my-2 font-medium">Tipps</h2>
+    <h2 class="text-xl my-2 font-medium">{{t('Home.Hints')}}</h2>
     <ScrollArea class="w-screen ml-[calc(-50vw+50%)] xl:w-full xl:ml-0">
       <div class="flex p-4 space-x-4 w-max">
         <div v-for="tip in hints" :key="tip.id" class="w-[80vw] shrink-1 xl:max-w-4xl">

@@ -12,6 +12,9 @@ import { MoreHorizontal } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
 import { computed, type PropType } from 'vue'
 import type { Group, Plant, Room } from '@/api'
+import {useI18n} from 'vue-i18n'
+
+const {t} = useI18n()
 
 const status = {
   active: { label: 'active', value: 'default' },
@@ -88,11 +91,11 @@ const badgeLabel = getStatus.value.label
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuLabel>{{t('SensorViewRow.Actions')}}</DropdownMenuLabel>
           <router-link :to="`/plant/${plant.plantId}/edit`">
-            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <DropdownMenuItem>{{t('SensorViewRow.Edit')}}</DropdownMenuItem>
           </router-link>
-          <DropdownMenuItem @click="$emit('delete', plant.plantId)">Delete</DropdownMenuItem>
+          <DropdownMenuItem @click="$emit('delete', plant.plantId)">{{t('SensorViewRow.Delete')}}</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </TableCell>

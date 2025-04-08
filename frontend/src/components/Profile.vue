@@ -1,8 +1,13 @@
 <script lang="ts" setup>
 import { Settings } from 'lucide-vue-next'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Avatar, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button/index.ts'
+import {useUserStore} from '@/stores'
+import {useI18n} from 'vue-i18n'
+
+const {t} = useI18n()
+const userStore = useUserStore()
 </script>
 <template>
   <Card class="w-full">
@@ -11,15 +16,15 @@ import { Button } from '@/components/ui/button/index.ts'
         <div class="flex items-center space-x-4">
           <Avatar shape="circle" size="sm">
             <AvatarImage
-              alt="Justus Siegert"
+              :alt="t('Profile.ProfilePicture')"
               class="ml-3"
-              src="https://avatars.githubusercontent.com/u/91261422?v=4"
+              :src="userStore.user?.avatarRef ?? ''"
             />
-            <AvatarFallback>JS</AvatarFallback>
+            <AvatarFallback>{{userStore.user?.firstname[0]??''}}</AvatarFallback>
           </Avatar>
           <div>
-            <CardTitle>Justus Siegert</CardTitle>
-            <CardDescription>kontakt@justus-siegert.de</CardDescription>
+            <CardTitle>{{userStore.user?.firstname}} {{userStore.user?.lastname ?? ""}}</CardTitle>
+            <CardDescription>{{userStore.user?.mail??''}}</CardDescription>
           </div>
         </div>
         <router-link to="/settings">

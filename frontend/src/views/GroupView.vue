@@ -59,7 +59,7 @@ usePullToRefresh(async () => {
         </AccordionContent>
         <CardFooter class="grid grid-cols-1">
           <div class="flex justify-between items-center">
-            <h3 class="text-xl pl-3 my-2 font-medium">Räume</h3>
+            <h3 class="text-xl pl-3 my-2 font-medium">{{t('Group.Rooms')}}</h3>
             <CreateGroupComponent :group="group">
               <template #desktop>
                 <Button :aria-label="t('group.addRoom')" size="icon" variant="default">

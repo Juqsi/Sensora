@@ -28,10 +28,10 @@ function copyText() {
   navigator.clipboard
     .writeText(props.link)
     .then(() => {
-      toast.success('Text wurde kopiert')
+      toast.success(t('ShareLink.Copied'))
     })
     .catch((err) => {
-      toast.error('Kopieren fehlgeschlagen')
+      toast.error(t('ShareLink.ErrorCopy'))
     })
 }
 </script>
@@ -62,7 +62,7 @@ function copyText() {
       </div>
       <DialogFooter class="sm:justify-start">
         <DialogClose as-child>
-          <Button type="button" variant="secondary"> {{ t('shareLink.close') }}Close</Button>
+          <Button type="button" variant="secondary"> {{ t('shareLink.close') }}</Button>
         </DialogClose>
       </DialogFooter>
     </DialogContent>
