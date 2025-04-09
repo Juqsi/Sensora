@@ -10,20 +10,18 @@ import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { MoreHorizontal } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
-import { computed, type PropType } from 'vue'
+import { computed, type PropType, onMounted } from 'vue'
 import type { Group, Plant, Room } from '@/api'
 import {useI18n} from 'vue-i18n'
 
 const {t} = useI18n()
 
 const status = {
-  active: { label: 'active', value: 'default' },
-  inactive: { label: 'inactive', value: 'secondary' },
-  unknown: { label: 'unknown', value: 'outline' },
-  error: { label: 'error', value: 'destructive' },
+  active: { label: t('active'), value: 'default' },
+  inactive: { label: t('inactive'), value: 'secondary' },
+  unknown: { label: t('unknown'), value: 'outline' },
+  error: { label: t('error'), value: 'destructive' },
 } as const
-
-type StatusKey = keyof typeof status
 
 const props = defineProps({
   plant: { type: Object as PropType<Plant>, required: true },
@@ -42,14 +40,9 @@ const getStatus = computed(() => {
     })
     return status.active
   }
-  if (props.plant.controllers.length === 0) {
-    return status.inactive
-  }
-  return status.unknown
+  return status.inactive
 })
 
-const badgeVariant = getStatus.value.value
-const badgeLabel = getStatus.value.label
 </script>
 
 <template>
@@ -61,8 +54,8 @@ const badgeLabel = getStatus.value.label
     </TableCell>
     <TableCell>
       <router-link :to="plant.controllers[0] ? `/sensor/${plant.controllers[0].did}` : '#'">
-        <Badge :variant="badgeVariant" class="w-full justify-center">
-          {{ badgeLabel }}
+        <Badge :variant="getStatus.value" class="w-full justify-center">
+          {{ getStatus.label }}
         </Badge>
       </router-link>
     </TableCell>

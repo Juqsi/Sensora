@@ -128,9 +128,9 @@ function onSearchResults(results: RecognizedImage[]) {
 
 <template>
   <NavCard :title="t('AI.Title')" :sub-title="t('AI.Subtitle')"/>
-  <div class="mt-6">
-    <div class="w-full max-w-md bg-background bg-opacity-80 backdrop-blur-md p-6 rounded-xl shadow-lg mx-auto">
-      <Tabs default-value="capturePhoto">
+  <div class="mt-6 w-full max-w-xl">
+    <div class="w-full bg-background bg-opacity-80 backdrop-blur-md p-6 rounded-xl shadow-lg mx-auto">
+      <Tabs class="min-w-full" default-value="capturePhoto">
         <TabsList class="grid w-full grid-cols-3 mb-4">
           <TabsTrigger value="capturePhoto">{{ t('upload.capture') }}</TabsTrigger>
           <TabsTrigger value="uploadImage">{{ t('upload.upload') }}</TabsTrigger>

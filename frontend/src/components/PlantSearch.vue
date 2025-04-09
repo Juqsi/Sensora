@@ -27,7 +27,7 @@ const performSearch = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center gap-4 pt-2 max-w-md mx-auto">
+  <div class="flex flex-col items-center gap-4 pt-2 w-full mx-auto">
     <input
       id="search"
       type="text"

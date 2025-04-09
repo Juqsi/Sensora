@@ -47,6 +47,7 @@ import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 import EmtyState from '@/components/EmtyState.vue'
 import { useI18n } from 'vue-i18n'
 import PlantListView from './PlantListView.vue'
+import type { Controller } from '@/api'
 
 const { t } = useI18n()
 
@@ -142,7 +143,6 @@ const { handleSubmit, values } = useForm({
 })
 
 const handleCheckboxChange = () => {
-  console.log(buttonVariants)
 }
 
 const alertDialog = ref(false)
@@ -189,10 +189,26 @@ onMounted(() => {
     console.error(e)
   }
 })
+
+const getLatestLastCall = (controller: Controller): string => {
+  console.log('Controller beim Aufruf:', controller);
+  return controller.sensors
+    .sort((a, b) => {
+      console.log('Vergleiche Sensor A:', a);
+      console.log('Vergleiche Sensor B:', b);
+      const dateA = new Date(a.lastCall!).getTime();
+      const dateB = new Date(b.lastCall!).getTime();
+      console.log('Datum A:', a.lastCall, dateA);
+      console.log('Datum B:', b.lastCall, dateB);
+      return dateB - dateA;
+    })
+    [0]?.lastCall ?? '--';
+};
+
 </script>
 
 <template>
-  <div class="flex flex-col sm:gap-4 sm:py-4 sm:pl-14 w-full">
+  <div class="flex flex-col sm:gap-4 sm:py-4 w-full">
     <header
       class="w-full top-0 z-30 h-14 items-center gap-4 border-b bg-background sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"
     >
@@ -341,14 +357,13 @@ onMounted(() => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>{{t('PlantList.ID')}}</TableHead>
-                    <TableHead class="text-center max-w-fit">{{t('PlantList.Plant')}}</TableHead>
+                    <TableHead class=" max-w-fit">{{t('PlantList.Plant')}}</TableHead>
                     <TableHead class="hidden md:table-cell">{{t('PlantList.LastCall')}}</TableHead>
                     <TableHead class="hidden md:table-cell">{{t('PlantList.Model')}}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   <TableRow v-for="sensor in filteredControllerList">
-                    <TableCell class="hidden sm:table-cell"></TableCell>
                     <TableCell class="overflow-hidden font-medium">
                       <router-link :to="`/sensor/${sensor.did}`">
                         {{ sensor.did }}
@@ -361,12 +376,7 @@ onMounted(() => {
                     </TableCell>
                     <TableCell class="hidden md:table-cell">
                       {{
-                        sensor.sensors
-                          .filter((sen) => sen.lastCall)
-                          .sort(
-                            (a, b) =>
-                              new Date(b.lastCall).getTime() - new Date(a.lastCall).getTime(),
-                          )[0] ?? ''
+                        getLatestLastCall(sensor)
                       }}
                     </TableCell>
                     <TableCell class="hidden md:table-cell">

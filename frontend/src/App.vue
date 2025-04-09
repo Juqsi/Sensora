@@ -18,7 +18,7 @@ CapacitorApp.addListener('backButton', ({ canGoBack }) => {
 </script>
 
 <template>
-  <div class="app-container">
+  <div class="xl:p-8 p-4 xl:max-w-6xl flex flex-col items-center mb-4 mx-auto">
     <router-view />
   </div>
   <bottom-nav-bar v-if="useAuthStore().isAuthenticated" />
@@ -26,27 +26,4 @@ CapacitorApp.addListener('backButton', ({ canGoBack }) => {
 </template>
 
 <style scoped>
-.app-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 16px;
-  box-sizing: border-box;
-}
-
-@media (min-width: 768px) {
-  .app-container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 32px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .app-container {
-    max-width: 1200px;
-    padding: 40px;
-  }
-}
 </style>
