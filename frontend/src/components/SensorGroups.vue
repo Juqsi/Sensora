@@ -26,11 +26,12 @@ const sensorDisplayMap = {
 </script>
 
 <template>
-  <div v-for="(sensors, type) in groupedSensors" :key="type">
+  <div v-for="(sensors, type) in groupedSensors" :key="type" class="w-full">
     <h2 class="text-xl font-semibold mt-6 mb-2">
       {{ sensorDisplayMap[type] ?? type }}
     </h2>
-
-    <SensorCard v-for="sensor in sensors" :key="sensor.sid" :sensor="sensor" />
+    <div class="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-2 w-full">
+      <SensorCard v-for="sensor in sensors" :key="sensor.sid" :sensor="sensor" />
+    </div>
   </div>
 </template>

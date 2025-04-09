@@ -16,10 +16,26 @@ import GroupCard from '@/components/GroupCard.vue'
 import EmtyState from '@/components/EmtyState.vue'
 import { Settings } from 'lucide-vue-next'
 import ShareLink from '@/components/ShareLink.vue'
+import { useGenerateInviteToken } from '@/composables/useGenerateInviteToken.ts'
+import {useRoute} from 'vue-router'
+
+const route = useRoute()
 
 const groupStore = useGroupStore()
 const { t } = useI18n()
 const defaultOpenValues = ref(groupStore.groups.length === 1 ? [groupStore.groups[0].gid] : [])
+const inviteToken = ref('')
+
+const generateInviteToken = async (groupId: string) => {
+  const portPart =
+    window.location.port && window.location.port !== '443' ? `:${window.location.port}` : ''
+  const frontendBaseUrl = `${window.location.protocol}//${window.location.hostname}${portPart}`
+  inviteToken.value = `${frontendBaseUrl}/groups?inviteToken=${await useGenerateInviteToken().generateInviteToken(groupId)}`
+}
+
+if (route.query.inviteToken){
+  groupStore.joinGroup(route.query.inviteToken as string)
+}
 
 usePullToRefresh(async () => {
   await groupStore.fetchGroups(true)
@@ -46,8 +62,9 @@ usePullToRefresh(async () => {
               {{ group.name }}
               <ShareLink
                 :description="t('groups.ShareDescription')"
-                link="https://sensora.de/join/asdasdasdasdasd"
+                :link="inviteToken"
                 :title="t('group.ShareTitle')"
+                @generate="generateInviteToken(group.gid)"
               />
             </CardTitle>
           </CardHeader>
@@ -59,7 +76,7 @@ usePullToRefresh(async () => {
         </AccordionContent>
         <CardFooter class="grid grid-cols-1">
           <div class="flex justify-between items-center">
-            <h3 class="text-xl pl-3 my-2 font-medium">{{t('Group.Rooms')}}</h3>
+            <h3 class="text-xl pl-3 my-2 font-medium">{{ t('Group.Rooms') }}</h3>
             <CreateGroupComponent :group="group">
               <template #desktop>
                 <Button :aria-label="t('group.addRoom')" size="icon" variant="default">

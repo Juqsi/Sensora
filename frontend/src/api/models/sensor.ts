@@ -66,6 +66,8 @@ export interface Sensor {
   status: SensorStatusEnum
 
   currently_assigned: boolean
+  plant:string
+  group:string
 }
 
 /**

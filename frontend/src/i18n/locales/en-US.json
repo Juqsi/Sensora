@@ -86,7 +86,9 @@
   },
   "PlantSearch": {
     "Search": "Search plant",
-    "isSearching": "Search...",
+    "SearchError": "Search failed:",
+    "Success": "Search successful!",
+    "isSearching": "Collect plant information ... ",
     "noResults": "No plant found",
     "searchButton": "Search"
   },
@@ -229,6 +231,8 @@
     "deleted": "Apartment successfully deleted",
     "emptyGroupSubtitle": "Start by creating your first apartment to get started.",
     "emptyGroupTitle": "Create Your First Apartment",
+    "generateInviteToken": "Generate invite link...",
+    "generateInviteTokenFinished": "Created initation.",
     "joined": "Successfully joined the Apartment",
     "left": "Successfully left the Apartment",
     "room": {

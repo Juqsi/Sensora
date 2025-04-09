@@ -22,7 +22,9 @@ const props = defineProps({
   link: { type: String, required: true },
   description: { type: String, required: false, default: '' },
   title: { type: String, required: true },
-})
+});
+
+const emit = defineEmits(['generate']);
 
 function copyText() {
   navigator.clipboard
@@ -50,7 +52,7 @@ function copyText() {
           {{ props.description }}
         </DialogDescription>
       </DialogHeader>
-      <div class="flex items-center space-x-2">
+      <div v-if="link" class="flex items-center space-x-2">
         <div class="grid flex-1 gap-2">
           <Label class="sr-only" for="link"> Link </Label>
           <Input id="link" v-model="props.link" readonly />
@@ -60,10 +62,11 @@ function copyText() {
           <Copy class="w-4 h-4" />
         </Button>
       </div>
-      <DialogFooter class="sm:justify-start">
+      <DialogFooter class="sm:justify-between gap-2">
         <DialogClose as-child>
           <Button type="button" variant="secondary"> {{ t('shareLink.close') }}</Button>
         </DialogClose>
+          <Button v-if="!link"@click="$emit('generate')" type="button"> {{ t('ShareLink.Generate') }}</Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>

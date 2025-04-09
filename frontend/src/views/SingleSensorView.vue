@@ -22,7 +22,6 @@ onMounted(async () => {
   <NavCard
     :sub-title="controller?.did ?? ''"
     :title="controller?.model ?? 'Fullcontroller 4+1'"
-    class="max-w-md"
   />
 
   <ControllerInfo v-if="controller" :controller="controller" />

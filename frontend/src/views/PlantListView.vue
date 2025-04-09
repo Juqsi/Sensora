@@ -194,12 +194,8 @@ const getLatestLastCall = (controller: Controller): string => {
   console.log('Controller beim Aufruf:', controller);
   return controller.sensors
     .sort((a, b) => {
-      console.log('Vergleiche Sensor A:', a);
-      console.log('Vergleiche Sensor B:', b);
       const dateA = new Date(a.lastCall!).getTime();
       const dateB = new Date(b.lastCall!).getTime();
-      console.log('Datum A:', a.lastCall, dateA);
-      console.log('Datum B:', b.lastCall, dateB);
       return dateB - dateA;
     })
     [0]?.lastCall ?? '--';

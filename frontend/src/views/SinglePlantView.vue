@@ -14,6 +14,7 @@ import {  type Recognition } from '@/composables/useImageUpload.ts'
 import PlantInformationCard from '@/components/PlantInformationCard.vue'
 import EmtyState from '@/components/EmtyState.vue'
 import {useI18n} from 'vue-i18n'
+import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 
 const {t} = useI18n()
 
@@ -89,6 +90,10 @@ const updateActiveKey = (key: ilk, force: boolean = false) => {
     }
   }
 }
+
+usePullToRefresh(async () => {
+  await plantStore.fetchPlants(true);
+});
 </script>
 
 <template>
@@ -111,8 +116,8 @@ const updateActiveKey = (key: ilk, force: boolean = false) => {
       <MeasuredTiles ref="measuredTiles" :plant="plant" @updateActiveKey="updateActiveKey" />
       <PlantMeassuredValuesChart :data="activeData" />
     </TabsContent>
-    <TabsContent value="infos">
-     <PlantInformationCard v-if="plantInformation" :recognition="plantInformation ?? {} as Recognition " />
+    <TabsContent value="infos" class="w-full">
+     <PlantInformationCard class="mx-auto" v-if="plantInformation" :recognition="plantInformation ?? {} as Recognition " />
     </TabsContent>
   </Tabs>
 </template>

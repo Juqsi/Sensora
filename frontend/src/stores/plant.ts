@@ -146,7 +146,7 @@ export const usePlantStore = defineStore('plant', {
       startTime?: Date,
       endTime?: Date,
       force: boolean = false,
-    ) {
+    ):Promise<Plant> {
       const existingPlant = this.plants.find((plant) => plant.plantId === plantId)
 
       if (!force && existingPlant && startTime && endTime) {

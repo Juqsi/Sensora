@@ -86,7 +86,9 @@
   },
   "PlantSearch": {
     "Search": "Pflanze suchen",
-    "isSearching": "Suchen...",
+    "SearchError": "Suche fehlgeschlagen:",
+    "Success": "Suche erfolgreich!",
+    "isSearching": "Sammel Pflanzeninformationen...",
     "noResults": "Keine Pflanze gefunden",
     "searchButton": "Suchen"
   },
@@ -194,7 +196,7 @@
     "unknownError": "Unbekannter Fehler!"
   },
   "group": {
-    "ShareTitle": "EInladungslink teilen",
+    "ShareTitle": "Einladungslink teilen",
     "alert": {
       "cancel": "Abbrechen",
       "confirm": "Löschen",
@@ -229,6 +231,8 @@
     "deleted": "Wohnung erfolgreich gelöscht",
     "emptyGroupSubtitle": "Beginnen Sie damit, Ihre erste Wohnung zu erstellen, um loszulegen.",
     "emptyGroupTitle": "Erstellen Sie Ihre erste Wohnung",
+    "generateInviteToken": "Einladungslink generieren...",
+    "generateInviteTokenFinished": "Einladungslink erstellt.",
     "joined": "Erfolgreich in die Wohnung eingezogen",
     "left": "Auszug erfolgreich",
     "room": {
@@ -258,7 +262,7 @@
     "subtitle": "Überblick über deine Räume",
     "welcome": "Hallo {name}!"
   },
-  "humidity": "",
+  "humidity": "Luftfeuchtigkeit",
   "inactive": "Inaktiv",
   "language": {
     "English": "Englisch",

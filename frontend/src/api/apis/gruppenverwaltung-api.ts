@@ -302,7 +302,7 @@ export const GruppenverwaltungApiAxiosParamCreator = function () {
       let baseOptions
 
       const localVarRequestOptions: AxiosRequestConfig = {
-        method: 'PATCH',
+        method: 'GET',
         ...baseOptions,
         ...options,
       }

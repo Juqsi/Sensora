@@ -1,15 +1,20 @@
 <script lang="ts" setup>
 import { Cpu, Flower2, User, Users } from 'lucide-vue-next'
 import { Card, CardContent } from '@/components/ui/card'
-import type { Controller } from '@/api'
+import type { Controller, Plant } from '@/api'
+import {usePlantStore} from '@/stores'
+import { latestSensorValue } from '@/composables/useLatestSensorValue.ts'
+import {computed} from 'vue'
 
+const plantStore = usePlantStore()
 const props = defineProps<{
   controller: Controller
 }>()
+
 </script>
 
 <template>
-  <Card class="w-full mt-4 max-w-md">
+  <Card class="w-full mt-4">
     <CardContent class="flex items-start p-3">
       <div class="rounded-full p-2 border-4 border-background mx-2">
         <Cpu class="w-8 h-8" />
@@ -20,18 +25,6 @@ const props = defineProps<{
         <div class="flex items-center gap-2">
           <User class="w-5 h-5" />
           <p class="font-medium">{{ controller.owner?.username ?? '-' }}</p>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <Flower2 class="w-5 h-5" />
-          <p class="font-medium">
-            <!-- TODO: Pflanzen hier -->
-          </p>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <Users class="w-5 h-5" />
-          <p class="font-medium"><!-- TODO: Gruppen von Pflanze hier --></p>
         </div>
       </div>
     </CardContent>

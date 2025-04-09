@@ -22,4 +22,6 @@ export interface Value {
    * @example 5.3
    */
   value: number
+  sensor:string
+  plant:string
 }
