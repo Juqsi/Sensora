@@ -3,6 +3,7 @@ import { Flower2, HomeIcon, Users } from 'lucide-vue-next'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import {useUserStore} from '@/stores'
+import { STATICS_PATH } from '@/api/base.ts'
 
 const userStore = useUserStore()
 const isKeyboardOpen = ref(false)
@@ -60,7 +61,7 @@ onBeforeUnmount(() => {
           >
             <AvatarImage
               :alt="userStore.user?.firstname + ' ' + userStore.user?.lastname"
-              :src="userStore.user?.avatarRef ?? ''"
+              :src="STATICS_PATH + userStore.user?.avatarRef "
             />
             <AvatarFallback >{{userStore.user?.firstname[0]??''}}</AvatarFallback>
           </Avatar>

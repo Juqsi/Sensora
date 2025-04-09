@@ -141,7 +141,7 @@
       "Frontend: Vue.js mit TypeScript, Tailwind CSS",
       "Backend: Rust (BFF), Python-Microservices für Sensordaten und E-Mail-Validierung",
       "Microcontroller: ESP32 mit Sensoren (Temperatur, Luftfeuchtigkeit, Bodenfeuchtigkeit, Helligkeit), Pumpe",
-      "Kommunikation: Solace Messaging zwischen Microcontrollern und Microservices"
+      "Kommunikation: Solace Messaging zwischen Mikrocontrollern und Microservices"
     ],
     "technologiesTitle": "Verwendete Technologien",
     "title": "Über uns"
@@ -176,12 +176,12 @@
     "E205": "Der Benutzer konnte nicht gespeichert werden. Benutzername oder E-Mail bereits vergeben.",
     "E300": "Die ID ist falsch. Die Ressource existiert möglicherweise nicht mehr.",
     "E301": "Sie haben keine Berechtigung, auf diesen Benutzer zuzugreifen.",
-    "E400": "Gruppe konnte nicht gespeichert werden. Kontaktieren Sie den Administrator.",
-    "E405": "Die Gruppe existiert nicht. Überprüfen Sie die Schreibweise.",
+    "E400": "Wohnung konnte nicht gespeichert werden. Kontaktieren Sie den Administrator.",
+    "E405": "Die Wohnung existiert nicht. Überprüfen Sie die Schreibweise.",
     "E406": "Der Einladungstoken ist abgelaufen oder ungültig.",
     "E500": "Der Raum existiert nicht. Überprüfen Sie die Schreibweise.",
     "E601": "Die Pflanzen-ID im Pfad ist erforderlich. Überprüfen Sie die Dokumentation.",
-    "E603": "Sie haben keine Berechtigung für diese Aktion. Fragen Sie ein Gruppenmitglied oder den Raum-Eigentümer.",
+    "E603": "Sie haben keine Berechtigung für diese Aktion. Fragen Sie ein Wohnungsmitglied oder den Raum-Eigentümer.",
     "badRequest": "Ungültige Anfrage!",
     "forbidden": "Zugriff verweigert!",
     "loading": "Lädt...",
@@ -194,58 +194,63 @@
     "unknownError": "Unbekannter Fehler!"
   },
   "group": {
+    "ShareTitle": "EInladungslink teilen",
     "alert": {
       "cancel": "Abbrechen",
       "confirm": "Löschen",
-      "description": "Möchtest du wirklich {name} aus der Gruppe entfernen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "description": "Möchtest du wirklich {name} aus der Wohnung entfernen? Diese Aktion kann nicht rückgängig gemacht werden.",
       "title": "Bist du sicher?"
     },
     "create": {
       "RoomEntity": "Küche",
       "cancel": "Abbrechen",
-      "create": "Gruppe erstellen",
-      "description": "Erstell eine neue Gruppe um Pflanzen zusammen zuverwalten und zu erstellen",
-      "groupName": "Gruppenname",
+      "create": "Wohnung erstellen",
+      "description": "Erstell eine neue Wohnung um Pflanzen zusammen zu verwalten und zu erstellen",
+      "groupName": "Wohnungsname",
       "namePlaceholder": "WG Mannheim",
       "roomName": "Räume",
       "roomPlaceholder": "erstelle deine Räume",
       "save": "Speichern",
-      "title": "Gruppe erstellen"
+      "title": "Wohnung hinzufügen"
     },
     "createRoom": {
       "Entity": "Raum",
       "EntityPlaceholder": "Wohnzimmer",
       "NewEntity": "Raum für eine Wohnung erstellen",
       "NewEntityCancel": "Abbrechen",
-      "NewEntitySelectionGroup": "Gruppe",
+      "NewEntitySelectionGroup": "Wohnung",
       "NewEntitySelectionGroupPlaceholder": "Auswählen",
       "NewEntitySubtitle": "Erstelle einen Raum in deinen bestehenden Wohnungen für eine Pflanze",
-      "NewEntityTitle": "Raum hizufügen",
+      "NewEntityTitle": "Raum hinzufügen",
       "NoEntity": "Kein Raum in einer Wohnung vorhanden",
       "SelectPlaceholder": "Raum auswählen"
     },
-    "created": "Gruppe erstellt",
-    "deleted": "Gruppe erfolgreich gelöscht",
-    "emptyGroupSubtitle": "Beginnen Sie damit, Ihre erste Gruppe zu erstellen, um loszulegen.",
-    "emptyGroupTitle": "Erstellen Sie Ihre erste Gruppe",
-    "joined": "Erfolgreich der Gruppe beigetreten",
-    "left": "Gruppe erfolgreich verlassen",
+    "created": "Wohnung erstellt",
+    "deleted": "Wohnung erfolgreich gelöscht",
+    "emptyGroupSubtitle": "Beginnen Sie damit, Ihre erste Wohnung zu erstellen, um loszulegen.",
+    "emptyGroupTitle": "Erstellen Sie Ihre erste Wohnung",
+    "joined": "Erfolgreich in die Wohnung eingezogen",
+    "left": "Auszug erfolgreich",
     "room": {
       "alert": {
         "cancel": "Abbrechen",
         "confirm": "Entfernen",
-        "description": "Bist du sicher, dass du den Raum \"{groupName}\" aus der Gruppe entfernen möchtest?",
+        "description": "Bist du sicher, dass du den Raum \"{groupName}\" aus der Wohnung entfernen möchtest?",
         "title": "Raum entfernen"
       }
     },
     "update": {
-      "create": "Grupper erstellen",
-      "description": "Überarbeite deinen Gruppennamen und Räume",
+      "create": "Wohnung erstellen",
+      "description": "Überarbeite den Namen deiner Wohnung und Räume",
       "save": "Speicher",
-      "title": "Gruppe bearbeiten"
+      "title": "Wohnung bearbeiten"
     },
-    "updated": "Gruppe aktualisiert",
+    "updated": "Wohnung aktualisiert",
     "userRemoved": "Benutzer wurde entfernt"
+  },
+  "groups": {
+    "ShareDescription": "Jeder den Link zu der Wohnung hat, kann dieser beitreten.",
+    "myGroups": "Wohnungen"
   },
   "home": {
     "emptyRoomsSubtitle": "Beginnen Sie damit, Ihren ersten Raum zu erstellen und eine Pflanze hinzuzufügen, um loszulegen.",
@@ -330,7 +335,7 @@
     "AddDevice": "Gerät hinzufügen",
     "ClearCache": "Cache löschen",
     "FAQ": "FAQ",
-    "Group": "Gruppen",
+    "Group": "Wohnungen",
     "Logout": "Abmelden",
     "Privacy": "Datenschutz",
     "Sensora": "Sensora",
@@ -371,7 +376,7 @@
   "title": {
     "aboutUs": "Über uns",
     "createPlant": "Pflanze erstellen",
-    "groups": "Gruppen",
+    "groups": "Wohnungen",
     "home": "Übersicht",
     "login": "Anmelden",
     "notFound": "Seite nicht gefunden",

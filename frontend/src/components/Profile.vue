@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button/index.ts'
 import {useUserStore} from '@/stores'
 import {useI18n} from 'vue-i18n'
+import { STATICS_PATH } from '@/api/base.ts'
 
 const {t} = useI18n()
 const userStore = useUserStore()
@@ -18,7 +19,7 @@ const userStore = useUserStore()
             <AvatarImage
               :alt="t('Profile.ProfilePicture')"
               class="ml-3"
-              :src="userStore.user?.avatarRef ?? ''"
+              :src="STATICS_PATH + userStore.user?.avatarRef "
             />
             <AvatarFallback>{{userStore.user?.firstname[0]??''}}</AvatarFallback>
           </Avatar>

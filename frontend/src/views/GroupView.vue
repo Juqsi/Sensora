@@ -45,9 +45,9 @@ usePullToRefresh(async () => {
             <CardTitle>
               {{ group.name }}
               <ShareLink
-                description="Anyone who has this link will be able to join this group."
+                :description="t('groups.ShareDescription')"
                 link="https://sensora.de/join/asdasdasdasdasd"
-                title="Share link"
+                :title="t('group.ShareTitle')"
               />
             </CardTitle>
           </CardHeader>

@@ -176,12 +176,12 @@
     "E205": "Unable to save user. Username or mail already in use.",
     "E300": "ID is incorrect. The resource may no longer exist.",
     "E301": "You do not have permission to access this user.",
-    "E400": "Unable to save group. Contact admin for more information.",
-    "E405": "The group does not exist. Check your spelling.",
+    "E400": "Unable to save Apartment. Contact admin for more information.",
+    "E405": "The apartment does not exist. Check your spelling.",
     "E406": "The invitation token has expired or is incorrect.",
     "E500": "The room does not exist. Check your spelling.",
     "E601": "The plant ID in the path is required. Check the documentation.",
-    "E603": "You don't have permission to do this. Ask a group member or the room owner.",
+    "E603": "You don't have permission to do this. Ask a Apartment member or the room owner.",
     "badRequest": "Invalid request!",
     "forbidden": "Access denied!",
     "loading": "Loading...",
@@ -194,27 +194,28 @@
     "unknownError": "Unknown error!"
   },
   "group": {
+    "ShareTitle": "Share invite link",
     "alert": {
       "cancel": "Cancel",
       "confirm": "Delete",
-      "description": "Do you really want to remove {name} from the group? This action cannot be undone.",
+      "description": "Do you really want to remove {name} from the Apartment? This action cannot be undone.",
       "title": "Are you sure?"
     },
     "create": {
       "RoomEntity": "Kitchen",
       "cancel": "Cancel",
-      "create": "Create group",
-      "description": "Create a group to create plants and mangage them together",
-      "groupName": "Groupname",
-      "namePlaceholder": "Flat Mannheim",
+      "create": "Create apartment",
+      "description": "Create a apartment to create plants and manage them together",
+      "groupName": "Apartment name",
+      "namePlaceholder": "Apartment Mannheim",
       "roomName": "Rooms",
       "roomPlaceholder": "create your rooms",
       "save": "Save",
-      "title": "Edit group"
+      "title": "Edit apartment"
     },
     "createRoom": {
       "Entity": "Room",
-      "EntityPlaceholder": "Livingroom",
+      "EntityPlaceholder": "Living room",
       "NewEntity": "Add a room in an apartment",
       "NewEntityCancel": "Cancel",
       "NewEntitySelectionGroup": "Apartment",
@@ -224,28 +225,32 @@
       "NoEntity": " No room available in apartment",
       "SelectPlaceholder": "Select room"
     },
-    "created": "Group created",
-    "deleted": "Group successfully deleted",
-    "emptyGroupSubtitle": "Start by creating your first group to get started.",
-    "emptyGroupTitle": "Create Your First Group",
-    "joined": "Successfully joined the group",
-    "left": "Successfully left the group",
+    "created": "Apartment created",
+    "deleted": "Apartment successfully deleted",
+    "emptyGroupSubtitle": "Start by creating your first apartment to get started.",
+    "emptyGroupTitle": "Create Your First Apartment",
+    "joined": "Successfully joined the Apartment",
+    "left": "Successfully left the Apartment",
     "room": {
       "alert": {
         "cancel": "Cancel",
         "confirm": "Remove",
-        "description": "Are you sure you want to remove the room \"{groupName}\" from the group?",
+        "description": "Are you sure you want to remove the room \"{groupName}\" from the Apartment?",
         "title": "Remove Room"
       }
     },
     "update": {
-      "create": "Create group",
-      "description": "Modify groupname and the rooms",
+      "create": "Create Apartment",
+      "description": "Modify apartment name and the rooms",
       "save": "Save",
-      "title": "Edit group"
+      "title": "Edit apartment"
     },
-    "updated": "Group updated",
+    "updated": "Apartment updated",
     "userRemoved": "User was removed"
+  },
+  "groups": {
+    "ShareDescription": "Anyone who has this link will be able to join this Apartment.",
+    "myGroups": "Apartments"
   },
   "home": {
     "emptyRoomsSubtitle": "Start by creating your first room and add a plant to get started.",
@@ -330,7 +335,7 @@
     "AddDevice": "Add Device",
     "ClearCache": "Clear Cache",
     "FAQ": "FAQ",
-    "Group": "Groups",
+    "Group": "Apartments",
     "Logout": "Logout",
     "Privacy": "Privacy",
     "Sensora": "Sensora",
@@ -358,8 +363,8 @@
       "title": "Profile Picture"
     },
     "4": {
-      "description": "Begin creating your flat and setting up your space",
-      "title": "Create Flat"
+      "description": "Begin creating your apartment and setting up your space",
+      "title": "Create Apartment"
     }
   },
   "shareLink": {
@@ -371,7 +376,7 @@
   "title": {
     "aboutUs": "About Us",
     "createPlant": "Create Plant",
-    "groups": "Groups",
+    "groups": "Apartments",
     "home": "Dashboard",
     "login": "Login",
     "notFound": "Page Not Found",

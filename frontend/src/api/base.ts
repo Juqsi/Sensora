@@ -1,7 +1,8 @@
 import apiClient from './apiClient'
 import type { AxiosRequestConfig } from 'axios'
 
-export const BASE_PATH = import.meta.env.VITE_API_BASE || '' //TODO Domain eintragen
+export const BASE_PATH = import.meta.env.VITE_API_BASE || ''
+export const STATICS_PATH  = BASE_PATH + '/statics/'
 
 export class BaseAPI {
   constructor(

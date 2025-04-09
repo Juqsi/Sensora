@@ -8,6 +8,7 @@ import { usePlantStore, useRoomStore, useUserStore } from '@/stores'
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 import EmtyState from '@/components/EmtyState.vue'
 import { onMounted } from 'vue'
+import { STATICS_PATH } from '@/api/base.ts'
 
 const { t } = useI18n()
 
@@ -50,7 +51,7 @@ onMounted(() => {
     <Avatar>
       <AvatarImage
         alt="profile Picture"
-        :src="userStore.user?.avatarRef ?? ''"
+        :src="STATICS_PATH + userStore.user?.avatarRef"
       />
       <AvatarFallback>{{userStore.user?.firstname[0] ?? ''}}</AvatarFallback>
     </Avatar>
