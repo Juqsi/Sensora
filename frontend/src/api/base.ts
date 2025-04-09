@@ -4,9 +4,6 @@ import { UserAvatarRefEnum } from '@/api/models'
 
 export const BASE_PATH = import.meta.env.VITE_API_BASE || ''
 export const STATICS_PATH  =  (name:string | undefined) => {
-  //const portPart = window.location.port && window.location.port !== '443' ? `:${window.location.port}` : '';
-  //const frontendBaseUrl = `${window.location.protocol}//${window.location.hostname}${portPart}`;
-  //return `${frontendBaseUrl}/public/`;
   if (!name) {
     name = UserAvatarRefEnum.Peashooter
   }

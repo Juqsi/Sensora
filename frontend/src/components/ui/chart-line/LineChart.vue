@@ -6,6 +6,9 @@ import { Axis, type BulletLegendItemInterface, CurveType, Line } from '@unovis/t
 import { VisAxis, VisLine, VisXYContainer } from '@unovis/vue'
 import { useMounted } from '@vueuse/core'
 import { type Component, computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import {useI18n} from 'vue-i18n'
+
+const {t} = useI18n()
 
 const props = withDefaults(
   defineProps<
@@ -47,7 +50,7 @@ const colors = computed(() =>
 
 const legendItems = computed<BulletLegendItemInterface[]>(() => {
   return props.categories.map((category, i) => ({
-    name: category,
+    name: t(category),
     color: colors.value[i],
     inactive: false,
   }))

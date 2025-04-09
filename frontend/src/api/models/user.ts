@@ -69,10 +69,10 @@ export interface User {
 export enum UserAvatarRefEnum {
   Peashooter = 'Peashooter',
   Sunflower = 'Sunflower',
-  CherryBomb = 'Cherry-Bomb',
-  WallNut = 'Wall-Nut',
-  PotatoMine = 'Potato-Mine',
-  SnowPea = 'Snow-Pea',
+  CherryBomb = 'Cherry Bomb',
+  WallNut = 'Wall-nut',
+  PotatoMine = 'Potato Mine',
+  SnowPea = 'Snow Pea',
   Chomper = 'Chomper',
   Repeater = 'Repeater',
 }

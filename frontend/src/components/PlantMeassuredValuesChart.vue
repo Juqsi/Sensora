@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n'
 import { computed, type PropType } from 'vue'
 import { ilk } from '@/api'
 
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 
 const props = defineProps({
   data: {

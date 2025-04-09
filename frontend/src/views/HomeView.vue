@@ -48,6 +48,7 @@ onMounted(() => {
       </h1>
       <p class="text-sm text-muted-foreground">{{ t('home.subtitle') }}</p>
     </div>
+    <router-link to="profile">
     <Avatar>
       <AvatarImage
         alt="profile Picture"
@@ -55,6 +56,7 @@ onMounted(() => {
       />
       <AvatarFallback>{{userStore.user?.firstname[0] ?? ''}}</AvatarFallback>
     </Avatar>
+    </router-link>
   </div>
 
   <div class="w-full my-2">

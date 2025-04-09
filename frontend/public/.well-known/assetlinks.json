@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "de.justilian.sensora.app",
+    "sha256_cert_fingerprints": [
+      "5B:E6:C4:B6:59:57:DE:03:B4:CF:39:1C:3C:7F:2F:85:41:78:28:4F:83:9B:8E:7E:00:15:03:40:D7:4B:50:34"
+    ]
+  }
+}]

@@ -18,6 +18,7 @@ import { Settings } from 'lucide-vue-next'
 import ShareLink from '@/components/ShareLink.vue'
 import { useGenerateInviteToken } from '@/composables/useGenerateInviteToken.ts'
 import {useRoute} from 'vue-router'
+import { Capacitor } from '@capacitor/core'
 
 const route = useRoute()
 
@@ -26,10 +27,21 @@ const { t } = useI18n()
 const defaultOpenValues = ref(groupStore.groups.length === 1 ? [groupStore.groups[0].gid] : [])
 const inviteToken = ref('')
 
+
 const generateInviteToken = async (groupId: string) => {
-  const portPart =
-    window.location.port && window.location.port !== '443' ? `:${window.location.port}` : ''
-  const frontendBaseUrl = `${window.location.protocol}//${window.location.hostname}${portPart}`
+  let frontendBaseUrl = ''
+
+  if (Capacitor.getPlatform() === 'android') {
+    frontendBaseUrl = import.meta.env.VITE_FRONTEND_URL
+  } else {
+    const portPart =
+      window.location.port && window.location.port !== '443'
+        ? `:${window.location.port}`
+        : ''
+    frontendBaseUrl = `${window.location.protocol}//${window.location.hostname}${portPart}`
+  }
+
+  // 👇 Token generieren
   inviteToken.value = `${frontendBaseUrl}/groups?inviteToken=${await useGenerateInviteToken().generateInviteToken(groupId)}`
 }
 
