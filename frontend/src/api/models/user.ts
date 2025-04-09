@@ -70,7 +70,7 @@ export enum UserAvatarRefEnum {
   Peashooter = 'Peashooter',
   Sunflower = 'Sunflower',
   CherryBomb = 'Cherry-Bomb',
-  WallNut = 'Wall-nut',
+  WallNut = 'Wall-Nut',
   PotatoMine = 'Potato-Mine',
   SnowPea = 'Snow-Pea',
   Chomper = 'Chomper',
