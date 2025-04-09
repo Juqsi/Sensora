@@ -1,0 +1,301 @@
+{
+  "authorized_controllers": {
+    "6fa97fda-8878-47c6-974b-850f28a19964": {
+      "token": "48021b5d-471d-46da-a27c-dadb7dce7fec",
+      "token_hash": "73c1be25dfc76fda82f32abadd1f0fbff0738231da5bc41a180ae13416a8bdfc",
+      "model": "Test-Controller",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-03-21 00:07:07.642476"
+    },
+    "60686101-61d8-4ea4-b6a6-8237233592b8": {
+      "token": "092d0906-a242-42dc-b2da-fd6c1c1ecd2a",
+      "token_hash": "651cca871e90cf49ef184b81dee14c8f55bb9244cbed72fc8bdf7e14485586cb",
+      "model": "Test-Controller",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-03-21 01:24:33.076855"
+    },
+    "e1473d10-ae2c-4ecb-843a-8e96da3470a9": {
+      "token": "f3d7474f-eca9-4836-9f47-1e517a24871b",
+      "token_hash": "c0ab51593fe347157f9aabfc21736f99456c0e85819b16ab11b7d9a023bd5f77",
+      "model": "Test-Controller",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-03-21 01:34:13.566424"
+    },
+    "88b8b308-5eae-47d5-a7d5-aa0f07a65deb": {
+      "token": "34e6ba64-b5ad-446e-a198-3a6c7ac563be",
+      "token_hash": "4bcbf8ec8edece735c7a844fef2274ee16e9c8bf9b151abb121753ca3ae30e5b",
+      "model": "Test-Controller",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-03-21 01:50:24.522112"
+    },
+    "bd988926-e232-4841-9184-d75c81bd338c": {
+      "token": "38eaf167-96d2-446b-ba7d-9d3a53e1523d",
+      "token_hash": "a60679e19537d2cd24ada25a755eea0debd42691efa8f111b5a54fd7b4dc9fc8",
+      "model": "Test-Controller",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-03-21 01:57:56.359749"
+    },
+    "fbb561b8-bdfd-4509-a131-fe14b397b5f4": {
+      "token": "35f14861-5ad4-4411-9a0f-2274af5fe077",
+      "token_hash": "5211b9e9f9ea167e1a444d835c1b42410916642ada9031b8472fd00b31e2ebda",
+      "model": "Test-Controller",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-03-21 02:12:58.921584"
+    },
+    "controller1": {
+      "token": "f1ea1ac0-d532-4283-8510-9d32256a052b",
+      "token_hash": "0e18d711afd037ce98fdcfb1ae241c59c3da27d4810006c96903c23c32b0c4b5",
+      "model": "Test-Controller",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-03-21 13:07:59.886725"
+    },
+    "c7878e52-247f-43a1-bc4e-ba045b1bdfa2": {
+      "token": "b51865dd-5f79-4ce4-83a9-c89d5f03deaa",
+      "token_hash": "930d6e31f012278c70a668b23e1119bf98a044cfc74143cc597c621355862983",
+      "model": "Test-Controller",
+      "username": "user1",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-04-03 13:38:51.943933"
+    },
+    "32795ddd-443e-4d4f-a80a-b116d8d9ace6": {
+      "token": "06e1d62f-1a4c-433f-a6ac-73b991f4ef98",
+      "token_hash": "8039289a1ad24d43a42b5a08a6335197b0ac1407677e9f350af904daa51bd63d",
+      "model": "Test-Controller",
+      "username": "user1",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-04-03 14:37:58.781258"
+    },
+    "5f8ffa78-b024-4442-a818-58de44bdddfb": {
+      "token": "eda60292-6463-479c-97e2-bb52bc297e09",
+      "token_hash": "070c9ee534d97db8842be1267f103fee1e665392b246414cc706a392177d8f9c",
+      "model": "Test-Controller",
+      "username": "user1",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-04-03 15:00:56.228479"
+    },
+    "d8e20ff4-430a-4896-8e07-4abe817c4094": {
+      "token": "50d2e409-8d92-4177-9cb8-f9ddd504df61",
+      "token_hash": "ac343cf899d8b23c1dc41535cc1911abb97dd6d7cceea2411ce47041a69c0476",
+      "model": "Test-Controller",
+      "username": "user1",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-04-03 15:21:30.764658"
+    },
+    "ee75caa0-a831-4009-bbf1-866f41c8dd7f": {
+      "token": "05bf92c7-c2c4-4983-a6cc-a4931b74153a",
+      "token_hash": "dc23e32ac93ebecea3ad143f45cc9fc9b82e22323939b41b6be5a5b10d2e4933",
+      "model": "Test-Controller",
+      "username": "user1",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-04-03 15:33:54.245450"
+    },
+    "cd73e2d1-54c4-4be7-980a-889e9b35d58d": {
+      "token": "bfadc5c1-0f8b-4a06-a2c0-e889f8587b2b",
+      "token_hash": "84303fcedf6e56fa8a6db6e033f8bba9089ba93be3aef50db4e61a766ff40cd9",
+      "model": "Test-Controller",
+      "username": "user1",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-04-03 15:41:25.017600"
+    },
+    "8486db78-2a78-4b03-b8ee-69b5c89f10ee": {
+      "token": "b853c0ba-c079-44f3-8623-dc1d491d2a3a",
+      "token_hash": "c376b748eb15790689bafcf2d63b980e448a3d03c7e1fc467a906b682b5882f5",
+      "model": "Test-Controller",
+      "username": "user1",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-04-03 15:44:27.495851"
+    },
+    "33d2e221-5219-4842-a0fd-cd6fbdd6d17c": {
+      "token": "6d881ff8-388f-40e1-9fba-c4d54106f90b",
+      "token_hash": "179919d29eabfc98e8129d6d97b33c369afee1e441eef8242233dff23d2c0b14",
+      "model": "Test-Controller",
+      "username": "user1",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-04-03 15:47:35.007524"
+    },
+    "c70f1fe7-8958-4c91-a9ad-6fa9b1c2ade2": {
+      "token": "fce6cd96-e321-46ab-bf25-8715bb428137",
+      "token_hash": "8fb742f3eee022484c5a51df4a64e976be6ed0924d6939f35e93af616c93e51e",
+      "model": "Test-Controller",
+      "username": "user1",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-04-03 15:51:42.020399"
+    },
+    "6fc0dc7b-d34c-4a56-b033-100db523f464": {
+      "token": "03eac456-1287-4bce-a73e-91637aae9127",
+      "token_hash": "6711e8b500c12d9ad33477022bf979b95f57e31df46776334583dec1b2888936",
+      "model": "Test-Controller",
+      "username": "user1",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-04-03 16:05:04.201329"
+    },
+    "2e46650d-936d-4b22-bc07-0b6657add41a": {
+      "token": "b8b2ade8-6301-4e94-bb2e-2914306d3659",
+      "token_hash": "69ce5a8c78c3f9739aa6b4d0af042a37ef0f8c7ce67037876fdf72323449b6ad",
+      "model": "Test-Controller",
+      "username": "user1",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-04-03 16:09:19.416341"
+    },
+    "10e867db-d440-4ca7-bf01-213d8869c219": {
+      "token": "07a70cbb-a649-4ed9-af1a-a174239df8c0",
+      "token_hash": "7a92f3b777538268dbb1e9033575ad459cc2a2df187d44d0ec2390611d8fb8f5",
+      "model": "Test-Controller",
+      "username": "user1",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-04-03 16:27:04.006993"
+    },
+    "94a679cf-8dba-4ee1-ba6f-23ffd6bfda50": {
+      "token": "4b05ba9a-1da7-48ba-88c9-bb7fa6c305a9",
+      "token_hash": "b28946b78570e21df3213c2eb7c21081f7b56299f40e8d279a60e63e6f031c5e",
+      "model": "Test-Controller",
+      "username": "user1",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-04-03 16:31:32.510177"
+    }
+  },
+  "solace_credentials": {
+    "6fa97fda-8878-47c6-974b-850f28a19964": {
+      "username": "controller_6fa97fda",
+      "password": "5f18SnQaClSBrR05eQr6QC_4YhyOzPrpDEEeipojYzA",
+      "publish_topic": "sensora/v1/send/6fa97fda-8878-47c6-974b-850f28a19964",
+      "subscribe_topic": "sensora/v1/receive/6fa97fda-8878-47c6-974b-850f28a19964/targetValues",
+      "did": "6fa97fda-8878-47c6-974b-850f28a19964",
+      "model": "Unknown"
+    },
+    "60686101-61d8-4ea4-b6a6-8237233592b8": {
+      "username": "controller_60686101",
+      "password": "qVE4rnfb6A5SNgGeSRei6YazBs8hrGJgawLtECOoVKk",
+      "publish_topic": "sensora/v1/send/60686101-61d8-4ea4-b6a6-8237233592b8",
+      "subscribe_topic": "sensora/v1/receive/60686101-61d8-4ea4-b6a6-8237233592b8/targetValues",
+      "did": "60686101-61d8-4ea4-b6a6-8237233592b8",
+      "model": "Unknown"
+    },
+    "e1473d10-ae2c-4ecb-843a-8e96da3470a9": {
+      "username": "controller_e1473d10",
+      "password": "-xseDBZ8FCQd6l7OOI-6gTp_a16GMX1_eBMVKtiB1qs",
+      "publish_topic": "sensora/v1/send/e1473d10-ae2c-4ecb-843a-8e96da3470a9",
+      "subscribe_topic": "sensora/v1/receive/e1473d10-ae2c-4ecb-843a-8e96da3470a9/targetValues",
+      "did": "e1473d10-ae2c-4ecb-843a-8e96da3470a9",
+      "model": "Unknown"
+    },
+    "88b8b308-5eae-47d5-a7d5-aa0f07a65deb": {
+      "username": "controller_88b8b308",
+      "password": "w0ZWX0OmKNls7QbSbagwOR9kyf-isAUpiH51NuTZ6nk",
+      "publish_topic": "sensora/v1/send/88b8b308-5eae-47d5-a7d5-aa0f07a65deb",
+      "subscribe_topic": "sensora/v1/receive/88b8b308-5eae-47d5-a7d5-aa0f07a65deb/targetValues",
+      "did": "88b8b308-5eae-47d5-a7d5-aa0f07a65deb",
+      "model": "Unknown"
+    },
+    "fbb561b8-bdfd-4509-a131-fe14b397b5f4": {
+      "username": "controller_fbb561b8",
+      "password": "euDH2-t5nZVhvc2_HxzhOdLTdieAwQqYOqvUwW5NEsc",
+      "publish_topic": "sensora/v1/send/fbb561b8-bdfd-4509-a131-fe14b397b5f4",
+      "subscribe_topic": "sensora/v1/receive/fbb561b8-bdfd-4509-a131-fe14b397b5f4/targetValues",
+      "did": "fbb561b8-bdfd-4509-a131-fe14b397b5f4",
+      "model": "Unknown"
+    },
+    "controller1": {
+      "username": "controller_controll",
+      "password": "LHfFFcQp4jIi1ZfdcnxUwECLu7uBS4ilMgQPcrIFzUo",
+      "publish_topic": "sensora/v1/send/controller1",
+      "subscribe_topic": "sensora/v1/receive/controller1/targetValues",
+      "did": "controller1",
+      "model": "Unknown"
+    },
+    "32795ddd-443e-4d4f-a80a-b116d8d9ace6": {
+      "username": "controller_32795ddd",
+      "password": "eLRfCPGOvgoni4WQOI_SoiG55OEahUbLGnPPy_utr7M",
+      "publish_topic": "sensora/v1/send/32795ddd-443e-4d4f-a80a-b116d8d9ace6",
+      "subscribe_topic": "sensora/v1/receive/32795ddd-443e-4d4f-a80a-b116d8d9ace6/targetValues",
+      "did": "32795ddd-443e-4d4f-a80a-b116d8d9ace6",
+      "model": "Unknown",
+      "broker_url": "your-solace-broker",
+      "broker_port": 1883,
+      "broker_ssl": false
+    },
+    "5f8ffa78-b024-4442-a818-58de44bdddfb": {
+      "username": "controller_5f8ffa78",
+      "password": "0ov4Pub5Gs9AH9yp_sTrD_gqWplfUeYacadIDfCRB8g",
+      "publish_topic": "sensora/v1/send/5f8ffa78-b024-4442-a818-58de44bdddfb",
+      "subscribe_topic": "sensora/v1/receive/5f8ffa78-b024-4442-a818-58de44bdddfb/targetValues",
+      "did": "5f8ffa78-b024-4442-a818-58de44bdddfb",
+      "model": "Unknown",
+      "broker_url": "solace",
+      "broker_port": 1883,
+      "broker_ssl": false
+    },
+    "ee75caa0-a831-4009-bbf1-866f41c8dd7f": {
+      "username": "controller_ee75caa0",
+      "password": "fozZxM3TOYcwi45uhxItZOVvfrjCX5fQK9mfRYvSk8s",
+      "publish_topic": "sensora/v1/send/ee75caa0-a831-4009-bbf1-866f41c8dd7f",
+      "subscribe_topic": "sensora/v1/receive/ee75caa0-a831-4009-bbf1-866f41c8dd7f/targetValues",
+      "did": "ee75caa0-a831-4009-bbf1-866f41c8dd7f",
+      "model": "Unknown",
+      "broker_url": "solace",
+      "broker_port": 1883,
+      "broker_ssl": false
+    },
+    "c70f1fe7-8958-4c91-a9ad-6fa9b1c2ade2": {
+      "username": "controller_c70f1fe7",
+      "password": "9be5YkYMsuHbucLKUBNrRIxDADfPP_R_SBNSazJpVBQ",
+      "publish_topic": "sensora/v1/send/c70f1fe7-8958-4c91-a9ad-6fa9b1c2ade2",
+      "subscribe_topic": "sensora/v1/receive/c70f1fe7-8958-4c91-a9ad-6fa9b1c2ade2/targetValues",
+      "did": "c70f1fe7-8958-4c91-a9ad-6fa9b1c2ade2",
+      "model": "Unknown",
+      "broker_url": "solace",
+      "broker_port": 1883,
+      "broker_ssl": false
+    },
+    "6fc0dc7b-d34c-4a56-b033-100db523f464": {
+      "username": "controller_6fc0dc7b",
+      "password": "OWHnWjLUF8wgbZdTk6uZnUe-B0p08lZOiVMC8PxtPF8",
+      "publish_topic": "sensora/v1/send/6fc0dc7b-d34c-4a56-b033-100db523f464",
+      "subscribe_topic": "sensora/v1/receive/6fc0dc7b-d34c-4a56-b033-100db523f464/targetValues",
+      "did": "6fc0dc7b-d34c-4a56-b033-100db523f464",
+      "model": "Unknown",
+      "broker_url": "solace",
+      "broker_port": 1883,
+      "broker_ssl": false
+    },
+    "2e46650d-936d-4b22-bc07-0b6657add41a": {
+      "username": "controller_2e46650d",
+      "password": "owxf3L-BrbVp24X44NokdKB9IeKoRtpdh9trOPV0Bfs",
+      "publish_topic": "sensora/v1/send/2e46650d-936d-4b22-bc07-0b6657add41a",
+      "subscribe_topic": "sensora/v1/receive/2e46650d-936d-4b22-bc07-0b6657add41a/targetValues",
+      "did": "2e46650d-936d-4b22-bc07-0b6657add41a",
+      "model": "Unknown",
+      "broker_url": "solace",
+      "broker_port": 1883,
+      "broker_ssl": false
+    },
+    "10e867db-d440-4ca7-bf01-213d8869c219": {
+      "username": "controller_10e867db",
+      "password": "JKVPie4tqKrQ1_HldERVN8SwCLR2HYEkuOPupdmE2Ww",
+      "publish_topic": "sensora/v1/send/10e867db-d440-4ca7-bf01-213d8869c219",
+      "subscribe_topic": "sensora/v1/receive/10e867db-d440-4ca7-bf01-213d8869c219/targetValues",
+      "did": "10e867db-d440-4ca7-bf01-213d8869c219",
+      "model": "Unknown",
+      "broker_url": "solace",
+      "broker_port": 1883,
+      "broker_ssl": false
+    },
+    "94a679cf-8dba-4ee1-ba6f-23ffd6bfda50": {
+      "username": "controller_94a679cf",
+      "password": "y4d4q5FyZAkzNYLH6n01msl7ZBOm5CBgwvTM4fA0SGo",
+      "publish_topic": "sensora/v1/send/94a679cf-8dba-4ee1-ba6f-23ffd6bfda50",
+      "subscribe_topic": "sensora/v1/receive/94a679cf-8dba-4ee1-ba6f-23ffd6bfda50/targetValues",
+      "did": "94a679cf-8dba-4ee1-ba6f-23ffd6bfda50",
+      "model": "Unknown",
+      "broker_url": "solace",
+      "broker_port": 1883,
+      "broker_ssl": false
+    }
+  },
+  "active_challenges": {
+    "930d6e31f012278c70a668b23e1119bf98a044cfc74143cc597c621355862983": {
+      "challenge": "0cfae0b7e8aa4cb7bef95cc8ce982860",
+      "timestamp": "2025-04-03 13:44:15.886908"
+    }
+  }
+}

@@ -1,4 +1,3 @@
-
 services:
   mailservice:
     build: ./mailservice
@@ -13,6 +12,7 @@ services:
     container_name: databasewriter
     env_file:
       - .env
+
 
   setpointapi:
     build: ./setpointapi
@@ -37,11 +37,20 @@ services:
     environment:
       - username_admin_globalaccesslevel=${SOLACE_ADMIN_USER}
       - username_admin_password=${SOLACE_ADMIN_PASS}
+      - system_scaling_maxconnectioncount=100
+      - system_scaling_maxqueuemessagecount=100
+      - system_scaling_maxqueuesize=100M
+      - system_scaling_maxqueuesize_guaranteed=100M
+    volumes:
+      - solace-data:/var/lib/solace
+      - solace-config:/var/lib/solace/config
     ulimits:
       nofile:
-        soft: 2448
-        hard: 6592
-    shm_size: 2g
+        soft: 1048576
+        hard: 1048576
+    shm_size: 4g
+    mem_limit: 4g
+    mem_reservation: 2g
 
   solace-init:
     build: ./solace-init
@@ -49,3 +58,22 @@ services:
       - SOLACE_USER=${SOLACE_ADMIN_USER}
       - SOLACE_PASS=${SOLACE_ADMIN_PASS}
       - SOLACE_HOST=http://solace:8080
+
+
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    volumes:
+      - ./config:/config
+    ports:
+      - "5001:5000"
+    environment:
+      - SOLACE_HOST=http://solace:8080
+      - SOLACE_VPN=default
+      - SOLACE_ADMIN_USER=${SOLACE_ADMIN_USER}
+      - SOLACE_ADMIN_PASS=${SOLACE_ADMIN_PASS}
+      - ADMIN_KEY=${ADMIN_KEY}
+
+volumes:
+  solace-data:
+  solace-config:

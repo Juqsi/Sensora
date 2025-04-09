@@ -9,7 +9,7 @@ import time
 
 # 🔹 Solace Konfiguration
 SOLACE_CONFIG = {
-    "solace.messaging.transport.host": os.getenv("SOLACE_HOST", "tcp://localhost:55555"),
+    "solace.messaging.transport.host": os.getenv("SOLACE_HOST", "tcp://solace:55555"),
     "solace.messaging.service.vpn-name": os.getenv("SOLACE_VPN", "default"),
     "solace.messaging.authentication.basic.username": os.getenv("SOLACE_USER", "admin"),
     "solace.messaging.authentication.basic.password": os.getenv("SOLACE_PASS", "admin"),

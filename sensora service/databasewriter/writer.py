@@ -12,13 +12,13 @@ DB_CONFIG = {
     "dbname": os.getenv("DB_NAME", "sensora"),
     "user": os.getenv("DB_USER", "postgres"),
     "password": os.getenv("DB_PASS", "postgres"),
-    "host": os.getenv("DB_HOST", "localhost"),
+    "host": os.getenv("DB_HOST", "host.docker.internal"),
     "port": os.getenv("DB_PORT", "5432")
 }
 
 # 🔹 Solace Konfiguration
 SOLACE_CONFIG = {
-    "solace.messaging.transport.host": os.getenv("SOLACE_HOST", "tcp://localhost:55555"),
+    "solace.messaging.transport.host": os.getenv("SOLACE_HOST", "tcp://solace:55555"),
     "solace.messaging.service.vpn-name": os.getenv("SOLACE_VPN", "default"),
     "solace.messaging.authentication.basic.username": os.getenv("SOLACE_USER", "admin"),
     "solace.messaging.authentication.basic.password": os.getenv("SOLACE_PASS", "admin"),
@@ -30,15 +30,19 @@ CHECK_INTERVAL = 60  # Alle 60 Sekunden prüfen
 
 # 🔹 Verbindung zur Datenbank
 def get_db_connection():
+    print(f"🔍 Versuche Verbindung zur Datenbank mit Konfiguration: {DB_CONFIG}")
     try:
         conn = psycopg2.connect(**DB_CONFIG, client_encoding="UTF8")
+        print("✅ Datenbankverbindung erfolgreich hergestellt!")
         return conn
     except Exception as e:
         print(f"❌ [DB] Fehler beim Herstellen der Verbindung: {e}")
+        print(f"❌ [DB] Host: {DB_CONFIG['host']}, Port: {DB_CONFIG['port']}, DB: {DB_CONFIG['dbname']}")
         return None
 
 # 🔹 Sensorwerte speichern
 def save_sensor_data(sensor_id, values, controller_id):
+    print(f"🔍 Versuche Sensorwerte zu speichern für Sensor {sensor_id} von Controller {controller_id}")
     conn = get_db_connection()
     if not conn:
         print("❌ [DB] Verbindung nicht verfügbar. Breche Speicherung ab.")
@@ -47,6 +51,42 @@ def save_sensor_data(sensor_id, values, controller_id):
     try:
         cur = conn.cursor()
 
+        # 🔍 Prüfe ob Controller existiert
+        cur.execute("SELECT did FROM sensora.controllers WHERE did = %s", (controller_id,))
+        if not cur.fetchone():
+            print(f"⚠️ [DB] Controller {controller_id} existiert nicht. Werte werden nicht gespeichert.")
+            return
+
+        # 🔍 Prüfe ob Sensor existiert, wenn nicht -> anlegen
+        cur.execute("SELECT sid, plant FROM sensora.sensors WHERE sid = %s", (sensor_id,))
+        sensor_result = cur.fetchone()
+        
+        if not sensor_result:
+            print(f"ℹ️ [DB] Sensor {sensor_id} existiert nicht. Lege neu an...")
+            # Extrahiere Sensor-Informationen aus der ersten Nachricht
+            sensor_info = next((s for s in values[0].get("sensor_info", []) if s.get("sid") == sensor_id), {})
+            
+            cur.execute("""
+                INSERT INTO sensora.sensors (sid, ilk, unit, controller, plant)
+                VALUES (%s, %s, %s, %s, NULL)
+            """, (
+                sensor_id,
+                sensor_info.get("ilk", "unknown"),
+                sensor_info.get("unit", ""),
+                controller_id
+            ))
+            conn.commit()
+            print(f"✅ [DB] Sensor {sensor_id} wurde angelegt und Controller {controller_id} zugeordnet.")
+            plant_id = None
+        else:
+            plant_id = sensor_result[1]
+
+        # 🔍 Prüfe ob Sensor einer Pflanze zugeordnet ist
+        if not plant_id:
+            print(f"⚠️ [DB] Sensor {sensor_id} ist keiner Pflanze zugeordnet. Werte werden nicht gespeichert.")
+            return
+
+        # 🔄 Werte speichern
         for entry in values:
             timestamp = entry.get("timestamp", "CURRENT_TIMESTAMP")
             value = entry.get("value", None)
@@ -56,15 +96,6 @@ def save_sensor_data(sensor_id, values, controller_id):
                 continue
 
             vid = str(uuid.uuid4())
-
-            # 🔍 Plant aus der DB holen
-            cur.execute("SELECT plant FROM sensora.sensors WHERE sid = %s", (sensor_id,))
-            plant_result = cur.fetchone()
-            plant_id = plant_result[0] if plant_result else None
-
-            if not plant_id:
-                print(f"⚠️ [DB] Kein `plant` für Sensor {sensor_id} gefunden. Wert wird nicht gespeichert.")
-                continue
 
             print(f"🔍 [DB] Speichere Wert -> Sensor: {sensor_id}, Wert: {value}, Zeit: {timestamp}, Controller: {controller_id}, Plant: {plant_id}")
 

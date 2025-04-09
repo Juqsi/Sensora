@@ -1,0 +1,6 @@
+Flask==2.3.3
+requests==2.31.0
+python-dotenv==1.0.0
+cryptography==42.0.5
+paho-mqtt==1.6.1
+psycopg2-binary==2.9.9 
