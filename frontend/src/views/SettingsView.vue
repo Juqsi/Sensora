@@ -20,10 +20,10 @@ enum Views {
 const activeView = ref<Views>(Views.MAIN)
 
 const ViewTitles: Record<Views, string> = {
-  [Views.MAIN]: 'Settings',
-  [Views.ACCOUNT]: 'Account Settings',
-  [Views.LANGUAGE]: 'Language Settings',
-  [Views.APPEARANCE]: 'Appearance',
+  [Views.MAIN]: t('settings.views.MAIN'),
+  [Views.ACCOUNT]: t('settings.views.ACCOUNT'),
+  [Views.LANGUAGE]: t('settings.views.LANGUAGE'),
+  [Views.APPEARANCE]: t('settings.views.APPEARANCE'),
 }
 
 // Methode zum Wechseln der Ansicht
@@ -88,7 +88,7 @@ const switchView = (view: Views) => {
         <Appearance v-else-if="activeView === Views.APPEARANCE" />
         <LanguageForm v-else-if="activeView === Views.LANGUAGE" />
         <button class="text-primary hover:underline" @click="switchView(Views.MAIN)">
-          Back to Settings
+          {{t('settings.back')}}
         </button>
       </template>
     </CardContent>

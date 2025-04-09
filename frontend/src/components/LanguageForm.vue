@@ -43,9 +43,7 @@ const updateLanguage = (newLanguage: string) => {
 
   <form>
     <FormField v-slot="{ componentField }" name="language" type="radio">
-      <FormItem class="space-y-1">
-        <FormLabel>{{ t('language.LanguageLabel') }}</FormLabel>
-        <FormDescription> {{ t('language.LanguageDescription') }}</FormDescription>
+      <FormItem class="space-y-1 my-4">
         <FormMessage />
 
         <RadioGroup

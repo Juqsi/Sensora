@@ -18,8 +18,7 @@ const userStore = useUserStore()
           <Avatar shape="circle" size="sm">
             <AvatarImage
               :alt="t('Profile.ProfilePicture')"
-              class="ml-3"
-              :src="STATICS_PATH + userStore.user?.avatarRef "
+              :src="STATICS_PATH(userStore.user?.avatarRef)"
             />
             <AvatarFallback>{{userStore.user?.firstname[0]??''}}</AvatarFallback>
           </Avatar>

@@ -191,7 +191,6 @@ onMounted(() => {
 })
 
 const getLatestLastCall = (controller: Controller): string => {
-  console.log('Controller beim Aufruf:', controller);
   return controller.sensors
     .sort((a, b) => {
       const dateA = new Date(a.lastCall!).getTime();

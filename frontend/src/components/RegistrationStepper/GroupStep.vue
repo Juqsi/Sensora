@@ -46,8 +46,8 @@ const createGroupSubmit = async () => {
 <template>
   <Card class="mx-auto max-w-sm w-full">
     <CardHeader>
-      <CardTitle class="text-xl">Create your Home</CardTitle>
-      <CardDescription>Create your Home and manage the access with groups</CardDescription>
+      <CardTitle class="text-xl">{{t('account.CreateHome')}}</CardTitle>
+      <CardDescription>{{t('account.CreateHomeDescription')}}</CardDescription>
     </CardHeader>
     <CardContent>
       <form class="grid items-start gap-4" @submit.prevent="createGroupSubmit">

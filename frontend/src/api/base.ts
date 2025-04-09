@@ -1,8 +1,17 @@
 import apiClient from './apiClient'
 import type { AxiosRequestConfig } from 'axios'
+import { UserAvatarRefEnum } from '@/api/models'
 
 export const BASE_PATH = import.meta.env.VITE_API_BASE || ''
-export const STATICS_PATH  = BASE_PATH + '/statics/'
+export const STATICS_PATH  =  (name:string | undefined) => {
+  //const portPart = window.location.port && window.location.port !== '443' ? `:${window.location.port}` : '';
+  //const frontendBaseUrl = `${window.location.protocol}//${window.location.hostname}${portPart}`;
+  //return `${frontendBaseUrl}/public/`;
+  if (!name) {
+    name = UserAvatarRefEnum.Peashooter
+  }
+  return '/public/profilePictures/' + name + ".jpeg"
+};
 
 export class BaseAPI {
   constructor(

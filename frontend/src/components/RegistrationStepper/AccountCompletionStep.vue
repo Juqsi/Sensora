@@ -28,8 +28,8 @@ async function handleSubmit() {
 <template>
   <Card class="mx-auto max-w-sm w-full">
     <CardHeader>
-      <CardTitle class="text-xl">Account Login</CardTitle>
-      <CardDescription>Enter your email and password to proceed</CardDescription>
+      <CardTitle class="text-xl">{{t('account.Login')}}</CardTitle>
+      <CardDescription>{{t('account.LoginDescription')}}</CardDescription>
     </CardHeader>
     <CardContent>
       <form @submit.prevent="handleSubmit">

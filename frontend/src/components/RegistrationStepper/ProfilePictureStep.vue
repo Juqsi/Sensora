@@ -6,6 +6,10 @@ import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { UserAvatarRefEnum } from '@/api'
 import { useUserStore } from '@/stores'
+import { STATICS_PATH } from '@/api/base.ts'
+import i18n from '@/i18n'
+
+const t = i18n.global?.t || ((key: string) => key)
 
 const props = defineProps<{ nextStep: () => void }>()
 
@@ -50,13 +54,13 @@ const handleSubmit = async () => {
               <img
                 :alt="avatar"
                 class="w-15 h-15 rounded-full"
-                src="https://avatars.githubusercontent.com/u/91261422?v=4&size=64"
+                :src="STATICS_PATH(avatar)"
               />
             </div>
             <Label :for="`avatar-${avatar}`" class="text-sm text-center">{{ avatar }}</Label>
           </div>
         </RadioGroup>
-        <Button :disabled="!selectedAvatar" class="w-full mt-4" type="submit">Continue</Button>
+        <Button :disabled="!selectedAvatar" class="w-full mt-4" type="submit">{{t('register.Continue')}}</Button>
       </form>
     </CardContent>
   </Card>

@@ -21,9 +21,13 @@ const password = ref('')
 
 function validatePassword(password: string): string | null {
   const specialCharacters = /[!"#$%&'()*+,-./:;<=>?[\]^_`{|}~]/
+  const uppercaseCharacters = /[A-Z]/
 
   if (password.length < 8) {
     return 'register.MinLength'
+  }
+  if (!uppercaseCharacters.test(password)) {
+    return 'register.UppercaseRequired'
   }
   if (!specialCharacters.test(password)) {
     return 'register.SpecialCharRequired'
@@ -47,7 +51,7 @@ const handleSubmit = async () => {
   try {
     await authApiClient.createAccount(accountInfos, {
       meta: {
-        successMessage: 'Dein Konto wurde erfolgreich erstellt!',
+        successMessage: t('account.AccountCreated'),
       },
     } as CustomAxiosRequestConfig)
 
@@ -74,7 +78,7 @@ const handleSubmit = async () => {
             <div class="grid gap-4">
               <div class="grid gap-2">
                 <Label for="username">{{ t('login.username') }}*</Label>
-                <Input id="username" v-model="username" placeholder="Max" required />
+                <Input id="username" v-model="username" placeholder="Joe" required />
               </div>
             </div>
             <div class="grid gap-2">
@@ -82,7 +86,7 @@ const handleSubmit = async () => {
               <Input
                 id="email"
                 v-model="email"
-                placeholder="JohnDoe@sensora.de"
+                placeholder="JoeDoe@sensora.de"
                 required
                 type="email"
               />

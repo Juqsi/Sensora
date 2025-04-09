@@ -148,6 +148,15 @@
     "technologiesTitle": "Technologies We Use",
     "title": "About Us"
   },
+  "account": {
+    "AccountCreated": "Account successful created!",
+    "CreateHome": "Create your Home",
+    "CreateHomeDescription": "Create your Home and manage the access",
+    "Login": "Account Login",
+    "LoginDescription": "Enter your email and password to proceed",
+    "forename": "Firstname",
+    "surname": "Surname"
+  },
   "active": "Active",
   "appearance": {
     "Dark": "Dark",
@@ -293,7 +302,8 @@
     "SignUp": "Sign Up",
     "SignUpInfo": "Enter your information to create an account",
     "SignUpWithA": "Sign up with A",
-    "Success": "Login successful"
+    "Success": "Login successful",
+    "username": "Username"
   },
   "plant": {
     "NoInformationSubtitle": "Sadly, we have currently no data about this plant in our datebase.",
@@ -346,12 +356,23 @@
     "Support": "Support"
   },
   "register": {
+    "Continue": "continue",
     "MinLength": "The password must be at least 8 characters long.",
-    "SpecialCharRequired": "The password must contain at least one special character (!\"#$%&'()*+,-./:;<=>?[]^_{}|~)."
+    "SpecialCharRequired": "The password must contain at least one special character (!\"#$%&'()*+,-./:;<=>?[]^_{}|~).",
+    "UppercaseRequired": "The password must contain at least one capital letter."
   },
   "sensorList": {
     "emptySensorSubtitle": "Add a sensor through your profile to start using it.",
     "emptySensorTitle": "Add Your First Sensor"
+  },
+  "settings": {
+    "back": "Back to Settings",
+    "views": {
+      "ACCOUNT": "Account Settings",
+      "APPEARANCE": "Appearance",
+      "LANGUAGE": "Language Settings",
+      "MAIN": "Settings"
+    }
   },
   "setupAccountStepper": {
     "1": {
@@ -376,6 +397,9 @@
     "copy": "Copy"
   },
   "soilMoisture": "Soil Moisture",
+  "success": {
+    "requestCompleted": "Load successful."
+  },
   "temperature": "Temperature",
   "title": {
     "aboutUs": "About Us",

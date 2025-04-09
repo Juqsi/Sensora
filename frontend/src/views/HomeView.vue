@@ -41,7 +41,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="w-full flex justify-between mt-4">
+  <div class="w-full flex justify-between items-stretch mt-4">
     <div>
       <h1 class="font-bold text-3xl">
         {{ t('home.welcome', { name: userStore.user?.firstname as string }) }} 👋
@@ -51,7 +51,7 @@ onMounted(() => {
     <Avatar>
       <AvatarImage
         alt="profile Picture"
-        :src="STATICS_PATH + userStore.user?.avatarRef"
+        :src="STATICS_PATH(userStore.user?.avatarRef)"
       />
       <AvatarFallback>{{userStore.user?.firstname[0] ?? ''}}</AvatarFallback>
     </Avatar>

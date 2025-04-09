@@ -61,7 +61,7 @@ onBeforeUnmount(() => {
           >
             <AvatarImage
               :alt="userStore.user?.firstname + ' ' + userStore.user?.lastname"
-              :src="STATICS_PATH + userStore.user?.avatarRef "
+              :src="STATICS_PATH(userStore.user?.avatarRef)"
             />
             <AvatarFallback >{{userStore.user?.firstname[0]??''}}</AvatarFallback>
           </Avatar>
