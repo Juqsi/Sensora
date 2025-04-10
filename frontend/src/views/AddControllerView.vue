@@ -2,24 +2,69 @@
 import { ref } from 'vue';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Info, WifiIcon, LinkIcon, RefreshCwIcon } from 'lucide-vue-next';
+import { Info, WifiIcon, LinkIcon, RefreshCwIcon, Loader2 } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from 'vue-sonner';
+import { useUserStore } from '@/stores'
+import NavCard from '@/components/NavCard.vue'
 
 const { t } = useI18n();
 const isWifiConnected = ref(false);
+const ssid = ref('');
+const wifiPassword = ref('');
+const username = ref(useUserStore().user?.username ?? "");
+const isSubmitting = ref(false);
+const submissionSuccess = ref(false);
+const submissionError = ref('');
 
 const confirmWifiConnected = () => {
   isWifiConnected.value = true;
 };
+
+const submitControllerConfig = async () => {
+  isSubmitting.value = true;
+  submissionError.value = '';
+
+  try {
+    const response = await fetch('http://192.168.0.1/config', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ssid: ssid.value,
+        password: wifiPassword.value,
+        username: username.value,
+      }),
+    });
+
+    if (response.ok) {
+      submissionSuccess.value = true;
+      toast.success(t('addController.configSuccess'));
+      ssid.value = '';
+      wifiPassword.value = '';
+      username.value = '';
+    } else {
+      const errorData = await response.json();
+      submissionError.value = errorData.message || t('addController.configErrorGeneric');
+      toast.error(t('addController.configError') + (errorData.message ? `: ${errorData.message}` : ''));
+    }
+  } catch (error: any) {
+    console.error('Error sending configuration:', error);
+    submissionError.value = t('addController.configErrorConnection');
+    toast.error(t('addController.configErrorConnection'));
+  } finally {
+    isSubmitting.value = false;
+  }
+};
 </script>
 
 <template>
-  <Card class="w-full mx-auto mt-8">
-    <CardHeader>
-      <CardTitle>{{ t('addController.title') }}</CardTitle>
-      <CardDescription>{{ t('addController.description') }}</CardDescription>
-    </CardHeader>
-    <CardContent class="space-y-4">
+  <NavCard :title="t('addController.title')" :sub-title="t('addController.description')" class="w-full mx-auto mt-8">
+    <template #default >
+      <div class="space-y-4 px-6 pb-6">
       <div class="flex items-center space-x-2">
         <Info class="h-4 w-4 text-muted-foreground" />
         <p class="text-sm text-muted-foreground">{{ t('addController.important') }}</p>
@@ -47,23 +92,37 @@ const confirmWifiConnected = () => {
         </div>
       </div>
 
-      <div class="space-y-2" v-if="isWifiConnected">
-        <h3 class="text-lg font-semibold">{{ t('addController.step3Title') }}</h3>
-        <p class="text-sm">{{ t('addController.step3Description') }}</p>
-        <div class="flex items-center space-x-2">
-          <LinkIcon class="h-4 w-4 text-primary" />
-          <p class="text-sm font-medium">192.168.0.1</p>
+      <div class="space-y-4" v-if="isWifiConnected && !submissionSuccess">
+        <h3 class="text-lg font-semibold">{{ t('addController.step3TitleForm') }}</h3>
+        <p class="text-sm">{{ t('addController.step3DescriptionForm') }}</p>
+        <div class="grid gap-2">
+          <div class="grid gap-1">
+            <Label for="ssid">{{ t('addController.ssidLabel') }}</Label>
+            <Input id="ssid" v-model="ssid" :placeholder="t('addController.ssidPlaceholder')" />
+          </div>
+          <div class="grid gap-1">
+            <Label for="wifiPassword">{{ t('addController.wifiPasswordLabel') }}</Label>
+            <Input id="wifiPassword" type="password" v-model="wifiPassword" :placeholder="t('addController.wifiPasswordPlaceholder')" />
+          </div>
+          <div class="grid gap-1">
+            <Label for="username">{{ t('addController.usernameLabel') }}</Label>
+            <Input id="username" v-model="username" :placeholder="t('addController.usernamePlaceholder')" />
+          </div>
+          <Button @click="submitControllerConfig" :disabled="isSubmitting" class="w-full">
+            <Loader2 v-if="isSubmitting" class="mr-2 h-4 w-4 animate-spin" />
+            {{ isSubmitting ? t('addController.submitting') : t('addController.submitConfig') }}
+          </Button>
+          <p v-if="submissionError" class="text-sm text-destructive">{{ submissionError }}</p>
         </div>
-        <p class="text-sm text-muted-foreground">{{ t('addController.step3Hint') }}</p>
-        <Button as="a" href="http://192.168.0.1" target="_blank" rel="noopener noreferrer" class="w-full">{{ t('addController.openConfig') }}</Button>
+        <Button as="a" href="http://192.168.0.1" target="_blank" rel="noopener noreferrer" variant="secondary" class="w-full">{{ t('addController.openConfig') }}</Button>
       </div>
 
-      <div class="space-y-2" v-if="isWifiConnected">
-        <h3 class="text-lg font-semibold">{{ t('addController.step4Title') }}</h3>
-        <p class="text-sm">{{ t('addController.step4Description') }}</p>
+      <div class="space-y-2" v-if="isWifiConnected && submissionSuccess">
+        <h3 class="text-lg font-semibold">{{ t('addController.step4SuccessTitle') }}</h3>
+        <p class="text-sm">{{ t('addController.step4SuccessDescription') }}</p>
       </div>
 
-      <div class="space-y-2" v-if="isWifiConnected">
+      <div class="space-y-2" v-if="isWifiConnected && (submissionSuccess || submissionError)">
         <h3 class="text-lg font-semibold">{{ t('addController.step5Title') }}</h3>
         <p class="text-sm">{{ t('addController.step5Description') }}</p>
         <Button as="a" href="/plants" class="w-full">
@@ -71,6 +130,7 @@ const confirmWifiConnected = () => {
           {{ t('addController.refreshPlants') }}
         </Button>
       </div>
-    </CardContent>
-  </Card>
+      </div>
+    </template>
+  </NavCard>
 </template>
