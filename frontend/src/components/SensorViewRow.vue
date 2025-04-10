@@ -52,14 +52,21 @@ const currentlyAssignedControllers = computed(() => {
   )
 })
 
-const isExtern = (did: string): boolean => {
-  if (!did) {
-    return false
+const firstAssignedController = computed(() => currentlyAssignedControllers.value[0] ?? null)
+
+const isExternal = computed(() => {
+  const did = firstAssignedController.value?.did
+  if (!did) return false
+  const device = useDeviceStore().devices.find((dev) => dev.did === did)
+  return device?.owner.username !== useUserStore().user?.username
+})
+
+const sensorLink = computed(() => {
+  if (firstAssignedController.value && !isExternal.value) {
+    return `/sensor/${firstAssignedController.value.did}`
   }
-  return useDeviceStore().devices.find(
-    (dev) => dev.did === did
-  )?.owner.username !== useUserStore().user?.username
-}
+  return '#'
+})
 </script>
 
 <template>
@@ -70,7 +77,7 @@ const isExtern = (did: string): boolean => {
       </RouterLink>
     </TableCell>
     <TableCell>
-      <RouterLink :to="currentlyAssignedControllers[0] && !isExtern(currentlyAssignedControllers[0]?.did) ? `/sensor/${plant.controllers[0].did}` : '#'">
+      <RouterLink :to="sensorLink">
         <Badge :variant="getStatus.value" class="w-full justify-center">
           {{ getStatus.label }}
         </Badge>
@@ -88,8 +95,11 @@ const isExtern = (did: string): boolean => {
       </RouterLink>
     </TableCell>
     <TableCell class="hidden md:table-cell">
-      <RouterLink :to="currentlyAssignedControllers[0] && !isExtern(currentlyAssignedControllers[0]?.did) ? `/sensor/${plant.controllers[0].did}` : '#'">
-        {{ currentlyAssignedControllers[0]?.did ?? '--' }} {{isExtern(currentlyAssignedControllers[0]?.did) ? `(${t('ext')})` : ''}}
+      <RouterLink :to="sensorLink">
+        <Badge v-if="isExternal" variant="secondary" class="text-xs px-1.5 py-0.5">
+       {{t('plant.external')}}
+        </Badge>
+        {{ firstAssignedController?.did ?? '--' }}
       </RouterLink>
     </TableCell>
     <TableCell>
@@ -105,9 +115,9 @@ const isExtern = (did: string): boolean => {
           <RouterLink :to="`/plant/${plant.plantId}/edit`">
             <DropdownMenuItem>{{ t('SensorViewRow.Edit') }}</DropdownMenuItem>
           </RouterLink>
-          <DropdownMenuItem @click="$emit('delete', plant.plantId)">{{
-            t('SensorViewRow.Delete')
-          }}</DropdownMenuItem>
+          <DropdownMenuItem @click="$emit('delete', plant.plantId)"
+            >{{ t('SensorViewRow.Delete') }}
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </TableCell>
