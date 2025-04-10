@@ -15,6 +15,7 @@ import { useI18n } from 'vue-i18n'
 import type { createGroupBody, Group } from '@/api'
 import { useGroupStore, useRoomStore } from '@/stores'
 import { useAuthRedirect } from '@/composables/useAuthRedirect.ts'
+import {toast} from 'vue-sonner'
 
 const { redirectAfterLogin } = useAuthRedirect()
 
@@ -27,6 +28,10 @@ const groupName = ref<string>('')
 const rooms = ref<Array<string>>([t('group.create.RoomEntity') as string])
 
 const createGroupSubmit = async () => {
+  if (!groupName.value.trim()) {
+    toast.warning(t('group.NameEmpty'))
+    return
+  }
   let group: Group
   try {
     let newGroup: createGroupBody = { name: groupName.value, members: [] }

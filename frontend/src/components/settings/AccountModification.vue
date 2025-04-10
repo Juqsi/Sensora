@@ -3,16 +3,13 @@ import { ref } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '@/stores'
-import { UserAvatarRefEnum } from '@/api'
 import { toast } from 'vue-sonner'
+import router from '@/router'
 
 const { t } = useI18n()
 const userStore = useUserStore()
-
-const props = defineProps<{ nextStep: () => void }>()
 
 const firstname = ref(userStore.user?.firstname ?? '')
 const lastname = ref(userStore.user?.lastname ?? '')
@@ -40,7 +37,7 @@ const handleSubmit = async () => {
       username: username.value,
       mail: email.value,
     })
-    props.nextStep()
+    router.back()
   } catch (error) {
     console.error(error)
   }

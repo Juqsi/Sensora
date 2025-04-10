@@ -15,6 +15,7 @@ const userStore = useUserStore()
     <CardHeader>
       <div class="flex items-center justify-between w-full">
         <div class="flex items-center space-x-4">
+          <RouterLink to="/settings/picture">
           <Avatar shape="circle" size="sm">
             <AvatarImage
               :alt="t('Profile.ProfilePicture')"
@@ -22,6 +23,7 @@ const userStore = useUserStore()
             />
             <AvatarFallback>{{userStore.user?.firstname[0]??''}}</AvatarFallback>
           </Avatar>
+          </RouterLink>
           <div>
             <CardTitle>{{userStore.user?.firstname}} {{userStore.user?.lastname ?? ""}}</CardTitle>
             <CardDescription>{{userStore.user?.mail??''}}</CardDescription>

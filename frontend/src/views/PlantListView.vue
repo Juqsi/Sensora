@@ -51,7 +51,7 @@ import {useRoute} from 'vue-router'
 
 const route = useRoute()
 
-const { t } = useI18n()
+const { locale, t } = useI18n()
 
 const groupStore = useGroupStore()
 const deviceStore = useDeviceStore()
@@ -202,6 +202,15 @@ const getLatestLastCall = (controller: Controller): string => {
     })
     [0]?.lastCall ?? '--';
 };
+
+const formatTimestamp = (timestamp: string, locale: string): string => {
+  const date = new Date(timestamp)
+
+  return new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(date)
+}
 
 </script>
 
@@ -364,7 +373,7 @@ const getLatestLastCall = (controller: Controller): string => {
                   <TableRow v-for="sensor in filteredControllerList">
                     <TableCell class="overflow-hidden font-medium">
                       <RouterLink :to="`/sensor/${sensor.did}`">
-                        {{ sensor.did }} {{ deviceStore.devices.some((dev) => dev.did === sensor.did && dev.owner.username === useUserStore().user?.username) ? t('PlantList.Ext') : '' }}
+                        {{ sensor.did }}
                       </RouterLink>
                     </TableCell>
                     <TableCell>
@@ -374,7 +383,7 @@ const getLatestLastCall = (controller: Controller): string => {
                     </TableCell>
                     <TableCell class="hidden md:table-cell">
                       {{
-                        getLatestLastCall(sensor)
+                        formatTimestamp(getLatestLastCall(sensor),locale)
                       }}
                     </TableCell>
                     <TableCell class="hidden md:table-cell">

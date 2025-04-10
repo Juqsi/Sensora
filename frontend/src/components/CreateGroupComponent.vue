@@ -33,6 +33,7 @@ import {
 import { CirclePlus } from 'lucide-vue-next'
 import type { createGroupBody, Group, GroupPatchBody, Room } from '@/api'
 import { useGroupStore, useRoomStore } from '@/stores'
+import {toast} from 'vue-sonner'
 
 const groupStore = useGroupStore()
 const roomStore = useRoomStore()
@@ -53,6 +54,10 @@ const rooms = ref<Array<string>>(
 )
 
 const createGroup = async () => {
+  if (!groupName.value.trim()) {
+    toast.warning(t('group.NameEmpty'))
+    return
+  }
   let group: Group
   try {
     let newGroup: createGroupBody = { name: groupName.value, members: [] }

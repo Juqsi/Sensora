@@ -300,6 +300,7 @@
     "usernameRequired": "Please enter your username."
   },
   "group": {
+    "NameEmpty": "Your Apartemnts needs a name",
     "ShareTitle": "Share invite link",
     "alert": {
       "cancel": "Cancel",
@@ -432,6 +433,7 @@
       "NameOfPlant": "Name of Plant",
       "NamePlaceholder": "Enter the name of the plant",
       "PlantType": "Plant Type",
+      "PlantTypeInfo": "Enter the plant type or genus. Based on this, relevant recommendations and plant information will be loaded. Please use the English name (e.g. 'basil', 'lavender').",
       "PlantTypePlaceholder": "Enter the plant type",
       "Room": "Room",
       "Room1": "Room 1",
@@ -447,7 +449,8 @@
       "SubTitle": "Manage your plant information",
       "Submit": "Submit",
       "Title": "Plant Settings",
-      "targetValues": "Target values"
+      "targetValues": "Target values",
+      "targetValuesInfo": "When enabled, you can define target values for temperature, brightness, humidity, and soil moisture. The pump will be activated automatically if the soil moisture falls below your defined threshold."
     }
   },
   "plantList": {

@@ -59,9 +59,6 @@ const handleSubmit = async () => {
           <div class="grid gap-2">
             <div class="flex items-center">
               <Label for="password">{{ t('login.Password') }}</Label>
-              <a class="ml-auto inline-block text-sm underline" href="#">
-                {{ t('login.ForgotPassword') }}
-              </a>
             </div>
             <Input id="password" v-model="password" required type="password" />
           </div>

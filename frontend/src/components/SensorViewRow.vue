@@ -10,11 +10,12 @@ import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
 import { MoreHorizontal } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
-import { computed, type PropType, onMounted } from 'vue'
+import { computed, type PropType } from 'vue'
 import type { Group, Plant, Room } from '@/api'
-import {useI18n} from 'vue-i18n'
+import { useI18n } from 'vue-i18n'
+import { useDeviceStore, useUserStore } from '@/stores'
 
-const {t} = useI18n()
+const { t } = useI18n()
 
 const status = {
   active: { label: t('active'), value: 'default' },
@@ -31,8 +32,8 @@ const props = defineProps({
 defineEmits(['delete'])
 
 const getStatus = computed(() => {
-  if (props.plant.controllers.length !== 0) {
-    props.plant.controllers.filter((controller) => {
+  if (currentlyAssignedControllers.value.length !== 0) {
+    currentlyAssignedControllers.value.filter((controller) => {
       const matchesStatus = controller.sensors.some((sensor) => ['error'].includes(sensor.status))
       if (matchesStatus) {
         return status.error
@@ -43,6 +44,22 @@ const getStatus = computed(() => {
   return status.inactive
 })
 
+const currentlyAssignedControllers = computed(() => {
+  return (
+    props.plant.controllers?.filter((controller) =>
+      controller.sensors?.some((sensor) => sensor.currently_assigned),
+    ) ?? []
+  )
+})
+
+const isExtern = (did: string): boolean => {
+  if (!did) {
+    return false
+  }
+  return useDeviceStore().devices.find(
+    (dev) => dev.did === did
+  )?.owner.username !== useUserStore().user?.username
+}
 </script>
 
 <template>
@@ -53,7 +70,7 @@ const getStatus = computed(() => {
       </RouterLink>
     </TableCell>
     <TableCell>
-      <RouterLink :to="plant.controllers[0] ? `/sensor/${plant.controllers[0].did}` : '#'">
+      <RouterLink :to="currentlyAssignedControllers[0] && !isExtern(currentlyAssignedControllers[0]?.did) ? `/sensor/${plant.controllers[0].did}` : '#'">
         <Badge :variant="getStatus.value" class="w-full justify-center">
           {{ getStatus.label }}
         </Badge>
@@ -71,8 +88,8 @@ const getStatus = computed(() => {
       </RouterLink>
     </TableCell>
     <TableCell class="hidden md:table-cell">
-      <RouterLink :to="plant.controllers[0] ? `/sensor/${plant.controllers[0].did}` : '#'">
-        {{ plant.controllers[0]?.did ?? '--' }}
+      <RouterLink :to="currentlyAssignedControllers[0] && !isExtern(currentlyAssignedControllers[0]?.did) ? `/sensor/${plant.controllers[0].did}` : '#'">
+        {{ currentlyAssignedControllers[0]?.did ?? '--' }} {{isExtern(currentlyAssignedControllers[0]?.did) ? `(${t('ext')})` : ''}}
       </RouterLink>
     </TableCell>
     <TableCell>
@@ -84,11 +101,13 @@ const getStatus = computed(() => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>{{t('SensorViewRow.Actions')}}</DropdownMenuLabel>
+          <DropdownMenuLabel>{{ t('SensorViewRow.Actions') }}</DropdownMenuLabel>
           <RouterLink :to="`/plant/${plant.plantId}/edit`">
-            <DropdownMenuItem>{{t('SensorViewRow.Edit')}}</DropdownMenuItem>
+            <DropdownMenuItem>{{ t('SensorViewRow.Edit') }}</DropdownMenuItem>
           </RouterLink>
-          <DropdownMenuItem @click="$emit('delete', plant.plantId)">{{t('SensorViewRow.Delete')}}</DropdownMenuItem>
+          <DropdownMenuItem @click="$emit('delete', plant.plantId)">{{
+            t('SensorViewRow.Delete')
+          }}</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </TableCell>

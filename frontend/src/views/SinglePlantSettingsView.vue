@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { plantAvatars } from '@/components/plant3d/plantAvatars'
-import { type Controller, type createPlantBody, ilk, type Room, type updatePlantBody } from '@/api'
+import { type createPlantBody, ilk, type Room, type updatePlantBody } from '@/api'
 import { toast } from 'vue-sonner'
 import {
   NumberField,
@@ -30,6 +30,9 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { v4 as uuid } from 'uuid'
 import { Sparkles } from 'lucide-vue-next'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Info } from 'lucide-vue-next'
+import InfoTooltip from '@/components/InfoTooltip.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -40,11 +43,14 @@ const deviceStore = useDeviceStore()
 const roomStore = useRoomStore()
 const plantStore = usePlantStore()
 
+const tooltipTargetValuesOpen = ref(false)
+const tooltipPlantTypeOpen = ref(false)
+
 const name = ref<string>('')
 const selectedRoom = ref<Room | undefined>(undefined)
 const selectedSensor = ref<string>('')
 const plantType = ref<string>('')
-const selectedAvatar = ref<string>("")
+const selectedAvatar = ref<string>('')
 const note = ref<string>('')
 
 const targetValuesTemperature = ref<number>(24)
@@ -66,7 +72,7 @@ const loadPlantDetails = async () => {
     if (editPlant) {
       name.value = editPlant?.name ?? ''
       selectedRoom.value = (await roomStore.getRoomDetails(editPlant?.room as string)) ?? undefined
-      selectedSensor.value = editPlant?.controllers[0]?.did ?? ""
+      selectedSensor.value = editPlant?.controllers[0]?.did ?? ''
       activateSensor.value = !!selectedSensor.value
       plantType.value = editPlant?.plantType ?? ''
 
@@ -110,7 +116,7 @@ const loadPlantDetails = async () => {
 onMounted(() => {
   if (route.params.id !== undefined) {
     loadPlantDetails()
-  }else{
+  } else {
     const query = route.query
     if (query.commonName) {
       name.value = query.commonName as string
@@ -173,7 +179,7 @@ const createPlant = async () => {
     const editPlant: updatePlantBody = {
       name: name.value,
       room: selectedRoom.value!.rid,
-      assignFullDevice: activateSensor.value &&  selectedSensor.value ? [selectedSensor.value] : [],
+      assignFullDevice: activateSensor.value && selectedSensor.value ? [selectedSensor.value] : [],
       plantType: plantType.value,
       avatarId: selectedAvatar.value,
       note: note.value,
@@ -200,7 +206,7 @@ const createPlant = async () => {
     }
     try {
       await plantStore.updatePlant(route.params.id as string, editPlant)
-      router.push("/plants")
+      router.push('/plants')
     } catch (error) {
       console.log(error)
     }
@@ -218,14 +224,14 @@ const createPlant = async () => {
       </RouterLink>
     </template>
     <template #default>
-      <CardContent class="grid gap-6 max-w-full ">
+      <CardContent class="grid gap-6 max-w-full">
         <div class="grid gap-2">
           <Label for="subject">{{ t('plant.settings.NameOfPlant') }}</Label>
           <Input id="subject" v-model="name" :placeholder="t('plant.settings.NamePlaceholder')" />
         </div>
 
         <div class="grid gap-4">
-          <div class="grid gap-2 max-w-full ">
+          <div class="grid gap-2 max-w-full">
             <Label for="room">{{ t('plant.settings.Room') }}</Label>
             <RoomSelection id="room" v-model:room="selectedRoom" />
           </div>
@@ -243,7 +249,8 @@ const createPlant = async () => {
                   <SelectItem
                     v-for="device in deviceStore.devices"
                     :key="device.did"
-                    :value="device.did">
+                    :value="device.did"
+                  >
                     {{ device.did }}
                   </SelectItem>
                 </SelectGroup>
@@ -254,7 +261,10 @@ const createPlant = async () => {
 
         <div class="w-full">
           <div class="flex items-center justify-between w-full gap-5">
-            <Label for="targetValues">{{ t('plant.settings.targetValues') }}</Label>
+            <div class="flex items-center space-x-1">
+              <Label for="targetValues">{{ t('plant.settings.targetValues') }}</Label>
+              <InfoTooltip :message="t('plant.settings.targetValuesInfo')" />
+            </div>
             <Switch id="temperaturSwitch" v-model="activateTargetValues" />
           </div>
           <div
@@ -300,7 +310,10 @@ const createPlant = async () => {
         </div>
 
         <div class="grid gap-2">
-          <Label for="plantType">{{ t('plant.settings.PlantType') }}</Label>
+          <div class="flex items-center space-x-1">
+            <Label for="plantType">{{ t('plant.settings.PlantType') }}</Label>
+            <InfoTooltip :message="t('plant.settings.PlantTypeInfo')" />
+          </div>
           <Input
             id="plantType"
             v-model="plantType"
@@ -310,15 +323,17 @@ const createPlant = async () => {
 
         <div class="grid gap-2">
           <Label for="avatar">{{ t('plant.settings.Avatar') }}</Label>
-          <Select id="avatar"  v-model="selectedAvatar">
+          <Select id="avatar" v-model="selectedAvatar">
             <SelectTrigger>
-              <SelectValue
-                :placeholder="t('plant.settings.AvatarPlaceholder')"
-              />
+              <SelectValue :placeholder="t('plant.settings.AvatarPlaceholder')" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem v-for="avatar in plantAvatars" :value="avatar.value" :key="avatar.value">
+                <SelectItem
+                  v-for="avatar in plantAvatars"
+                  :value="avatar.value"
+                  :key="avatar.value"
+                >
                   {{ avatar.label }}
                 </SelectItem>
               </SelectGroup>

@@ -300,6 +300,7 @@
     "usernameRequired": "itte gib deinen Benutzernamen ein."
   },
   "group": {
+    "NameEmpty": "Dein Zuhause braucht einen Name",
     "ShareTitle": "Einladungslink teilen",
     "alert": {
       "cancel": "Abbrechen",
@@ -432,6 +433,7 @@
       "NameOfPlant": "Name der Pflanze",
       "NamePlaceholder": "Gib den Namen der Pflanze ein",
       "PlantType": "Pflanzentyp",
+      "PlantTypeInfo": "Gib hier die Art bzw. Gattung der Pflanze ein. Auf Basis dieser Information werden passende Empfehlungen und Pflanzeninformationen geladen. Bitte verwende den englischen Namen (z. B. 'basil', 'lavender').",
       "PlantTypePlaceholder": "Gib den Pflanzenart ein (englisch)",
       "Room": "Raum",
       "Room1": "Raum 1",
@@ -447,7 +449,8 @@
       "SubTitle": "Verwalte deine Pflanzeninformationen",
       "Submit": "Speichern",
       "Title": "Pflanzeneinstellungen",
-      "targetValues": "Soll-Werte"
+      "targetValues": "Soll-Werte",
+      "targetValuesInfo": "Wenn aktiviert, kannst du Zielwerte für Temperatur, Helligkeit, Luft- und Bodenfeuchtigkeit definieren. Die Pumpe wird automatisch aktiviert, sobald der Bodenfeuchtigkeitswert unter deinen angegebenen Zielwert fällt."
     }
   },
   "plantList": {

@@ -10,6 +10,7 @@ import { authApiClient } from '@/api/clients.ts'
 import { toast } from 'vue-sonner'
 import { useAuthStore } from '@/stores'
 import type { CustomAxiosRequestConfig } from '@/api/apiClient.ts'
+import {nextTick} from 'vue'
 
 const props = defineProps<{ nextStep: () => void }>()
 
@@ -58,7 +59,9 @@ const handleSubmit = async () => {
     const authStore = useAuthStore()
     authStore.logout()
     await authStore.login({ username: username.value, password: password.value })
-    props.nextStep()
+    await nextTick(() => {
+      props.nextStep()
+    });
   } catch (error) {
     password.value = ''
   }
