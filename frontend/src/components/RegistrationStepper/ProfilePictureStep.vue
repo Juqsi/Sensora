@@ -8,10 +8,12 @@ import { UserAvatarRefEnum } from '@/api'
 import { useUserStore } from '@/stores'
 import { STATICS_PATH } from '@/api/base.ts'
 import i18n from '@/i18n'
+import { cn } from '@/lib/utils.ts'
+import type { HTMLAttributes } from 'vue'
 
 const t = i18n.global?.t || ((key: string) => key)
 
-const props = defineProps<{ nextStep: () => void }>()
+const props = defineProps<{ nextStep: () => void; class?: HTMLAttributes['class'] }>()
 
 const userStore = useUserStore()
 const selectedAvatar = ref<string | undefined>(undefined)
@@ -29,10 +31,9 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <Card class="mx-auto w-full">
+  <Card :class="cn('mx-auto w-full', props.class)">
     <CardHeader>
-      <CardTitle class="text-xl">{{t('register.profilePicture.Title')}}</CardTitle>
-      <CardDescription>{{t('register.profilePicture.Description')}}</CardDescription>
+      <CardTitle class="text-xl">{{t('register.profilePicture.Description') }}</CardTitle>
     </CardHeader>
     <CardContent>
       <form @submit.prevent="handleSubmit">
@@ -51,16 +52,14 @@ const handleSubmit = async () => {
               class="flex items-center justify-center w-16 h-16 rounded-full cursor-pointer transition-all"
               @click="selectedAvatar = avatar"
             >
-              <img
-                :alt="avatar"
-                class="w-15 h-15 rounded-full"
-                :src="STATICS_PATH(avatar)"
-              />
+              <img :alt="avatar" class="w-15 h-15 rounded-full" :src="STATICS_PATH(avatar)" />
             </div>
             <Label :for="`avatar-${avatar}`" class="text-sm text-center">{{ avatar }}</Label>
           </div>
         </RadioGroup>
-        <Button :disabled="!selectedAvatar" class="w-full mt-4" type="submit">{{t('register.Continue')}}</Button>
+        <Button :disabled="!selectedAvatar" class="w-full mt-4" type="submit">{{
+          t('register.Continue')
+        }}</Button>
       </form>
     </CardContent>
   </Card>

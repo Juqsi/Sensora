@@ -32,8 +32,34 @@ const router = createRouter({
     },
     {
       path: '/settings',
-      name: 'settings',
-      component: () => import('../views/SettingsView.vue'),
+      component: () => import('@/views/SettingsLayout.vue'),
+      children: [
+        {
+          path: '',
+          name: 'SettingsHome',
+          component: () => import('@/components/settings/SettingsHome.vue'),
+        },
+        {
+          path: 'account',
+          name: 'SettingsAccount',
+          component: () => import('@/components/settings/AccountModification.vue'),
+        },
+        {
+          path: 'language',
+          name: 'SettingsLanguage',
+          component: () => import('@/components/settings/LanguageForm.vue'),
+        },
+        {
+          path: 'appearance',
+          name: 'SettingsAppearance',
+          component: () => import('@/components/settings/AppearanceForm.vue'),
+        },
+        {
+          path: 'picture',
+          name: 'SettingsPicture',
+          component: () => import('@/components/settings/ProfilePictureWrapper.vue'),
+        },
+      ],
       meta: { requiresAuth: true, title: 'title.settings' },
     },
     {

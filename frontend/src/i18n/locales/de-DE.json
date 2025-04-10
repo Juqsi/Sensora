@@ -11,6 +11,8 @@
     "Account": "Account",
     "AccountDescription": "Hier kannst du deine Accountinformationen ändern.",
     "CurrentPassword": "Aktuelles Passwort",
+    "Email": "E-Mail",
+    "FirstName": "Vorname",
     "FistName": "Vorname",
     "NewPassword": "Neues Passwort",
     "Password": "Passwort",
@@ -18,6 +20,7 @@
     "SaveChanges": "Änderung speichern",
     "SavePassword": "Passwort speichern",
     "SurName": "Nachname",
+    "Surname": "Nachname",
     "Username": "Benutzername"
   },
   "Camera": {
@@ -102,12 +105,14 @@
     "Edit": "Bearbeiten"
   },
   "Settings": {
-    "Account": "Account",
-    "AccountDescription": "Name, Benutzername und Passwort",
+    "AccountData": "Accountdaten",
+    "AccountDataDescription": "Name, Benutzername und E-Mail",
     "Appearance": "Aussehen",
     "AppearanceDescription": "Wechsel das aussehen der App",
     "Language": "Sprache",
-    "LanguageDescription": "Wechsel die Sprache der App"
+    "LanguageDescription": "Wechsel die Sprache der App",
+    "Picture": "Profilbild",
+    "PictureDescription": "Wähl ein passendes Profilbild aus"
   },
   "ShareLink": {
     "Copied": "Kopiert",
@@ -289,6 +294,11 @@
     },
     "title": "FAQ – Smartes Bewässerungssystem"
   },
+  "formErrors": {
+    "emailRequired": "Bitte gib deine E-Mail-Adresse ein.",
+    "firstnameRequired": "Bitte gib deinen Vornamen ein.",
+    "usernameRequired": "itte gib deinen Benutzernamen ein."
+  },
   "group": {
     "ShareTitle": "Einladungslink teilen",
     "alert": {
@@ -376,7 +386,7 @@
     "LanguageDescription": "Wählen Sie eine Sprache aus.",
     "LanguageLabel": "Sprache",
     "LanguageSelectionDescription": "Bitte wählen Sie die bevorzugte Sprache.",
-    "LanguageSelectionTitle": "Wählen Sie Ihre Sprache",
+    "LanguageSelectionTitle": "Wähle deine Sprache aus",
     "SetToEnglish": "Sprache auf Englisch gesetzt.",
     "SetToGerman": "Sprache auf Deutsch gesetzt.",
     "UpdateLanguage": "Sprache aktualisieren"
@@ -490,7 +500,7 @@
     "SpecialCharRequired": "Das Passwort muss mindestens ein Sonderzeichen enthalten (!\"#$%&'()*+,-./:;<=>?[]^_{}|~).",
     "UppercaseRequired": "Das Passwort muss mindestens einen Großbuchstaben enthalten",
     "profilePicture": {
-      "Description": "Wähl dein Avatar aus.",
+      "Description": "Wähle deinen Avatar aus.",
       "Title": "Benutzerinformationen"
     }
   },
@@ -504,7 +514,8 @@
       "ACCOUNT": "Accounteinstellungen",
       "APPEARANCE": "Aussehen",
       "LANGUAGE": "Spracheinstellungen",
-      "MAIN": "Einstellungen"
+      "MAIN": "Einstellungen",
+      "PICTURE": "Profilbild"
     }
   },
   "setupAccountStepper": {

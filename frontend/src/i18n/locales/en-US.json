@@ -11,6 +11,8 @@
     "Account": "Account",
     "AccountDescription": " Make changes to your account here.",
     "CurrentPassword": "Current Password",
+    "Email": "Mail",
+    "FirstName": "Firstname",
     "FistName": "First name",
     "NewPassword": "New Password",
     "Password": "Password",
@@ -18,6 +20,7 @@
     "SaveChanges": "Save Changes",
     "SavePassword": "Save Password",
     "SurName": "Surname",
+    "Surname": "Surname",
     "Username": "Username"
   },
   "Camera": {
@@ -102,12 +105,14 @@
     "Edit": "Edit"
   },
   "Settings": {
-    "Account": "Account",
-    "AccountDescription": "Name, Username and Password",
+    "AccountData": "Account data",
+    "AccountDataDescription": "Name, Username and Mail",
     "Appearance": "Appearance",
     "AppearanceDescription": "Change the appearance of the app",
     "Language": "Language",
-    "LanguageDescription": "Change the app language"
+    "LanguageDescription": "Change the app language",
+    "Picture": "Profil Picture",
+    "PictureDescription": "Choos your favorit profile picture "
   },
   "ShareLink": {
     "Copied": "Copied",
@@ -288,6 +293,11 @@
       "question": "Are there notifications?"
     },
     "title": "FAQ – Smart Irrigation System"
+  },
+  "formErrors": {
+    "emailRequired": "Please enter your email address.",
+    "firstnameRequired": "Please enter your first name.",
+    "usernameRequired": "Please enter your username."
   },
   "group": {
     "ShareTitle": "Share invite link",
@@ -504,7 +514,8 @@
       "ACCOUNT": "Account Settings",
       "APPEARANCE": "Appearance",
       "LANGUAGE": "Language Settings",
-      "MAIN": "Settings"
+      "MAIN": "Settings",
+      "PICTURE": "Profile picture"
     }
   },
   "setupAccountStepper": {

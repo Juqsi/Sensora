@@ -7,7 +7,7 @@ export const STATICS_PATH  =  (name:string | undefined) => {
   if (!name) {
     name = UserAvatarRefEnum.Peashooter
   }
-  return 'profilePictures/' + name + ".jpeg"
+  return '/profilePictures/' + name + ".jpeg"
 };
 
 export class BaseAPI {
