@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import MeasuredTiles from '@/components/MeasuredTiles.vue'
 import { useRoute } from 'vue-router'
 import NavCard from '@/components/NavCard.vue'
@@ -15,6 +15,7 @@ import PlantInformationCard from '@/components/PlantInformationCard.vue'
 import EmtyState from '@/components/EmtyState.vue'
 import {useI18n} from 'vue-i18n'
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
+import router from '@/router'
 
 const {t} = useI18n()
 
@@ -32,11 +33,28 @@ let values: Record<string, { timestamp: Date; value: number; unit: string }[]> |
 
 onMounted(async () => {
   if (route.params.id !== undefined) {
-    plant.value = await plantStore.getPlantDetails(route.params.id as string, oneHourAgo, today)
-    values = await plantStore.getCombinedSensorData(plant.value?.plantId ?? '', yesterday, today)
-    room.value = await roomStore.getRoomDetails(plant.value?.room??'')?? undefined
-    const plantInfos : Recognition[] = await searchPlant(plant.value?.plantType && plant.value?.plantType.length !== 0 ? plant.value?.plantType:plant.value?.name) ?? []
-    plantInformation.value = plantInfos[0]
+    try {
+      plant.value = await plantStore.getPlantDetails(route.params.id as string, oneHourAgo, today)
+    }catch (e){
+      await nextTick(() => {
+        router.push('/plants');
+      });
+    }
+
+    await Promise.all([
+      (async () => {
+        values = await plantStore.getCombinedSensorData(plant.value?.plantId ?? '', yesterday, today);
+      })(),
+      (async () => {
+        room.value = await roomStore.getRoomDetails(plant.value?.room ?? '') ?? undefined;
+      })(),
+      (async () => {
+        const plantInfos: Recognition[] = await searchPlant(
+          plant.value?.plantType && plant.value?.plantType.length !== 0 ? plant.value?.plantType : plant.value!.name
+        ) ?? [];
+        plantInformation.value = plantInfos[0];
+      })(),
+    ]);
 
     if (plant.value && measuredTiles.value) {
       measuredTiles.value.initializeWithPlant(plant.value)
@@ -99,11 +117,11 @@ usePullToRefresh(async () => {
 <template>
   <NavCard :title="plant?.name ?? ''" :sub-title="room?.name">
     <template #TitleRight>
-      <router-link :to="`/plant/${route.params.id}/edit`">
+      <RouterLink :to="`/plant/${route.params.id}/edit`">
         <Button size="icon" variant="ghost">
           <Settings />
         </Button>
-      </router-link>
+      </RouterLink>
     </template>
   </NavCard>
   <Plant3d plant-model-path="/models3d/plant.glb" />
@@ -118,6 +136,7 @@ usePullToRefresh(async () => {
     </TabsContent>
     <TabsContent value="infos" class="w-full">
      <PlantInformationCard class="mx-auto" v-if="plantInformation" :recognition="plantInformation ?? {} as Recognition " />
+      <EmtyState v-if="!plantInformation" :title="t('plant.NoInformationTitle')" :condition="true" :subtitle="t('plant.NoInformationSubtitle')" img-src="/svg/undraw_no-data_ig65.svg" />
     </TabsContent>
   </Tabs>
 </template>

@@ -11,6 +11,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
 import { useI18n } from 'vue-i18n'
 import { useColorMode } from '@vueuse/core'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const mode = useColorMode()
 
@@ -18,19 +19,17 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <div>
+  <Card>
+    <CardHeader>
     <h3 class="text-lg font-medium">{{ t('appearance.Title') }}</h3>
     <p class="text-sm text-muted-foreground">
       {{ t('appearance.Description') }}
     </p>
-  </div>
-  <Separator />
-
+    </CardHeader>
+<CardContent>
   <form>
     <FormField v-slot="{ componentField }" name="theme" type="radio">
       <FormItem class="space-y-1">
-        <FormLabel>{{ t('appearance.ThemeLabel') }}</FormLabel>
-        <FormDescription> {{ t('appearance.ThemeDescription') }}</FormDescription>
         <FormMessage />
 
         <RadioGroup
@@ -122,4 +121,6 @@ const { t } = useI18n()
       </FormItem>
     </FormField>
   </form>
+</CardContent>
+  </Card>
 </template>

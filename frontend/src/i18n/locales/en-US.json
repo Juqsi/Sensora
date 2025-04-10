@@ -67,6 +67,7 @@
     "DeletePlantWarningDescription": "This action cannot be undone. This will permanently delete your plant and remove all related data from our servers",
     "DeletePlantWarningTitle": "Are you absolutely sure?",
     "ErrorFilter": "You have to select at least one item.",
+    "Ext": "(ext)",
     "Filter": "Filter",
     "FilterBy": "Filter by",
     "Group": "Apartment",
@@ -110,7 +111,8 @@
   },
   "ShareLink": {
     "Copied": "Copied",
-    "ErrorCopy": "Error during copying"
+    "ErrorCopy": "Error during copying",
+    "Generate": "Generate"
   },
   "SinglePlant": {
     "EnterValidRoom": "Please enter a valid room"
@@ -305,6 +307,9 @@
     "Success": "Login successful",
     "username": "Username"
   },
+  "photo": {
+    "uploadImages": "Upload photos"
+  },
   "plant": {
     "NoInformationSubtitle": "Sadly, we have currently no data about this plant in our datebase.",
     "NoInformationTitle": "No Data available",
@@ -356,10 +361,14 @@
     "Support": "Support"
   },
   "register": {
-    "Continue": "continue",
+    "Continue": "Save",
     "MinLength": "The password must be at least 8 characters long.",
     "SpecialCharRequired": "The password must contain at least one special character (!\"#$%&'()*+,-./:;<=>?[]^_{}|~).",
-    "UppercaseRequired": "The password must contain at least one capital letter."
+    "UppercaseRequired": "The password must contain at least one capital letter.",
+    "profilePicture": {
+      "Description": "Choose your profile avatar.",
+      "Title": "User Information"
+    }
   },
   "sensorList": {
     "emptySensorSubtitle": "Add a sensor through your profile to start using it.",
@@ -403,6 +412,7 @@
   "temperature": "Temperature",
   "title": {
     "aboutUs": "About Us",
+    "addDevice": "Add Device",
     "createPlant": "Create Plant",
     "groups": "Apartments",
     "home": "Dashboard",
@@ -428,5 +438,27 @@
   "user": {
     "deleted": "User successfully deleted!",
     "updated": "User successfully updated!"
+  },
+  "addController": {
+    "title": "Add New Controller",
+    "description": "Follow these steps to add a new controller to your account.",
+    "important": "Important:",
+    "step1Title": "Step 1: Power Up",
+    "step1Description": "Connect the new controller to a power source. Ensure it is turned on.",
+    "step2Title": "Step 2: Connect to Wi-Fi",
+    "step2Description": "On your device (smartphone, tablet, laptop), open the Wi-Fi settings and look for a network named:",
+    "wifiName": "Sensora",
+    "wifiPassword": "No password is required for this Wi-Fi network. Simply select it to connect.",
+    "confirmWifi": "I am connected to the \"Sensora\" Wi-Fi",
+    "wifiConnected": "Connected to \"Sensora\" Wi-Fi",
+    "step3Title": "Step 3: Open Web Server",
+    "step3Description": "Once you are connected to the \"Sensora\" Wi-Fi, open a web browser (e.g., Chrome, Safari, Firefox) and enter the following address in the address bar:",
+    "step3Hint": "This will open the controller's configuration page.",
+    "openConfig": "Open Configuration Page (192.168.0.1)",
+    "step4Title": "Step 4: Enter Wi-Fi Details",
+    "step4Description": "On the controller's configuration page, you will be asked to enter your home network's Wi-Fi details (SSID and password) as well as your user account name for this app. Make sure you enter all the information correctly.",
+    "step5Title": "Step 5: Verify Controller in App",
+    "step5Description": "After entering the Wi-Fi details and your username, the controller will attempt to connect to our server. Once the connection is established, you should see the new controller in your app. You may need to refresh the plants overview once.",
+    "refreshPlants": "Refresh Plants Overview"
   }
 }

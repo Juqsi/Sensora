@@ -74,12 +74,12 @@ const handleSubmit = async () => {
 
         <div class="mt-4 text-center text-sm">
           {{ t('login.DontHaveAccount') }}
-          <router-link
+          <RouterLink
             :to="{ name: 'register', query: { redirect: $route.query.redirect } }"
             class="underline"
           >
             {{ t('login.SignUp') }}
-          </router-link>
+          </RouterLink>
         </div>
       </CardContent>
     </Card>

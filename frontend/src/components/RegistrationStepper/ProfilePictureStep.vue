@@ -29,10 +29,10 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <Card class="mx-auto max-w-sm w-full">
+  <Card class="mx-auto w-full">
     <CardHeader>
-      <CardTitle class="text-xl">User Information</CardTitle>
-      <CardDescription>Choose your profile avatar</CardDescription>
+      <CardTitle class="text-xl">{{t('register.profilePicture.Title')}}</CardTitle>
+      <CardDescription>{{t('register.profilePicture.Description')}}</CardDescription>
     </CardHeader>
     <CardContent>
       <form @submit.prevent="handleSubmit">

@@ -33,7 +33,7 @@ const switchView = (view: Views) => {
 </script>
 
 <template>
-  <Card class="w-full">
+  <Card class="w-full mb-6">
     <CardHeader class="w-full flex flex-row space-x-4">
       <!-- Zurück-Button nur, wenn nicht in der Hauptansicht -->
       <Button
@@ -49,9 +49,8 @@ const switchView = (view: Views) => {
       <CardTitle>{{ ViewTitles[activeView] }}</CardTitle>
     </CardHeader>
 
-    <CardContent class="grid gap-1">
-      <!-- Hauptansicht -->
-      <template v-if="activeView === 'main'">
+    <!-- Hauptansicht -->
+    <CardContent v-if="activeView === 'main'" class="grid gap-1">
         <div
           class="-mx-2 flex cursor-pointer items-center space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
           @click="switchView(Views.ACCOUNT)"
@@ -82,15 +81,14 @@ const switchView = (view: Views) => {
             <p class="text-sm text-muted-foreground">{{t('Settings.AppearanceDescription')}}</p>
           </div>
         </div>
-      </template>
-      <template v-if="activeView !== 'main'">
-        <AccountModification v-if="activeView === Views.ACCOUNT" class="max-w-full" />
-        <Appearance v-else-if="activeView === Views.APPEARANCE" />
-        <LanguageForm v-else-if="activeView === Views.LANGUAGE" />
-        <button class="text-primary hover:underline" @click="switchView(Views.MAIN)">
-          {{t('settings.back')}}
-        </button>
-      </template>
     </CardContent>
   </Card>
+  <template v-if="activeView !== 'main'">
+    <AccountModification v-if="activeView === Views.ACCOUNT" class="max-w-full" />
+    <Appearance v-else-if="activeView === Views.APPEARANCE" />
+    <LanguageForm v-else-if="activeView === Views.LANGUAGE" />
+    <button class="text-primary hover:underline" @click="switchView(Views.MAIN)">
+      {{t('settings.back')}}
+    </button>
+  </template>
 </template>

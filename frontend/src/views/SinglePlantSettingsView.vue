@@ -211,11 +211,11 @@ const createPlant = async () => {
 <template>
   <NavCard :sub-title="t('plant.settings.SubTitle')" :title="t('plant.settings.Title')">
     <template #TitleRight>
-      <router-link :to="{ name: 'PlantUpload' }">
+      <RouterLink :to="{ name: 'PlantUpload' }">
         <Button variant="outline" size="icon">
           <Sparkles class="text-blue-400" />
         </Button>
-      </router-link>
+      </RouterLink>
     </template>
     <template #default>
       <CardContent class="grid gap-6 max-w-full ">

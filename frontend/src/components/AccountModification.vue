@@ -12,6 +12,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs/index.ts'
 import {useI18n} from 'vue-i18n'
+import ProfilePictureStep from '@/components/RegistrationStepper/ProfilePictureStep.vue'
+import router from '@/router'
 
 const {t} = useI18n()
 </script>
@@ -48,6 +50,7 @@ const {t} = useI18n()
           <Button>{{t('Account.SaveChanges')}}</Button>
         </CardFooter>
       </Card>
+      <ProfilePictureStep :next-step="()=>{router.push('/settings')}" />
     </TabsContent>
     <TabsContent value="password">
       <Card>

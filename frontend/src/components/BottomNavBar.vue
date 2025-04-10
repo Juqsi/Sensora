@@ -30,31 +30,31 @@ onBeforeUnmount(() => {
       class="fixed bottom-0 left-0 right-0 border-muted-background border-t-2 mx-auto w-full bg-background shadow-lg p-3"
     >
       <div class="grid grid-cols-4 gap-4">
-        <router-link
+        <RouterLink
           :class="{ 'text-primary': $route.path === '/' }"
           class="flex flex-col items-center"
           to="/"
         >
           <HomeIcon class="w-6 h-6" />
-        </router-link>
+        </RouterLink>
 
-        <router-link
+        <RouterLink
           :class="{ 'text-primary': $route.path === '/plants' }"
           class="flex flex-col items-center"
           to="/plants"
         >
           <Flower2 class="w-6 h-6" />
-        </router-link>
+        </RouterLink>
 
-        <router-link
+        <RouterLink
           :class="{ 'text-primary': $route.path === '/groups' }"
           class="flex flex-col items-center"
           to="/groups"
         >
           <Users class="w-6 h-6" />
-        </router-link>
+        </RouterLink>
 
-        <router-link class="flex flex-col items-center" to="/profile">
+        <RouterLink class="flex flex-col items-center" to="/profile">
           <Avatar
             :class="{ 'border-primary': $route.path === '/profile','border-foreground': $route.path !== '/profile'}"
             class="w-6 h-6 border-solid border-2 "
@@ -65,7 +65,7 @@ onBeforeUnmount(() => {
             />
             <AvatarFallback >{{userStore.user?.firstname[0]??''}}</AvatarFallback>
           </Avatar>
-        </router-link>
+        </RouterLink>
       </div>
     </div>
   </div>

@@ -41,7 +41,6 @@ const generateInviteToken = async (groupId: string) => {
     frontendBaseUrl = `${window.location.protocol}//${window.location.hostname}${portPart}`
   }
 
-  // 👇 Token generieren
   inviteToken.value = `${frontendBaseUrl}/groups?inviteToken=${await useGenerateInviteToken().generateInviteToken(groupId)}`
 }
 

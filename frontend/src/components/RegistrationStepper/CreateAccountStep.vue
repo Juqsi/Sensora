@@ -67,7 +67,7 @@ const handleSubmit = async () => {
 
 <template>
   <div class="flex items-center justify-center">
-    <Card class="mx-auto max-w-sm w-full">
+    <Card class="mx-auto w-full">
       <CardHeader>
         <CardTitle class="text-xl">{{ t('login.SignUp') }}</CardTitle>
         <CardDescription>{{ t('login.SignUpInfo') }}</CardDescription>
@@ -100,12 +100,12 @@ const handleSubmit = async () => {
         </form>
         <div class="mt-4 text-center text-sm">
           {{ t('login.AlreadyHaveAccount') }}
-          <router-link
+          <RouterLink
             :to="{ name: 'login', query: { redirect: $route.query.redirect } }"
             class="underline"
           >
             {{ t('login.SignIn') }}
-          </router-link>
+          </RouterLink>
         </div>
       </CardContent>
     </Card>

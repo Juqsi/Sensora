@@ -26,7 +26,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <Card class="mx-auto max-w-sm w-full">
+  <Card class="mx-auto w-full">
     <CardHeader>
       <CardTitle class="text-xl">{{t('account.Login')}}</CardTitle>
       <CardDescription>{{t('account.LoginDescription')}}</CardDescription>

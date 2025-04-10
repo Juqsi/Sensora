@@ -42,7 +42,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog/index.ts'
 import { computed, onMounted, ref } from 'vue'
-import { useDeviceStore, useGroupStore, usePlantStore } from '@/stores'
+import { useDeviceStore, useGroupStore, usePlantStore, useUserStore } from '@/stores'
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 import EmtyState from '@/components/EmtyState.vue'
 import { useI18n } from 'vue-i18n'
@@ -287,12 +287,12 @@ const getLatestLastCall = (controller: Controller): string => {
                 </form>
               </DropdownMenuContent>
             </DropdownMenu>
-            <router-link to="/newPlant">
+            <RouterLink to="/newPlant">
               <Button class="h-7 gap-1" size="sm">
                 <PlusCircle class="h-3.5 w-3.5" />
                 <span class="sr-only sm:not-sr-only sm:whitespace-nowrap"> {{t('PlantList.AddPlant')}} </span>
               </Button>
-            </router-link>
+            </RouterLink>
           </div>
         </div>
         <TabsContent value="plants">
@@ -360,14 +360,14 @@ const getLatestLastCall = (controller: Controller): string => {
                 <TableBody>
                   <TableRow v-for="sensor in filteredControllerList">
                     <TableCell class="overflow-hidden font-medium">
-                      <router-link :to="`/sensor/${sensor.did}`">
-                        {{ sensor.did }}
-                      </router-link>
+                      <RouterLink :to="`/sensor/${sensor.did}`">
+                        {{ sensor.did }} {{ deviceStore.devices.some((dev) => dev.did === sensor.did && dev.owner.username === useUserStore().user?.username) ? t('PlantList.Ext') : '' }}
+                      </RouterLink>
                     </TableCell>
                     <TableCell>
-                      <router-link :to="`/plant/${sensor.did}`">
+                      <RouterLink :to="`/plant/${sensor.did}`">
                         {{ controllerMap.get(sensor.did)?.plant.name ?? '' }}
-                      </router-link>
+                      </RouterLink>
                     </TableCell>
                     <TableCell class="hidden md:table-cell">
                       {{

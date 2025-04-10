@@ -48,32 +48,32 @@ const getStatus = computed(() => {
 <template>
   <TableRow>
     <TableCell class="overflow-hidden font-medium">
-      <router-link :to="`/plant/${plant.plantId}`">
+      <RouterLink :to="`/plant/${plant.plantId}`">
         {{ plant.name }}
-      </router-link>
+      </RouterLink>
     </TableCell>
     <TableCell>
-      <router-link :to="plant.controllers[0] ? `/sensor/${plant.controllers[0].did}` : '#'">
+      <RouterLink :to="plant.controllers[0] ? `/sensor/${plant.controllers[0].did}` : '#'">
         <Badge :variant="getStatus.value" class="w-full justify-center">
           {{ getStatus.label }}
         </Badge>
-      </router-link>
+      </RouterLink>
     </TableCell>
     <TableCell class="hidden md:table-cell">
-      <router-link :to="`/groups#${group.gid}`">
+      <RouterLink :to="`/groups#${group.gid}`">
         {{ group.name }}
-      </router-link>
+      </RouterLink>
     </TableCell>
 
     <TableCell class="hidden md:table-cell">
-      <router-link :to="`/groups#${room.rid}`">
+      <RouterLink :to="`/groups#${room.rid}`">
         {{ room.name }}
-      </router-link>
+      </RouterLink>
     </TableCell>
     <TableCell class="hidden md:table-cell">
-      <router-link :to="plant.controllers[0] ? `/sensor/${plant.controllers[0].did}` : '#'">
+      <RouterLink :to="plant.controllers[0] ? `/sensor/${plant.controllers[0].did}` : '#'">
         {{ plant.controllers[0]?.did ?? '--' }}
-      </router-link>
+      </RouterLink>
     </TableCell>
     <TableCell>
       <DropdownMenu>
@@ -85,9 +85,9 @@ const getStatus = computed(() => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>{{t('SensorViewRow.Actions')}}</DropdownMenuLabel>
-          <router-link :to="`/plant/${plant.plantId}/edit`">
+          <RouterLink :to="`/plant/${plant.plantId}/edit`">
             <DropdownMenuItem>{{t('SensorViewRow.Edit')}}</DropdownMenuItem>
-          </router-link>
+          </RouterLink>
           <DropdownMenuItem @click="$emit('delete', plant.plantId)">{{t('SensorViewRow.Delete')}}</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

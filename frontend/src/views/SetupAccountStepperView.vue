@@ -100,7 +100,7 @@ const steps = [
         </div>
       </div>
 
-      <component :is="step.component" v-if="index + 1 == stepIndex" :nextStep="nextStep" />
+      <component class="max-w-md" :is="step.component" v-if="index + 1 == stepIndex" :nextStep="nextStep" />
     </StepperItem>
   </Stepper>
 </template>

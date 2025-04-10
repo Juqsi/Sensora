@@ -48,7 +48,7 @@ onMounted(() => {
       </h1>
       <p class="text-sm text-muted-foreground">{{ t('home.subtitle') }}</p>
     </div>
-    <router-link to="profile">
+    <RouterLink to="profile">
     <Avatar>
       <AvatarImage
         alt="profile Picture"
@@ -56,7 +56,7 @@ onMounted(() => {
       />
       <AvatarFallback>{{userStore.user?.firstname[0] ?? ''}}</AvatarFallback>
     </Avatar>
-    </router-link>
+    </RouterLink>
   </div>
 
   <div class="w-full my-2">
@@ -84,9 +84,9 @@ onMounted(() => {
         <h3 class="text-xl my-2 font-medium">{{ room.name }}</h3>
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        <router-link v-for="plant in room.plants" :to="`/plant/${plant.plantId}`">
+        <RouterLink v-for="plant in room.plants" :to="`/plant/${plant.plantId}`">
           <HomeCard :plant="plant"></HomeCard>
-        </router-link>
+        </RouterLink>
       </div>
     </div>
   </template>

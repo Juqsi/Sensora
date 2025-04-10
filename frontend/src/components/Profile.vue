@@ -27,11 +27,11 @@ const userStore = useUserStore()
             <CardDescription>{{userStore.user?.mail??''}}</CardDescription>
           </div>
         </div>
-        <router-link to="/settings">
+        <RouterLink to="/settings">
           <Button size="icon" variant="ghost">
             <Settings />
           </Button>
-        </router-link>
+        </RouterLink>
       </div>
     </CardHeader>
   </Card>

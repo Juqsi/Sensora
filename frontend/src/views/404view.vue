@@ -13,9 +13,9 @@ const { t } = useI18n()
     :title="t('404view.title')"
     img-src="/svg/undraw_page-not-found_6wni.svg"
   />
-  <router-link to="/">
+  <RouterLink to="/">
     <Button variant="link">{{t('Hom')}}</Button>
-  </router-link>
+  </RouterLink>
 </template>
 
 <style scoped></style>
