@@ -161,6 +161,19 @@
   },
   "active": "Active",
   "addController": {
+    "formErrors": {
+      "ssidRequired": "Please enter a Wi-Fi network (SSID).",
+      "passwordRequired": "Please enter the Wi-Fi password.",
+      "usernameRequired": "Please enter your username.",
+      "mailRequired": "Please enter your email address.",
+      "unknown": "An unknown error occurred.",
+      "server": "Request failed",
+      "connection": "Failed to connect to the device."
+    },
+    "formSuccess": {
+      "sent": "Connection successfully submitted."
+    },
+    "MailLabel": "Mail",
     "configError": "Error sending configuration",
     "configErrorConnection": "Connection error to the controller.",
     "configErrorGeneric": "An unknown error occurred.",
@@ -168,6 +181,7 @@
     "confirmWifi": "I am connected to the \"Sensora\" Wi-Fi",
     "description": "Follow these steps to add a new controller to your account.",
     "important": "Important:",
+    "mailPlaceholder": "Your mail",
     "openConfig": "Open Configuration Page (192.168.4.1)",
     "refreshPlants": "Refresh Plants Overview",
     "ssidLabel": "Wi-Fi Name (SSID)",
@@ -335,6 +349,16 @@
   "groups": {
     "ShareDescription": "Anyone who has this link will be able to join this Apartment.",
     "myGroups": "Apartments"
+  },
+  "hints": {
+    "addSensorDescription": "Add a sensor to automatically track soil moisture and environmental data.",
+    "addSensorTitle": "Add a sensor",
+    "createGroupDescription": "Create an apartment to organize rooms and plants. The first step to a smarter green home!",
+    "createGroupTitle": "Start with your apartment",
+    "createPlantDescription": "Create a plant to begin. Sensors are optional!",
+    "createPlantTitle": "Add your first plant",
+    "starProjectDescription": "If you like this project, consider leaving a ⭐ on GitHub!",
+    "starProjectTitle": "Support us on GitHub"
   },
   "home": {
     "emptyRoomsSubtitle": "Start by creating your first room and add a plant to get started.",
@@ -536,18 +560,5 @@
   "user": {
     "deleted": "User successfully deleted!",
     "updated": "User successfully updated!"
-  },
-  "hints": {
-    "createGroupTitle": "Start with your apartment",
-    "createGroupDescription": "Create an apartment to organize rooms and plants. The first step to a smarter green home!",
-
-    "createPlantTitle": "Add your first plant",
-    "createPlantDescription": "Create a plant to begin with smart watering. Sensors are optional!",
-
-    "addSensorTitle": "Add a sensor",
-    "addSensorDescription": "Add a sensor to automatically track soil moisture and environmental data.",
-
-    "starProjectTitle": "Support us on GitHub",
-    "starProjectDescription": "If you like this project, consider leaving a ⭐ on GitHub!"
   }
 }

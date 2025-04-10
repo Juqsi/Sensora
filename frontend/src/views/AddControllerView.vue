@@ -15,6 +15,7 @@ const isWifiConnected = ref(false);
 const ssid = ref('');
 const wifiPassword = ref('');
 const username = ref(useUserStore().user?.username ?? "");
+const mail = ref(useUserStore().user?.mail ?? "");
 const isSubmitting = ref(false);
 const submissionSuccess = ref(false);
 const submissionError = ref('');
@@ -27,18 +28,44 @@ const submitControllerConfig = async () => {
   isSubmitting.value = true;
   submissionError.value = '';
 
+  if (!ssid.value.trim()) {
+    toast.warning(t('addController.formErrors.ssidRequired'))
+    isSubmitting.value = false
+    return
+  }
+
+  if (!wifiPassword.value.trim()) {
+    toast.warning(t('addController.formErrors.passwordRequired'))
+    isSubmitting.value = false
+    return
+  }
+
+  if (!username.value.trim()) {
+    toast.warning(t('addController.formErrors.usernameRequired'))
+    isSubmitting.value = false
+    return
+  }
+
+  if (!mail.value.trim()) {
+    toast.warning(t('addController.formErrors.mailRequired'))
+    isSubmitting.value = false
+    return
+  }
+
   try {
-    const response = await fetch('http://192.168.4.1/config', {
+    const response = await fetch('http://192.168.4.1/connect', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: JSON.stringify({
+      body: new URLSearchParams({
         ssid: ssid.value,
         password: wifiPassword.value,
         username: username.value,
+        mail: mail.value,
       }),
-    });
+    })
+
 
     if (response.ok) {
       submissionSuccess.value = true;
@@ -107,6 +134,10 @@ const submitControllerConfig = async () => {
           <div class="grid gap-1">
             <Label for="username">{{ t('addController.usernameLabel') }}</Label>
             <Input id="username" v-model="username" :placeholder="t('addController.usernamePlaceholder')" />
+          </div>
+          <div class="grid gap-1">
+            <Label for="username">{{ t('addController.MailLabel') }}</Label>
+            <Input id="username" v-model="mail" :placeholder="t('addController.mailPlaceholder')" />
           </div>
           <Button @click="submitControllerConfig" :disabled="isSubmitting" class="w-full">
             <Loader2 v-if="isSubmitting" class="mr-2 h-4 w-4 animate-spin" />

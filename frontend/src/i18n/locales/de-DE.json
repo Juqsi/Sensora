@@ -161,6 +161,19 @@
   },
   "active": "Aktiv",
   "addController": {
+    "formErrors": {
+      "ssidRequired": "Bitte gib ein WLAN-Netzwerk (SSID) ein.",
+      "passwordRequired": "Bitte gib das WLAN-Passwort ein.",
+      "usernameRequired": "Bitte gib deinen Benutzernamen ein.",
+      "mailRequired": "Bitte gib deine E-Mail-Adresse ein.",
+      "unknown": "Ein unbekannter Fehler ist aufgetreten.",
+      "server": "Fehler bei der Anfrage",
+      "connection": "Verbindung zum Gerät fehlgeschlagen."
+    },
+    "formSuccess": {
+      "sent": "Verbindung erfolgreich übermittelt."
+    },
+    "MailLabel": "E-Mail",
     "configError": "Fehler beim Senden der Konfiguration",
     "configErrorConnection": "Verbindungsfehler zum Controller.",
     "configErrorGeneric": "Ein unbekannter Fehler ist aufgetreten.",
@@ -168,6 +181,7 @@
     "confirmWifi": "Ich bin im \"Sensora\" WLAN",
     "description": "Folge diesen Schritten, um einen neuen Controller zu deinem Konto hinzuzufügen.",
     "important": "Wichtig:",
+    "mailPlaceholder": "Deine E-Mail Adress",
     "openConfig": "Konfigurationsseite öffnen (192.168.4.1)",
     "refreshPlants": "Pflanzenübersicht aktualisieren",
     "ssidLabel": "WLAN-Name (SSID)",
@@ -335,6 +349,16 @@
   "groups": {
     "ShareDescription": "Jeder den Link zu der Wohnung hat, kann dieser beitreten.",
     "myGroups": "Wohnungen"
+  },
+  "hints": {
+    "addSensorDescription": "Füge einen Sensor hinzu, um Bodenfeuchtigkeit und andere Werte automatisch zu erfassen.",
+    "addSensorTitle": "Sensor hinzufügen",
+    "createGroupDescription": "Erstelle eine Wohnung, um Räume und Pflanzen darin zu organisieren. Der erste Schritt zum grünen Zuhause!",
+    "createGroupTitle": "Starte mit deiner Wohnung",
+    "createPlantDescription": "Lege eine Pflanze an, um zu starten. Sensoren sind optional!",
+    "createPlantTitle": "Füge deine erste Pflanze hinzu",
+    "starProjectDescription": "Wenn dir das Projekt gefällt, unterstütze uns mit einem ⭐ auf GitHub!",
+    "starProjectTitle": "Support auf GitHub"
   },
   "home": {
     "emptyRoomsSubtitle": "Beginnen Sie damit, Ihren ersten Raum zu erstellen und eine Pflanze hinzuzufügen, um loszulegen.",
@@ -536,18 +560,5 @@
   "user": {
     "deleted": "Benutzer erfolgreich gelöscht!",
     "updated": "Benutzer erfolgreich aktualisiert!"
-  },
-  "hints": {
-    "createGroupTitle": "Starte mit deiner Wohnung",
-    "createGroupDescription": "Erstelle eine Wohnung, um Räume und Pflanzen darin zu organisieren. Der erste Schritt zum grünen Zuhause!",
-
-    "createPlantTitle": "Füge deine erste Pflanze hinzu",
-    "createPlantDescription": "Lege eine Pflanze an, um mit der smarten Bewässerung zu starten. Sensoren sind optional!",
-
-    "addSensorTitle": "Sensor hinzufügen",
-    "addSensorDescription": "Füge einen Sensor hinzu, um Bodenfeuchtigkeit und andere Werte automatisch zu erfassen.",
-
-    "starProjectTitle": "Support auf GitHub",
-    "starProjectDescription": "Wenn dir das Projekt gefällt, unterstütze uns mit einem ⭐ auf GitHub!"
   }
 }
