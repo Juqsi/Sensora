@@ -82,6 +82,7 @@ bool is_sta_connected(void) {
 }
 
 static esp_err_t wifi_setup_handler(httpd_req_t *req) {
+	httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
 	char resp[2048]; // Buffer für die Antwort
 
 	// Dynamisch die Fehlernachricht einfügen, falls erforderlich
@@ -112,6 +113,7 @@ static esp_err_t wifi_setup_handler(httpd_req_t *req) {
 
 
 static esp_err_t try_wifi_handler(httpd_req_t *req) {
+	httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
 	char buf[256];
 	int ret = httpd_req_recv(req, buf, sizeof(buf) - 1);
 	if (ret <= 0)
@@ -168,6 +170,7 @@ static esp_err_t try_wifi_handler(httpd_req_t *req) {
 }
 
 static esp_err_t status_wifi_handler(httpd_req_t *req) {
+	httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
 	if (is_sta_connected()) {
 		const char *success_page =
 			"<html><body style='font-family:sans-serif;padding:2rem;'>"
