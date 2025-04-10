@@ -4,32 +4,58 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useI18n } from 'vue-i18n'
-import { usePlantStore, useRoomStore, useUserStore } from '@/stores'
+import { useDeviceStore, useGroupStore, usePlantStore, useRoomStore, useUserStore } from '@/stores'
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 import EmtyState from '@/components/EmtyState.vue'
 import { onMounted } from 'vue'
 import { STATICS_PATH } from '@/api/base.ts'
+import { RouterLink } from 'vue-router'
 
 const { t } = useI18n()
 
 const roomStore = useRoomStore()
 const userStore = useUserStore()
 const plantStore = usePlantStore()
+const deviceStore = useDeviceStore()
+const groupStore = useGroupStore()
 
 interface Hint {
   id: string
   title: string
   description: string
+  url: string
+  condition: boolean
 }
 
 const hints: Hint[] = [
   {
     id: '1',
-    title: 'Hint 1',
-    description: 'This is the first tipThis is the first tippThis is the first tip',
+    title: t('hints.createGroupTitle'),
+    description: t('hints.createGroupDescription'),
+    url: '/groups',
+    condition: groupStore.groups.length === 0,
   },
-  { id: '2', title: 'Hint 2', description: 'Another useful tip for you' },
-  { id: '3', title: 'Hint 3', description: 'Don’t forget this one!' },
+  {
+    id: '2',
+    title: t('hints.createPlantTitle'),
+    description: t('hints.createPlantDescription'),
+    url: '/newPlant',
+    condition: plantStore.plants.length === 0,
+  },
+  {
+    id: '3',
+    title: t('hints.addSensorTitle'),
+    description: t('hints.addSensorDescription'),
+    url: '/addDevice',
+    condition: deviceStore.devices.length === 0,
+  },
+  {
+    id: '4',
+    title: t('hints.starProjectTitle'),
+    description: t('hints.starProjectDescription'),
+    url: 'https://github.com/juqsi/sensora',
+    condition: true,
+  },
 ]
 usePullToRefresh(async () => {
   await roomStore.fetchRooms(true)
@@ -37,11 +63,13 @@ usePullToRefresh(async () => {
 onMounted(() => {
   plantStore.fetchPlants()
   roomStore.fetchRooms()
+  deviceStore.fetchDevices()
+  groupStore.fetchGroups()
 })
 </script>
 
 <template>
-  <div class="w-full flex justify-between items-stretch mt-4">
+  <div class="w-full flex justify-between items-stretch my-4">
     <div>
       <h1 class="font-bold text-3xl">
         {{ t('home.welcome', { name: userStore.user?.firstname as string }) }} 👋
@@ -49,30 +77,39 @@ onMounted(() => {
       <p class="text-sm text-muted-foreground">{{ t('home.subtitle') }}</p>
     </div>
     <RouterLink to="profile">
-    <Avatar>
-      <AvatarImage
-        alt="profile Picture"
-        :src="STATICS_PATH(userStore.user?.avatarRef)"
-      />
-      <AvatarFallback>{{userStore.user?.firstname[0] ?? ''}}</AvatarFallback>
-    </Avatar>
+      <Avatar>
+        <AvatarImage alt="profile Picture" :src="STATICS_PATH(userStore.user?.avatarRef)" />
+        <AvatarFallback>{{ userStore.user?.firstname[0] ?? '' }}</AvatarFallback>
+      </Avatar>
     </RouterLink>
   </div>
 
-  <div class="w-full my-2">
-    <h2 class="text-xl my-2 font-medium">{{t('Home.Hints')}}</h2>
+  <div class="w-full mb-2" v-if="hints.some((hint) => hint.condition === true)">
+    <h2 class="text-xl my-2 font-medium">{{ t('Home.Hints') }}</h2>
     <ScrollArea class="w-screen ml-[calc(-50vw+50%)] xl:w-full xl:ml-0">
       <div class="flex p-4 space-x-4 w-max">
-        <div v-for="tip in hints" :key="tip.id" class="w-[80vw] shrink-1 xl:max-w-4xl">
-          <Card class="w-full border-none bg-secondary">
-            <CardHeader>
-              <CardTitle>{{ tip.title }}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>{{ tip.description }}</p>
-            </CardContent>
-          </Card>
-        </div>
+        <template v-for="tip in hints">
+          <div v-if="tip.condition" :key="tip.id" class="w-[80vw] shrink-1 xl:max-w-4xl">
+            <component
+              :is="tip.url.startsWith('http') ? 'a' : RouterLink"
+              :href="tip.url.startsWith('http') ? tip.url : undefined"
+              :to="!tip.url.startsWith('http') ? tip.url : undefined"
+              target="_blank"
+              rel="noopener"
+              class="block"
+            >
+              <Card class="w-full border-none bg-secondary hover:bg-secondary/80 transition">
+                <CardHeader>
+                  <CardTitle>{{ tip.title }}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p class="text-muted-foreground">{{ tip.description }}</p>
+                </CardContent>
+              </Card>
+            </component>
+          </div>
+        </template>
+
       </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>

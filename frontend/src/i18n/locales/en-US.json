@@ -160,6 +160,40 @@
     "surname": "Surname"
   },
   "active": "Active",
+  "addController": {
+    "configError": "Error sending configuration",
+    "configErrorConnection": "Connection error to the controller.",
+    "configErrorGeneric": "An unknown error occurred.",
+    "configSuccess": "Configuration sent successfully!",
+    "confirmWifi": "I am connected to the \"Sensora\" Wi-Fi",
+    "description": "Follow these steps to add a new controller to your account.",
+    "important": "Important:",
+    "openConfig": "Open Configuration Page (192.168.4.1)",
+    "refreshPlants": "Refresh Plants Overview",
+    "ssidLabel": "Wi-Fi Name (SSID)",
+    "ssidPlaceholder": "Your Wi-Fi network name",
+    "step1Description": "Connect the new controller to a power source. Ensure it is turned on.",
+    "step1Title": "Step 1: Power Up",
+    "step2Description": "On your device (smartphone, tablet, laptop), open the Wi-Fi settings and look for a network named:",
+    "step2Title": "Step 2: Connect to Wi-Fi",
+    "step3DescriptionForm": "Enter your home network's Wi-Fi details and your user account name here.",
+    "step3Title": "Step 3: Open Web Server",
+    "step3TitleForm": "Step 3: Enter Wi-Fi Details and Username",
+    "step4SuccessDescription": "The controller is now trying to connect to your Wi-Fi and our server. This may take a few moments.",
+    "step4SuccessTitle": "Step 4: Connecting...",
+    "step5Description": "Once the connection is established, you should see the new controller in your app. You may need to refresh the plants overview once.",
+    "step5Title": "Step 5: Verify Controller in App",
+    "submitConfig": "Submit Configuration",
+    "submitting": "Submitting...",
+    "title": "Add New Controller",
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "Your app username",
+    "wifiConnected": "Connected to \"Sensora\" Wi-Fi",
+    "wifiName": "Sensora",
+    "wifiPassword": "No password is required for this Wi-Fi network. Simply select it to connect.",
+    "wifiPasswordLabel": "Wi-Fi Password",
+    "wifiPasswordPlaceholder": "Your Wi-Fi password"
+  },
   "appearance": {
     "Dark": "Dark",
     "Description": "Customize the appearance of the app.",
@@ -205,6 +239,41 @@
     "sessionExpired": "Unauthorized!",
     "unauthorized": "Session expired! Please log in again.",
     "unknownError": "Unknown error!"
+  },
+  "faq": {
+    "q1": {
+      "answer": "This app helps home gardeners efficiently water their plants. Using sensors (soil moisture, temperature, humidity, and brightness) and an integrated pump, irrigation can be automated.",
+      "question": "What does this app do?"
+    },
+    "q2": {
+      "answer": "Plants belong to a room, which is part of an apartment. An apartment can have multiple members. You can invite others using an invite link valid for 7 days.",
+      "question": "How is the system organized?"
+    },
+    "q3": {
+      "answer": "No. You can add plants without a sensor, but sensors provide additional data for automation.",
+      "question": "Does every plant need a sensor?"
+    },
+    "q4": {
+      "answer": "Yes, using an invite link. It's valid for 7 days. Invited users can view and edit all plants in the apartment.",
+      "question": "Can I invite other people?"
+    },
+    "q5": {
+      "answer": "You can configure watering times and amounts, or enable automation. The system uses sensor data and/or weather forecasts for intelligent control.",
+      "question": "How does the irrigation work?"
+    },
+    "q6": {
+      "answer": "Yes, there's a log showing when and how much water each plant received – ideal for monitoring and optimization.",
+      "question": "Can I view past watering events?"
+    },
+    "q7": {
+      "answer": "Yes! The app is web-based and works on any internet-enabled device – phone, tablet, or laptop.",
+      "question": "Can I control the system remotely?"
+    },
+    "q8": {
+      "answer": "You can enable notifications – e.g., when watering is complete or if there are system errors.",
+      "question": "Are there notifications?"
+    },
+    "title": "FAQ – Smart Irrigation System"
   },
   "group": {
     "ShareTitle": "Share invite link",
@@ -349,6 +418,33 @@
     "emptyPlantSubtitle": "Create a plant so you can start collecting data with Sensora.",
     "emptyPlantTitle": "Create Your First Plant"
   },
+  "privacy": {
+    "access": {
+      "text": "Only members of your group (apartment) can access shared plants and sensors. Your data is never shared with third parties.",
+      "title": "Who can access my data?"
+    },
+    "contact": {
+      "text": "If you have any questions regarding privacy, feel free to contact your project team at any time.",
+      "title": "Contact for questions"
+    },
+    "dataCollected": {
+      "plantData": "Plant details (name, room, apartment)",
+      "sensorData": "Sensor readings such as soil moisture, temperature, brightness, humidity",
+      "title": "What data is stored?",
+      "usageData": "Usage data (e.g., watering activity logs)",
+      "username": "Username and group memberships"
+    },
+    "intro": "Protecting your data is important to us. This app only collects the necessary information to ensure the proper functioning of the smart irrigation system.",
+    "security": {
+      "text": "The app uses modern security practices and does not store any sensitive data (like passwords) in plain text.",
+      "title": "How is my data protected?"
+    },
+    "title": "Privacy Policy",
+    "usage": {
+      "text": "Data is only used for operating the system — automating irrigation, displaying plant info, and showing past activity.",
+      "title": "How is the data used?"
+    }
+  },
   "profile": {
     "AboutUs": "About Us",
     "AddDevice": "Add Device",
@@ -411,6 +507,7 @@
   },
   "temperature": "Temperature",
   "title": {
+    "FAQ": "FAQ",
     "aboutUs": "About Us",
     "addDevice": "Add Device",
     "createPlant": "Create Plant",
@@ -421,6 +518,7 @@
     "plant": "Plant Details",
     "plantSettings": "Edit Plant",
     "plants": "My Plants",
+    "privacyPolicy": "Privacy Policy",
     "profile": "Profile",
     "register": "Register",
     "sensor": "Sensor Details",
@@ -439,38 +537,17 @@
     "deleted": "User successfully deleted!",
     "updated": "User successfully updated!"
   },
-  "addController": {
-    "title": "Add New Controller",
-    "description": "Follow these steps to add a new controller to your account.",
-    "important": "Important:",
-    "step1Title": "Step 1: Power Up",
-    "step1Description": "Connect the new controller to a power source. Ensure it is turned on.",
-    "step2Title": "Step 2: Connect to Wi-Fi",
-    "step2Description": "On your device (smartphone, tablet, laptop), open the Wi-Fi settings and look for a network named:",
-    "wifiName": "Sensora",
-    "wifiPassword": "No password is required for this Wi-Fi network. Simply select it to connect.",
-    "confirmWifi": "I am connected to the \"Sensora\" Wi-Fi",
-    "wifiConnected": "Connected to \"Sensora\" Wi-Fi",
-    "step3Title": "Step 3: Open Web Server",
-    "step3TitleForm": "Step 3: Enter Wi-Fi Details and Username",
-    "step3DescriptionForm": "Enter your home network's Wi-Fi details and your user account name here.",
-    "ssidLabel": "Wi-Fi Name (SSID)",
-    "openConfig": "Open Configuration Page (192.168.0.1)",
-    "ssidPlaceholder": "Your Wi-Fi network name",
-    "wifiPasswordLabel": "Wi-Fi Password",
-    "wifiPasswordPlaceholder": "Your Wi-Fi password",
-    "usernameLabel": "Username",
-    "usernamePlaceholder": "Your app username",
-    "submitConfig": "Submit Configuration",
-    "submitting": "Submitting...",
-    "configSuccess": "Configuration sent successfully!",
-    "configError": "Error sending configuration",
-    "configErrorGeneric": "An unknown error occurred.",
-    "configErrorConnection": "Connection error to the controller.",
-    "step4SuccessTitle": "Step 4: Connecting...",
-    "step4SuccessDescription": "The controller is now trying to connect to your Wi-Fi and our server. This may take a few moments.",
-    "step5Title": "Step 5: Verify Controller in App",
-    "step5Description": "Once the connection is established, you should see the new controller in your app. You may need to refresh the plants overview once.",
-    "refreshPlants": "Refresh Plants Overview"
+  "hints": {
+    "createGroupTitle": "Start with your apartment",
+    "createGroupDescription": "Create an apartment to organize rooms and plants. The first step to a smarter green home!",
+
+    "createPlantTitle": "Add your first plant",
+    "createPlantDescription": "Create a plant to begin with smart watering. Sensors are optional!",
+
+    "addSensorTitle": "Add a sensor",
+    "addSensorDescription": "Add a sensor to automatically track soil moisture and environmental data.",
+
+    "starProjectTitle": "Support us on GitHub",
+    "starProjectDescription": "If you like this project, consider leaving a ⭐ on GitHub!"
   }
 }

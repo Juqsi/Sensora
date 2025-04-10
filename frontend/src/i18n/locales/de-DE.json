@@ -160,6 +160,40 @@
     "surname": "Nachname"
   },
   "active": "Aktiv",
+  "addController": {
+    "configError": "Fehler beim Senden der Konfiguration",
+    "configErrorConnection": "Verbindungsfehler zum Controller.",
+    "configErrorGeneric": "Ein unbekannter Fehler ist aufgetreten.",
+    "configSuccess": "Konfiguration erfolgreich gesendet!",
+    "confirmWifi": "Ich bin im \"Sensora\" WLAN",
+    "description": "Folge diesen Schritten, um einen neuen Controller zu deinem Konto hinzuzufügen.",
+    "important": "Wichtig:",
+    "openConfig": "Konfigurationsseite öffnen (192.168.4.1)",
+    "refreshPlants": "Pflanzenübersicht aktualisieren",
+    "ssidLabel": "WLAN-Name (SSID)",
+    "ssidPlaceholder": "Name deines WLANs",
+    "step1Description": "Verbinde den neuen Controller mit einer Stromquelle. Stelle sicher, dass er eingeschaltet ist.",
+    "step1Title": "Schritt 1: Stromversorgung",
+    "step2Description": "Auf deinem Gerät (Smartphone, Tablet, Laptop) öffne die WLAN-Einstellungen und suche nach einem Netzwerk mit dem Namen:",
+    "step2Title": "Schritt 2: Mit WLAN verbinden",
+    "step3DescriptionForm": "Gib hier die WLAN-Daten deines Heimnetzwerks und deinen Benutzerkonto-Namen ein.",
+    "step3Title": "Schritt 3: Webserver öffnen",
+    "step3TitleForm": "Schritt 3: WLAN-Daten und Benutzername eingeben",
+    "step4SuccessDescription": "Der Controller versucht nun, sich mit deinem WLAN und unserem Server zu verbinden. Dies kann einige Momente dauern.",
+    "step4SuccessTitle": "Schritt 4: Verbindung wird hergestellt",
+    "step5Description": "Sobald die Verbindung hergestellt ist, solltest du den neuen Controller in deiner App sehen. Möglicherweise musst du die Pflanzenübersicht einmal aktualisieren.",
+    "step5Title": "Schritt 5: Controller in der App überprüfen",
+    "submitConfig": "Konfiguration senden",
+    "submitting": "Senden...",
+    "title": "Neuen Controller hinzufügen",
+    "usernameLabel": "Benutzername",
+    "usernamePlaceholder": "Dein App-Benutzername",
+    "wifiConnected": "Mit \"Sensora\" WLAN verbunden",
+    "wifiName": "Sensora",
+    "wifiPassword": "Für dieses WLAN ist kein Passwort erforderlich. Wähle es einfach aus, um dich zu verbinden.",
+    "wifiPasswordLabel": "WLAN-Passwort",
+    "wifiPasswordPlaceholder": "Passwort deines WLANs"
+  },
   "appearance": {
     "Dark": "Dunkel",
     "Description": "Passen Sie das Erscheinungsbild der App an.",
@@ -205,6 +239,41 @@
     "sessionExpired": "Nicht autorisiert!",
     "unauthorized": "Sitzung abgelaufen! Bitte erneut einloggen.",
     "unknownError": "Unbekannter Fehler!"
+  },
+  "faq": {
+    "q1": {
+      "answer": "Diese App ermöglicht es Heimgärtnern, ihre Pflanzen effizient zu bewässern. Mithilfe von Sensoren (Bodenfeuchtigkeit, Temperatur, Luftfeuchtigkeit und Helligkeit) und einer integrierten Pumpe kann die Bewässerung automatisch gesteuert werden.",
+      "question": "Was macht diese App?"
+    },
+    "q2": {
+      "answer": "Pflanzen gehören zu einem Zimmer, das wiederum Teil einer Wohnung (Apartment) ist. Eine Wohnung kann mehrere Mitglieder haben. Du kannst andere Personen über einen Einladungslink hinzufügen, der 7 Tage gültig ist.",
+      "question": "Wie ist das System organisiert?"
+    },
+    "q3": {
+      "answer": "Nein. Du kannst Pflanzen auch ohne Sensor hinzufügen. Sensoren liefern aber zusätzliche Daten für eine automatisierte Bewässerung.",
+      "question": "Benötigt jede Pflanze einen Sensor?"
+    },
+    "q4": {
+      "answer": "Ja, über einen Einladungslink. Dieser ist 7 Tage gültig. Eingeladene Personen können alle Pflanzen in der Wohnung sehen und bearbeiten.",
+      "question": "Kann ich andere Personen einladen?"
+    },
+    "q5": {
+      "answer": "Du kannst Bewässerungszeiten und -mengen individuell einstellen oder die Automatik aktivieren. Diese nutzt Sensorwerte und/oder Wetterdaten zur optimalen Steuerung.",
+      "question": "Wie funktioniert die Bewässerung?"
+    },
+    "q6": {
+      "answer": "Ja, im Bewässerungsprotokoll siehst du, wann welche Pflanze wie viel Wasser bekommen hat – perfekt zur Kontrolle und Optimierung.",
+      "question": "Kann ich vergangene Bewässerungen einsehen?"
+    },
+    "q7": {
+      "answer": "Ja! Die App ist webbasiert und funktioniert auf jedem internetfähigen Gerät – egal ob Smartphone, Tablet oder Laptop.",
+      "question": "Kann ich das System auch von unterwegs steuern?"
+    },
+    "q8": {
+      "answer": "Optional kannst du Benachrichtigungen aktivieren – z. B. bei abgeschlossenen Bewässerungen oder Fehlern im System.",
+      "question": "Gibt es Benachrichtigungen?"
+    },
+    "title": "FAQ – Smartes Bewässerungssystem"
   },
   "group": {
     "ShareTitle": "Einladungslink teilen",
@@ -349,6 +418,33 @@
     "emptyPlantSubtitle": "Erstell eine Pflanze damit du mit Sensora die Daten erfassen kannst.",
     "emptyPlantTitle": "Erstell deine erste Pflanze "
   },
+  "privacy": {
+    "access": {
+      "text": "Nur Mitglieder deiner Gruppe (Wohnung) haben Zugriff auf die gemeinsamen Pflanzen und Sensoren. Deine persönlichen Daten werden nicht an Dritte weitergegeben.",
+      "title": "Wer hat Zugriff auf meine Daten?"
+    },
+    "contact": {
+      "text": "Bei Fragen oder Anliegen zur Datensicherheit kannst du dich jederzeit an dein Projektteam wenden.",
+      "title": "Kontakt bei Fragen"
+    },
+    "dataCollected": {
+      "plantData": "Pflanzeninformationen (Name, Zimmer, Wohnung)",
+      "sensorData": "Sensordaten wie Bodenfeuchtigkeit, Temperatur, Helligkeit, Luftfeuchtigkeit",
+      "title": "Welche Daten werden gespeichert?",
+      "usageData": "Nutzungsverhalten (z. B. wann bewässert wurde)",
+      "username": "Benutzername und Gruppenmitgliedschaften"
+    },
+    "intro": "Der Schutz Ihrer Daten ist uns wichtig. Diese App sammelt nur die notwendigsten Informationen, um das smarte Bewässerungssystem zuverlässig zu betreiben.",
+    "security": {
+      "text": "Die App nutzt moderne Sicherheitsmechanismen und speichert keine sensiblen Daten wie Passwörter im Klartext.",
+      "title": "Wie werden meine Daten geschützt?"
+    },
+    "title": "Datenschutzerklärung",
+    "usage": {
+      "text": "Die Daten dienen ausschließlich zur Funktion des Systems – zur Automatisierung der Bewässerung, zur Anzeige von Pflanzeninformationen und zur Auswertung vergangener Aktionen.",
+      "title": "Wofür werden die Daten verwendet?"
+    }
+  },
   "profile": {
     "AboutUs": "Über uns",
     "AddDevice": "Gerät hinzufügen",
@@ -411,6 +507,7 @@
   },
   "temperature": "Temperatur",
   "title": {
+    "FAQ": "FAQ",
     "aboutUs": "Über uns",
     "addDevice": "Gerät hinzufügen",
     "createPlant": "Pflanze erstellen",
@@ -421,6 +518,7 @@
     "plant": "Pflanzendetails",
     "plantSettings": "Pflanze bearbeiten",
     "plants": "Meine Pflanzen",
+    "privacyPolicy": "Datenschutz",
     "profile": "Profil",
     "register": "Registrieren",
     "sensor": "Sensordetails",
@@ -439,38 +537,17 @@
     "deleted": "Benutzer erfolgreich gelöscht!",
     "updated": "Benutzer erfolgreich aktualisiert!"
   },
-  "addController": {
-    "title": "Neuen Controller hinzufügen",
-    "description": "Folge diesen Schritten, um einen neuen Controller zu deinem Konto hinzuzufügen.",
-    "important": "Wichtig:",
-    "step1Title": "Schritt 1: Stromversorgung",
-    "step1Description": "Verbinde den neuen Controller mit einer Stromquelle. Stelle sicher, dass er eingeschaltet ist.",
-    "step2Title": "Schritt 2: Mit WLAN verbinden",
-    "step2Description": "Auf deinem Gerät (Smartphone, Tablet, Laptop) öffne die WLAN-Einstellungen und suche nach einem Netzwerk mit dem Namen:",
-    "wifiName": "Sensora",
-    "wifiPassword": "Für dieses WLAN ist kein Passwort erforderlich. Wähle es einfach aus, um dich zu verbinden.",
-    "confirmWifi": "Ich bin mit dem \"Sensora\" WLAN verbunden",
-    "wifiConnected": "Mit \"Sensora\" WLAN verbunden",
-    "step3Title": "Schritt 3: Webserver öffnen",
-    "openConfig": "Konfigurationsseite öffnen (192.168.0.1)",
-    "step3TitleForm": "Schritt 3: WLAN-Daten und Benutzername eingeben",
-    "step3DescriptionForm": "Gib hier die WLAN-Daten deines Heimnetzwerks und deinen Benutzerkonto-Namen ein.",
-    "ssidLabel": "WLAN-Name (SSID)",
-    "ssidPlaceholder": "Name deines WLANs",
-    "wifiPasswordLabel": "WLAN-Passwort",
-    "wifiPasswordPlaceholder": "Passwort deines WLANs",
-    "usernameLabel": "Benutzername",
-    "usernamePlaceholder": "Dein App-Benutzername",
-    "submitConfig": "Konfiguration senden",
-    "submitting": "Senden...",
-    "configSuccess": "Konfiguration erfolgreich gesendet!",
-    "configError": "Fehler beim Senden der Konfiguration",
-    "configErrorGeneric": "Ein unbekannter Fehler ist aufgetreten.",
-    "configErrorConnection": "Verbindungsfehler zum Controller.",
-    "step4SuccessTitle": "Schritt 4: Verbindung wird hergestellt",
-    "step4SuccessDescription": "Der Controller versucht nun, sich mit deinem WLAN und unserem Server zu verbinden. Dies kann einige Momente dauern.",
-    "step5Title": "Schritt 5: Controller in der App überprüfen",
-    "step5Description": "Sobald die Verbindung hergestellt ist, solltest du den neuen Controller in deiner App sehen. Möglicherweise musst du die Pflanzenübersicht einmal aktualisieren.",
-    "refreshPlants": "Pflanzenübersicht aktualisieren"
+  "hints": {
+    "createGroupTitle": "Starte mit deiner Wohnung",
+    "createGroupDescription": "Erstelle eine Wohnung, um Räume und Pflanzen darin zu organisieren. Der erste Schritt zum grünen Zuhause!",
+
+    "createPlantTitle": "Füge deine erste Pflanze hinzu",
+    "createPlantDescription": "Lege eine Pflanze an, um mit der smarten Bewässerung zu starten. Sensoren sind optional!",
+
+    "addSensorTitle": "Sensor hinzufügen",
+    "addSensorDescription": "Füge einen Sensor hinzu, um Bodenfeuchtigkeit und andere Werte automatisch zu erfassen.",
+
+    "starProjectTitle": "Support auf GitHub",
+    "starProjectDescription": "Wenn dir das Projekt gefällt, unterstütze uns mit einem ⭐ auf GitHub!"
   }
 }

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Button, buttonVariants } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -46,8 +46,10 @@ import { useDeviceStore, useGroupStore, usePlantStore, useUserStore } from '@/st
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 import EmtyState from '@/components/EmtyState.vue'
 import { useI18n } from 'vue-i18n'
-import PlantListView from './PlantListView.vue'
 import type { Controller } from '@/api'
+import {useRoute} from 'vue-router'
+
+const route = useRoute()
 
 const { t } = useI18n()
 
@@ -134,7 +136,7 @@ const formSchema = toTypedSchema(
   }),
 )
 
-const { handleSubmit, values } = useForm({
+const { values } = useForm({
   validationSchema: formSchema,
   initialValues: {
     items: ['error', 'active', 'inactive', 'unknown'],
@@ -173,18 +175,19 @@ usePullToRefresh(async () => {
   }
 })
 onMounted(() => {
+  const force : boolean = Boolean(route.params.force)
   try {
-    deviceStore.fetchDevices()
+    deviceStore.fetchDevices(force)
   } catch (e) {
     console.error(e)
   }
   try {
-    groupStore.fetchGroups()
+    groupStore.fetchGroups(force)
   } catch (e) {
     console.error(e)
   }
   try {
-    plantStore.fetchPlants()
+    plantStore.fetchPlants(force)
   } catch (e) {
     console.error(e)
   }

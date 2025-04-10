@@ -103,6 +103,18 @@ const router = createRouter({
       meta: { requiresAuth: true, title: 'title.addDevice' },
     },
     {
+      path: '/faq',
+      name: 'FAQ',
+      component: () => import('../views/FaqView.vue'),
+      meta: { requiresAuth: true, title: 'title.FAQ' },
+    },
+    {
+      path: '/privacyPolicy',
+      name: 'Privacy Policy',
+      component: () => import('../views/PrivacyView.vue'),
+      meta: { requiresAuth: true, title: 'title.privacyPolicy' },
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
       component: () => import('../views/404view.vue'),

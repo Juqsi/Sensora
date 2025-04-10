@@ -28,7 +28,7 @@ const submitControllerConfig = async () => {
   submissionError.value = '';
 
   try {
-    const response = await fetch('http://192.168.0.1/config', {
+    const response = await fetch('http://192.168.4.1/config', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ const submitControllerConfig = async () => {
           </Button>
           <p v-if="submissionError" class="text-sm text-destructive">{{ submissionError }}</p>
         </div>
-        <Button as="a" href="http://192.168.0.1" target="_blank" rel="noopener noreferrer" variant="secondary" class="w-full">{{ t('addController.openConfig') }}</Button>
+        <Button as="a" href="http://192.168.4.1" @click="()=>{submissionSuccess = true;}" target="_blank" rel="noopener noreferrer" variant="secondary" class="w-full">{{ t('addController.openConfig') }}</Button>
       </div>
 
       <div class="space-y-2" v-if="isWifiConnected && submissionSuccess">
@@ -125,7 +125,7 @@ const submitControllerConfig = async () => {
       <div class="space-y-2" v-if="isWifiConnected && (submissionSuccess || submissionError)">
         <h3 class="text-lg font-semibold">{{ t('addController.step5Title') }}</h3>
         <p class="text-sm">{{ t('addController.step5Description') }}</p>
-        <Button as="a" href="/plants" class="w-full">
+        <Button as="a" href="/plants?force=true" class="w-full">
           <RefreshCwIcon class="h-4 w-4 mr-2" />
           {{ t('addController.refreshPlants') }}
         </Button>

@@ -71,6 +71,7 @@ const delteData = () => {
   <p class="w-full text-muted-foreground mt-2 mb-1">{{ t('profile.Support') }}</p>
   <Card class="w-full">
     <CardContent class="grid gap-1 py-2 px-6">
+      <RouterLink to="/faq">
       <div
         class="-mx-2 flex items-enter space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
       >
@@ -79,6 +80,7 @@ const delteData = () => {
           <p class="text-md leading-none">{{ t('profile.FAQ') }}</p>
         </div>
       </div>
+      </RouterLink>
       <RouterLink to="/aboutus">
         <div
           class="-mx-2 flex items-center space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
@@ -89,6 +91,7 @@ const delteData = () => {
           </div>
         </div>
       </RouterLink>
+      <RouterLink to="/privacyPolicy">
       <div
         class="-mx-2 flex items-center space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
       >
@@ -97,6 +100,7 @@ const delteData = () => {
           <p class="text-md leading-none">{{ t('profile.Privacy') }}</p>
         </div>
       </div>
+      </RouterLink>
     </CardContent>
   </Card>
   <p class="w-full text-muted-foreground mt-2 mb-1">{{ t('profile.Logout') }}</p>
@@ -121,6 +125,11 @@ const delteData = () => {
       </div>
     </CardContent>
   </Card>
+  <div class="mt-6 text-center text-sm text-muted-foreground">
+    Made with
+    <span class="text-red-500 animate-pulse">❤️</span>
+    in <span class="font-semibold text-primary">Mannheim</span>
+  </div>
 </template>
 
 <style scoped></style>

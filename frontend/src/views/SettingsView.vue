@@ -6,6 +6,7 @@ import AccountModification from '@/components/AccountModification.vue'
 import Appearance from '@/components/AppearanceForm.vue'
 import LanguageForm from '@/components/LanguageForm.vue'
 import {useI18n} from 'vue-i18n'
+import router from '@/router'
 
 const { t } = useI18n()
 
@@ -37,11 +38,10 @@ const switchView = (view: Views) => {
     <CardHeader class="w-full flex flex-row space-x-4">
       <!-- Zurück-Button nur, wenn nicht in der Hauptansicht -->
       <Button
-        v-if="activeView !== Views.MAIN"
         class="text-muted-foreground hover:text-primary flex items-center space-x-2"
         size="icon"
         variant="ghost"
-        @click="switchView(Views.MAIN)"
+        @click="activeView !== Views.MAIN ? switchView(Views.MAIN) : router.back()"
       >
         <ChevronLeft />
       </Button>
