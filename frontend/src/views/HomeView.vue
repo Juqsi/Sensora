@@ -56,6 +56,13 @@ const hints: Hint[] = [
     url: 'https://github.com/juqsi/sensora',
     condition: true,
   },
+  {
+    id: '5',
+    title: t('hints.reportBugTitle'),
+    description: t('hints.reportBugDescription'),
+    url: 'https://github.com/juqsi/sensora/issues',
+    condition: true,
+  },
 ]
 usePullToRefresh(async () => {
   await roomStore.fetchRooms(true)

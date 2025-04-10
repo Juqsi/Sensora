@@ -8,6 +8,8 @@ import {
   MessageCircleQuestion,
   ShieldHalf,
   Users,
+  Github,
+  Bug
 } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
 import {
@@ -55,6 +57,7 @@ const delteData = () => {
           </div>
         </div>
       </RouterLink>
+      <RouterLink to="/groups">
       <div
         class="-mx-2 flex items-center space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
       >
@@ -65,6 +68,7 @@ const delteData = () => {
           </p>
         </div>
       </div>
+      </RouterLink>
     </CardContent>
   </Card>
 
@@ -101,6 +105,26 @@ const delteData = () => {
         </div>
       </div>
       </RouterLink>
+      <a href="https://github.com/juqsi/sensora">
+        <div
+          class="-mx-2 flex items-center space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
+        >
+          <Github class="mt-px h-5 w-5" />
+          <div class="space-y-1">
+            <p class="text-md leading-none">{{ t('profile.project') }}</p>
+          </div>
+        </div>
+      </a>
+      <a href="https://github.com/juqsi/sensora/issues">
+        <div
+          class="-mx-2 flex items-center space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground"
+        >
+          <Bug class="mt-px h-5 w-5" />
+          <div class="space-y-1">
+            <p class="text-md leading-none">{{ t('profile.reportError') }}</p>
+          </div>
+        </div>
+      </a>
     </CardContent>
   </Card>
   <p class="w-full text-muted-foreground mt-2 mb-1">{{ t('profile.Logout') }}</p>

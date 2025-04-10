@@ -61,6 +61,12 @@ const { t, tm, rt } = useI18n()
           <!-- Links Section -->
           <div class="flex justify-center space-x-8 mt-8">
             <a
+              href="mailto:kontakt@justilian.de"
+              class="text-primary text-lg underline-offset-2 hover:opacity-80"
+            >
+              Mail
+            </a>
+            <a
               :href="t('about.githubLink')"
               class="text-primary text-lg"
               target="https://github.com/Juqsi/Sensora"

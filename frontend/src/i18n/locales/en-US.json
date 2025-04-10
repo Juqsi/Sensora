@@ -161,18 +161,6 @@
   },
   "active": "Active",
   "addController": {
-    "formErrors": {
-      "ssidRequired": "Please enter a Wi-Fi network (SSID).",
-      "passwordRequired": "Please enter the Wi-Fi password.",
-      "usernameRequired": "Please enter your username.",
-      "mailRequired": "Please enter your email address.",
-      "unknown": "An unknown error occurred.",
-      "server": "Request failed",
-      "connection": "Failed to connect to the device."
-    },
-    "formSuccess": {
-      "sent": "Connection successfully submitted."
-    },
     "MailLabel": "Mail",
     "configError": "Error sending configuration",
     "configErrorConnection": "Connection error to the controller.",
@@ -180,6 +168,18 @@
     "configSuccess": "Configuration sent successfully!",
     "confirmWifi": "I am connected to the \"Sensora\" Wi-Fi",
     "description": "Follow these steps to add a new controller to your account.",
+    "formErrors": {
+      "connection": "Failed to connect to the device.",
+      "mailRequired": "Please enter your email address.",
+      "passwordRequired": "Please enter the Wi-Fi password.",
+      "server": "Request failed",
+      "ssidRequired": "Please enter a Wi-Fi network (SSID).",
+      "unknown": "An unknown error occurred.",
+      "usernameRequired": "Please enter your username."
+    },
+    "formSuccess": {
+      "sent": "Connection successfully submitted."
+    },
     "important": "Important:",
     "mailPlaceholder": "Your mail",
     "openConfig": "Open Configuration Page (192.168.4.1)",
@@ -357,6 +357,8 @@
     "createGroupTitle": "Start with your apartment",
     "createPlantDescription": "Create a plant to begin. Sensors are optional!",
     "createPlantTitle": "Add your first plant",
+    "reportBugDescription": "Open a GitHub issue to report problems and help improve the project.",
+    "reportBugTitle": "Found a bug or issue?",
     "starProjectDescription": "If you like this project, consider leaving a ⭐ on GitHub!",
     "starProjectTitle": "Support us on GitHub"
   },
@@ -478,7 +480,9 @@
     "Logout": "Logout",
     "Privacy": "Privacy",
     "Sensora": "Sensora",
-    "Support": "Support"
+    "Support": "Support",
+    "project": "Project",
+    "reportError": "Report error"
   },
   "register": {
     "Continue": "Save",

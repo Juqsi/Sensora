@@ -161,18 +161,6 @@
   },
   "active": "Aktiv",
   "addController": {
-    "formErrors": {
-      "ssidRequired": "Bitte gib ein WLAN-Netzwerk (SSID) ein.",
-      "passwordRequired": "Bitte gib das WLAN-Passwort ein.",
-      "usernameRequired": "Bitte gib deinen Benutzernamen ein.",
-      "mailRequired": "Bitte gib deine E-Mail-Adresse ein.",
-      "unknown": "Ein unbekannter Fehler ist aufgetreten.",
-      "server": "Fehler bei der Anfrage",
-      "connection": "Verbindung zum Gerät fehlgeschlagen."
-    },
-    "formSuccess": {
-      "sent": "Verbindung erfolgreich übermittelt."
-    },
     "MailLabel": "E-Mail",
     "configError": "Fehler beim Senden der Konfiguration",
     "configErrorConnection": "Verbindungsfehler zum Controller.",
@@ -180,6 +168,18 @@
     "configSuccess": "Konfiguration erfolgreich gesendet!",
     "confirmWifi": "Ich bin im \"Sensora\" WLAN",
     "description": "Folge diesen Schritten, um einen neuen Controller zu deinem Konto hinzuzufügen.",
+    "formErrors": {
+      "connection": "Verbindung zum Gerät fehlgeschlagen.",
+      "mailRequired": "Bitte gib deine E-Mail-Adresse ein.",
+      "passwordRequired": "Bitte gib das WLAN-Passwort ein.",
+      "server": "Fehler bei der Anfrage",
+      "ssidRequired": "Bitte gib ein WLAN-Netzwerk (SSID) ein.",
+      "unknown": "Ein unbekannter Fehler ist aufgetreten.",
+      "usernameRequired": "Bitte gib deinen Benutzernamen ein."
+    },
+    "formSuccess": {
+      "sent": "Verbindung erfolgreich übermittelt."
+    },
     "important": "Wichtig:",
     "mailPlaceholder": "Deine E-Mail Adress",
     "openConfig": "Konfigurationsseite öffnen (192.168.4.1)",
@@ -357,6 +357,8 @@
     "createGroupTitle": "Starte mit deiner Wohnung",
     "createPlantDescription": "Lege eine Pflanze an, um zu starten. Sensoren sind optional!",
     "createPlantTitle": "Füge deine erste Pflanze hinzu",
+    "reportBugDescription": "Öffne ein GitHub-Issue, um Probleme zu melden und das Projekt zu verbessern.",
+    "reportBugTitle": "Fehler oder Bug entdeckt?",
     "starProjectDescription": "Wenn dir das Projekt gefällt, unterstütze uns mit einem ⭐ auf GitHub!",
     "starProjectTitle": "Support auf GitHub"
   },
@@ -478,7 +480,9 @@
     "Logout": "Abmelden",
     "Privacy": "Datenschutz",
     "Sensora": "Sensora",
-    "Support": "Hilfe"
+    "Support": "Hilfe",
+    "project": "Projekt",
+    "reportError": "Fehler melden"
   },
   "register": {
     "Continue": "Speichern",
