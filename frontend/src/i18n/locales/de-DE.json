@@ -419,6 +419,7 @@
   "plant": {
     "NoInformationSubtitle": "In unserer Datenbank sind leider keine Daten zu der Pflanze enthalten.",
     "NoInformationTitle": "Keine Daten verfügbar",
+    "external": "extern",
     "settings": {
       "Avatar": "Avatar",
       "Avatar1": "Avatar 1",

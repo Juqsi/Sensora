@@ -79,7 +79,7 @@ const sensorLink = computed(() => {
     <TableCell>
       <RouterLink :to="sensorLink">
         <Badge :variant="getStatus.value" class="w-full justify-center">
-          {{ getStatus.label }}
+          {{ getStatus.label }} {{ isExternal ? `| ${t('plant.external')}` : '' }}
         </Badge>
       </RouterLink>
     </TableCell>
@@ -96,9 +96,6 @@ const sensorLink = computed(() => {
     </TableCell>
     <TableCell class="hidden md:table-cell">
       <RouterLink :to="sensorLink">
-        <Badge v-if="isExternal" variant="secondary" class="text-xs px-1.5 py-0.5">
-       {{t('plant.external')}}
-        </Badge>
         {{ firstAssignedController?.did ?? '--' }}
       </RouterLink>
     </TableCell>

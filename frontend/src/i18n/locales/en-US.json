@@ -419,6 +419,7 @@
   "plant": {
     "NoInformationSubtitle": "Sadly, we have currently no data about this plant in our datebase.",
     "NoInformationTitle": "No Data available",
+    "external": "external",
     "settings": {
       "Avatar": "Avatar",
       "Avatar1": "Avatar 1",
