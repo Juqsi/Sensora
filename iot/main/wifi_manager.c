@@ -9,14 +9,20 @@
 #include "driver/gpio.h"
 #include "esp_system.h"
 #include "wifi_setup_html.h"
+#include "system_data_manager.h"
+
+#include <esp_https_server.h>
 
 #define RESET_BUTTON_GPIO 0 // GPIO 0 für den Reset-Button verwenden
+#define RESET_HOLD_DURATION_MS 5000  // 5 Sekunden
+#define LED_RESET_BLINK_INTERVAL_MS 200
 
 static const char *TAG = "wifi_manager";
 static httpd_handle_t server = NULL;
 static TaskHandle_t reset_task_handle = NULL;
 static bool reset = false;
 static TaskHandle_t ap_delayed_stop_task_handle = NULL;
+static system_data_t system_data;
 
 typedef enum {
 	CONNECT_STATE_IDLE,
@@ -26,10 +32,17 @@ typedef enum {
 
 static connect_state_t wifi_connect_state = CONNECT_STATE_IDLE;
 
+extern const uint8_t server_cert_pem_start[] asm("_binary_server_cert_pem_start"
+);
+extern const uint8_t server_cert_pem_end[] asm("_binary_server_cert_pem_end");
+extern const uint8_t server_key_pem_start[] asm("_binary_server_key_pem_start");
+extern const uint8_t server_key_pem_end[] asm("_binary_server_key_pem_end");
+
 void stop_ap(void);
 
-//definiere Interrupt Routine für einen Input an GPIO0
+
 static void IRAM_ATTR gpio_isr_handler(void *arg) {
+	// Nur Notification senden, Auswertung in der Task
 	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 	vTaskNotifyGiveFromISR(reset_task_handle, &xHigherPriorityTaskWoken);
 	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
@@ -37,28 +50,60 @@ static void IRAM_ATTR gpio_isr_handler(void *arg) {
 
 void reset_task(void *arg) {
 	while (1) {
-		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-		// Blockiert bis Interrupt ausgelöst wurde
+		ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // Warte auf ISR
 
-		ESP_LOGW(
-			TAG, "🟡 GPIO Interrupt erkannt. WLAN-Daten werden gelöscht...");
-		reset = true;
-		esp_wifi_stop(); // sicherstellen, dass Wi-Fi nicht aktiv ist
-		esp_wifi_restore();
-		vTaskDelay(pdMS_TO_TICKS(500));
+		ESP_LOGW(TAG, "🟡 Reset-Knopf erkannt – prüfe Haltezeit...");
 
-		ESP_LOGW(TAG, "🔁 Gerät wird neu gestartet...");
-		esp_restart();
+		TickType_t press_time = xTaskGetTickCount();
+
+		// Starte schnelles Blinken
+		ESP_LOGI(TAG, "💡 Starte schnelles LED-Blinken für Reset-Vorbereitung");
+		bool led_state = false;
+
+		while (gpio_get_level(RESET_BUTTON_GPIO) == 0) {
+			led_state = !led_state;
+			if (led_state) {
+				led_on();
+			} else {
+				led_off();
+			}
+
+			vTaskDelay(pdMS_TO_TICKS(LED_RESET_BLINK_INTERVAL_MS));
+
+			if ((xTaskGetTickCount() - press_time) >= pdMS_TO_TICKS(
+				    RESET_HOLD_DURATION_MS)) {
+				ESP_LOGW(
+					TAG, "✅ Knopf wurde 5 Sekunden gehalten – setze zurück...");
+
+				reset = true;
+				led_off(); // sicherheitshalber
+
+				ESP_LOGW(TAG, "🟡 WLAN-Daten werden gelöscht...");
+				esp_wifi_stop();
+				esp_wifi_restore();
+
+				ESP_LOGW(TAG, "🟡 User-Daten werden gelöscht...");
+				erase_system_data();
+
+				vTaskDelay(pdMS_TO_TICKS(500));
+				ESP_LOGW(TAG, "🔁 Gerät wird neu gestartet...");
+				esp_restart();
+			}
+		}
+
+		// Wenn hier angekommen, wurde der Knopf zu früh losgelassen
+		led_off();
+		ESP_LOGI(TAG, "❌ Knopf wurde nicht lange genug gehalten. Kein Reset.");
 	}
 }
 
-// Initialisierung von GPIO und Interrupt
+
 void gpio_interrupt_init(void) {
 	gpio_config_t io_conf = {
 		.pin_bit_mask = (1ULL << RESET_BUTTON_GPIO),
 		.mode = GPIO_MODE_INPUT,
 		.pull_up_en = GPIO_PULLUP_ENABLE,
-		.intr_type = GPIO_INTR_NEGEDGE, // z.B. bei Knopfdruck (LOW)
+		.intr_type = GPIO_INTR_NEGEDGE, // auf fallende Flanke reagieren
 	};
 	ESP_ERROR_CHECK(gpio_config(&io_conf));
 
@@ -71,6 +116,7 @@ void gpio_interrupt_init(void) {
 	xTaskCreate(reset_task, "reset_task", 2048, NULL, 10, &reset_task_handle);
 }
 
+
 bool is_sta_connected(void) {
 	esp_netif_ip_info_t ip_info;
 	esp_netif_t *sta_netif = esp_netif_get_handle_from_ifkey("WIFI_STA_DEF");
@@ -81,38 +127,44 @@ bool is_sta_connected(void) {
 	return false;
 }
 
-static esp_err_t wifi_setup_handler(httpd_req_t *req) {
+static esp_err_t setup_handler(httpd_req_t *req) {
 	httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
-	char resp[2048]; // Buffer für die Antwort
+	char resp[2048];
 
-	// Dynamisch die Fehlernachricht einfügen, falls erforderlich
-	bool failed = false;
+	bool failed_wifi_connection = false;
+	bool failed_backend_connection = false;
 	char error[8] = {0};
 
-	// URL-Parameter abfragen, um zu prüfen, ob ein Fehler vorliegt
 	if (httpd_req_get_url_query_str(req, NULL, 0) > 0) {
 		char query[32];
 		if (httpd_req_get_url_query_str(req, query, sizeof(query)) == ESP_OK) {
-			httpd_query_key_value(query, "error", error, sizeof(error));
-			if (strcmp(error, "1") == 0) {
-				failed = true;
+			if (httpd_query_key_value(query, "error", error, sizeof(error)) ==
+			    ESP_OK) {
+				int error_code = atoi(error);
+				if (error_code & 0x01)
+					failed_wifi_connection = true;
+				if (error_code & 0x02)
+					failed_backend_connection = true;
 			}
 		}
 	}
 
-	// Den HTML-String mit der dynamischen Fehlermeldung füllen
-	snprintf(resp, sizeof(resp), wifi_setup_html,
-	         failed
-		         ? "<div class='error' id='wifi-error'>❌ Verbindung fehlgeschlagen. Bitte erneut versuchen.</div>"
-		         : "");
+	char error_html[512] = "";
+	if (failed_wifi_connection) {
+		strcat(error_html,
+		       "<div class='error' id='wifi-error'>❌ Wifi-Verbindung fehlgeschlagen. Bitte erneut versuchen.</div>");
+	}else if (failed_backend_connection) {
+		strcat(error_html,
+		       "<div class='error' id='backend-error'>❌ Geräteregistrierung fehlgeschlagen. Bitte später erneut versuchen.</div>");
+	}
 
-	// Die Antwort zurück an den Client senden
+	snprintf(resp, sizeof(resp), wifi_setup_html, error_html);
 	httpd_resp_send(req, resp, HTTPD_RESP_USE_STRLEN);
 	return ESP_OK;
 }
 
 
-static esp_err_t try_wifi_handler(httpd_req_t *req) {
+static esp_err_t try_handler(httpd_req_t *req) {
 	httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
 	char buf[256];
 	int ret = httpd_req_recv(req, buf, sizeof(buf) - 1);
@@ -121,12 +173,17 @@ static esp_err_t try_wifi_handler(httpd_req_t *req) {
 
 	buf[ret] = '\0';
 
-	char ssid[32] = {0}, password[64] = {0};
+	char ssid[32] = {0}, password[64] = {0}, username[32] = {0};
 
 	httpd_query_key_value(buf, "ssid", ssid, sizeof(ssid));
 	httpd_query_key_value(buf, "password", password, sizeof(password));
+	httpd_query_key_value(buf, "username", username, sizeof(username));
 
-	ESP_LOGI(TAG, "Received SSID: %s, Password: %s", ssid, password);
+	ESP_LOGI(TAG, "Received SSID: %s, Password: %s, Username %s",
+	         ssid, password, username);
+
+	strncpy(system_data.username, username, sizeof(system_data.username));
+	save_system_data(&system_data);
 
 	wifi_config_t wifi_config = {};
 	strncpy((char *)wifi_config.sta.ssid, ssid, sizeof(wifi_config.sta.ssid));
@@ -169,7 +226,56 @@ static esp_err_t try_wifi_handler(httpd_req_t *req) {
 	return ESP_OK;
 }
 
-static esp_err_t status_wifi_handler(httpd_req_t *req) {
+static esp_err_t try_app_handler(httpd_req_t *req) {
+	httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
+	char buf[256];
+	int ret = httpd_req_recv(req, buf, sizeof(buf) - 1);
+	if (ret <= 0)
+		return ESP_FAIL;
+
+	buf[ret] = '\0';
+
+	char ssid[32] = {0}, password[64] = {0}, username[32] = {0};
+
+	httpd_query_key_value(buf, "ssid", ssid, sizeof(ssid));
+	httpd_query_key_value(buf, "password", password, sizeof(password));
+	httpd_query_key_value(buf, "username", username, sizeof(username));
+
+	ESP_LOGI(TAG, "Received SSID: %s, Password: %s, Username %s",
+	         ssid, password, username);
+
+	strncpy(system_data.username, username, sizeof(system_data.username));
+	save_system_data(&system_data);
+
+	wifi_config_t wifi_config = {};
+	strncpy((char *)wifi_config.sta.ssid, ssid, sizeof(wifi_config.sta.ssid));
+	strncpy((char *)wifi_config.sta.password, password,
+	        sizeof(wifi_config.sta.password));
+
+	ESP_ERROR_CHECK(esp_wifi_disconnect());
+	ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
+	wifi_connect_state = CONNECT_STATE_CONNECTING;
+	ESP_ERROR_CHECK(esp_wifi_connect());
+	int loop_ctr = 0;
+	while (wifi_connect_state == CONNECT_STATE_CONNECTING) {
+		if (loop_ctr++ > 10) {
+			wifi_connect_state = CONNECT_STATE_IDLE;
+			ESP_LOGW(TAG, "❌ Initialer Verbindungsversuch fehlgeschlagen.");
+		}
+		vTaskDelay(pdMS_TO_TICKS(1000));
+	}
+	if (is_sta_connected()) {
+		httpd_resp_set_status(req, "200 OK");
+		httpd_resp_send(req, NULL, 0);
+	} else if (!is_sta_connected()) {
+		httpd_resp_set_status(req, "400 Bad Request");
+		httpd_resp_set_type(req, "application/json");
+		httpd_resp_sendstr(req, "{\"message\":\"addController.ErrorWlan\"}");
+	}
+	return ESP_OK;
+}
+
+static esp_err_t status_handler(httpd_req_t *req) {
 	httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
 	if (is_sta_connected()) {
 		const char *success_page =
@@ -200,36 +306,58 @@ static esp_err_t status_wifi_handler(httpd_req_t *req) {
 
 
 void start_webserver(void) {
-	httpd_config_t config = HTTPD_DEFAULT_CONFIG();
-	config.recv_wait_timeout = 10;
-	config.stack_size = 8192;
+	httpd_ssl_config_t config = HTTPD_SSL_CONFIG_DEFAULT();
+	config.httpd.max_open_sockets = 6;
+	config.httpd.recv_wait_timeout = 10;
+	config.httpd.stack_size = 8192;
 
-	if (httpd_start(&server, &config) == ESP_OK) {
-		httpd_uri_t uri_get_wifi = {
+	config.servercert = server_cert_pem_start;
+	config.servercert_len = server_cert_pem_end - server_cert_pem_start;
+	config.prvtkey_pem = server_key_pem_start;
+	config.prvtkey_len = server_key_pem_end - server_key_pem_start;
+
+	if (httpd_ssl_start(&server, &config) == ESP_OK) {
+		const httpd_uri_t uri_get = {
 			.uri = "/",
 			.method = HTTP_GET,
-			.handler = wifi_setup_handler,
+			.handler = setup_handler,
 			.user_ctx = NULL
 		};
-		httpd_register_uri_handler(server, &uri_get_wifi);
+		httpd_register_uri_handler(server, &uri_get);
 
-		httpd_uri_t uri_post_wifi = {
+		const httpd_uri_t uri_post = {
 			.uri = "/connect",
 			.method = HTTP_POST,
-			.handler = try_wifi_handler,
+			.handler = try_handler,
 			.user_ctx = NULL
 		};
-		httpd_register_uri_handler(server, &uri_post_wifi);
+		httpd_register_uri_handler(server, &uri_post);
 
-		httpd_uri_t uri_status_wifi = {
+		const httpd_uri_t uri_post_app = {
+			.uri = "/connectapp",
+			.method = HTTP_POST,
+			.handler = try_app_handler,
+			.user_ctx = NULL
+		};
+		httpd_register_uri_handler(server, &uri_post_app);
+
+		const httpd_uri_t uri_status = {
 			.uri = "/status",
 			.method = HTTP_GET,
-			.handler = status_wifi_handler,
+			.handler = status_handler,
 			.user_ctx = NULL
 		};
-		httpd_register_uri_handler(server, &uri_status_wifi);
+		httpd_register_uri_handler(server, &uri_status);
 
-		ESP_LOGI(TAG, "🌐 Webserver gestartet.");
+		ESP_LOGI(TAG, "🔐 HTTPS-Webserver gestartet.");
+	}
+}
+
+void stop_webserver(void) {
+	if (server) {
+		httpd_ssl_stop(server);
+		server = NULL;
+		ESP_LOGI(TAG, "🛑 HTTPS-Webserver gestoppt.");
 	}
 }
 
@@ -274,8 +402,7 @@ void stop_ap(void) {
 	if (current_mode == WIFI_MODE_APSTA) {
 		ESP_LOGI(TAG, "🛑 Stoppe Webserver");
 		if (server) {
-			httpd_stop(server);
-			server = NULL;
+			stop_webserver();
 		}
 		ESP_LOGI(TAG, "🔄 Deaktiviere SoftAP");
 		ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
@@ -284,7 +411,7 @@ void stop_ap(void) {
 
 		if (!is_sta_connected()) {
 			ESP_LOGI(TAG, "📡 Kein aktives WLAN – versuche zu verbinden...");
-			esp_wifi_connect();  // optional
+			esp_wifi_connect(); // optional
 		}
 
 		ESP_LOGI(TAG, "📶 Jetzt nur noch im STA-Modus aktiv.");
@@ -315,7 +442,7 @@ void ap_delayed_stop_task(void *arg) {
 }
 
 
-void wifi_event_handler(void *arg, esp_event_base_t event_base, long event_id,
+void wifi_event_handler(void *arg, const esp_event_base_t event_base, const long event_id,
                         void *event_data) {
 	if (event_base == WIFI_EVENT) {
 		wifi_config_t stored_wifi_config;
@@ -398,6 +525,10 @@ void wifi_init(void) {
 	// Initialisiere Wi-Fi
 	wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
 	ESP_ERROR_CHECK(esp_wifi_init(&cfg));
+
+	//initialisiere Userdata Storage
+	ESP_ERROR_CHECK(system_data_storage_init());
+	load_system_data(&system_data);
 
 	// Registriere Event-Handler
 	ESP_ERROR_CHECK(

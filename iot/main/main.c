@@ -3,9 +3,11 @@
 #include "wifi_manager.h"
 #include "solace_manager.h"
 #include "sensor_manager.h"
+#include "system_data_manager.h"
 
 void app_main(void) {
 	// Initialisierung von NVS
+	//possibly redundant and to be removed
 	esp_err_t ret = nvs_flash_init();
 	if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
 		ESP_ERROR_CHECK(nvs_flash_erase());
