@@ -53,7 +53,7 @@ const submitControllerConfig = async () => {
   }
 
   try {
-    const response = await fetch('http://192.168.4.1/connect', {
+    const response = await fetch('https://192.168.4.1/connectapp', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -75,7 +75,7 @@ const submitControllerConfig = async () => {
       username.value = '';
     } else {
       const errorData = await response.json();
-      submissionError.value = errorData.message || t('addController.configErrorGeneric');
+      submissionError.value = t(errorData.message) || t('addController.configErrorGeneric');
       toast.error(t('addController.configError') + (errorData.message ? `: ${errorData.message}` : ''));
     }
   } catch (error: any) {
@@ -145,7 +145,7 @@ const submitControllerConfig = async () => {
           </Button>
           <p v-if="submissionError" class="text-sm text-destructive">{{ submissionError }}</p>
         </div>
-        <Button as="a" href="http://192.168.4.1" @click="()=>{submissionSuccess = true;}" target="_blank" rel="noopener noreferrer" variant="secondary" class="w-full">{{ t('addController.openConfig') }}</Button>
+        <Button as="a" href="https://192.168.4.1" @click="()=>{submissionSuccess = true;}" target="_blank" rel="noopener noreferrer" variant="secondary" class="w-full">{{ t('addController.openConfig') }}</Button>
       </div>
 
       <div class="space-y-2" v-if="isWifiConnected && submissionSuccess">
@@ -153,7 +153,7 @@ const submitControllerConfig = async () => {
         <p class="text-sm">{{ t('addController.step4SuccessDescription') }}</p>
       </div>
 
-      <div class="space-y-2" v-if="isWifiConnected && (submissionSuccess || submissionError)">
+      <div class="space-y-2" v-if="isWifiConnected && (submissionSuccess )">
         <h3 class="text-lg font-semibold">{{ t('addController.step5Title') }}</h3>
         <p class="text-sm">{{ t('addController.step5Description') }}</p>
         <Button as="a" href="/plants?force=true" class="w-full">

@@ -149,7 +149,7 @@
     "technologiesList": [
       "Frontend: Vue.js with TypeScript, Tailwind CSS",
       "Backend: Rust (BFF), Python microservices for sensor data and email validation",
-      "Microcontrollers: ESP32 with sensors (temperature, humidity, soil moisture, brightness), pump",
+      "Microcontrollers: ESP32 with the ESP-IDF framework with sensors (temperature, humidity, soil moisture, brightness), pump",
       "Communication: Solace messaging between microcontrollers and microservices"
     ],
     "technologiesTitle": "Technologies We Use",
@@ -166,6 +166,8 @@
   },
   "active": "Active",
   "addController": {
+    "ErrorWlan": "SSID or password is incorrect.",
+    "ErrorUser": "Username or email is incorrect.",
     "MailLabel": "Mail",
     "configError": "Error sending configuration",
     "configErrorConnection": "Connection error to the controller.",
