@@ -153,7 +153,7 @@ static esp_err_t setup_handler(httpd_req_t *req) {
 	if (failed_wifi_connection) {
 		strcat(error_html,
 		       "<div class='error' id='wifi-error'>❌ Wifi-Verbindung fehlgeschlagen. Bitte erneut versuchen.</div>");
-	}else if (failed_backend_connection) {
+	} else if (failed_backend_connection) {
 		strcat(error_html,
 		       "<div class='error' id='backend-error'>❌ Geräteregistrierung fehlgeschlagen. Bitte später erneut versuchen.</div>");
 	}
@@ -442,7 +442,8 @@ void ap_delayed_stop_task(void *arg) {
 }
 
 
-void wifi_event_handler(void *arg, const esp_event_base_t event_base, const long event_id,
+void wifi_event_handler(void *arg, const esp_event_base_t event_base,
+                        const long event_id,
                         void *event_data) {
 	if (event_base == WIFI_EVENT) {
 		wifi_config_t stored_wifi_config;
