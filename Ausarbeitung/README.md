@@ -1,0 +1,2 @@
+# Sensora Ausarbeitung
+Die theoretische Ausarbeitung zum Sensora Projekt. Zuordnung der Kapitel zu Autoren hier: https://docs.google.com/document/d/18rK5lohoJ5nsiIO38gmagQblDWHHFmYlbgiAY14C8ss/edit?usp=sharing
