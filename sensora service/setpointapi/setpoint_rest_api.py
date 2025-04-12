@@ -1,5 +1,6 @@
 # setpoint_rest_api.py
 from flask import Flask, request, jsonify
+from flasgger import Swagger
 import solace.messaging.messaging_service as messaging_service
 from solace.messaging.resources.queue import Queue
 from solace.messaging.resources.topic import Topic
@@ -18,6 +19,7 @@ SOLACE_CONFIG = {
 QUEUE_NAME = "sensor_setpoints"
 
 app = Flask(__name__)
+swagger = Swagger(app)  # Initialisiere Flasgger für Swagger-Dokumentation
 
 # 🔹 Solace-Verbindung & Publisher
 messaging_service = messaging_service.MessagingService.builder().from_properties(SOLACE_CONFIG).build()
@@ -41,6 +43,30 @@ publisher.start()
 
 @app.route('/sollwert', methods=['POST'])
 def post_sollwert():
+    """
+    Sende Sollwerte an einen Sensor
+    ---
+    tags:
+      - Setpoint API
+    parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            sensor_id:
+              type: string
+              example: "sensor123"
+            sollwert:
+              type: number
+              example: 22.5
+    responses:
+      200:
+        description: Sollwert erfolgreich gesendet
+      400:
+        description: Fehlerhafte Anfrage
+    """
     data = request.get_json()
     sensor_id = data.get("sensor_id")
     sollwert = data.get("sollwert")
@@ -56,7 +82,7 @@ def post_sollwert():
     }]})
     
 
-    topic = Topic.of(f"sensor/setpoints/{sensor_id}") # ändern zu: sensora/v1/receive/<id>/targetValues (id ist controller id muss durch sql)
+    topic = Topic.of(f"sensora/v1/receive/{sensor_id}/targetValues") # ändern zu: sensora/v1/receive/<id>/targetValues (id ist controller id muss durch sql)
     publisher.publish(messaging_service.message_builder().build(payload), topic)
 
     print(f"✅ Sollwert gesendet -> Sensor: {sensor_id}, Sollwert: {sollwert}")

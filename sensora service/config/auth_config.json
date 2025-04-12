@@ -152,6 +152,14 @@
       "username": "user1",
       "description": "Test controller for authentication testing",
       "created_at": "2025-04-03 16:31:32.510177"
+    },
+    "d2d3d62b-1aa2-4423-84a1-f1ec239b6a6d": {
+      "token": "88d203e9-178d-461f-b034-e604fc5733d5",
+      "token_hash": "240e074b0c36bb1d0b0539fd86d801d9fc4f65f9f8fb2823a548637e9b2f40c3",
+      "model": "Test-Controller",
+      "username": "user1",
+      "description": "Test controller for authentication testing",
+      "created_at": "2025-04-09 16:31:20.844420"
     }
   },
   "solace_credentials": {
@@ -286,6 +294,17 @@
       "publish_topic": "sensora/v1/send/94a679cf-8dba-4ee1-ba6f-23ffd6bfda50",
       "subscribe_topic": "sensora/v1/receive/94a679cf-8dba-4ee1-ba6f-23ffd6bfda50/targetValues",
       "did": "94a679cf-8dba-4ee1-ba6f-23ffd6bfda50",
+      "model": "Unknown",
+      "broker_url": "solace",
+      "broker_port": 1883,
+      "broker_ssl": false
+    },
+    "d2d3d62b-1aa2-4423-84a1-f1ec239b6a6d": {
+      "username": "controller_d2d3d62b",
+      "password": "TdV3f7H8DXPDRJLgw2DnTkp-zue1NuApZg2XBPM-uFg",
+      "publish_topic": "sensora/v1/send/d2d3d62b-1aa2-4423-84a1-f1ec239b6a6d",
+      "subscribe_topic": "sensora/v1/receive/d2d3d62b-1aa2-4423-84a1-f1ec239b6a6d/targetValues",
+      "did": "d2d3d62b-1aa2-4423-84a1-f1ec239b6a6d",
       "model": "Unknown",
       "broker_url": "solace",
       "broker_port": 1883,

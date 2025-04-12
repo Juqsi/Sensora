@@ -1,46 +1,87 @@
+version: "3.9"
+
 services:
+
   mailservice:
-    build: ./mailservice
+    image: fynnth/mailservice:latest
+    build:
+      context: ./mailservice
     container_name: mailservice
-    ports:
-      - "8000:8000"
-    env_file:
-      - .env
+    networks:
+      default_internal_network:
+        aliases:
+          - mailservice.local
+    environment:
+      - DATABASE_URL=postgres://postgres:JaN90DPa9U0ENSs0cranGRIyPs3mVcMTU4J9qZNDFdEY9dLUbt@sensora-db-prod.local:5432/sensora
+      - SERVER_HOST=https://fynnsmailservice.maxtar.de
+      - SMTP_USER=SensoraMailVerify@gmail.com
+      - SMTP_PASS=lbvy fkey orwp solk
+      - DB_NAME=sensora
+      - DB_USER=postgres
+      - DB_PASS=JaN90DPa9U0ENSs0cranGRIyPs3mVcMTU4J9qZNDFdEY9dLUbt
+      - DB_HOST=sensora-db-prod.local
+      - DB_PORT=5432
+    depends_on:
+      - solace-init
+    entrypoint: >
+      sh -c "sleep 90 && exec uvicorn app:app --host 0.0.0.0 --port 8000"
 
   databasewriter:
-    build: ./databasewriter
+    image: fynnth/databasewriter:latest
+    build:
+      context: ./databasewriter
     container_name: databasewriter
-    env_file:
-      - .env
-
+    networks:
+      default_internal_network:
+        aliases:
+          - databasewriter.local
+    environment:
+      - DATABASE_URL=postgres://postgres:JaN90DPa9U0ENSs0cranGRIyPs3mVcMTU4J9qZNDFdEY9dLUbt@sensora-db-prod.local:5432/sensora
+      - DB_NAME=sensora
+      - DB_USER=postgres
+      - DB_PASS=JaN90DPa9U0ENSs0cranGRIyPs3mVcMTU4J9qZNDFdEY9dLUbt
+      - DB_HOST=sensora-db-prod.local
+      - DB_PORT=5432
+    depends_on:
+      - solace-init
+    entrypoint: >
+      sh -c "sleep 90 && exec python writer.py"
 
   setpointapi:
-    build: ./setpointapi
+    image: fynnth/setpointapi:latest
+    build:
+      context: ./setpointapi
     container_name: setpointapi
-    ports:
-      - "5000:5000"
-    env_file:
-      - .env
-
+    networks:
+      default_internal_network:
+        aliases:
+          - setpointapi.local
+    environment:
+      - DATABASE_URL=postgres://postgres:JaN90DPa9U0ENSs0cranGRIyPs3mVcMTU4J9qZNDFdEY9dLUbt@sensora-db-prod.local:5432/sensora
+      - SERVER_HOST=https://fynnsetpointapi.maxtar.de
+      - DB_NAME=sensora
+      - DB_USER=postgres
+      - DB_PASS=JaN90DPa9U0ENSs0cranGRIyPs3mVcMTU4J9qZNDFdEY9dLUbt
+      - DB_HOST=sensora-db-prod.local
+      - DB_PORT=5432
+    depends_on:
+      - solace-init
+    entrypoint: >
+      sh -c "sleep 90 && exec python setpoint_rest_api.py"
 
   solace:
     image: solace/solace-pubsub-standard:latest
     container_name: solace
-    ports:
-      - "55555:55555"
-      - "8080:8080"
-      - "8008:8008"
-      - "1883:1883"
-      - "5672:5672"
-      - "9000:9000"
-      - "2222:22"
     environment:
-      - username_admin_globalaccesslevel=${SOLACE_ADMIN_USER}
-      - username_admin_password=${SOLACE_ADMIN_PASS}
+      - username_admin_globalaccesslevel=admin
+      - username_admin_password=adminpasswort
       - system_scaling_maxconnectioncount=100
       - system_scaling_maxqueuemessagecount=100
       - system_scaling_maxqueuesize=100M
       - system_scaling_maxqueuesize_guaranteed=100M
+      - SOLACE_PUBLIC_URL=https://fynnsolace.maxtar.de
+      - SOLACE_PUBLIC_PORT=1883
+      - SOLACE_USE_SSL=false
     volumes:
       - solace-data:/var/lib/solace
       - solace-config:/var/lib/solace/config
@@ -51,29 +92,60 @@ services:
     shm_size: 4g
     mem_limit: 4g
     mem_reservation: 2g
+    networks:
+      default_internal_network:
+        aliases:
+          - solace.local
 
   solace-init:
-    build: ./solace-init
+    image: fynnth/solace-init:latest
+    build:
+      context: ./solace-init
     environment:
-      - SOLACE_USER=${SOLACE_ADMIN_USER}
-      - SOLACE_PASS=${SOLACE_ADMIN_PASS}
-      - SOLACE_HOST=http://solace:8080
-
+      - SOLACE_USER=admin
+      - SOLACE_PASS=adminpasswort
+      - SOLACE_HOST=http://solace.local:8080
+    networks:
+      default_internal_network:
+        aliases:
+          - solace-init.local
+    depends_on:
+      - solace
+    entrypoint: >
+      sh -c "sleep 80 && exec python init.py"
 
   auth-service:
-    build: ./auth-service
+    image: fynnth/auth-service:latest
+    build:
+      context: ./auth-service
     container_name: auth-service
     volumes:
       - ./config:/config
-    ports:
-      - "5001:5000"
     environment:
-      - SOLACE_HOST=http://solace:8080
+      - DATABASE_URL=postgres://postgres:JaN90DPa9U0ENSs0cranGRIyPs3mVcMTU4J9qZNDFdEY9dLUbt@sensora-db-prod.local:5432/sensora
+      - SOLACE_HOST=http://solace.local:8080
       - SOLACE_VPN=default
-      - SOLACE_ADMIN_USER=${SOLACE_ADMIN_USER}
-      - SOLACE_ADMIN_PASS=${SOLACE_ADMIN_PASS}
-      - ADMIN_KEY=${ADMIN_KEY}
+      - SOLACE_ADMIN_USER=admin
+      - SOLACE_ADMIN_PASS=adminpasswort
+      - ADMIN_KEY=your-secure-admin-key
+      - TOKEN_SECRET=your-secret-key-min-32-bytes-long!!
+      - SERVER_HOST=https://fynnauthservice.maxtar.de
+      - DB_HOST=sensora-db-prod.local
+      - DB_PORT=5432
+    networks:
+      default_internal_network:
+        aliases:
+          - auth-service.local
+    depends_on:
+      - solace-init
+    entrypoint: >
+      sh -c "sleep 90 && exec python app.py"
 
 volumes:
   solace-data:
   solace-config:
+
+networks:
+  default_internal_network:
+    name: default_internal_network
+    #external: true

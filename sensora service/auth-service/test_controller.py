@@ -12,11 +12,11 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-# Test Configuration
-AUTH_SERVICE_URL = "http://localhost:5001"  # Updated port
+# Updated Test Configuration
+AUTH_SERVICE_URL = "https://fynnsauthservice.maxtar.de"  # Proxy Subdomain
 
 # Simulated Controller Data
-HARDWARE_TOKEN = "4b05ba9a-1da7-48ba-88c9-bb7fa6c305a9"
+HARDWARE_TOKEN = "b9b05aa9-85ac-4a3d-a188-cf2ca029e163"
 TOKEN_HASH = hmac.new(
     b"your-secret-key-min-32-bytes-long!!", 
     HARDWARE_TOKEN.encode(), 
@@ -24,7 +24,7 @@ TOKEN_HASH = hmac.new(
 ).hexdigest()
 
 # Simulated User Data
-USERNAME = "user1"  # Using existing test user
+USERNAME = "testuser1"  # Using a valid test user from the database
 
 class TestController:
     def __init__(self):
@@ -68,7 +68,8 @@ class TestController:
             f"{AUTH_SERVICE_URL}/api/controller/verify",
             json={
                 "token_hash": TOKEN_HASH,
-                "challenge_response": challenge_response
+                "challenge_response": challenge_response,
+                "username": USERNAME  # Füge das fehlende Feld hinzu
             }
         )
         
@@ -118,23 +119,37 @@ class TestController:
 
     def on_connect(self, client, userdata, flags, rc):
         """Callback when connected to MQTT broker"""
+        print(f"🔄 MQTT on_connect called with return code: {rc}")
         if rc == 0:
-            print("\n✅ Connected to Solace successfully!")
+            print("✅ Successfully connected to Solace broker.")
             # Subscribe to receive topic
+            print(f"🔄 Subscribing to topic: {self.credentials['subscribe_topic']}")
             client.subscribe(self.credentials['subscribe_topic'])
-            print(f"✅ Subscribed to: {self.credentials['subscribe_topic']}")
+            print(f"✅ Subscribed to topic: {self.credentials['subscribe_topic']}")
         else:
-            print(f"❌ Failed to connect to Solace: {rc}")
+            print(f"❌ Connection to Solace broker failed with return code: {rc}")
 
     def on_message(self, client, userdata, msg):
         """Callback when message is received"""
-        print(f"\n📨 Received message on {msg.topic}:")
+        print(f"📩 Received message on topic: {msg.topic}")
         try:
             payload = json.loads(msg.payload.decode())
-            print(json.dumps(payload, indent=2))
+            print(f"📩 Message payload: {json.dumps(payload, indent=2)}")
             self.received_messages.append(payload)
-        except:
-            print(msg.payload.decode())
+        except Exception as e:
+            print(f"❌ Failed to process received message: {e}")
+            print(f"Raw payload: {msg.payload.decode()}")
+
+    def on_disconnect(self, client, userdata, rc):
+        """Callback when disconnected from MQTT broker"""
+        print(f"❌ MQTT client disconnected with return code: {rc}")
+        if rc != 0:
+            print("🔍 Unexpected disconnection. Trying to reconnect...")
+            try:
+                client.reconnect()
+                print("✅ Reconnected to MQTT broker.")
+            except Exception as e:
+                print(f"❌ Failed to reconnect: {e}")
 
     def connect_mqtt(self):
         """Connect to Solace MQTT"""
@@ -142,29 +157,35 @@ class TestController:
         self.mqtt_client = mqtt.Client()
         self.mqtt_client.on_connect = self.on_connect
         self.mqtt_client.on_message = self.on_message
-        
+        self.mqtt_client.on_disconnect = self.on_disconnect  # Added disconnect callback
+
+        # Enable MQTT client logging for debugging
+        self.mqtt_client.enable_logger()
+
         # Set credentials
+        print(f"📝 Setting MQTT credentials: Username={self.credentials['username']}, Password={self.credentials['password']}")
         self.mqtt_client.username_pw_set(
             self.credentials['username'],
             self.credentials['password']
         )
-        
-        # Use localhost when running locally
-        broker_url = "localhost"  # Always use localhost for local testing
+
+        # Use the broker URL and port from the credentials
+        # Remove https:// from the broker URL for MQTT connection
+        broker_url = self.credentials['broker_url'].replace('https://', '')
         broker_port = self.credentials['broker_port']
-        
-        print(f"🔄 Connecting to {broker_url}:{broker_port}...")
-        
+        print(f"🔄 Preparing to connect to broker: URL={broker_url}, Port={broker_port}, SSL={self.credentials['broker_ssl']}")
+
         try:
             self.mqtt_client.connect(
                 broker_url,
                 broker_port,
-                60
+                keepalive=60  # Set keepalive to 60 seconds
             )
+            print("✅ Successfully initiated connection to Solace broker.")
             self.mqtt_client.loop_start()
             return True
         except Exception as e:
-            print(f"❌ Failed to connect to MQTT: {e}")
+            print(f"❌ Failed to connect to MQTT broker: {e}")
             return False
 
     def wait_for_messages(self, timeout=10):
@@ -178,7 +199,7 @@ class TestController:
     def publish_test_data(self):
         """Publish test sensor data"""
         print("\n📤 Publishing test sensor data...")
-        
+
         test_data = {
             "did": self.credentials['did'],
             "model": self.credentials['model'],
@@ -218,19 +239,27 @@ class TestController:
                 }
             ]
         }
-        
+
         print("\n📤 Sending data:")
         print(json.dumps(test_data, indent=2))
-        
+
         result = self.mqtt_client.publish(
             self.credentials['publish_topic'],
             json.dumps(test_data)
         )
-        
-        if result.rc == 0:
+
+        if result.rc == mqtt.MQTT_ERR_SUCCESS:
             print("✅ Test data published successfully")
         else:
             print(f"❌ Failed to publish test data: {result.rc}")
+            print(f"🔍 MQTT Publish Result: {result}")
+
+        # Debugging: Check if the message is queued
+        print("🔍 Checking MQTT message queue status...")
+        if self.mqtt_client.is_connected():
+            print("✅ MQTT client is still connected.")
+        else:
+            print("❌ MQTT client is disconnected.")
 
 def main():
     print("🚀 Starting Controller Test\n")

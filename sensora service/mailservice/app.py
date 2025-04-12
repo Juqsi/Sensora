@@ -8,16 +8,15 @@ from email.mime.text import MIMEText
 import secrets
 import os
 
-#DATABASE_URL = "postgresql://postgres:postgres@localhost/sensora"
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
-#SMTP_USER = "SensoraMailVerify@gmail.com"       
-#SMTP_PASS = "lbvy fkey orwp solk"
-#SERVER_HOST = "http://192.168.0.86:8000" # auf dem server-> https://fynnsmailservice.maxtar.de
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost/sensora")
 SERVER_HOST = os.getenv("SERVER_HOST", "http://localhost:8000")
 SMTP_USER = os.getenv("SMTP_USER", "SensoraMailVerify@gmail.com")
 SMTP_PASS = os.getenv("SMTP_PASS", "lbvy fkey orwp solk")
+
+# Lade den preshared key aus den Umgebungsvariablen
+PSK = os.getenv("MAILSERVICE_PSK", "default-psk")
 
 tokens = {}
 
@@ -33,14 +32,23 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+@app.get("/")
+def read_root():
+    return {"message": "Mailservice läuft!"}
+
 # ✅ Hier das Pydantic-Model für JSON-Daten
 class VerifyRequest(BaseModel):
     username: str
     mail: str
+    key: str  # Neuer Key für die PSK-Überprüfung
 
 
 @app.post("/verify")
 async def send_verification(data: VerifyRequest, request: Request):
+    # Überprüfe den preshared key
+    if data.key != PSK:
+        raise HTTPException(status_code=403, detail="Invalid preshared key.")
+
     username = data.username
     mail = data.mail
 
@@ -88,3 +96,7 @@ async def confirm_email(username: str, token: str, request: Request):
     )
     tokens.pop(username, None)
     return "<h1>Email erfolgreich bestätigt!</h1>"
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -1,15 +1,14 @@
-# Basis-Image
-FROM python:3.11-slim
+FROM python:3.12-slim
 
-# Arbeitsverzeichnis
 WORKDIR /app
 
-# Abhängigkeiten installieren
-COPY requirements.txt .
+# Copy application files
+COPY . /app
+
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Restliche Dateien kopieren (init.py, queues.json, etc.)
-COPY . .
+# Ensure the init script is executable
+RUN chmod +x /app/init.py
 
-# Startbefehl
 CMD ["python", "init.py"]

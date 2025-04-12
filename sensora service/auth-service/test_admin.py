@@ -6,7 +6,7 @@ import uuid
 AUTH_SERVICE_URL = "http://localhost:5001"  # Updated port
 ADMIN_KEY = "your-secure-admin-key"  # Should match ADMIN_KEY in .env file
 
-def register_controller(model="Test-Controller", username="user1"):
+def register_controller(model="Test-Controller", username=None):
     """Register a new controller and get its credentials"""
     print("\n🔐 Registering new controller...")
     
@@ -18,9 +18,12 @@ def register_controller(model="Test-Controller", username="user1"):
     data = {
         "controller_id": str(uuid.uuid4()),  # Generate new UUID for each test
         "model": model,
-        "username": username,  # Required username
         "description": "Test controller for authentication testing"
     }
+    
+    # Füge den Username nur hinzu, wenn er angegeben wurde
+    if username:
+        data["username"] = username
     
     response = requests.post(
         f"{AUTH_SERVICE_URL}/api/admin/controller",
@@ -32,7 +35,8 @@ def register_controller(model="Test-Controller", username="user1"):
         result = response.json()
         print("\n✅ Controller registered successfully!")
         print(f"📝 Controller ID: {result['controller_id']}")
-        print(f"📝 Username: {result['username']}")
+        if "username" in result:
+            print(f"📝 Username: {result['username']}")
         print(f"📝 Hardware Token: {result['token']}")
         print(f"📝 Token Hash: {result['token_hash']}")
         return result
@@ -82,4 +86,4 @@ def main():
     """)
 
 if __name__ == "__main__":
-    main() 
+    main()

@@ -1,35 +1,190 @@
-Dieses Docker Netzwerk stellt die Grundstruktur für drei services bereit und konfiguriert Solace für die Sensora App. Dies ist noch nicht Final und stell nur die testing Grundlage dar und lässt sich bezüglich weiterer schnittstellen zwischen datenbank und solace einfach erweitern und anpssen.
+# Sensora Service
 
-1. Mailservice API-> ermöglicht dem Backend über eine REST schnittstelle Verifikations Mails an Nutzer zu schicken. Soweit fertig.
-2. Databasewriter-> liest werte aus solace queues und schreibt sie in die Datenbank
-    -> aktuell nur sensor werte ist aber flexibel erweiterbar auf andere Queues und werte.
-3. setpoint_api-> ermöglicht dem Backend über eine REST Schnittstelle commands an einzelne sensoren und controller zu senden
-    -> aktuell nur Sollwerte für Sensoren, ist aber sehr einfach erweiterbar auf weitere commands
-4. solace-init-> konfiguriert nutzer, queues und subscriptions in solace per SEMP
+## Overview
+The Sensora Service is a critical component of the Sensora smart irrigation system. This service acts as the interface between the backend, Solace (a message broker), the controller authentication system, and a mail service. It also manages Solace accounts for controllers. The system is designed to automate plant watering by leveraging real-time sensor data, user inputs, and weather data. This README provides a detailed explanation of the service's components, their roles, and the rationale behind their implementation.
 
+---
 
-PREPARATION:
-1. create the .env file according to the structure in env_struct (Message Fynn Thierling for smtp credentials)
-2. Verify that the databse is running and reachable for the docker network (also put the right credentials into the .env) 
-    ->for testing purposes you can use the "psql -U postgres -h localhost -f "<patho to this script>\sensora service\database_setup.sql"" then you cann execute the dummy data script to fill few datapoints. 
-3. For lokal testing of the mail service you need to change the ip adresses in the .env to your device for production on the server the reverse proxy should handle the connection to "localhost:8000"
+## Features
 
+1. **Controller Authentication**:
+   - Ensures secure communication between controllers and the backend.
+   - Uses HMAC-based challenge-response authentication to verify controllers.
+   - Stores and manages controller credentials.
 
-START SERVICES:
-1. start solace via the docker compose file (just solace not the whole file)-> wait till it is completely running and you cann sign in in the UI
-2. start solace init via the docker compose file (just this service)
-3. start the rest of the services
+2. **Solace Integration**:
+   - Acts as a message broker for communication between controllers and the backend.
+   - Manages Solace accounts for controllers, including ACL profiles and user credentials.
 
-TESTING:
-1. you can use your Browser on  localhost:8000 to test the endpoints via a UI 
-    -> you need to create a user in the database with the mail adress you want to test, then execute the verify endpoint.
-    -> a verification mail should be send to the mail adress, when the link is klicked the flag in the databses should be changed from f to t
+3. **Mail Service**:
+   - Sends verification mails to users.
+   - Uses SMTP for email delivery.
 
-2. to test the setpooint api you can just use: "curl.exe -X POST http://localhost:5000/sollwert -H "Content-Type: application/json" -d '{\"sensor_id\":\"sensor123\",\"sollwert\":42.5}'"
-    -> then verify that the value is queued in the solace UI on port 8080 in the queue setpoint_values
+4. **Database Writer**:
+   - Stores user and controller data in a PostgreSQL database.
+   - subscribes to every solace topic of the controllers and transfers the payload into the database
 
-3. you can either use a real mqtt input or use the databasewriter_test.py to queue some sample values in sensor_data and see if the database writer inserts those values into the database
-    -> You may need to change some parameters there if you are on another operating system/version
+5. **Setpoint API**:
+   - Provides an interface for setting and retrieving target values for sensors.
+   - The Backend can just provide controller_id and target_value and the target value is send to the correct solace topic which has the correct controller as a subscriber.
+
+---
+
+## Project Structure
+
+### 1. `auth-service`
+This module handles controller authentication and registration.
+
+- **`app.py`**:
+  - Implements Flask-based REST APIs for authentication and controller registration.
+  - Uses HMAC for secure token verification.
+  - Integrates with Solace to create user accounts and manage ACL profiles.
+  - Stores controller data in a PostgreSQL database.
+
+- **`test_controller.py`**:
+  - Simulates a controller to test the authentication process.
+  - Demonstrates the challenge-response mechanism and MQTT communication.
+
+- **`test_admin.py`**:
+  - Tests the admin API for registering new controllers.
+  - Verifies the functionality of the admin key and database integration.
+
+- **`requirements.txt`**:
+  - Lists dependencies such as Flask, requests, and paho-mqtt.
+
+- **`Dockerfile`**:
+  - Defines the container for the authentication service.
+  - Uses Gunicorn for production deployment.
+
+### 2. `solace-init`
+This module initializes and manages Solace Queues.
+
+- **`init.py`**:
+  - Ensures the creation of Solace queues used in the other services.
+
+- **`queues.json`**:
+  - Defines the structure of Solace queues and topics.
+
+- **`requirements.txt`**:
+  - Lists dependencies for Solace integration.
+
+- **`Dockerfile`**:
+  - Defines the container for Solace initialization.
+
+### 3. `mailservice`
+This module handles email notifications.
+
+- **`app.py`**:
+  - Implements the Email verification service using Flask.
+  - Sends emails via SMTP.
+
+- **`requirements.txt`**:
+  - Lists dependencies for email handling.
+
+- **`Dockerfile`**:
+  - Defines the container for the mail service.
+
+### 4. `setpointapi`
+This module provides an API for managing sensor target values.
+
+- **`setpoint_rest_api.py`**:
+  - Implements REST endpoints for setting target values.
+
+- **`requirements.txt`**:
+  - Lists dependencies for the Setpoint API.
+
+- **`Dockerfile`**:
+  - Defines the container for the Setpoint API.
+
+### 5. `databasewriter`
+This module writes sensor data to the database.
+
+- **`writer.py`**:
+  - Handles database interactions for storing sensor data.
+
+- **`requirements.txt`**:
+  - Lists dependencies for database operations.
+
+- **`Dockerfile`**:
+  - Defines the container for the database writer.
+
+### 6. `docker-compose.yml`
+Defines the multi-container setup for the entire service, including:
+- Authentication service
+- Solace initialization
+- Mail service
+- Setpoint API
+- Database writer
+
+### 7. `.env`
+Contains environment variables for:
+- Database configuration
+- SMTP credentials
+- Solace credentials
+- Admin keys
+
+---
+
+## Design Decisions
+
+### 1. **HMAC-Based Authentication**
+- **Why**: Provides a secure and lightweight mechanism for verifying controllers.
+- **How**: Uses a shared secret to generate and verify HMACs.
+
+### 2. **Solace as a Message Broker**
+- **Why**: Enables real-time communication between controllers and the backend.
+- **How**: Manages publish/subscribe topics and user credentials.
+
+### 3. **PostgreSQL for Data Storage**
+- **Why**: Ensures data consistency and supports complex queries.
+- **How**: Stores user, controller, and sensor data.
+
+### 4. **Modular Architecture**
+- **Why**: Simplifies development and maintenance.
+- **How**: Divides functionality into separate services.
+
+### 5. **Docker for Deployment**
+- **Why**: Ensures consistency across environments.
+- **How**: Uses Docker Compose to manage multi-container setups.
+
+---
+
+## How It Works
+
+1. **Controller Registration**:
+   - Admin registers a controller via the `/api/admin/controller` endpoint.
+   - Generates a unique token and stores it securely.
+
+2. **Authentication**:
+   - Controller initiates authentication by requesting a challenge.
+   - Responds with an HMAC-based response.
+   - Receives encrypted credentials upon successful verification.
+
+3. **Solace Init**:
+   - Hosts the Broker for the mqtt devices and ensures proper structure.
+   - Configures publish and subscribe topics.
+
+4. **Mail Verification**:
+   - Sends a veryfication mail with a generated link+token that links to our server to verify the mail adress.
+
+5. **Setpoint Management**:
+   - Allows users to set target values for sensors.
+
+---
+
+## Future Enhancements
+
+1. **Web Interface**:
+   - Develop a user-friendly dashboard for managing controllers and sensors.
+   - Especially the creation of tokes which needs to be done via curl right now would be easier this way.
+
+2. **Mail-Notification**:
+   - Provide Mail-Notifications via the Mail Service
+
+---
+
+## Conclusion
+The Sensora Service is a robust prototype solution for automating plant irrigation. By integrating authentication, real-time communication, and data management, it ensures a seamless user experience. The modular design and use of industry-standard tools make it easy to maintain and extend.
 
 
 
