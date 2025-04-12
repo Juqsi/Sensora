@@ -5,6 +5,7 @@ if("${CONFIG}" STREQUAL "" OR "${CONFIG}" STREQUAL "")
   file(REMOVE_RECURSE
   "app-template.bin"
   "app-template.map"
+          "auth_service_cert.pem.S"
   "bootloader\\bootloader.bin"
   "bootloader\\bootloader.elf"
   "bootloader\\bootloader.map"
@@ -19,6 +20,8 @@ if("${CONFIG}" STREQUAL "" OR "${CONFIG}" STREQUAL "")
   "ldgen_libraries"
   "ldgen_libraries.in"
   "project_elf_src_esp32.c"
+          "server_cert.pem.S"
+          "server_key.pem.S"
   "x509_crt_bundle.S"
   )
 endif()

@@ -2,9 +2,9 @@
 # for more information about component CMakeLists.txt files.
 
 idf_component_register(
-        SRCS main.c wifi_manager.c led_control.c solace_manager.c sensor_manager.c auth_service.c system_data_manager.c    # list the source files of this component
+        SRCS main.c device_manager.c led_control.c solace_manager.c sensor_manager.c auth_service.c system_data_manager.c    # list the source files of this component
         INCLUDE_DIRS .        # optional, add here public include directories
-        EMBED_TXTFILES "certs/server_cert.pem" "certs/server_key.pem"
+        EMBED_TXTFILES "certs/server_cert.pem" "certs/server_key.pem" "certs/auth_service_cert.pem"
         PRIV_INCLUDE_DIRS   # optional, add here private include directories
         REQUIRES            # optional, list the public requirements (component names)
         PRIV_REQUIRES       # optional, list the private requirements
