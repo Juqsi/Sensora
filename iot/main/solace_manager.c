@@ -2,6 +2,7 @@
 #include "sensor_manager.h"
 #include <stdio.h>
 #include <stdint.h>
+#include <math.h>
 #include "esp_log.h"
 #include "mqtt_client.h"
 #include "cJSON.h"
@@ -109,15 +110,16 @@ void process_received_json(char *json_str) {
 		if (cJSON_IsString(sid) && cJSON_IsNumber(value)) {
 			ESP_LOGI(TAG, "Sensor (sid): %s, Sollwert: %d",
 					 sid->valuestring, value->valueint);
+			int roundedValue = (int) round(value->valuedouble);
 
 			if (strcmp(sid->valuestring, MOISTURE_SID) == 0) {
-				info.target_moisture = value->valueint;
+				info.target_moisture = roundedValue;
 			} else if (strcmp(sid->valuestring, TEMP_SID) == 0) {
-				info.target_temp = value->valueint;
+				info.target_temp = roundedValue;
 			} else if (strcmp(sid->valuestring, HUM_SID) == 0) {
-				info.target_hum = value->valueint;
+				info.target_hum = roundedValue;
 			} else if (strcmp(sid->valuestring, LUM_SID) == 0) {
-				info.target_lum = value->valueint;
+				info.target_lum = roundedValue;
 			} else {
 				ESP_LOGW(TAG, "Unbekannter Sensor-ID: %s", sid->valuestring);
 			}
