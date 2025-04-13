@@ -7,14 +7,11 @@
 void app_main(void) {
 	//initialisiere Gerät
 	device_init();
-	ESP_LOGI("APP_MAIN", "⏳ Warte auf WLAN-Verbindung...");
+	ESP_LOGI("APP_MAIN", "⏳ Initialisierung läuft...");
 	while (!device_init_done()) {
 		vTaskDelay(pdMS_TO_TICKS(1000));
 	}
-	if (ap_delayed_stop_task_handle == NULL) {
-		xTaskCreate(ap_delayed_stop_task, "ap_stop_delayed", 2048, NULL, 5,
-		            &ap_delayed_stop_task_handle);
-	}
+	stop_ap();
 	ESP_LOGI("APP_MAIN", "✅ Inititalisierung abgeschlossen.");
 	//initialisiere routine
 	solace_init(); // Verbindet sich mit Solace MQTT Broker

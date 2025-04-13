@@ -9,13 +9,17 @@
 // Struktur zur Speicherung der Benutzerdaten
 typedef struct {
 	char username[32];
-	char hardware_token[32];
+	char hardware_token[64];
 	char software_token[64];
 	char solace_username[32];
 	char solace_password[32];
 	char solace_publish_topic[32];
 	char solace_subscribe_topic[32];
 	char solace_controller_id[32];
+	char controller_model[32];
+	char broker_url[32];
+	int broker_port;
+	bool broker_ssl;
 	bool registered;
 }system_data_t;
 
