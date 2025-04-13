@@ -9,9 +9,6 @@
 #include "i2cdev.h"
 #include "esp_log.h"
 
-#define NVS_NAMESPACE "storage"
-#define NVS_KEY_TARGET       "target_moisture"
-
 
 void initialize_sntp(void) {
 	esp_sntp_setoperatingmode(SNTP_OPMODE_POLL);
@@ -52,7 +49,7 @@ void app_main(void) {
 	}
 
 	// Schreibe einen Testwert in den NVS
-	nvs_handle_t handle;
+	/*nvs_handle_t handle;
 	esp_err_t err = nvs_open(NVS_NAMESPACE, NVS_READWRITE, &handle);
 	if (err != ESP_OK) {
 		ESP_LOGE("NVS", "Fehler beim Öffnen des NVS (%s)", esp_err_to_name(err));
@@ -70,7 +67,7 @@ void app_main(void) {
 			ESP_LOGE("NVS", "Fehler beim Commit in den NVS (%s)", esp_err_to_name(err));
 		}
 		nvs_close(handle);
-	}
+	}*/
 
 	led_init();
 	wifi_init();

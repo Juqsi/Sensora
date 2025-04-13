@@ -4,9 +4,7 @@
 #include "esp_log.h"
 #include "mqtt_client.h"
 #include "cJSON.h"
-#include "led_control.h"
-
-static const char *TAG = "MQTT_JSON_EXAMPLE";
+#include "nvs_flash.h"
 
 // MQTT Konfiguration
 #define MQTT_URI       "mqtt://192.168.137.1"
@@ -16,6 +14,9 @@ static const char *TAG = "MQTT_JSON_EXAMPLE";
 #define MQTT_TOPIC_SEND     "sensora/v1/send/id"
 #define MQTT_TOPIC_RECEIVE     "sensora/v1/receive/id"
 #define MODEL	"FullControll-4-Sensors"
+#define NVS_NAMESPACE "storage"
+
+static const char *TAG = "SOLACE_MANAGER";
 
 // Globaler MQTT-Client
 static esp_mqtt_client_handle_t client;
@@ -77,18 +78,46 @@ char* create_json_message(char did[], cJSON *sensors[], int num_sensors) {
 	// Sensors-Array zum Root hinzufügen
 	cJSON_AddItemToObject(root, "sensors", sensors_array);
 
-	// JSON in String umwandeln
 	char *json_str = cJSON_Print(root);
-
-	// Speicher freigeben
 	cJSON_Delete(root);
 
 	return json_str;
 }
 
 // Funktion zur Verarbeitung der empfangenen JSON-Daten
-void process_json_object() {
-	// TODO: JSON mit unbekannter Struktur verarbeiten und dynamisch Daten extrahieren
+void process_received_json(char *json_str) {
+	// JSON in einen cJSON-Objektbaum parsen
+	cJSON *root = cJSON_Parse(json_str);
+	if (root == NULL) {
+		ESP_LOGE(TAG, "❌ Fehler beim Parsen des JSON-Strings");
+		return;
+	}
+
+	cJSON *targetValues = cJSON_GetObjectItem(root, "targetValues");
+	if (targetValues == NULL || !cJSON_IsArray(targetValues)) {
+		ESP_LOGE(TAG, "❌ 'targetValues' ist entweder NULL oder kein Array");
+		cJSON_Delete(root);
+		return;
+	}
+
+	int num_targetValues = cJSON_GetArraySize(targetValues);
+	for (int i = 0; i < num_targetValues; i++) {
+		cJSON *item = cJSON_GetArrayItem(targetValues, i);
+		if (item == NULL) continue;
+
+		cJSON *sid = cJSON_GetObjectItem(item, "sid");
+		cJSON *value = cJSON_GetObjectItem(item, "value");
+
+		if (cJSON_IsString(sid) && cJSON_IsNumber(value)) {
+			ESP_LOGI(TAG, "Sensor (sid): %s, Sollwert: %d",
+					 sid->valuestring, value->valueint);
+
+			// In speicher schreiben: store_target_value(sid->valuestring, value->valueint);
+		} else {
+			ESP_LOGE(TAG, "❌ JSON-Struktur in targetValues-Objekt ungültig");
+		}
+	}
+	cJSON_Delete(root);
 }
 
 // Funktion zum Senden von Nachrichten
@@ -109,8 +138,6 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 	switch (event->event_id) {
 	case MQTT_EVENT_CONNECTED:
 		ESP_LOGI(TAG, "✅ MQTT verbunden");
-
-		// Topic abonnieren
 		esp_mqtt_client_subscribe(client, MQTT_TOPIC_RECEIVE, 1);
 		break;
 
@@ -124,18 +151,18 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 
 	case MQTT_EVENT_DATA:
 		ESP_LOGI(TAG, "📨 Nachricht erhalten");
-		// JSON parsen
-		/*cJSON *root = cJSON_Parse(json_str);
-		if (root == NULL) {
-			ESP_LOGE(TAG, "❌ Fehler beim Parsen der JSON-Daten");
-			return;
+		char *msg = malloc(event->data_len + 1);
+		if (msg == NULL) {
+			ESP_LOGE(TAG, "❌ Speicherallokierung fehlgeschlagen");
+			break;
 		}
-		// TODO: JSON-Object lesen und verarbeiten
-		// Speicher freigeben
-		cJSON_Delete(root);
-		led_blink_start();
-		send_message("Nachricht erhalten!");  //esp_mqtt_client_enqueue(client, MQTT_TOPIC_SEND, "Nachricht erhalten!", 0, 1, 1, true);
-		*/break;
+		memcpy(msg, event->data, event->data_len);
+		msg[event->data_len] = '\0';
+
+		process_received_json(msg);
+
+		free(msg);
+		break;
 
 	default:
 		break;

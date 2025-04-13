@@ -13,10 +13,6 @@
 #include <string.h>
 #include <time.h>
 
-#define DID "660c197f-48c6-42bf-8e65-13dcbcf8d641"
-#define MOISTURE_SID "291b40ed-0512-4c98-bebf-7d19ad629c48"
-#define TEMP_HUM_SID "4c4e4b64-1bd9-4332-b82c-f0bec6dc901d"
-#define LUM_SID "58d8568d-5a4e-4c49-8cac-b620ee218739"
 #define SAMPLES 3
 #define MEAN_COUNT 4
 #define MOISTURE_SENSOR_PIN ADC1_CHANNEL_5	// GPIO 33
@@ -125,6 +121,7 @@ void read_sensordata(void *pvParameter) {
 
 		// Sensor-Werte einlesen
 		moistureVals[valueIndex] = (int)adc_to_percentage(adc1_get_raw(MOISTURE_SENSOR_PIN), DRY, WET);
+		ESP_LOGI("MOISTURE", "Gemessene Bodenfeuchte: %d%%", moistureVals[valueIndex]);
 
 		// Bewässerungslogik abrufen
 		int duration = calculate_watering_duration(moistureVals[valueIndex]);
@@ -150,7 +147,9 @@ void read_sensordata(void *pvParameter) {
 			vTaskDelay(pdMS_TO_TICKS(10));
 		}
 		tempVals[valueIndex] = round_value(temperature);
+		ESP_LOGI("TEMP", "Gemessene Temperatur: %d °C", tempVals[valueIndex]);
 		humVals[valueIndex] = round_value(humidity);
+		ESP_LOGI("HUM", "Gemessene Luftfeuchte: %d%%", humVals[valueIndex]);
 
 		uint16_t raw_lux = 0;
 		esp_err_t err_bh1750 = bh1750_read(&bh1750_dev, &raw_lux);
@@ -159,6 +158,7 @@ void read_sensordata(void *pvParameter) {
 			vTaskDelay(pdMS_TO_TICKS(10));
 		}
 		lumVals[valueIndex] = (int)(((float)raw_lux / 1.2f) + 0.5f);
+		ESP_LOGI("LUM", "Gemessene Beleuchtungsstärke: %d%%", lumVals[valueIndex]);
 
 		// Zeitstempel speichern
 		sprintf(timestamps[valueIndex], "%s", get_timestamp());
@@ -185,9 +185,9 @@ void read_sensordata(void *pvParameter) {
 				cJSON *sensors[4];
 				sensors[0] = create_json_sensor(MOISTURE_SID, DID, moistureMeans, MEAN_COUNT, "moisture", "%",
 					moisture_sensor_status, meanTimestamps, lastCall);
-				sensors[1] = create_json_sensor(TEMP_HUM_SID, DID, tempMeans, MEAN_COUNT, "temperature", "°C",
+				sensors[1] = create_json_sensor(TEMP_SID, DID, tempMeans, MEAN_COUNT, "temperature", "°C",
 												temp_hum_sensor_status, meanTimestamps, lastCall);
-				sensors[2] = create_json_sensor(TEMP_HUM_SID, DID, humMeans, MEAN_COUNT, "humidity", "%",
+				sensors[2] = create_json_sensor(HUM_SID, DID, humMeans, MEAN_COUNT, "humidity", "%",
 												temp_hum_sensor_status, meanTimestamps, lastCall);
 				sensors[3] = create_json_sensor(LUM_SID, DID, lumMeans, MEAN_COUNT, "illuminance", "lx",
 												lum_sensor_status, meanTimestamps, lastCall);
