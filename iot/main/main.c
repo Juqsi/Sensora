@@ -1,12 +1,12 @@
-#include "nvs_flash.h"
-#include "esp_sntp.h"
-#include <time.h>
-#include "led_control.h"
-#include "wifi_manager.h"
+#include "device_manager.h"
 #include "solace_manager.h"
 #include "sensor_manager.h"
+#include <time.h>
+#include "esp_sntp.h"
 #include "pump_manager.h"
 #include "i2cdev.h"
+#include "esp_log.h"
+#include "system_data_manager.h"
 #include "esp_log.h"
 
 
@@ -32,14 +32,16 @@ void wait_for_time_sync(void) {
 
 
 void app_main(void) {
-	// Initialisierung von NVS
-	esp_err_t ret_nvs = nvs_flash_init();
-	if (ret_nvs == ESP_ERR_NVS_NO_FREE_PAGES ||
-		ret_nvs == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-		ESP_ERROR_CHECK(nvs_flash_erase());
-		ret_nvs = nvs_flash_init();
+	//initialisiere Gerät
+	device_init();
+	ESP_LOGI("APP_MAIN", "⏳ Warte auf WLAN-Verbindung...");
+	while (!device_init_done()) {
+		vTaskDelay(pdMS_TO_TICKS(1000));
 	}
-	ESP_ERROR_CHECK(ret_nvs);
+	if (ap_delayed_stop_task_handle == NULL) {
+		xTaskCreate(ap_delayed_stop_task, "ap_stop_delayed", 2048, NULL, 5,
+		            &ap_delayed_stop_task_handle);
+	}
 
 	// Globalen I²C-Dev-Stack initialisieren
 	esp_err_t ret_i2c = i2cdev_init();
@@ -48,30 +50,9 @@ void app_main(void) {
 		return;
 	}
 
-	// Schreibe einen Testwert in den NVS
-	/*nvs_handle_t handle;
-	esp_err_t err = nvs_open(NVS_NAMESPACE, NVS_READWRITE, &handle);
-	if (err != ESP_OK) {
-		ESP_LOGE("NVS", "Fehler beim Öffnen des NVS (%s)", esp_err_to_name(err));
-	} else {
-		int32_t test_value = 40;  // Hier hardgecodeter Sollwert fürs Testing
-		err = nvs_set_i32(handle, NVS_KEY_TARGET, test_value);
-		if (err != ESP_OK) {
-			ESP_LOGE("NVS", "Fehler beim Schreiben in den NVS (%s)", esp_err_to_name(err));
-		} else {
-			ESP_LOGI("NVS", "Wert %d in NVS gespeichert", test_value);
-		}
-		// Änderungen übernehmen
-		err = nvs_commit(handle);
-		if (err != ESP_OK) {
-			ESP_LOGE("NVS", "Fehler beim Commit in den NVS (%s)", esp_err_to_name(err));
-		}
-		nvs_close(handle);
-	}*/
+	ESP_LOGI("APP_MAIN", "✅ Inititalisierung abgeschlossen.");
+	//initialisiere routine
 
-	led_init();
-	wifi_init();
-	vTaskDelay(pdMS_TO_TICKS(2000));
 	initialize_sntp();
 	wait_for_time_sync();
 	solace_init();
