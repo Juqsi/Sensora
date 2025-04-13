@@ -1,13 +1,13 @@
 # Target labels
  bootloader
 # Source files and their labels
-C:/Users/lukas/espressif-ide_workspace/sensora/build/CMakeFiles/bootloader
-C:/Users/lukas/espressif-ide_workspace/sensora/build/CMakeFiles/bootloader.rule
-C:/Users/lukas/espressif-ide_workspace/sensora/build/CMakeFiles/bootloader-complete.rule
-C:/Users/lukas/espressif-ide_workspace/sensora/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
-C:/Users/lukas/espressif-ide_workspace/sensora/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
-C:/Users/lukas/espressif-ide_workspace/sensora/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
-C:/Users/lukas/espressif-ide_workspace/sensora/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
-C:/Users/lukas/espressif-ide_workspace/sensora/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
-C:/Users/lukas/espressif-ide_workspace/sensora/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
-C:/Users/lukas/espressif-ide_workspace/sensora/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
+C:/Users/timon/CLionProjects/Sensora/iot/build/CMakeFiles/bootloader
+C:/Users/timon/CLionProjects/Sensora/iot/build/CMakeFiles/bootloader.rule
+C:/Users/timon/CLionProjects/Sensora/iot/build/CMakeFiles/bootloader-complete.rule
+C:/Users/timon/CLionProjects/Sensora/iot/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+C:/Users/timon/CLionProjects/Sensora/iot/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+C:/Users/timon/CLionProjects/Sensora/iot/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+C:/Users/timon/CLionProjects/Sensora/iot/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+C:/Users/timon/CLionProjects/Sensora/iot/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+C:/Users/timon/CLionProjects/Sensora/iot/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+C:/Users/timon/CLionProjects/Sensora/iot/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
