@@ -8,14 +8,8 @@
 #include "nvs_flash.h"
 #include "system_data_manager.h"
 
-// MQTT Konfiguration
-#define MQTT_URI       "mqtt://maxtar.de"
-#define MQTT_USERNAME	"esp"
-#define MQTT_PASSWORD	"esp"
 #define MQTT_CLIENT_ID	"ESP32-1"
-#define MQTT_TOPIC_SEND     "sensora/v1/send/id"
-#define MQTT_TOPIC_RECEIVE     "sensora/v1/receive/id"
-#define MODEL	"FullControll-4-Sensors"
+
 
 static const char *TAG = "SOLACE_MANAGER";
 
@@ -67,7 +61,7 @@ char* create_json_message(char did[], cJSON *sensors[], int num_sensors) {
 	}
 
 	cJSON_AddStringToObject(root, "did", did);
-	cJSON_AddStringToObject(root, "model", MODEL);
+	cJSON_AddStringToObject(root, "model", info.controller_model);
 
 	// Array für "sensors" erstellen
 	cJSON *sensors_array = cJSON_CreateArray();
@@ -139,7 +133,7 @@ void process_received_json(char *json_str) {
 // Funktion zum Senden von Nachrichten
 void send_message(const char *message) {
 	if (message != NULL) {
-		esp_mqtt_client_enqueue(client, MQTT_TOPIC_SEND, message, 0, 1, 1, true);
+		esp_mqtt_client_enqueue(client, info.solace_publish_topic, message, 0, 1, 1, true);
 		ESP_LOGI(TAG, "📡 Daten gesendet: %s", message);
 	} else {
 	ESP_LOGE(TAG, "❌ Fehler beim Senden an Solace");
@@ -154,7 +148,7 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 	switch (event->event_id) {
 	case MQTT_EVENT_CONNECTED:
 		ESP_LOGI(TAG, "✅ MQTT verbunden");
-		esp_mqtt_client_subscribe(client, MQTT_TOPIC_RECEIVE, 1);
+		esp_mqtt_client_subscribe(client, info.solace_subscribe_topic, 1);
 		break;
 
 	case MQTT_EVENT_DISCONNECTED:
@@ -187,12 +181,13 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 
 void solace_init(void) {
 	ESP_LOGI(TAG, "🚀 Starte MQTT...");
+	load_system_data(&info);
 
 	// MQTT Konfiguration und Start
 	esp_mqtt_client_config_t mqtt_cfg = {
-		.broker.address.uri = MQTT_URI,
-		.credentials.username = MQTT_USERNAME,
-		.credentials.authentication.password = MQTT_PASSWORD,
+		.broker.address.uri = info.broker_url,
+		.credentials.username = info.solace_username,
+		.credentials.authentication.password = info.solace_password,
 		.credentials.client_id = MQTT_CLIENT_ID,
 		.session.disable_clean_session = true,
 		.session.keepalive = 10,

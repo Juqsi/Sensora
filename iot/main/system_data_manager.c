@@ -3,7 +3,7 @@
 #include "esp_log.h"
 #include "nvs_flash.h"
 #include "nvs.h"
-#include "mqtt_client.h"
+
 
 static const char *TAG = "system_data_storage";
 

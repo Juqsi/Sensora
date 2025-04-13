@@ -9,6 +9,7 @@
 #include "freertos/task.h"
 #include "solace_manager.h"
 #include "pump_manager.h"
+#include "system_data_manager.h"
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
@@ -26,6 +27,8 @@
 #define ADC_ATTEN_11db ADC_ATTEN_DB_11
 #endif
 
+
+system_data_t info;
 
 // Globale Device-Struktur des BH1750
 static i2c_dev_t bh1750_dev;
@@ -183,15 +186,15 @@ void read_sensordata(void *pvParameter) {
 			if (meanIndex >= MEAN_COUNT - 1) {
 				// JSON Nachricht erstellen und schicken
 				cJSON *sensors[4];
-				sensors[0] = create_json_sensor(MOISTURE_SID, DID, moistureMeans, MEAN_COUNT, "moisture", "%",
+				sensors[0] = create_json_sensor(MOISTURE_SID, info.solace_controller_id, moistureMeans, MEAN_COUNT, "moisture", "%",
 					moisture_sensor_status, meanTimestamps, lastCall);
-				sensors[1] = create_json_sensor(TEMP_SID, DID, tempMeans, MEAN_COUNT, "temperature", "°C",
+				sensors[1] = create_json_sensor(TEMP_SID, info.solace_controller_id, tempMeans, MEAN_COUNT, "temperature", "°C",
 												temp_hum_sensor_status, meanTimestamps, lastCall);
-				sensors[2] = create_json_sensor(HUM_SID, DID, humMeans, MEAN_COUNT, "humidity", "%",
+				sensors[2] = create_json_sensor(HUM_SID, info.solace_controller_id, humMeans, MEAN_COUNT, "humidity", "%",
 												temp_hum_sensor_status, meanTimestamps, lastCall);
-				sensors[3] = create_json_sensor(LUM_SID, DID, lumMeans, MEAN_COUNT, "illuminance", "lx",
+				sensors[3] = create_json_sensor(LUM_SID, info.solace_controller_id, lumMeans, MEAN_COUNT, "illuminance", "lx",
 												lum_sensor_status, meanTimestamps, lastCall);
-				char *msg = create_json_message(DID, sensors, 4);
+				char *msg = create_json_message(info.solace_controller_id, sensors, 4);
 				send_message(msg);
 
 				meanIndex = 0;
@@ -208,7 +211,9 @@ void read_sensordata(void *pvParameter) {
 
 // Funktion zur Sensor-Initialisierung und Start der Messung
 void sensor_init(void) {
-	adc1_config_width(ADC_WIDTH_BIT_12);	// 12-Bit-Auflösung (0 - 4095)
+    load_system_data(&info);
+
+    adc1_config_width(ADC_WIDTH_BIT_12);	// 12-Bit-Auflösung (0 - 4095)
 	adc1_config_channel_atten(MOISTURE_SENSOR_PIN, ADC_ATTEN_11db);
 	i2c_scanner();
 	bh1750_init_desc(&bh1750_dev, BH1750_ADDR_LO, LUM_I2C_PORT, LUM_GPIO_SDA, LUM_GPIO_SCL);
