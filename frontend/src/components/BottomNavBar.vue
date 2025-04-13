@@ -31,6 +31,7 @@ onBeforeUnmount(() => {
       >
         <div class="grid grid-cols-4 gap-4">
           <RouterLink
+            aria-label="Home"
             :class="{ 'text-primary': $route.path === '/' }"
             class="flex flex-col items-center"
             to="/"
@@ -39,6 +40,7 @@ onBeforeUnmount(() => {
           </RouterLink>
 
           <RouterLink
+            aria-label="Plants"
             :class="{ 'text-primary': $route.path === '/plants' }"
             class="flex flex-col items-center"
             to="/plants"
@@ -47,6 +49,7 @@ onBeforeUnmount(() => {
           </RouterLink>
 
           <RouterLink
+            aria-label="Groups"
             :class="{ 'text-primary': $route.path === '/groups' }"
             class="flex flex-col items-center"
             to="/groups"
@@ -54,7 +57,7 @@ onBeforeUnmount(() => {
             <Users class="w-6 h-6" />
           </RouterLink>
 
-          <RouterLink class="flex flex-col items-center" to="/profile">
+          <RouterLink aria-label="Profile" class="flex flex-col items-center" to="/profile">
             <Avatar
               :class="{
                 'border-primary': $route.path === '/profile',

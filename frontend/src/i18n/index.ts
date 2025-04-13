@@ -4,6 +4,7 @@ import deDE from './locales/de-DE.json'
 import { getLanguage } from '../composables/useLanguage.ts'
 
 const lang = getLanguage()
+document.documentElement.setAttribute('lang', lang)
 
 const i18n = createI18n({
   legacy: false,

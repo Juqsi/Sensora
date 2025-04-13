@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Info, WifiIcon, LinkIcon, RefreshCwIcon, Loader2 } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
@@ -9,13 +8,13 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'vue-sonner';
 import { useUserStore } from '@/stores'
 import NavCard from '@/components/NavCard.vue'
+import { Capacitor } from '@capacitor/core';
 
 const { t } = useI18n();
 const isWifiConnected = ref(false);
 const ssid = ref('');
 const wifiPassword = ref('');
 const username = ref(useUserStore().user?.username ?? "");
-const mail = ref(useUserStore().user?.mail ?? "");
 const isSubmitting = ref(false);
 const submissionSuccess = ref(false);
 const submissionError = ref('');
@@ -23,6 +22,8 @@ const submissionError = ref('');
 const confirmWifiConnected = () => {
   isWifiConnected.value = true;
 };
+
+const variant = Capacitor.getPlatform() === 'android' ? 'secondary' : 'default';
 
 const submitControllerConfig = async () => {
   isSubmitting.value = true;
@@ -46,14 +47,8 @@ const submitControllerConfig = async () => {
     return
   }
 
-  if (!mail.value.trim()) {
-    toast.warning(t('addController.formErrors.mailRequired'))
-    isSubmitting.value = false
-    return
-  }
-
   try {
-    const response = await fetch('https://192.168.4.1/connectapp', {
+    const response = await fetch('http://192.168.4.1/connectapp', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -62,7 +57,6 @@ const submitControllerConfig = async () => {
         ssid: ssid.value,
         password: wifiPassword.value,
         username: username.value,
-        mail: mail.value,
       }),
     })
 
@@ -122,7 +116,7 @@ const submitControllerConfig = async () => {
       <div class="space-y-4" v-if="isWifiConnected && !submissionSuccess">
         <h3 class="text-lg font-semibold">{{ t('addController.step3TitleForm') }}</h3>
         <p class="text-sm">{{ t('addController.step3DescriptionForm') }}</p>
-        <div class="grid gap-2">
+        <div class="grid gap-2" v-if="Capacitor.getPlatform() === 'android'">
           <div class="grid gap-1">
             <Label for="ssid">{{ t('addController.ssidLabel') }}</Label>
             <Input id="ssid" v-model="ssid" :placeholder="t('addController.ssidPlaceholder')" />
@@ -135,17 +129,13 @@ const submitControllerConfig = async () => {
             <Label for="username">{{ t('addController.usernameLabel') }}</Label>
             <Input id="username" v-model="username" :placeholder="t('addController.usernamePlaceholder')" />
           </div>
-          <div class="grid gap-1">
-            <Label for="username">{{ t('addController.MailLabel') }}</Label>
-            <Input id="username" v-model="mail" :placeholder="t('addController.mailPlaceholder')" />
-          </div>
           <Button @click="submitControllerConfig" :disabled="isSubmitting" class="w-full">
             <Loader2 v-if="isSubmitting" class="mr-2 h-4 w-4 animate-spin" />
             {{ isSubmitting ? t('addController.submitting') : t('addController.submitConfig') }}
           </Button>
           <p v-if="submissionError" class="text-sm text-destructive">{{ submissionError }}</p>
         </div>
-        <Button as="a" href="https://192.168.4.1" @click="()=>{submissionSuccess = true;}" target="_blank" rel="noopener noreferrer" variant="secondary" class="w-full">{{ t('addController.openConfig') }}</Button>
+        <Button as="a" href="http://192.168.4.1" @click="()=>{submissionSuccess = true;}" target="_blank" rel="noopener noreferrer" :variant="variant" class="w-full">{{ t('addController.openConfig') }}</Button>
       </div>
 
       <div class="space-y-2" v-if="isWifiConnected && submissionSuccess">

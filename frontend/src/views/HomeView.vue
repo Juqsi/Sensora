@@ -105,12 +105,12 @@ onMounted(() => {
               rel="noopener"
               class="block"
             >
-              <Card class="w-full border-none bg-secondary hover:bg-secondary/80 transition">
+              <Card class="w-full border bg-muted hover:bg-muted/80 transition">
                 <CardHeader>
                   <CardTitle>{{ tip.title }}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p class="text-muted-foreground">{{ tip.description }}</p>
+                  <p class="text-foreground">{{ tip.description }}</p>
                 </CardContent>
               </Card>
             </component>

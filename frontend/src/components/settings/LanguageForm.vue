@@ -23,6 +23,7 @@ const updateLanguage = (newLanguage: string) => {
   if (locale.value !== newLanguage) {
     localStorage.setItem('language', newLanguage)
     locale.value = newLanguage
+    document.documentElement.setAttribute('lang', newLanguage)
 
     toast.success(
       newLanguage === SupportedLanguages.EN
