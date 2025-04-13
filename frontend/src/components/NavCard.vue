@@ -18,7 +18,7 @@ defineProps({
       <div class="flex justify-between w-full">
         <div class="flex items-center justify-start space-x-4">
           <Button
-            class="text-muted-foreground hover:text-primary flex items-center space-x-2"
+            class="text-muted-foreground hover:text-primary flex items-center space-x-2 cursor-pointer"
             size="icon"
             variant="ghost"
             @click="router.back()"

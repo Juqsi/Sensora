@@ -10,12 +10,19 @@ const { locale, t } = useI18n()
 const props = defineProps({
   data: {
     type: Object as PropType<{
-      values: { timestamp: number; [key: string]: number }[]
+      values: { timestamp: number; targetValue: number ;[key: string]: number }[]
       ilk: ilk
       unit: string
     }>,
     required: true,
   },
+})
+
+const categories = computed<string[]>(()=>{
+  if (props.data.values[0]  === undefined|| props.data.values[0].targetValue === -1 ){
+    return [props.data.ilk]
+  }
+  return [props.data.ilk, 'targetValue']
 })
 
 // Formatierung der Y-Achse
@@ -79,7 +86,7 @@ const tickValuesX = computed(() => calculateXTicks(props.data.values))
 
 <template>
   <LineChart
-    :categories="[props.data.ilk]"
+    :categories="categories"
     :custom-tooltip="CustomChartTooltip"
     :data="props.data.values"
     :tick-values-x="tickValuesX"

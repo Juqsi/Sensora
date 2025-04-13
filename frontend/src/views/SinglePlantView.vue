@@ -74,7 +74,7 @@ yesterday.setDate(today.getDate() - 3)
 const activeKey = ref<ilk>(ilk.temperature)
 
 const activeData = ref<{
-  values: { timestamp: number; [key: string]: number }[]
+  values: { timestamp: number; targetValue : number ; [key: string]: number }[]
   ilk: ilk
   unit: string
 }>({
@@ -98,27 +98,33 @@ const updateActiveKey = (key: ilk, force: boolean = false) => {
 
     const rawData = values[activeKey.value] || []
     const unit = rawData[0]?.unit ?? ''
+
+    const targetValue = plant.value?.targetValues?.find(
+      (target) => target.ilk === activeKey.value
+    )?.value ?? -1
+
     activeData.value = {
       values: rawData.map(({ timestamp, value }) => ({
         timestamp: new Date(timestamp).getTime(),
         [activeKey.value]: value,
+        targetValue: targetValue,
       })),
       unit: unit,
       ilk: activeKey.value,
     }
   }
 }
-
 usePullToRefresh(async () => {
   await plantStore.fetchPlants(true);
 });
+
 </script>
 
 <template>
   <NavCard :title="plant?.name ?? ''" :sub-title="room?.name">
     <template #TitleRight>
-      <RouterLink :to="`/plant/${route.params.id}/edit`">
-        <Button size="icon" variant="ghost">
+      <RouterLink :to="`/plant/${route.params.id}/edit`" >
+        <Button size="icon" variant="ghost" class="cursor-pointer">
           <Settings />
         </Button>
       </RouterLink>

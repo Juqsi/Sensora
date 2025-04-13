@@ -30,8 +30,6 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { v4 as uuid } from 'uuid'
 import { Sparkles } from 'lucide-vue-next'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { Info } from 'lucide-vue-next'
 import InfoTooltip from '@/components/InfoTooltip.vue'
 
 const router = useRouter()
@@ -149,6 +147,11 @@ onMounted(() => {
 const createPlant = async () => {
   if (selectedRoom.value === undefined || selectedRoom.value.rid === undefined) {
     toast.warning(t('SinglePlant.EnterValidRoom'))
+    return
+  }
+  if (!name.value.trim()) {
+    toast.warning(t('SinglePlant.EnterInvalidName'))
+    return
   }
   if (route.params.id === undefined) {
     const newPlant: createPlantBody = {
@@ -217,8 +220,8 @@ const createPlant = async () => {
 <template>
   <NavCard :sub-title="t('plant.settings.SubTitle')" :title="t('plant.settings.Title')">
     <template #TitleRight>
-      <RouterLink :to="{ name: 'PlantUpload' }">
-        <Button variant="outline" size="icon">
+      <RouterLink :to="{ name: 'PlantUpload' }" >
+        <Button variant="outline" size="icon" class="cursor-pointer">
           <Sparkles class="text-blue-400" />
         </Button>
       </RouterLink>

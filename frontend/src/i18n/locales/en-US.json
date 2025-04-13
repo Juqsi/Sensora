@@ -120,6 +120,7 @@
     "Generate": "Generate"
   },
   "SinglePlant": {
+    "EnterInvalidName": "The plant wants a name.",
     "EnterValidRoom": "Please enter a valid room"
   },
   "about": {
@@ -166,8 +167,8 @@
   },
   "active": "Active",
   "addController": {
-    "ErrorWlan": "SSID or password is incorrect.",
     "ErrorUser": "Username or email is incorrect.",
+    "ErrorWlan": "SSID or password is incorrect.",
     "MailLabel": "Mail",
     "configError": "Error sending configuration",
     "configErrorConnection": "Connection error to the controller.",
@@ -430,7 +431,7 @@
       "Avatars": "Avatars",
       "Cancel": "Cancel",
       "Description": "Description",
-      "DescriptionPlaceholder": "More private notes",
+      "DescriptionPlaceholder": "Private notes",
       "Group1": "Group 1",
       "Group2": "Group 2",
       "NameOfPlant": "Name of Plant",
@@ -550,6 +551,7 @@
   "success": {
     "requestCompleted": "Load successful."
   },
+  "targetValue": "Target Value",
   "temperature": "Temperature",
   "title": {
     "FAQ": "FAQ",
