@@ -11,13 +11,12 @@
 #include "wifi_setup_html.h"
 #include "system_data_manager.h"
 #include <auth_service.h>
-#include <esp_https_server.h>
 
 #define RESET_BUTTON_GPIO 0 // GPIO 0 für den Reset-Button verwenden
 #define RESET_HOLD_DURATION_MS 5000  // 5 Sekunden
 #define LED_RESET_BLINK_INTERVAL_MS 200
 
-static const char *TAG = "wifi_manager";
+static const char *TAG = "device_manager";
 static httpd_handle_t server = NULL;
 static TaskHandle_t reset_task_handle = NULL;
 static bool reset = false;
@@ -32,15 +31,6 @@ typedef enum {
 
 static connect_state_t wifi_connect_state = CONNECT_STATE_IDLE;
 registration_state_t registration_state = REGISTRATION_STATE_IDLE;
-TaskHandle_t ap_delayed_stop_task_handle = NULL;
-
-extern const uint8_t server_cert_pem_start[] asm("_binary_server_cert_pem_start"
-);
-extern const uint8_t server_cert_pem_end[] asm("_binary_server_cert_pem_end");
-extern const uint8_t server_key_pem_start[] asm("_binary_server_key_pem_start");
-extern const uint8_t server_key_pem_end[] asm("_binary_server_key_pem_end");
-
-void stop_ap(void);
 
 
 static void IRAM_ATTR gpio_isr_handler(void *arg) {
@@ -57,11 +47,7 @@ void reset_task(void *arg) {
 		ESP_LOGW(TAG, "🟡 Reset-Knopf erkannt – prüfe Haltezeit...");
 
 		TickType_t press_time = xTaskGetTickCount();
-
-		// Starte schnelles Blinken
-		ESP_LOGI(TAG, "💡 Starte schnelles LED-Blinken für Reset-Vorbereitung");
 		bool led_state = false;
-
 		while (gpio_get_level(RESET_BUTTON_GPIO) == 0) {
 			led_state = !led_state;
 			if (led_state) {
@@ -181,9 +167,7 @@ static esp_err_t try_handler(httpd_req_t *req) {
 	httpd_query_key_value(buf, "password", password, sizeof(password));
 	httpd_query_key_value(buf, "username", username, sizeof(username));
 
-	ESP_LOGI(TAG, "Received SSID: %s, Password: %s, Username %s",
-	         ssid, password, username);
-
+	ESP_LOGI(TAG, "Received WIFI Data...");
 	strncpy(system_data.username, username, sizeof(system_data.username));
 	save_system_data(&system_data);
 
@@ -215,7 +199,7 @@ static esp_err_t try_handler(httpd_req_t *req) {
 		"    } else if (++retries < maxRetries) {"
 		"      setTimeout(checkStatus, 2000);"
 		"    } else {"
-		"      window.location.href = '/?error=1';"
+		"      window.location.href = '/?error=2';"
 		"    }"
 		"  }).catch(() => setTimeout(checkStatus, 2000));"
 		"}"
@@ -255,8 +239,7 @@ static esp_err_t try_app_handler(httpd_req_t *req) {
 	httpd_query_key_value(buf, "password", password, sizeof(password));
 	httpd_query_key_value(buf, "username", username, sizeof(username));
 
-	ESP_LOGI(TAG, "Received SSID: %s, Password: %s, Username %s",
-	         ssid, password, username);
+	ESP_LOGI(TAG, "Received WIFI Data");
 
 	strncpy(system_data.username, username, sizeof(system_data.username));
 	save_system_data(&system_data);
@@ -315,8 +298,6 @@ static esp_err_t status_handler(httpd_req_t *req) {
 
 			httpd_resp_set_type(req, "text/html");
 			httpd_resp_send(req, success_page, HTTPD_RESP_USE_STRLEN);
-
-			stop_ap();
 		} else {
 			const char *wait_page =
 				"<html><body><p>⏳ Daten werden geprüft...</p></body></html>";
@@ -347,17 +328,12 @@ static esp_err_t status_handler(httpd_req_t *req) {
 
 
 void start_webserver(void) {
-	httpd_ssl_config_t config = HTTPD_SSL_CONFIG_DEFAULT();
-	config.httpd.max_open_sockets = 6;
-	config.httpd.recv_wait_timeout = 10;
-	config.httpd.stack_size = 8192;
+	httpd_config_t config = HTTPD_DEFAULT_CONFIG();
+	config.max_open_sockets = 6;
+	config.recv_wait_timeout = 10;
+	config.stack_size = 8192;
 
-	config.servercert = server_cert_pem_start;
-	config.servercert_len = server_cert_pem_end - server_cert_pem_start;
-	config.prvtkey_pem = server_key_pem_start;
-	config.prvtkey_len = server_key_pem_end - server_key_pem_start;
-
-	if (httpd_ssl_start(&server, &config) == ESP_OK) {
+	if (httpd_start(&server, &config) == ESP_OK) {
 		const httpd_uri_t uri_get = {
 			.uri = "/",
 			.method = HTTP_GET,
@@ -390,15 +366,15 @@ void start_webserver(void) {
 		};
 		httpd_register_uri_handler(server, &uri_status);
 
-		ESP_LOGI(TAG, "🔐 HTTPS-Webserver gestartet.");
+		ESP_LOGI(TAG, "🌐 HTTP-Webserver gestartet.");
 	}
 }
 
 void stop_webserver(void) {
 	if (server) {
-		httpd_ssl_stop(server);
+		httpd_stop(server);
 		server = NULL;
-		ESP_LOGI(TAG, "🛑 HTTPS-Webserver gestoppt.");
+		ESP_LOGI(TAG, "🛑 HTTP-Webserver gestoppt.");
 	}
 }
 
@@ -407,12 +383,11 @@ void start_ap(void) {
 	// Wi-Fi-Config für den SoftAP-Modus
 	wifi_config_t wifi_ap_config = {
 		.ap = {
-			.ssid = "Sensora", // SSID des AP
+			.ssid = "Sensora",
 			.ssid_len = strlen("Sensora"),
-			.password = "setup123",
-			// Passwort für den AP (mindestens 8 Zeichen)
-			.max_connection = 4, // Maximal 4 Verbindungen
-			.authmode = WIFI_AUTH_WPA2_PSK, // WPA2 Verschlüsselung
+			.password = "",
+			.max_connection = 4,
+			.authmode = WIFI_AUTH_OPEN, // Offen – kein Passwort
 		},
 	};
 
@@ -431,7 +406,6 @@ void start_ap(void) {
 void stop_ap(void) {
 	//Sicherstellen, dass keine WLAN Daten mehr gespeichert sind
 	erase_system_data();
-	ap_delayed_stop_task_handle = NULL;
 	wifi_mode_t current_mode;
 	ESP_ERROR_CHECK(esp_wifi_get_mode(&current_mode));
 
@@ -445,8 +419,15 @@ void stop_ap(void) {
 		suppress_reconnect = true;
 		ESP_ERROR_CHECK(esp_wifi_stop());
 		ESP_ERROR_CHECK(esp_wifi_start());
+		int loop_ctr = 0;
+		while (wifi_connect_state == CONNECT_STATE_CONNECTING) {
+			if (loop_ctr++ > 15) {
+				wifi_connect_state = CONNECT_STATE_IDLE;
+				ESP_LOGW(TAG, "❌ Verbindungsversuch fehlgeschlagen.");
+			}
+			vTaskDelay(pdMS_TO_TICKS(1000));
+		}
 		suppress_reconnect = false;
-
 		if (!is_sta_connected()) {
 			ESP_LOGI(TAG, "📡 Kein aktives WLAN – versuche zu verbinden...");
 			esp_wifi_connect(); // optional
@@ -464,20 +445,6 @@ void stop_ap(void) {
 }
 
 
-void ap_delayed_stop_task(void *arg) {
-	const TickType_t delay = pdMS_TO_TICKS(5 * 60 * 1000); // 5 Minuten
-
-	ESP_LOGI(TAG, "🕒 Warte 5 Minuten, bevor AP gestoppt wird...");
-
-	vTaskDelay(delay);
-
-	ESP_LOGI(TAG, "⏱️ Zeit abgelaufen – AP wird nun deaktiviert.");
-	stop_ap(); // nur wenn noch nötig
-	ap_delayed_stop_task_handle = NULL;
-	vTaskDelete(NULL);
-}
-
-
 void wifi_event_handler(void *arg, const esp_event_base_t event_base,
                         const long event_id,
                         void *event_data) {
@@ -491,8 +458,7 @@ void wifi_event_handler(void *arg, const esp_event_base_t event_base,
 				"📶 Wi-Fi STA gestartet. Prüfe gespeicherte Konfiguration...");
 
 			if (strlen((char *)stored_wifi_config.sta.ssid) > 0) {
-				ESP_LOGI(TAG, "📡 Verbindung wird aufgebaut mit SSID: %s",
-				         stored_wifi_config.sta.ssid);
+				ESP_LOGI(TAG, "📡 Verbindung wird aufgebaut ...");
 				ESP_ERROR_CHECK(esp_wifi_connect());
 			} else {
 				ESP_LOGW(
@@ -594,8 +560,7 @@ void device_init(void) {
 
 	if (ret == ESP_OK && strlen((char *)stored_wifi_config.sta.ssid) > 0 &&
 	    is_device_registered()) {
-		ESP_LOGI(TAG, "📶 Gespeicherte System-Daten gefunden: %s, %s",
-		         stored_wifi_config.sta.ssid, system_data.solace_password);
+		ESP_LOGI(TAG, "📶 Gespeicherte System-Daten gefunden");
 
 		// Verbindung mit gespeicherten Daten herstellen
 		ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));

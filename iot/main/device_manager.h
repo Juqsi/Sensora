@@ -16,7 +16,7 @@ extern TaskHandle_t ap_delayed_stop_task_handle;
 void device_init(void);
 void wifi_event_handler(void *arg, esp_event_base_t event_base, long event_id, void *event_data);
 bool device_init_done(void);
-void ap_delayed_stop_task(void* arg);
+void stop_ap(void);
 
 
 #endif
