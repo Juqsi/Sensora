@@ -17,6 +17,10 @@ typedef struct {
 	char solace_subscribe_topic[32];
 	char solace_controller_id[32];
 	bool registered;
+    int32_t target_moisture;
+    int32_t target_temp;
+    int32_t target_hum;
+    int32_t target_lum;
 }system_data_t;
 
 // Initialisiert NVS (nur einmal beim Start notwendig)

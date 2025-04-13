@@ -1,15 +1,11 @@
 #include "pump_manager.h"
-#include "sensor_manager.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
 #include "driver/gpio.h"
-#include "nvs.h"
 #include "esp_log.h"
-#include "esp_err.h"
 #include <stdlib.h>
-
-#define NVS_NAMESPACE "storage"
+#include "system_data_manager.h"
 
 #define PUMP_GPIO  GPIO_NUM_4
 #define MIN_WATERING_TIME       2000
@@ -21,31 +17,23 @@
 // Globaler Queue-Handle
 QueueHandle_t pumpQueue = NULL;
 
+system_data_t info;
+
 // Funktion für die Bewässerungslogik
 int calculate_watering_duration(int current_moisture) {
-	int32_t target_moisture = 0;
-	/*nvs_handle_t handle;
-	esp_err_t err = nvs_open(NVS_NAMESPACE, NVS_READONLY, &handle);
-	if (err == ESP_OK) {
-		char key[44];
-		sprintf(key, "target_%s", MOISTURE_SID);
-		err = nvs_get_i32(handle, key, &target_moisture);
-		if (err != ESP_OK) {
-			ESP_LOGW("WATERING_DURATION", "NVS get target failed");
-		}
-		nvs_close(handle);
-	} else {
-		ESP_LOGW("WATERING_DURATION", "NVS open failed");
-	}*/
+	load_system_data(&info);
+	if (!info.target_moisture) {
+		info.target_moisture = 0;
+	}
 
-	ESP_LOGI("WATERING_DURATION", "Aktuelle Bodenfeuchte: %d%%, Soll-Bodenfeuchte: %d%%", current_moisture, target_moisture);
+	ESP_LOGI("WATERING_DURATION", "Aktuelle Bodenfeuchte: %d%%, Soll-Bodenfeuchte: %d%%", current_moisture, info.target_moisture);
 
-	if (current_moisture >= target_moisture) {
+	if (current_moisture >= info.target_moisture) {
 		ESP_LOGI("WATERING_DURATION", "Kein Bewässerungsbedarf, da aktuelle Feuchte >= Sollwert.");
 		return 0;
 	}
 
-	int deficit = target_moisture - current_moisture;
+	int deficit = info.target_moisture - current_moisture;
 	int duration = deficit * WATERING_K_FACTOR;
 
 	if (duration < MIN_WATERING_TIME) {

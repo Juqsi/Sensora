@@ -1,25 +1,28 @@
 #include "solace_manager.h"
+#include "sensor_manager.h"
 #include <stdio.h>
 #include <stdint.h>
 #include "esp_log.h"
 #include "mqtt_client.h"
 #include "cJSON.h"
 #include "nvs_flash.h"
+#include "system_data_manager.h"
 
 // MQTT Konfiguration
-#define MQTT_URI       "mqtt://192.168.137.1"
+#define MQTT_URI       "mqtt://maxtar.de"
 #define MQTT_USERNAME	"esp"
 #define MQTT_PASSWORD	"esp"
 #define MQTT_CLIENT_ID	"ESP32-1"
 #define MQTT_TOPIC_SEND     "sensora/v1/send/id"
 #define MQTT_TOPIC_RECEIVE     "sensora/v1/receive/id"
 #define MODEL	"FullControll-4-Sensors"
-#define NVS_NAMESPACE "storage"
 
 static const char *TAG = "SOLACE_MANAGER";
 
 // Globaler MQTT-Client
 static esp_mqtt_client_handle_t client;
+
+system_data_t info;
 
 // Funktion um JSON für einen Sensor zu erstellen
 cJSON* create_json_sensor(char sid[], char did[], int values[], int valueCount, char ilk[], char unit[], char status[], char timestamps[][20], char lastCall[20]) {
@@ -101,6 +104,7 @@ void process_received_json(char *json_str) {
 	}
 
 	int num_targetValues = cJSON_GetArraySize(targetValues);
+	load_system_data(&info);
 	for (int i = 0; i < num_targetValues; i++) {
 		cJSON *item = cJSON_GetArrayItem(targetValues, i);
 		if (item == NULL) continue;
@@ -112,11 +116,23 @@ void process_received_json(char *json_str) {
 			ESP_LOGI(TAG, "Sensor (sid): %s, Sollwert: %d",
 					 sid->valuestring, value->valueint);
 
-			// In speicher schreiben: store_target_value(sid->valuestring, value->valueint);
+			if (strcmp(sid->valuestring, MOISTURE_SID) == 0) {
+				info.target_moisture = value->valueint;
+			} else if (strcmp(sid->valuestring, TEMP_SID) == 0) {
+				info.target_temp = value->valueint;
+			} else if (strcmp(sid->valuestring, HUM_SID) == 0) {
+				info.target_hum = value->valueint;
+			} else if (strcmp(sid->valuestring, LUM_SID) == 0) {
+				info.target_lum = value->valueint;
+			} else {
+				ESP_LOGW(TAG, "Unbekannter Sensor-ID: %s", sid->valuestring);
+			}
+
 		} else {
 			ESP_LOGE(TAG, "❌ JSON-Struktur in targetValues-Objekt ungültig");
 		}
 	}
+	save_system_data(&info);
 	cJSON_Delete(root);
 }
 
