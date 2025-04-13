@@ -1,0 +1,274 @@
+\section{Auswahl der Technologien f\"ur die entwickelten Schnittstellen-Services}
+
+Die im Rahmen des Projekts \textit{Sensora} entwickelten Schnittstellen-Services \"ubernehmen unterschiedliche Aufgaben innerhalb der Systemarchitektur, stellen jedoch alle zentrale Bausteine zur Kommunikations- und Steuerungsebene dar. Ihre Implementierung erfordert eine wohl\"uberlegte Auswahl geeigneter Technologien, die sowohl den funktionalen Anforderungen als auch den architekturellen, sicherheitstechnischen und betrieblichen Rahmenbedingungen gerecht werden.
+
+In diesem Kapitel werden die getroffenen Technologieentscheidungen f\"ur jeden entwickelten Service einzeln erl\"autert, mit vergleichbaren Alternativen kontextualisiert und unter R\"uckbezug auf die definierten Anforderungen begr\"undet.
+
+\subsection{Technologieauswahl f\"ur den Authentifizierungs- und Registrierungsdienst (Auth-Service)}
+
+\subsubsection*{Zielsetzung und Kontext}
+
+Der Auth-Service ist eine der sicherheitskritischsten Komponenten des Sensora-Systems. Er ist daf\"ur verantwortlich, neue IoT-Controller kontrolliert ins System aufzunehmen, ihnen eindeutige Kommunikationsidentit\"aten zuzuweisen und die Authentizit\"at dieser Ger\"ate eindeutig zu \"uberpr\"ufen. Zudem verwaltet er die Registrierung von Controllern in der zentralen Datenbank und erzeugt differenzierte Zugriffskan\"ale innerhalb der Messaging-Infrastruktur.
+
+\subsubsection*{Verwendete Programmiersprache: Python}
+
+F\"ur die Umsetzung des Auth-Service wurde die Programmiersprache \textbf{Python} gew\"ahlt. Python bietet eine sehr hohe Ausdrucksst\"arke bei gleichzeitig niedriger Komplexit\"at in der Syntax\cite{python_flask_prototyping}. Dies erlaubt eine fokussierte Umsetzung sicherheitskritischer Logik mit hoher Lesbarkeit und reduziertem Fehlerpotenzial. Die Sprache bietet native Unterst\"utzung f\"ur REST-APIs (via Flask), HMAC-Berechnungen (via \texttt{hashlib}) und JSON-Verarbeitung, was sie ideal f\"ur die Umsetzung des Auth-Service macht.
+
+Im Vergleich zu Alternativen wie Java oder Go zeigt Python zwar leistungstechnische Schw\"achen bei hochfrequenten Systemen, bietet daf\"ur jedoch wesentlich h\"ohere Entwicklungsproduktiv\"itat \textendash{} ein entscheidender Vorteil im Rahmen eines begrenzten studentischen Projektzeitraums.
+
+\paragraph*{Alternative Bewertung:}
+
+Java bietet mit Spring Security zwar eine \"au\ss{}erst robuste Infrastruktur f\"ur Authentifizierungsmechanismen, ist jedoch deutlich komplexer im Deployment und ben\"otigt mehr Konfigurationsaufwand. Go bietet starke Performance und native Concurrency-Modelle, jedoch eine im Vergleich zu Python eingeschr\"ankte Bibliothekslandschaft f\"ur Security-Workflows. 
+
+\paragraph*{Begr\"undung der Auswahl:}
+
+Angesichts der Priorisierung von Entwicklungszeit, Lesbarkeit, Testbarkeit und Verf\"ugbarkeit passender Security-Tools wurde Python als die geeignetste Sprache f\"ur den Auth-Service identifiziert.
+
+\subsubsection*{Authentifizierungsmechanismus: HMAC-basiertes Challenge-Response-Verfahren}
+
+F\"ur die Authentifizierung der IoT-Ger\"ate wurde ein leichtgewichtiges Challenge-Response-Verfahren auf Basis von HMAC (Hash-based Message Authentication Code) implementiert. Diese Entscheidung basiert auf den Anforderungen an ein sicheres, serverseitig validierbares Verfahren ohne Notwendigkeit, Klartext-Zugangsdaten zu speichern oder zu \"ubertragen.
+
+\paragraph*{Alternative Technologien:}
+\begin{itemize}
+  \item \textbf{OAuth 2.0:} Standard f\"ur Benutzer-Authentifizierung, jedoch komplex in der Implementierung f\"ur Maschinen-zu-Maschinen-Kommunikation.
+  \item \textbf{JWT (JSON Web Token):} Geeignet f\"ur Token-basierte Sessions, jedoch problematisch hinsichtlich Zustandslosigkeit bei Ger\"aten mit hohem Sicherheitsanspruch.
+  \item \textbf{Client-Zertifikate:} Sehr sicher, aber schwergewichtig in der Verwaltung f\"ur dynamisch zu registrierende IoT-Ger\"ate.
+\end{itemize}
+
+\paragraph*{Begr\"undung der Auswahl:}
+
+Das HMAC-Verfahren erm\"oglicht die Validierung eines vorab generierten Ger\"ateschl\"ussels (Token), ohne diesen selbst senden zu m\"ussen. Durch serverseitige Generierung einer Challenge, die vom Ger\"at korrekt beantwortet werden muss, wird ein sicheres, manipulationsresistentes Protokoll etabliert, das gleichzeitig ressourcenschonend und einfach zu implementieren ist. Die Entscheidung orientiert sich damit an Best Practices f\"ur Ger\"ateauthentifizierung in Embedded-Umgebungen \cite{rfc2104_hmac}.
+
+\subsubsection*{Kommunikationsmodell: REST-basierte API}
+
+Der Service stellt seine Funktionalit\"at \"uber HTTP/REST-Endpunkte zur Verf\"ugung. Die Entscheidung f\"ur ein REST-Modell basiert auf der Notwendigkeit, den Dienst sowohl von Web-Frontends als auch von anderen Services (z.\,B. Mail-Service oder Solace-Konfiguration) ansprechbar zu machen.
+
+\paragraph*{Alternative Technologien:}
+\begin{itemize}
+  \item \textbf{gRPC:} Hohe Effizienz, jedoch schwerer in Browser-Umgebungen integrierbar.
+  \item \textbf{MQTT:} Bietet nur Publish/Subscribe, nicht geeignet f\"ur Request/Response-Workflows mit stateless APIs.
+\end{itemize}
+
+\paragraph*{Begr\"undung:}
+
+REST bietet mit seiner stateless Architektur und breiten Toolunterst\"utzung (z.\,B. Swagger, Postman, curl) die optimale Basis f\"ur verteilte Systeme, insbesondere f\"ur administrative Operationen wie die Controller-Registrierung.
+
+\subsubsection*{Interner Konfigurationsspeicher: JSON-Datei}
+
+Die Informationen \"uber aktive Challenges und bereits registrierte Ger\"ate werden zus\"atzlich zur Datenbank in einer strukturierten JSON-Datei gespeichert. Dies erm\"oglicht schnelle Zugriffe auf tempor\"are Daten ohne Overhead einer persistierten Transaktion. Dieser pragmatische Kompromiss ist im Kontext studentischer Prototypen vertretbar.
+
+\subsection{Technologieauswahl f\"ur den E-Mail-Verifikationsdienst (Mail-Service)}
+
+\subsubsection*{Zielsetzung und Kontext}
+
+Der Mail-Service stellt eine sicherheitsrelevante Verbindung zwischen Benutzerschnittstellen und Backend dar. Seine prim\"are Aufgabe ist die Versendung von E-Mail-Verifizierungslinks nach der Benutzerregistrierung. Damit fungiert er als zentrale Instanz zur initialen Verifikation von Benutzeridentit\"aten. Neben der Kommunikation mit einem SMTP-Server stellt der Dienst auch eine kontrollierte API zur Entgegennahme von Verifizierungsanfragen bereit.
+
+\subsubsection*{Verwendete Programmiersprache: Python}
+
+Die Entscheidung f\"ur Python basiert auf \"ahnlichen Argumenten wie beim Auth-Service. Python bietet durch Bibliotheken wie \texttt{smtplib} und \texttt{email.mime} einfache Schnittstellen zur Realisierung von SMTP-Kommunikation. Zus\"atzlich erlaubt die Verwendung von Flask eine unkomplizierte REST-Anbindung mit geringen Komplexit\"atsh\"urden. Im Rahmen des Projekts erm\"oglichte dies eine schnelle, wartbare und lesbare Implementierung des Dienstes.
+
+\paragraph*{Vergleich mit Alternativen:}
+
+Java (z.\,B. mit Spring Boot Mail) h\"atte eine robustere Infrastruktur geboten, w\"are jedoch mit erheblich h\"oherem Konfigurationsaufwand verbunden gewesen. Node.js wiederum bietet durch Pakete wie \texttt{nodemailer} eine gute Grundlage, ist jedoch im Team hinsichtlich Erfahrung weniger etabliert gewesen.
+
+\paragraph*{Begr\"undung der Auswahl:}
+
+Im Hinblick auf Entwicklungszeit, Lesbarkeit, Bibliotheksunterst\"utzung und Teamkompetenz wurde Python als pragmatische und effektive L\"osung gew\"ahlt.
+
+\subsubsection*{E-Mail-Kommunikationsprotokoll: SMTP \"uber TLS}
+
+F\"ur den Versand von Verifizierungsnachrichten wurde das Simple Mail Transfer Protocol (SMTP) in Kombination mit einer Transport Layer Security (TLS)-Verbindung eingesetzt. Diese Kombination bietet einen etablierten Standard f\"ur ausgehende Mail-Kommunikation mit Basisverschl\"usselung.\cite{smtp_tls}
+
+\paragraph*{Alternativen:}
+
+\begin{itemize}
+  \item \textbf{REST-basierte Mailservices (z.\,B. SendGrid, Mailgun):} Bieten einfache APIs und statistische Auswertung, erfordern aber Drittanbieterkonten und externe Infrastruktur.
+  \item \textbf{SMTP ohne Verschl\"usselung:} Unsicher und nicht datenschutzkonform.
+\end{itemize}
+
+\paragraph*{Begr\"undung:}
+
+Die Entscheidung f\"ur SMTP \"uber TLS wurde getroffen, da ein Gmail für eine nicht zu Hohe Menge an Mails dies kostenlos ermöglicht und bereits zur Verf\"ugung stand und keine Drittanbieterintegration gew\"unscht war. Gleichzeitig konnten Sicherheitsanforderungen gewahrt bleiben.
+
+\subsubsection*{Zugriffsschutz: Pre-Shared Key (PSK)}
+
+Um zu verhindern, dass Dritte beliebige Verifizierungsanfragen senden, wurde der REST-Endpunkt des Mail-Service mit einem Pre-Shared Key abgesichert. Nur Systeme, die diesen kennen, k\"onnen autorisiert E-Mails ausl\"osen.
+
+\paragraph*{Alternative Schutzmechanismen:}
+\begin{itemize}
+  \item \textbf{OAuth 2.0 oder API Tokens:} Sicher, aber unn\"otig komplex f\"ur einen geschlossenen Service.
+  \item \textbf{Keine Authentifizierung:} Sicherheitsrisiko.
+\end{itemize}
+
+\paragraph*{Begr\"undung:}
+
+Der Einsatz eines PSK ist ein einfacher, aber effektiver Schutzmechanismus, der in einem geschlossenen Systemumfeld wie Sensora praktikabel und ausreichend sicher ist.
+
+\subsection{Technologieauswahl f\"ur den Datenpersistenzdienst (Database Writer)}
+
+\subsubsection*{Zielsetzung und Kontext}
+
+Der Database Writer nimmt eine zentrale Rolle in der persistenznahen Verarbeitung eingehender Sensordaten ein. Seine Hauptaufgabe besteht darin, kontinuierlich Datenpakete aus der Messaging-Infrastruktur entgegenzunehmen, diese auszuwerten und in strukturierter Form in das zugrunde liegende Datenbanksystem zu \"ubertragen. Eine besondere Herausforderung besteht dabei in der Notwendigkeit, sowohl hohe Verf\"ugbarkeit als auch Integrit\"at der Messdaten zu gew\"ahrleisten, selbst bei tempor\"aren Netzwerkproblemen oder inkonsistenten Eingangsnachrichten.
+
+\subsubsection*{Programmiersprache: Python}
+
+Die Implementierung des Database Writers erfolgte in Python. Die Entscheidung basiert auf der Kombination aus vorhandener Expertise im Projektteam, umfangreicher Bibliotheksunterst\"utzung f\"ur JSON-Verarbeitung, Messaging-Systeme und Datenbankzugriffe sowie der leichten Wartbarkeit der Servicestruktur. In Python stehen mit Bibliotheken wie \texttt{paho-mqtt}\cite{python_mqtt}, \texttt{psycopg2} und \texttt{json} sofort einsatzf\"ahige und stabile Werkzeuge f\"ur alle Teilaufgaben zur Verf\"ugung.
+
+\paragraph*{Vergleich mit Alternativen:}
+
+Eine Implementierung in Go w\"are performant und speichereffizient, jedoch mit deutlich h\"oherem Aufwand bei der Bibliotheksintegration verbunden gewesen. Java h\"atte ebenfalls umfassende JDBC-basierte Anbindungen an relationale Datenbanken geboten, ist aber insbesondere f\"ur prototypische Implementierungen \"uberdimensioniert und aufw\"andig in Bezug auf Konfiguration und Deployment.
+
+\paragraph*{Begr\"undung:}
+
+Die Wahl von Python stellt einen optimalen Kompromiss zwischen Funktionalit\"at, Einfachheit und Flexibilit\"at dar. Dar\"uber hinaus konnte die gemeinsame Sprache mit den \"ubrigen Schnittstellen-Services genutzt werden, was die Homogenit\"at und Wartbarkeit der Gesamtplattform verbessert.
+
+\subsubsection*{Messaging-Empfang: MQTT}
+
+Der Database Writer konsumiert eingehende Nachrichten \"uber das MQTT-Protokoll, das vom zentralen Messaging-System vermittelt wird. MQTT wurde ausgew\"ahlt, da es mit seinem Publish/Subscribe-Paradigma und dem minimalen Protokoll-Overhead ideal auf intermittierende und latenzempfindliche Kommunikationsbeziehungen zwischen Sensoren und Auswertungssystemen zugeschnitten ist.\cite{mqtt_overview}
+
+\paragraph*{Alternative Protokolle:}
+
+\begin{itemize}
+  \item \textbf{AMQP:} Industriestandard f\"ur Messaging, jedoch schwergewichtiger und nicht speziell f\"ur IoT optimiert.
+  \item \textbf{HTTP Push:} Einfach zu implementieren, aber ungeeignet f\"ur kontinuierliche, bidirektionale Datenstr\"ome.
+  \item \textbf{WebSockets:} Echtzeitf\"ahig, jedoch komplexer in der Integration mit klassischen Persistenzsystemen.
+\end{itemize}
+
+\paragraph*{Begr\"undung:}
+
+MQTT bietet ein exzellentes Gleichgewicht zwischen Zuverl\"assigkeit, Ressourceneffizienz und Verbreitung im IoT-Bereich. Die Persistenzfunktionen des zugrunde liegenden Messaging-Brokers stellen zudem sicher, dass keine Daten durch kurzzeitige Netzwerkausf\"alle verloren gehen.
+
+\subsubsection*{Fehlerbehandlung und Wiederholungsmechanismen}
+
+Im Database Writer wurden explizite Retry-Mechanismen f\"ur die Datenbankanbindung integriert, um Datenverluste bei vor\"ubergehender Nichtverf\"ugbarkeit zu verhindern. Dies erfolgt \"uber ein warteschlangenbasiertes Zwischenspeichern nicht erfolgreicher Schreiboperationen, die periodisch erneut angesto\"ossen werden.
+
+\paragraph*{Alternative Ans\"atze:}
+
+\begin{itemize}
+  \item \textbf{Fire-and-Forget-Ansatz:} Einfach, aber inakzeptabel bei Sicherheits- oder Zuverl\"assigkeitsanforderungen.
+  \item \textbf{Transaktionsbasierte Protokolle:} W\"aren robuster, jedoch mit hohem Implementierungsaufwand verbunden.
+\end{itemize}
+
+\paragraph*{Begr\"undung:}
+
+Die gew\"ahlte Methode stellt sicher, dass Datenverlust unter realistischen Bedingungen nahezu ausgeschlossen ist, ohne den Entwicklungsaufwand \"uber Geb\"uhr zu erh\"ohen. Die Wiederholungslogik kann bei Bedarf skalierbar erweitert werden.
+
+\subsection{Technologieauswahl f\"ur die Zielwert-Schnittstelle (Setpoint API)}
+
+\subsubsection*{Zielsetzung und Kontext}
+
+Die Setpoint API erm\"oglicht die gezielte \"Ubertragung von Sollwerten an Steuercontroller, welche wiederum f\"ur die Regelung der Wasserzufuhr einzelner Pflanzen verantwortlich sind. Damit bildet sie eine Br\"ucke zwischen Benutzeranwendungen bzw. Systemkomponenten mit Steuerlogik und der dezentralen Aktorik des Systems. Die wesentliche Herausforderung besteht darin, eine flexible, zielgerichtete Kommunikation mit hoher Ausfallsicherheit und Ger\"atespezifit\"at zu gew\"ahrleisten.
+
+\subsubsection*{Programmiersprache und Framework: Python mit Flask und Flasgger}
+
+Die Implementierung erfolgte in Python, da bereits andere Systemkomponenten mit dieser Sprache realisiert wurden und eine hohe Wiederverwendbarkeit von Code sowie Konsistenz bei der Konfiguration gew\"ahrleistet werden sollte. Flask wurde als Web-Framework verwendet, da es eine schlanke Struktur mitbringt, sich hervorragend f\"ur RESTful-Services eignet und geringe Anforderungen an die Serverinfrastruktur stellt. Erg\"anzt wurde dies durch die Nutzung von Flasgger zur Generierung einer automatisierten Swagger-Dokumentation der REST-Endpunkte.\cite{flasgger_docs}
+
+\paragraph*{Vergleich mit Alternativen:}
+
+Alternativ w\"are FastAPI als modernere REST-Plattform denkbar gewesen, die native OpenAPI-Dokumentation, Validierung und asynchrone Verarbeitung unterst\"utzt. Allerdings wurde Flask aufgrund des stabileren Lern- und Erfahrungsstands im Team sowie vorhandener Funktionalit\"at bevorzugt.
+
+\paragraph*{Begr\"undung:}
+
+Die Kombination aus Flask und Flasgger erm\"oglichte eine wartbare und klar dokumentierte Schnittstelle mit kurzer Entwicklungszeit und einfacher Erweiterbarkeit. Die REST-Architektur passte gut zur Anforderung, kontrolliert und gezielt Steuerinformationen zu senden.
+
+\subsubsection*{Kommunikationsmodell: Publish/Subscribe via MQTT \"uber Topics}
+
+F\"ur die Weiterleitung der Sollwertnachrichten an den jeweiligen Controller wird das MQTT-Protokoll mit einer thematischen Strukturierung der Topics genutzt. Jeder Controller erh\"alt ein dediziertes Topic, dessen Aufbau die eindeutige Zuordnung der Nachricht erm\"oglicht. Dies entspricht dem Prinzip der Device-Adressierung in der IoT-Kommunikation.
+
+\paragraph*{Vergleich mit Alternativen:}
+
+\begin{itemize}
+  \item \textbf{HTTP POST:} W\"are theoretisch f\"ur Push-Verhalten geeignet, erfordert jedoch persistente Adressen und erschwert dynamische Subscriptions.
+  \item \textbf{AMQP:} Komplexer, mit mehr Overhead f\"ur das Szenario der gezielten Steuerung einzelner Endpunkte.
+\end{itemize}
+
+\paragraph*{Begr\"undung:}
+
+MQTT erm\"oglicht eine sehr leichtgewichtige \"Ubermittlung mit der Option, persistente oder volatile Nachrichten zu senden. Die Topic-Struktur bietet eine flexible Adressierung ohne zus\"atzliche Verwaltungslogik. Die vorhandene Messaging-Infrastruktur mit Solace wurde konsequent weiterverwendet, was den Integrationsaufwand gering hielt.
+
+\subsubsection*{Nachrichtenerstellung und Serialisierung}
+
+Die Struktur der Sollwertnachricht wurde als JSON konzipiert, um sowohl Menschenlesbarkeit als auch Systemkompatibilit\"at zu sichern. Die Erstellung erfolgt mit Hilfe von Python-Bordmitteln, wodurch externe Abh\"angigkeiten minimiert werden konnten.
+
+\paragraph*{Alternative Formate:}
+\begin{itemize}
+  \item \textbf{XML:} Etabliert, aber komplexer in der Verarbeitung.
+  \item \textbf{Protobuf:} Effizient, aber f\"ur kleinere Projekte \"uberdimensioniert und weniger transparent.
+\end{itemize}
+
+\paragraph*{Begr\"undung:}
+
+JSON bietet einen ausgezeichneten Kompromiss zwischen Standardisierung, Einfachheit und Interoperabilit\"at. Es ist gut durch Firewalls und Broker-Systeme hindurch transportierbar und in praktisch jeder Sprache verarbeitbar.
+
+\subsection{Technologieauswahl f\"ur den Initialisierungsskript-Dienst (Solace Init)}
+
+\subsubsection*{Zielsetzung und Kontext}
+
+Der Solace Init-Dienst wurde als automatisierter Initialisierungsmechanismus konzipiert, um beim Start des Systems die f\"ur die Kommunikationsarchitektur erforderlichen Messaging-Objekte auf dem Solace Broker anzulegen. Dabei handelt es sich insbesondere um Queues mit spezifischen Topic-Subscriptions, deren Struktur die Grundlage f\"ur das ger\"ateindividuelle Messaging im gesamten Sensora-System bildet. Ziel war es, eine einmalige, reproduzierbare und konfigurierbare Initialisierung ohne manuelle Eingriffe zu erm\"oglichen.
+
+\subsubsection*{Begr\"undung der Broker-Wahl: Solace PubSub+ als Messaging-Plattform}
+
+Die Wahl des Message Brokers stellt eine der zentralen Architekturentscheidungen im Sensora-Projekt dar. Die Anforderung bestand darin, ein performantes, fehlertolerantes und hochflexibles Messaging-System zu integrieren, das sowohl klassische Publish/Subscribe-Kommunikation als auch spezifische Anforderungen an Filterung, Persistenz und Authentifizierung erf\"ullt. Nach einem Vergleich mehrerer etablierter Systeme fiel die Entscheidung auf \textbf{Solace PubSub+}.\cite{solace_overview}
+
+\paragraph*{Vergleich mit Alternativen:}
+
+\begin{itemize}
+  \item \textbf{Apache Kafka:} Hervorragend f\"ur Event-Streaming und hohe Datenvolumina, jedoch nicht nat\"urlich auf Topic-basiertes IoT-Publish/Subscribe ausgerichtet und ohne eingebaute Message Routing Features wie Topic Wildcards.\cite{mqtt_vs_kafka}
+  \item \textbf{RabbitMQ:} Solide AMQP-Implementierung mit guter Dokumentation, jedoch schw\"acher in Bezug auf native MQTT-Unterst\"utzung, dynamische Topic-Strukturen und granulare Zugriffssteuerung auf Topics.
+  \item \textbf{Mosquitto:} Leichtgewichtig und speziell auf MQTT ausgelegt, aber eingeschr\"ankt in Bezug auf Sicherheitsfeatures, Persistence-Mechanismen und Administration auf Enterprise-Niveau.
+\end{itemize}
+
+\paragraph*{St\"arken von Solace:}
+
+Solace PubSub+ verbindet als Enterprise-Grade-Plattform mehrere Vorteile, die sich direkt aus den Anforderungen des Sensora-Projekts ergeben:
+
+\begin{itemize}
+  \item \textbf{Native Unterst\"utzung mehrerer Protokolle:} Solace unterst\"utzt MQTT, REST, AMQP und WebSockets nativ auf einem Broker. Damit konnten sowohl sensornahe Kommunikation \textit{(MQTT)} als auch service-interne Schnittstellen \textit{(REST)} integriert werden, ohne unterschiedliche Middleware-L\"osungen kombinieren zu m\"ussen.
+  \item \textbf{Feingranulare Topic-Strukturen und Wildcards:} F\"ur die Adressierung einzelner Controller oder Sensortypen wurden hierarchische Topics mit Wildcard-Unterst\"utzung genutzt, wodurch sich flexible Abonnements realisieren lie\ss{}en.
+  \item \textbf{Skalierbare Persistenzmechanismen:} Solace bietet sowohl volatile als auch persistente Delivery-Modes mit garantierter Zustellung, was f\"ur zeitkritische Steuerinformationen entscheidend ist.
+  \item \textbf{Zentrale Administration via SEMPv2:} Die REST-basierte Konfigurationsschnittstelle (SEMPv2) erlaubt automatisierte, containerkompatible Initialisierungsskripte wie den hier beschriebenen Init-Service.
+  \item \textbf{MQTT optimiert f\"ur IoT:} Die MQTT-Implementierung von Solace ist mit Fokus auf Latenzreduktion, Lastverteilung und Delivery-Garantien implementiert und eignet sich ideal f\"ur Embedded-Ger\"atekommunikation.
+  \item \textbf{Security-Features:} ACL-Management, Authentifizierung auf Benutzer- und Topic-Ebene sowie TLS-Unterst\"utzung erm\"oglichen ein differenziertes Sicherheitskonzept.
+\end{itemize}
+
+\paragraph*{Zusammenfassende Begr\"undung:}
+
+Solace PubSub+ wurde gew\"ahlt, da es in einzigartiger Weise hohe Anspr\"uche an Zuverl\"assigkeit, Integrationstiefe und Skalierbarkeit erf\"ullt. Die native Unterst\"utzung von MQTT ist f\"ur IoT-Anwendungen essenziell, w\"ahrend die gleichzeitige Verf\"ugbarkeit von Management- und Sicherheitsfunktionen auf Enterprise-Niveau den reibungslosen Betrieb in containerisierten Umgebungen sicherstellt. Dar\"uber hinaus empfiehlt auch der Hersteller Solace selbst den Einsatz von Python f\"ur schnelle Prototypenentwicklung im Bereich IoT \cite{solace_python_doc}.
+
+\subsubsection*{Konfigurationsbasis: JSON-Datei}
+
+Als zentrales Format f\"ur die Definition der zu erstellenden Queues und ihrer jeweiligen Subscriptions wurde eine strukturierte JSON-Datei verwendet. Dieses Format erlaubt eine deklarative Spezifikation der gesamten Messaging-Infrastruktur und kann sowohl von Menschen editiert als auch maschinell verarbeitet werden.\cite{json_best_practices}
+
+\paragraph*{Vergleich mit Alternativen:}
+
+\begin{itemize}
+  \item \textbf{YAML:} Ebenfalls menschenlesbar, jedoch fehleranf\"alliger bei komplexeren Strukturen und nicht nativ durch alle Python-Standardbibliotheken unterst\"utzt.
+  \item \textbf{XML:} Formal stark, aber syntaktisch schwergewichtig und in der Praxis f\"ur Konfigurationszwecke oft \"uberdimensioniert.
+\end{itemize}
+
+\paragraph*{Begr\"undung:}
+
+JSON erf\"ullt im Kontext des Projekts das optimale Gleichgewicht zwischen Lesbarkeit, Standardisierung und Softwareunterst\"utzung. Es erm\"oglicht eine flexible Erweiterung der Initialisierungskonfiguration, z.\,B. durch Hinzuf\"ugen weiterer Queues oder komplexerer Subscription-Filter, ohne strukturelle Anpassungen am Code erforderlich zu machen.
+
+\subsubsection*{Schnittstelle zur Messaging-Infrastruktur: Solace SEMPv2 API}
+
+Die eigentliche Initialisierung erfolgt \"uber HTTP-Requests an die SEMPv2-API von Solace PubSub+, einer offiziellen Verwaltungs- und Konfigurationsschnittstelle des Brokers. Diese REST-basierte Schnittstelle erlaubt das Anlegen, Konfigurieren und Pr\"ufen von Messaging-Komponenten wie Queues, Topics und ACLs im laufenden Betrieb.
+
+\paragraph*{Vergleich mit Alternativen:}
+
+\begin{itemize}
+  \item \textbf{Admin GUI:} Bedienerfreundlich, aber nicht automatisierbar und nicht reproduzierbar.
+  \item \textbf{CLI-Tools (solacectl):} Eher f\"ur DevOps-Prozesse geeignet, jedoch aufwendiger in der Einbettung in einen containerisierten Microservice.
+\end{itemize}
+
+\paragraph*{Begr\"undung:}
+
+Die REST-API von Solace war f\"ur den Projektkontext besonders geeignet, da sie eine serviceinterne und vollautomatische Ansteuerung erm\"oglichte. Die Authentifizierung konnte \"uber Umgebungsvariablen geregelt werden, die in Docker Compose konfiguriert wurden, sodass die Schnittstelle sowohl sicher als auch einfach nutzbar war. Zudem erm\"oglicht SEMPv2 die Definition granulare Subscription-Filter direkt beim Queue-Erstellen, was eine exakte Abbildung der Messaging-Logik erm\"oglicht.
+
+\subsubsection*{Fehlertoleranz und Wiederanlauf}
+
+Das Init-Skript enth\"alt einfache Mechanismen zur Wiederanlaufbarkeit. Existierende Queues werden nicht erneut erstellt, sondern \"ubersprungen oder aktualisiert. Fehler bei der Kommunikation mit dem Solace-Broker werden protokolliert, und das Skript kann bei Bedarf mehrfach ohne Seiteneffekte ausgef\"uhrt werden.
+
+\paragraph*{Begr\"undung:}
+
+Diese Idempotenz ist essenziell f\"ur automatisierte Umgebungen, etwa bei der Nutzung von Docker Compose oder CI/CD-Pipelines. Durch sie wird vermieden, dass der Initialisierungsprozess bei einem Neustart ungewollt Konfigurationsfehler verursacht oder bestehende Objekte zerst\"ort.
