@@ -1,0 +1,42 @@
+\RequirePackage{listings}
+
+\lstdefinelanguage{Golang}%
+  {morekeywords=[1]{package,import,func,type,struct,return,defer,panic,%
+     recover,select,var,const,iota,},%
+   morekeywords=[2]{string,uint,uint8,uint16,uint32,uint64,int,int8,int16,%
+     int32,int64,bool,float32,float64,complex64,complex128,byte,rune,uintptr,%
+     error,interface},%
+   morekeywords=[3]{map,slice,make,new,nil,len,cap,copy,close,true,false,%
+     delete,append,real,imag,complex,chan,},%
+   morekeywords=[4]{for,break,continue,range,go,goto,switch,case,fallthrough,if,%
+     else,default,},%
+   morekeywords=[5]{Println,Printf,Error,Print,},%
+   sensitive=true,%
+   morecomment=[l]{//},%
+   commentstyle=\color{codegreen}\ttfamily, % Kommentarfarbe anpassen
+   morecomment=[s]{/*}{*/},%
+   morestring=[b]',%
+   morestring=[b]",%
+   morestring=[s]{`}{`},%
+   keywordstyle=\color{magenta}\bfseries, % Schlüsselwortfarbe anpassen
+   stringstyle=\color{codepurple}\ttfamily, % Stringfarbe anpassen
+   basicstyle=\ttfamily\footnotesize, % Basisstil anpassen
+}
+
+
+\lstdefinelanguage{Kotlin}{
+  comment=[l]{//},
+  commentstyle=\color{codegreen}\ttfamily, % Kommentarfarbe anpassen
+  emph={filter, first, firstOrNull, forEach, lazy, map, mapNotNull, println},
+  emphstyle=\color{magenta}\bfseries, % Hervorgehobene Wörter in derselben Farbe wie Keywords
+  identifierstyle=\color{black},
+  keywords={!in, !is, abstract, actual, annotation, as, as?, break, by, catch, class, companion, const, constructor, continue, crossinline, data, delegate, do, dynamic, else, enum, expect, external, false, field, file, final, finally, for, fun, get, if, import, in, infix, init, inline, inner, interface, internal, is, lateinit, noinline, null, object, open, operator, out, override, package, param, private, property, protected, public, receiveris, reified, return, return@, sealed, set, setparam, super, suspend, tailrec, this, throw, true, try, typealias, typeof, val, var, vararg, when, where, while},
+  keywordstyle=\color{magenta}\bfseries, % Schlüsselwortfarbe anpassen
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morestring=[s]{"""*}{*"""},
+  ndkeywords={@Deprecated, @JvmField, @JvmName, @JvmOverloads, @JvmStatic, @JvmSynthetic, Array, Byte, Double, Float, Int, Integer, Iterable, Long, Runnable, Short, String, Any, Unit, Nothing},
+  ndkeywordstyle=\color{magenta}\bfseries, % ndkeywords in derselben Farbe wie Keywords
+  sensitive=true,
+  stringstyle=\color{codepurple}\ttfamily, % Stringfarbe anpassen
+}
