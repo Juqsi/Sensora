@@ -211,9 +211,9 @@ void read_sensordata(void *pvParameter) {
 
 // Funktion zur Sensor-Initialisierung und Start der Messung
 void sensor_init(void) {
-    load_system_data(&info);
-
-    adc1_config_width(ADC_WIDTH_BIT_12);	// 12-Bit-Auflösung (0 - 4095)
+	load_system_data(&info);
+	
+	adc1_config_width(ADC_WIDTH_BIT_12);	// 12-Bit-Auflösung (0 - 4095)
 	adc1_config_channel_atten(MOISTURE_SENSOR_PIN, ADC_ATTEN_11db);
 	i2c_scanner();
 	bh1750_init_desc(&bh1750_dev, BH1750_ADDR_LO, LUM_I2C_PORT, LUM_GPIO_SDA, LUM_GPIO_SCL);
