@@ -1,4 +1,4 @@
-\section{Auswahl der Technologien f\"ur die entwickelten Schnittstellen-Services}
+\section{Auswahl der Technologien f\"ur die entwickelten \\ Schnittstellen-Services}
 
 Die im Rahmen des Projekts \textit{Sensora} entwickelten Schnittstellen-Services \"ubernehmen unterschiedliche Aufgaben innerhalb der Systemarchitektur, stellen jedoch alle zentrale Bausteine zur Kommunikations- und Steuerungsebene dar. Ihre Implementierung erfordert eine wohl\"uberlegte Auswahl geeigneter Technologien, die sowohl den funktionalen Anforderungen als auch den architekturellen, sicherheitstechnischen und betrieblichen Rahmenbedingungen gerecht werden.
 
@@ -61,7 +61,7 @@ Die Informationen \"uber aktive Challenges und bereits registrierte Ger\"ate wer
 
 \subsubsection*{Zielsetzung und Kontext}
 
-Der Mail-Service stellt eine sicherheitsrelevante Verbindung zwischen Benutzerschnittstellen und Backend dar. Seine prim\"are Aufgabe ist die Versendung von E-Mail-Verifizierungslinks nach der Benutzerregistrierung. Damit fungiert er als zentrale Instanz zur initialen Verifikation von Benutzeridentit\"aten. Neben der Kommunikation mit einem SMTP-Server stellt der Dienst auch eine kontrollierte API zur Entgegennahme von Verifizierungsanfragen bereit.
+Der Mail-Service stellt eine sicherheitsrelevante Verbindung zwischen Benutzerschnittstellen und Backend dar. Seine prim\"are Aufgabe ist die Versendung von E-Mail-\\Verifizierungslinks nach der Benutzerregistrierung. Damit fungiert er als zentrale Instanz zur initialen Verifikation von Benutzeridentit\"aten. Neben der Kommunikation mit einem SMTP-Server stellt der Dienst auch eine kontrollierte API zur Entgegennahme von Verifizierungsanfragen bereit.
 
 \subsubsection*{Verwendete Programmiersprache: Python}
 
@@ -161,7 +161,7 @@ Die Setpoint API erm\"oglicht die gezielte \"Ubertragung von Sollwerten an Steue
 
 \subsubsection*{Programmiersprache und Framework: Python mit Flask und Flasgger}
 
-Die Implementierung erfolgte in Python, da bereits andere Systemkomponenten mit dieser Sprache realisiert wurden und eine hohe Wiederverwendbarkeit von Code sowie Konsistenz bei der Konfiguration gew\"ahrleistet werden sollte. Flask wurde als Web-Framework verwendet, da es eine schlanke Struktur mitbringt, sich hervorragend f\"ur RESTful-Services eignet und geringe Anforderungen an die Serverinfrastruktur stellt. Erg\"anzt wurde dies durch die Nutzung von Flasgger zur Generierung einer automatisierten Swagger-Dokumentation der REST-Endpunkte.\cite{flasgger_docs}
+Die Implementierung erfolgte in Python, da bereits andere Systemkomponenten mit dieser Sprache realisiert wurden und eine hohe Wiederverwendbarkeit von Code sowie Konsistenz bei der Konfiguration gew\"ahrleistet werden sollte. Flask wurde als Web-Framework verwendet, da es eine schlanke Struktur mitbringt, sich hervorragend f\"ur RESTful-Services eignet und geringe Anforderungen an die Serverinfrastruktur stellt. Erg\"anzt wurde dies durch die Nutzung von Flasgger zur Generierung einer automatisierten Swagger-\\Dokumentation der REST-Endpunkte.\cite{flasgger_docs}
 
 \paragraph*{Vergleich mit Alternativen:}
 
@@ -224,7 +224,7 @@ Solace PubSub+ verbindet als Enterprise-Grade-Plattform mehrere Vorteile, die si
 
 \begin{itemize}
   \item \textbf{Native Unterst\"utzung mehrerer Protokolle:} Solace unterst\"utzt MQTT, REST, AMQP und WebSockets nativ auf einem Broker. Damit konnten sowohl sensornahe Kommunikation \textit{(MQTT)} als auch service-interne Schnittstellen \textit{(REST)} integriert werden, ohne unterschiedliche Middleware-L\"osungen kombinieren zu m\"ussen.
-  \item \textbf{Feingranulare Topic-Strukturen und Wildcards:} F\"ur die Adressierung einzelner Controller oder Sensortypen wurden hierarchische Topics mit Wildcard-Unterst\"utzung genutzt, wodurch sich flexible Abonnements realisieren lie\ss{}en.
+  \item \textbf{Feingranulare Topic-Strukturen und Wildcards:} F\"ur die Adressierung einzelner Controller oder Sensortypen wurden hierarchische Topics mit Wildcard-\\Unterst\"utzung genutzt, wodurch sich flexible Abonnements realisieren lie\ss{}en.
   \item \textbf{Skalierbare Persistenzmechanismen:} Solace bietet sowohl volatile als auch persistente Delivery-Modes mit garantierter Zustellung, was f\"ur zeitkritische Steuerinformationen entscheidend ist.
   \item \textbf{Zentrale Administration via SEMPv2:} Die REST-basierte Konfigurationsschnittstelle (SEMPv2) erlaubt automatisierte, containerkompatible Initialisierungsskripte wie den hier beschriebenen Init-Service.
   \item \textbf{MQTT optimiert f\"ur IoT:} Die MQTT-Implementierung von Solace ist mit Fokus auf Latenzreduktion, Lastverteilung und Delivery-Garantien implementiert und eignet sich ideal f\"ur Embedded-Ger\"atekommunikation.
