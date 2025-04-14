@@ -1,0 +1,120 @@
+\section{Anforderungen an die entwickelten Schnittstellen-Services im Projekt Sensora}
+
+Die Hauptaufgabe der Schnittstellen-Services lag in der Konzeption und Realisierung mehrerer Dienste, die als Vermittlungskomponenten zwischen Sensor-Controllern, Benutzerschnittstellen, dem zentralen Datenspeicher sowie einem Nachrichtenübertragungsmechanismus fungieren. Diese Services sind nicht Bestandteil der Steuerlogik auf Hardwareebene, sondern unterstützen den bidirektionalen Informationsaustausch und die sichere Verwaltung verteilter Geräteinstanzen.
+
+Ziel dieses Kapitels ist es, die funktionalen und nicht-funktionalen Anforderungen an diese Schnittstellenkomponenten technologieoffen zu definieren. Die konkrete Wahl der eingesetzten Technologien sowie deren theoretische Fundierung erfolgt erst in den nachfolgenden Kapiteln.
+
+\subsection{Allgemeine Anforderungen an alle Schnittstellen-Services}
+
+Unabhängig von ihrer konkreten Aufgabe müssen sämtliche entwickelten Services folgende generelle Anforderungen erfüllen, die sich aus dem Aufbau des Gesamtsystems sowie den Entwicklungsprinzipien eines modernen verteilten Softwaresystems ergeben:
+
+\begin{itemize}
+  \item \textbf{Modularität:} Die Komponenten sollen entkoppelt und unabhängig voneinander betreibbar sein, sodass sie einzeln aktualisiert, getestet und ersetzt werden können.
+
+  \item \textbf{Plattformunabhängigkeit:} Die Services müssen innerhalb einer containerisierten Umgebung lauffähig sein und dürfen keine plattformspezifischen Abhängigkeiten voraussetzen.
+
+  \item \textbf{Fehlertoleranz:} Die Komponenten müssen so gestaltet sein, dass bei Ausfall abhängiger Systeme (z.\,B. Netzwerk, Datenbank) keine kritischen Fehler entstehen. Entsprechende Retry-Mechanismen und Fehlerprotokollierung sind vorzusehen.
+
+  \item \textbf{Datensicherheit:} Sensible Informationen dürfen zu keinem Zeitpunkt im Klartext übertragen oder ungeschützt gespeichert werden. Eine sichere Authentifizierung und Zugriffsbeschränkung ist auf allen öffentlich erreichbaren Schnittstellen erforderlich.
+
+  \item \textbf{Skalierbarkeit und Erweiterbarkeit:} Die Architektur der Services soll so beschaffen sein, dass zusätzliche Sensoren, Controller oder Benutzer ohne grundlegende Systemänderungen hinzugefügt werden können.
+
+  \item \textbf{Zuverlässigkeit bei der Kommunikation:} Die Kommunikation zwischen Services sowie mit externen Geräten soll gegen Nachrichtenverlust abgesichert sein, insbesondere bei systemkritischen Operationen wie Steuerbefehlen oder Datenspeicherung.
+\end{itemize}
+
+\subsection{Registrierungs- und Authentifizierungsservice (Auth-Service)}
+
+Der Auth-Service bildet die sicherheitsrelevante Schnittstelle zur Einbindung verteilter Steuergeräte (Controller) in das System. Er ist verantwortlich für die Validierung, Registrierung und individuelle Konfiguration dieser Geräte.
+
+\subsubsection{Funktionale Anforderungen}
+\begin{itemize}
+  \item Der Service muss es ermöglichen, neue Geräteinstanzen kontrolliert durch autorisierte Verwaltungsprozesse zu registrieren. Eine unbeaufsichtigte Selbstregistrierung ist auszuschließen.
+  
+  \item Für jede registrierte Geräteinstanz ist ein eindeutiger Identifikator sowie ein zugehöriges Zugriffsprofil zu erzeugen. Dieses Profil muss zur differenzierten Rechtevergabe geeignet sein.
+  
+  \item Die Authentifizierung eines Geräts gegenüber dem System muss über ein sicheres Verfahren erfolgen, das keine langfristige Speicherung von Klartextgeheimnissen erfordert und gleichzeitig eine manipulationssichere Verifikation ermöglicht.
+
+  \item Nach erfolgreicher Authentifizierung soll eine Kommunikationsfähigkeit zwischen Gerät und System ermöglicht werden, die sich explizit auf festgelegte Kommunikationskanäle beschränkt.
+
+  \item Der Service muss relevante Metadaten persistieren, sodass die zugehörige Gerätelogik (z.\,B. Sensor- oder Aktorzuordnung) systemweit nachvollzogen werden kann.
+\end{itemize}
+
+\subsubsection{Nicht-funktionale Anforderungen}
+\begin{itemize}
+  \item Die Registrierungslogik darf nur durch explizit autorisierte Systeme oder Nutzer aufrufbar sein.
+  \item Die Kommunikation mit dem Service muss verschlüsselt erfolgen.
+  \item Eine versehentliche Mehrfachregistrierung desselben Geräts ist zu erkennen und abzuweisen.
+\end{itemize}
+
+\subsection{E-Mail-Verifikationsservice (Mail-Service)}
+
+Der Mail-Service übernimmt die Kommunikation mit Nutzenden zur Verifizierung neu angelegter Benutzerkonten. Seine primäre Aufgabe ist es, die Zustellung von zeitlich begrenzten Bestätigungslinks zu ermöglichen.
+
+\subsubsection{Funktionale Anforderungen}
+\begin{itemize}
+  \item Der Service muss über eine Schnittstelle ansprechbar sein, über die Verifizierungsanfragen gestellt werden können.
+  \item Nach Validierung der Anfrage ist ein einmalig nutzbarer Link zu generieren und über einen gängigen E-Mail-Dienst an den Empfänger zu übermitteln.
+  \item Bei Aufruf des Verifikationslinks muss der Status des entsprechenden Benutzerkontos im System aktualisiert werden.
+\end{itemize}
+
+\subsubsection{Nicht-funktionale Anforderungen}
+\begin{itemize}
+  \item Nur autorisierte Systeme dürfen Anfragen zur Mailverifikation stellen.
+  \item Die Verifizierung darf nur erfolgen, wenn die Kombination aus Benutzername und E-Mail-Adresse im System bekannt ist.
+  \item Ein nicht eingelöster Verifizierungslink muss nach Ablauf einer definierten Zeitspanne seine Gültigkeit verlieren.
+\end{itemize}
+
+\subsection{Datenschreibdienst für Messdaten (Database Writer)}
+
+Dieser Dienst verarbeitet eingehende Datenströme von Sensoren und persistiert die extrahierten Informationen strukturiert in einem relationalen Datensystem.
+
+\subsubsection{Funktionale Anforderungen}
+\begin{itemize}
+  \item Der Dienst muss kontinuierlich eingehende Daten von Messgeräten empfangen, analysieren und in geeigneter Form speichern.
+  \item Die Identität der messenden Einheit muss eindeutig ermittelbar sein. Ist die Einheit im System nicht bekannt, so muss diese bei Bedarf dynamisch registriert werden können.
+  \item Die Speicherung darf nur erfolgen, wenn eine vollständige logische Zuordnung der Sensordaten zu einer Pflanze bzw. zum zugehörigen Anwendungsfall gegeben ist.
+  \item Es müssen regelmäßig alle bekannten Sensoren auf Aktivität geprüft werden. Wird über einen definierten Zeitraum keine neue Messung empfangen, ist dies systemintern als Fehlverhalten zu markieren.
+\end{itemize}
+
+\subsubsection{Nicht-funktionale Anforderungen}
+\begin{itemize}
+  \item Der Dienst muss bei Netzwerkausfällen oder vorübergehenden Störungen in der Verbindung zur Datenbank stabil bleiben.
+  \item Wiederholte Nachrichtenübertragungen dürfen nicht zu doppelten Datensätzen führen.
+  \item Die Datenverarbeitung muss nachvollziehbar protokolliert werden, um Fehler oder Auffälligkeiten zu diagnostizieren.
+\end{itemize}
+
+\subsection{Service zur Steuerung von Zielwerten (Setpoint API)}
+
+Über diesen Dienst können Zielwerte (Sollwerte) für bestimmte Sensoren oder Aktoren von außen gesetzt werden. Ziel ist es, die Regelgrößen im System dynamisch anpassen zu können.
+
+\subsubsection{Funktionale Anforderungen}
+\begin{itemize}
+  \item Der Dienst muss eine externe Schnittstelle bereitstellen, über die Zielwerte für bestimmte Komponenten adressiert werden können.
+  \item Der Dienst muss in der Lage sein, die übermittelten Steuerinformationen an die richtige Geräteinstanz weiterzuleiten.
+  \item Die übertragenen Datenpakete müssen die Zuordnung zur Zielkomponente sowie den anvisierten Wert enthalten.
+  \item Eine Dokumentation der Schnittstelle muss vorliegen, um die Integration in andere Komponenten zu ermöglichen.
+\end{itemize}
+
+\subsubsection{Nicht-funktionale Anforderungen}
+\begin{itemize}
+  \item Der Dienst darf keine gespeicherten Zustände über Zielwerte vorhalten.
+  \item Die Kommunikation muss so gestaltet sein, dass sie eine zuverlässige Zustellung ermöglicht.
+  \item Fehlkonfigurationen oder fehlerhafte Eingaben müssen zu validierbaren Fehlermeldungen führen.
+\end{itemize}
+
+\subsection{Konfigurationsdienst für Kommunikationsinfrastruktur (Solace Init)}
+
+Dieser Service ist verantwortlich für die initiale Einrichtung der Kommunikationsinfrastruktur im System, insbesondere im Hinblick auf Messaging-Komponenten wie Queues oder themenbasierte Weiterleitungspfade.
+
+\subsubsection{Funktionale Anforderungen}
+\begin{itemize}
+  \item Der Dienst muss eine maschinenlesbare Konfiguration interpretieren können, in der Kommunikationskanäle, Routingregeln und Zugriffspfade definiert sind.
+  \item Auf Basis dieser Konfiguration muss die zugrunde liegende Infrastruktur um definierte Ressourcen ergänzt werden.
+  \item Bereits existierende Konfigurationselemente dürfen dabei nicht überschrieben oder dupliziert werden.
+\end{itemize}
+
+\subsubsection{Nicht-funktionale Anforderungen}
+\begin{itemize}
+  \item Der Dienst muss so gestaltet sein, dass er mehrfach ausgeführt werden kann, ohne die Konsistenz der Kommunikationsstruktur zu gefährden.
+  \item Fehlerhafte Konfigurationseinträge sind zu erkennen, protokollieren und dürfen die Verarbeitung nicht abbrechen.
+\end{itemize}
