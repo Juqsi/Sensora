@@ -23,20 +23,26 @@
    basicstyle=\ttfamily\footnotesize, % Basisstil anpassen
 }
 
-
-\lstdefinelanguage{Kotlin}{
-  comment=[l]{//},
-  commentstyle=\color{codegreen}\ttfamily, % Kommentarfarbe anpassen
-  emph={filter, first, firstOrNull, forEach, lazy, map, mapNotNull, println},
-  emphstyle=\color{magenta}\bfseries, % Hervorgehobene Wörter in derselben Farbe wie Keywords
-  identifierstyle=\color{black},
-  keywords={!in, !is, abstract, actual, annotation, as, as?, break, by, catch, class, companion, const, constructor, continue, crossinline, data, delegate, do, dynamic, else, enum, expect, external, false, field, file, final, finally, for, fun, get, if, import, in, infix, init, inline, inner, interface, internal, is, lateinit, noinline, null, object, open, operator, out, override, package, param, private, property, protected, public, receiveris, reified, return, return@, sealed, set, setparam, super, suspend, tailrec, this, throw, true, try, typealias, typeof, val, var, vararg, when, where, while},
-  keywordstyle=\color{magenta}\bfseries, % Schlüsselwortfarbe anpassen
-  morecomment=[s]{/*}{*/},
-  morestring=[b]",
-  morestring=[s]{"""*}{*"""},
-  ndkeywords={@Deprecated, @JvmField, @JvmName, @JvmOverloads, @JvmStatic, @JvmSynthetic, Array, Byte, Double, Float, Int, Integer, Iterable, Long, Runnable, Short, String, Any, Unit, Nothing},
-  ndkeywordstyle=\color{magenta}\bfseries, % ndkeywords in derselben Farbe wie Keywords
+\lstdefinelanguage{Rust}{
+  morekeywords=[1]{as,break,const,continue,crate,else,enum,extern,false,fn,for,
+    if,impl,in,let,loop,match,mod,move,mut,pub,ref,return,self,Self,static,
+    struct,super,trait,true,type,unsafe,use,where,while,async,await,dyn},
+  morekeywords=[2]{i8,i16,i32,i64,i128,isize,
+    u8,u16,u32,u64,u128,usize,
+    f32,f64,bool,char,str,String,Option,Result,Vec,Box},
   sensitive=true,
-  stringstyle=\color{codepurple}\ttfamily, % Stringfarbe anpassen
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]{"},
+  morestring=[s]{r"}{"}, % raw string literals
+  morestring=[s]{b"}{"}, % byte string literals
+  morestring=[s]{r#"}{"#}, % raw string with one hash
+  morestring=[s]{r##"}{"##}, % raw string with two hashes
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{gray}\ttfamily,
+  stringstyle=\color{orange}\ttfamily,
+  basicstyle=\ttfamily\footnotesize,
+  showstringspaces=false,
+  columns=fullflexible
 }
+
