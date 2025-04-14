@@ -26,6 +26,8 @@ hidelinks %Links nicht einrahmen
 
 \usepackage{graphicx} %für Einbindung von Grafiken
 \graphicspath{{img/}} %Pfad für Grafiken
+\usepackage{svg}
+\usepackage{amsmath}
 
 \usepackage{pdfpages}
 
@@ -169,6 +171,8 @@ hidelinks %Links nicht einrahmen
 	%\input{Theroretische Grundlagen/TG_example}
 	\newpage
 	\chapter{Anforderungen}
+    Für das Projekt Sensora gelten hohe Anforderungen an Zuverlässigkeit, Sicherheit, Erweiterbarkeit und Datenintegrität. In diesem Kapitel werden die formellen Anforderungen an das Backend sowie an die zugrunde liegende Datenbankarchitektur getrennt voneinander dargestellt. Ziel ist es, eine tragfähige Grundlage für die technische Umsetzung zu schaffen.
+	\input{Anforderungen/Anf_Backend}
 	%\input{Anforderungen/Anforderungen_example}
 	\newpage
 	\chapter{Auswahl der Technologien}
@@ -177,6 +181,7 @@ hidelinks %Links nicht einrahmen
 	%\input{Auswahl der Technologien/AdT_example}
 	\newpage
 	\chapter{Umsetzung}
+	\input{Umsetzung/Ums_Datenmodellierung und Datenfluss}
 	%\input{Umsetzung/Umsetzung_example}
 	\newpage
 	
