@@ -50,6 +50,8 @@ hidelinks %Links nicht einrahmen
 
 
 \newcommand{\source}[1]{\vspace{1ex}\noindent{\small \textit{Quelle: #1}}}
+\newcommand{\file}[1]{\texttt{#1}}
+\DeclareUnicodeCharacter{202F}{\%}
 
 \newcommand{\initializeBibliography}{
 	\ihead{}
@@ -153,24 +155,51 @@ hidelinks %Links nicht einrahmen
 
 	\chapter{Theoretische Grundlagen}
 	%\input{Theroretische Grundlagen/TG_example}
+	\input{Theoretische Grundlagen/SPAs}
+	\input{Theoretische Grundlagen/MobileApps}
+	\input{Theoretische Grundlagen/UIUX}
+    \input{Theoretische Grundlagen/Testing}
+
 	\newpage
+	
 	\chapter{Anforderungen}
+	\input{Anforderungen/Frontend}
 	%\input{Anforderungen/Anforderungen_example}
+	
 	\newpage
+	
 	\chapter{Auswahl der Technologien}
+	\input{Auswahl der Technologien/Vue}
+	\input{Auswahl der Technologien/Pinia}
+	\input{Auswahl der Technologien/CSS}
+	\input{Auswahl der Technologien/Capacitor}
+	\input{Auswahl der Technologien/I18n}
 	%\input{Auswahl der Technologien/AdT_example}
+	
 	\newpage
+	
 	\chapter{Umsetzung}
 	%\input{Umsetzung/Umsetzung_example}
-	\newpage
+	\input{Umsetzung/Frontend-Architektur}
+	\input{Umsetzung/UIUX}
+	\input{Umsetzung/KI-Erkennung}
+	\input{Umsetzung/Spezifische_Komponenten_Frontend}
+	
+Ausarbeitung/Umsetzung	\newpage
+
 	
 	% ------------- Ende Hautpteil -------------
 	
 	\chapter{Kritische Reflexion}
+	\input{Kritische Reflexion/Frontend}
 	%\input{Kritische Reflexion/Kritische_Reflexion_example}
+	
 	\newpage 
+	
 	\chapter{Ausblick}
+	\input{Ausblick/Frontend}
 	%\input{Ausblick/Ausblick_example}
+	
 	\newpage
 	
 	%------------- Literaturverzeichnis -------------

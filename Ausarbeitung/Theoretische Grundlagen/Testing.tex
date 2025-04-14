@@ -1,0 +1,69 @@
+\section{Theoretische Grundlagen des Softwaretestens mit Fokus auf Frontend-Frameworks}
+\label{sec:testing-theorie}
+
+Das Testen von Software stellt einen fundamentalen Bestandteil des Entwicklungsprozesses dar. Es dient der systematischen Qualitätssicherung und verfolgt das Ziel, Fehler frühzeitig zu identifizieren, Korrektheit zu überprüfen und die Wartbarkeit des Codes zu erhöhen. Insbesondere im Kontext moderner, komponentenbasierter Frontend-Frameworks wie Vue.js nimmt das Testen eine zentrale Rolle ein, um das dynamische Verhalten von Benutzeroberflächen valide zu verifizieren.
+
+\subsection{Ziele und Nutzen von Softwaretests}
+
+Softwaretests haben in der Praxis mehrere eng miteinander verknüpfte Funktionen. Sie dienen in erster Linie der Fehlererkennung und -vermeidung. Ein umfassend getestetes System weist eine signifikant geringere Wahrscheinlichkeit für kritische Laufzeitfehler oder nicht intendiertes Verhalten auf \cite{Myers2011}. Gleichzeitig erfüllen Tests eine dokumentierende Funktion. Insbesondere automatisierte Tests können als maschinenlesbare Spezifikationen fungieren, da sie in kodifizierter Form definieren, wie sich Komponenten unter bestimmten Bedingungen verhalten sollen \cite{Ammann2016}. Darüber hinaus ermöglichen Tests die Durchführung von Regressionstests, bei denen sichergestellt wird, dass Änderungen im Quelltext keine unbeabsichtigten Nebeneffekte hervorrufen. Im Rahmen \ac{TDD} werden Tests sogar vor dem eigentlichen Code geschrieben, was die Modularität und Wartbarkeit von Software verbessert.
+
+\subsection{Testarten und deren Abgrenzung}
+
+Die Theorie des Softwaretestens unterscheidet verschiedene Teststufen, die unterschiedliche Aspekte der Softwarequalität absichern. Unit-Tests stellen die unterste Ebene dar. Sie testen kleinste funktionale Einheiten, beispielsweise einzelne Funktionen oder Komponenten, isoliert von deren Kontext. Diese Tests sind schnell ausführbar und gut automatisierbar, bilden jedoch nicht das Zusammenwirken mehrerer Module ab.
+
+An diese schließen sich Integrationstests an. Hier wird das Zusammenspiel mehrerer Komponenten oder Module geprüft. Ziel ist es, Schnittstellen und Interaktionen zwischen Teilsystemen zu validieren. Integrationstests sind insbesondere in komponentenbasierten Frameworks relevant, da viele logische Fehler nicht in der Einzelkomponente, sondern im Wechselspiel zwischen Komponenten auftreten.
+
+Darüber hinaus existieren End-to-End-Tests (E2E), welche die gesamte Anwendung aus Sicht eines realen Nutzers durchlaufen. Dabei wird die gesamte Technologie-Stack inklusive Frontend, Backend und Persistenzschicht berührt. E2E-Tests sind besonders geeignet, um kritische Pfade wie Login-Prozesse, Formularinteraktionen oder komplexe Benutzerflüsse zu validieren. Sie zeichnen sich durch eine hohe Aussagekraft aus, sind jedoch in der Regel aufwändiger in Wartung und Ausführung \cite{Humble2010}.
+
+\subsection{Frontend-Testing mit Vue.js}
+
+Vue.js als komponentenbasiertes Framework bietet umfassende Möglichkeiten zur modularisierten Testung. Der offizielle Stack sieht insbesondere Werkzeuge wie Vue Test Utils, Jest und Cypress vor. Mit Vue Test Utils lassen sich einzelne Komponenten isoliert rendern und ihre Interaktionen mit dem DOM gezielt untersuchen \cite{VueTestUtils2024}. Jest dient als Ausführungsumgebung für Unit- und Snapshot-Tests, wobei durch das Speichern von DOM-Zuständen automatisiert Regressionen erkannt werden können. Für End-to-End-Tests empfiehlt sich der Einsatz von Cypress, welches auf der Ebene realer Nutzerinteraktionen arbeitet und dabei u.\,a. Klicks, Navigationen und Eingaben überprüft.
+
+Die Architektur von Vue-Komponenten, insbesondere deren Trennung in Template, Script und Style, ermöglicht eine gezielte Testbarkeit. Darüber hinaus fördert die Reaktivierung durch die Composition API eine deklarative und testfreundliche Logikstruktur \cite{VueTestUtils2024}. 
+
+\subsection{Beispielhafte Unit-Test-Spezifikation mit Vue Test Utils}
+
+Zur strukturierten Validierung einzelner Komponenten eignet sich das Framework \emph{Vue Test Utils}. Nachfolgend wird exemplarisch ein Unit-Test für die Komponente \texttt{PlantCard.vue} dargestellt, der die korrekte Darstellung des Pflanzennamens überprüft:
+
+\begin{lstlisting}[caption=Beispielhafter Unit-Test mit Vue Test Utils]
+	import { mount } from '@vue/test-utils'
+	import PlantCard from '@/components/PlantCard.vue'
+	
+	describe('PlantCard', () => {
+		it('zeigt den Pflanzennamen korrekt an', () => {
+			const wrapper = mount(PlantCard, {
+				props: { name: 'Ficus lyrata' }
+			})
+			expect(wrapper.text()).toContain('Ficus lyrata')
+		})
+	})
+\end{lstlisting}
+
+Dieser Ansatz wurde im vorliegenden \ac{POC} nicht umgesetzt, stellt jedoch ein zentrales Element moderner Qualitätssicherung in Vue-basierten Projekten dar \cite{VueTestUtils2024}.
+
+\subsection{Beispielhafter Cypress-Test zur End-to-End-Verifikation}
+
+Für umfassende Systemtests eignet sich \emph{Cypress} als Werkzeug zur End-to-End-Verifikation. Es ermöglicht die Simulation realer Benutzerinteraktionen über den gesamten Technologie-Stack hinweg. Im Folgenden ist ein Beispieltest für das Anlegen einer Pflanze dargestellt:
+
+\begin{lstlisting}[caption=Beispielhafter Cypress-Test]
+	describe('Plant hinzufuegen', () => {
+		it('oeffnet das Formular und speichert eine neue Pflanze', () => {
+			cy.visit('/plants')
+			cy.contains('Pflanze hinzufuegen').click()
+			cy.get('input[name="name"]').type('Monstera')
+			cy.get('select[name="room"]').select('Wohnzimmer')
+			cy.get('button[type="submit"]').click()
+			cy.contains('Monstera').should('exist')
+		})
+	})
+\end{lstlisting}
+
+Ein vollständiger Cypress-Test wurde im Rahmen des Prototyps nicht umgesetzt, kann aber als Vorlage für spätere Implementierungen dienen \cite{CypressDocs2024}.
+
+\subsection{Codeabdeckung und Testmetriken}
+
+Zur Überprüfung der Testabdeckung bietet sich der Einsatz von \texttt{@vitest/coverage} an. Es berechnet Kennzahlen wie \emph{Statements Covered}, \emph{Branches} und \emph{Line Coverage}. Diese Methode wurde im Rahmen des \ac{POC} nicht implementiert, wäre jedoch für ein Produktivsystem ein relevanter Bestandteil der Qualitätssicherung.
+
+\subsection{Einordnung und Fazit}
+
+Obwohl Softwaretests einen entscheidenden Beitrag zur Qualitätssicherung leisten, wurden im vorliegenden Projekt keine automatisierten Tests implementiert. Der Grund dafür liegt in der prototypischen Natur der Anwendung als Proof-of-Concept (PoC), wodurch der Fokus auf Funktionalität und Benutzerfluss lag. Insbesondere zeitliche und ressourcenbezogene Einschränkungen sprechen in frühen Entwicklungsphasen oftmals gegen einen vollständigen Testaufbau. Gleichwohl ist festzuhalten, dass insbesondere bei der Weiterentwicklung oder einer produktiven Nutzung automatisierte Tests ein integraler Bestandteil des Entwicklungsprozesses sein sollten.
