@@ -404,8 +404,6 @@ void start_ap(void) {
 }
 
 void stop_ap(void) {
-	//Sicherstellen, dass keine WLAN Daten mehr gespeichert sind
-	erase_system_data();
 	wifi_mode_t current_mode;
 	ESP_ERROR_CHECK(esp_wifi_get_mode(&current_mode));
 
