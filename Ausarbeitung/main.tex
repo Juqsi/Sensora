@@ -26,12 +26,21 @@ hidelinks %Links nicht einrahmen
 
 \usepackage{graphicx} %für Einbindung von Grafiken
 \graphicspath{{img/}} %Pfad für Grafiken
+\usepackage{svg}
+\usepackage{amsmath}
 
 \usepackage{pdfpages}
 
 \usepackage{todonotes}
 
-\usepackage[printonlyused]{acronym}
+%\usepackage[printonlyused]{acronym}
+% Akronymverzeichnis
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{supertabular}
+\usepackage{acro}
+\acsetup{make-links}
+\input{acronyms}
 
 \usepackage{minted} %für Darstellung von Code
 \usepackage{float}
@@ -42,7 +51,7 @@ hidelinks %Links nicht einrahmen
 \usepackage{xspace}
 
 % Define a command to ensure consistent space after acronym
-\newcommand{\acspace}{\xspace\hspace{1em}}
+%\newcommand{\acspace}{\xspace\hspace{1em}}
 
 \makeatletter
 \renewcommand*{\aclabelfont}[1]{\textbf{\acsfont{#1}\acspace}}
@@ -63,6 +72,7 @@ hidelinks %Links nicht einrahmen
 \usepackage{amssymb}
 
 \usepackage{listings}
+\usepackage{listings-golang}
 \usepackage{xcolor}  % Optional, für zusätzliche Farbanpassungen
 \lstset{ 
 	language=Python,                % Programmiersprache
@@ -88,6 +98,7 @@ hidelinks %Links nicht einrahmen
 }
 % Label für Listings ändern
 \renewcommand{\lstlistingname}{Beispiel}
+\newcommand{\code}[1]{\colorbox{gray!20}{\consola #1}}
 
 \usepackage{titlesec}
 \titleformat{\chapter}[hang]
@@ -119,8 +130,10 @@ hidelinks %Links nicht einrahmen
 	\tableofcontents
 	
 	%------------- Abkürzungsverzeichnis -------------
-	\include{./Präamble/acronyms}
-	\newpage
+	%\include{./Präamble/acronyms}
+	\printacronyms[template=supertabular]
+    \addcontentsline{toc}{chapter}{Abkürzungen}
+    \newpage
 	
 	%------------- Abbildungsverzeichnis -------------
 	\section*{Abbildungsverzeichnis}
@@ -154,6 +167,9 @@ hidelinks %Links nicht einrahmen
 	% ------------- Hauptteil -------------
 
 	\chapter{Theoretische Grundlagen}
+	\input{Theoretische Grundlagen/TG_Scrum}
+	\input{Theoretische Grundlagen/TG_APIs}
+	\input{Theoretische Grundlagen/TG_Designprinzipien}
 	%\input{Theroretische Grundlagen/TG_example}
 	\input{Theoretische Grundlagen/SPAs}
 	\input{Theoretische Grundlagen/MobileApps}
@@ -164,6 +180,8 @@ hidelinks %Links nicht einrahmen
 	
 	\chapter{Anforderungen}
 	\input{Anforderungen/Frontend}
+    Für das Projekt Sensora gelten hohe Anforderungen an Zuverlässigkeit, Sicherheit, Erweiterbarkeit und Datenintegrität. In diesem Kapitel werden die formellen Anforderungen an das Backend sowie an die zugrunde liegende Datenbankarchitektur getrennt voneinander dargestellt. Ziel ist es, eine tragfähige Grundlage für die technische Umsetzung zu schaffen.
+	\input{Anforderungen/Anf_Backend}
 	%\input{Anforderungen/Anforderungen_example}
 	
 	\newpage
@@ -174,18 +192,21 @@ hidelinks %Links nicht einrahmen
 	\input{Auswahl der Technologien/CSS}
 	\input{Auswahl der Technologien/Capacitor}
 	\input{Auswahl der Technologien/I18n}
+	\input{Auswahl der Technologien/AdT_Programmiersprache_BFF}
+	\input{Auswahl der Technologien/AdT_Datenbankentscheidung}
 	%\input{Auswahl der Technologien/AdT_example}
 	
 	\newpage
 	
 	\chapter{Umsetzung}
+	\input{Umsetzung/Ums_Datenmodellierung und Datenfluss}
 	%\input{Umsetzung/Umsetzung_example}
 	\input{Umsetzung/Frontend-Architektur}
 	\input{Umsetzung/UIUX}
 	\input{Umsetzung/KI-Erkennung}
 	\input{Umsetzung/Spezifische_Komponenten_Frontend}
 	
-Ausarbeitung/Umsetzung	\newpage
+	\newpage
 
 	
 	% ------------- Ende Hautpteil -------------

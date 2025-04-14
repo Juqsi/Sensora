@@ -1,0 +1,84 @@
+\section{Anforderungen an das Backend}
+Das Backend bildet die zentrale Kommunikationsschnittstelle zwischen Clients, internen Services und der Datenbank. Entsprechend hoch sind die Anforderungen an Struktur, Sicherheit und Stabilität.
+
+\subsection{Architektur und Technologien}
+\begin{itemize}
+    \item Das Backend ist als \ac{rest}-Service zu implementieren.
+    \item Es muss eine modulare, wartbare Architektur aufweisen, die dem Prinzip der Trennung von Zuständigkeiten (Separation of Concerns) folgt.
+    \item Als Technologie-Stack wird eine moderne, performante Sprache wie Rust mit einem Webframework wie actix\_web empfohlen.
+\end{itemize}
+
+\subsection{Authentifizierung und Autorisierung}
+\begin{itemize}
+    \item Alle Zugriffe auf geschützte Ressourcen müssen durch ein Authentifizierungsverfahren abgesichert werden (z.B. \ac{jwt} oder OAuth2).
+    \item Autorisierungen auf Zeit wie z.B. Sessions sind nicht erlaubt. Alternativen zu Passwörtern (z.B. Tokens) müssen begrenzt gültig sein.
+\end{itemize}
+
+\subsection{Fehlerbehandlung und Logging}
+\begin{itemize}
+    \item Fehlerzustände müssen konsistent behandelt und in einem strukturierten Format an den Client kommuniziert werden.
+    \item Es ist ein mehrstufiges Logging-System zu implementieren, das zwischen Info, Warnung und Fehler unterscheidet.
+    \item Sensible Informationen dürfen in Logs nicht gespeichert werden. Logs müssen zentral gesammelt und gegen Manipulation abgesichert werden.
+\end{itemize}
+
+\subsection{Skalierbarkeit und Performance}
+\begin{itemize}
+    \item Das Backend ist zustandslos zu gestalten, um horizontale Skalierung über Load-Balancing zu ermöglichen.
+    \item Die Antwortzeiten für einfache \ac{crud} Operationen sollen im Normalbetrieb unter 100ms liegen.
+    \item Die Architektur soll auf Lastspitzen vorbereitet sein (z.B. durch Queues oder Caching).
+\end{itemize}
+
+\subsection{Sicherheit}
+\begin{itemize}
+    \item Gängige Sicherheitslücken (z.B. SQL-Injection, XSS, CSRF) sind durch geeignete Mechanismen zu verhindern.
+    \item Eingaben vom Client sind streng zu validieren und zu sanitieren.
+\end{itemize}
+
+\subsection{API-Dokumentation}
+\begin{itemize}
+    \item Die Schnittstellen müssen vollständig dokumentiert werden.
+    \item Eine maschinenlesbare API-Spezifikation (z.B. OpenAPI 3.0) ist zu pflegen.
+    \item Optional kann eine interaktive API-Oberfläche für Entwickler bereitgestellt werden (z.B. Swagger UI).
+\end{itemize}
+
+\section{Anforderungen an die Datenbank}
+Die Datenbank dient als persistente Grundlage für alle im System gespeicherten Informationen. Sie muss sowohl performant als auch sicher und konsistent arbeiten.
+
+\subsection{Modellierung und Struktur}
+\begin{itemize}
+    \item Das Datenbankschema ist klar zu dokumentieren und mindestens in der 3. Normalform zu entwerfen, sofern nicht durch Performance-Aspekte begründet anders.
+    \item Entitäten und ihre Beziehungen müssen nachvollziehbar und versionierbar abgebildet werden.
+\end{itemize}
+
+\subsection{Datensicherheit und Integrität}
+\begin{itemize}
+    \item Sensible Daten (z.B. Passwörter, Tokens) müssen verschlüsselt gespeichert werden.
+    \item Datenbankeigene Mechanismen wie Constraints, Foreign Keys und ggf. Trigger sind zur Sicherstellung der Datenintegrität zu verwenden.
+    \item Referentielle Integrität ist in allen relevanten Tabellen durchzusetzen.
+\end{itemize}
+
+\subsection{Zugriffskontrolle}
+\begin{itemize}
+    \item Der Datenbankzugriff erfolgt ausschließlich über definierte Rollen mit minimalen Rechten.
+    \item Es muss zwischen Administrations-, Lese- und Schreibzugriff differenziert werden.
+    \item Externe Dienste erhalten nur selektiven Zugriff auf erforderliche Tabellen.
+\end{itemize}
+
+\subsection{Backups und Wiederherstellung}
+\begin{itemize}
+    \item Es ist ein automatisiertes Backup-Konzept zu implementieren, welches tägliche Snapshots sowie inkrementelle Sicherungen vorsieht.
+    \item Wiederherstellungsroutinen müssen dokumentiert und regelmäßig geprüft werden.
+\end{itemize}
+
+\subsection{Performance und Skalierung}
+\begin{itemize}
+    \item Für häufig genutzte Felder sind geeignete Indizes zu definieren.
+    \item Bei wachsendem Datenvolumen sollen Mechanismen wie Read-Replicas, Sharding oder Partitionierung zum Einsatz kommen.
+    \item Abfragen müssen gezielt optimiert und auf lange Laufzeiten geprüft werden.
+\end{itemize}
+
+\subsection{Technologischer Rahmen}
+\begin{itemize}
+    \item Die Datenbanklösung muss Open Source, stabil, transaktionssicher und für hohe Datenmengen geeignet sein.
+    \item Es wird der Einsatz von PostgreSQL empfohlen.
+\end{itemize}
