@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "esp-idf/esp-tls",
+		"source" : "C:/Espressif/frameworks/esp-idf-v5.3.1/components/esp-tls"
+	}
+}
