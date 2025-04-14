@@ -1,0 +1,31 @@
+\section{Frontendarchitektur und Datenflüsse im System}
+Die Frontendarchitektur des smarten Bewässerungssystems wurde nach dem Paradigma komponentenbasierter Webentwicklung realisiert. Ziel war es, eine modular aufgebaute, wartbare und reaktive Benutzeroberfläche zu schaffen, die flexibel auf unterschiedliche Endgeräte und Benutzeranforderungen reagiert. Im Zentrum steht dabei das Framework Vue.js in Verbindung mit dem State-Management-Tool Pinia. Im Folgenden werden die Strukturierung der Views, das Datenflussmodell sowie die Rolle zentraler Technologien im Detail betrachtet.
+
+\subsection{Komponentenbasierte Struktur und Navigationsmodell}
+Die Architektur der vorliegenden Anwendung folgt einem komponentenbasierten Ansatz gemäß der Vue.js-Konventionen. Jede View in der Applikation ist als \ac{SFC} implementiert. Eine \ac{SFC} vereint die drei wesentlichen Bestandteile einer Webkomponente in einer Datei: Template, Script und Styles. Das Template definiert die Benutzeroberfläche in HTML-ähnlicher Syntax, das Script implementiert die zugehörige Logik (meist in TypeScript), und der Style-Block regelt das visuelle Layout mittels CSS bzw. Tailwind CSS. Diese Trennung innerhalb einer Datei fördert sowohl die Lesbarkeit als auch die Wiederverwendbarkeit von Komponenten \cite{VueGuide2024}.
+
+Die Views der Anwendung (z. B.	\texttt{HomeView}, 	\texttt{SinglePlantView}, 	\texttt{GroupView}, 	\texttt{SingleSensorView} sowie 	\texttt{PlantListView}) stellen jeweils eigenständige Seiten dar, die durch den Einsatz des Vue Routers dynamisch geladen werden. Jede dieser Views aggregiert untergeordnete Komponenten wie Karten, Dialoge, Navigationsleisten oder Diagramme und bindet dabei die jeweils relevanten Daten aus dem zentralen Zustand.
+
+Die Navigationsstruktur ist hierarchisch aufgebaut. Eine Hauptansicht (\texttt{HomeView}) dient als Einstiegspunkt und aggregiert Informationen aus den verschiedenen Kontexten: Räume, Pflanzen und deren Sensordaten. Ausgehend davon ermöglicht das Routing eine Tiefennavigation bis auf Objektebene, z.\,B. zum Bearbeiten einer bestimmten Pflanze. Dies fördert die kognitive Abbildung realweltlicher Strukturen (Wohnung $\rightarrow$ Raum $\rightarrow$ Pflanze) im digitalen Raum.
+ 
+ \subsection{Pinia als Vermittlungsinstanz zwischen API und Frontend}
+ Zur zentralen Zustandsverwaltung kommt Pinia zum Einsatz, welches das offizielle State-Management-System für Vue 3 darstellt \cite{Vuex, Allotey2023}. Anders als bei Vuex erfolgt die Definition eines Stores in Pinia mittels der Funktion \texttt{defineStore}, wobei sowohl State als auch Actions und Getters kapsuliert definiert werden. Diese Struktur unterstützt sowohl die Modularität als auch die Wiederverwendbarkeit der Zustandslogik.
+ 
+ Pinia fungiert im Anwendungskontext als Puffer und vermittelnde Instanz zwischen dem Frontend und der REST-API. Die Stores agieren als Cache: sie speichern persistente Daten über Komponentenlebenszyklen hinweg und reduzieren dadurch die Anzahl notwendiger API-Anfragen. Dies verbessert sowohl die Performance als auch die Benutzererfahrung, da viele Interaktionen lokal bedient werden können. Persistiert wird der Zustand mittels \texttt{pinia-plugin-persistedstate} im \texttt{localStorage}, wodurch Informationen wie eingeloggte Nutzer oder selektierte Objekte auch bei einem Seitenreload erhalten bleiben.
+ 
+ In der Applikation existieren getrennte Stores für Benutzerinformationen (\texttt{user.ts}), Authentifizierung (\texttt{auth.ts}), Pflanzen (\texttt{plant.ts}), Geräte (\texttt{device.ts}) und Räume (\texttt{room.ts}). Jeder Store definiert spezifische Actions, typischerweise asynchrone Methoden, alle die API-Schnittstellen repräsentieren und einige Weitere. Wenn Änderungen stattfinden, werden diese immer direkt an die API gesendet. Wenn Daten abgefragt werden, wird zuerst geprüft ob sie im Store verfügbar sind, wenn nicht wird erst eine Anfrage ans Backend gestellt. Diese neuen Daten werden dann gespeichert und automatisch in die andern Stores synchronisiert. 
+ 
+ Optional kann eine Aktion auch mit einem \texttt{force}-Flag aufgerufen werden, welches eine explizite Aktualisierung erzwingt. Dies geschieht Beispielsweise bei "Pull-to-Refresh". Diese Strategie erlaubt einen kontrollierten Kompromiss zwischen Reaktivitiät und Ressourceneffizienz.
+ 
+Um die Daten vor missbräuchlichen Zugriff zu schützen, wurde eine explizite Clear-Strategie implementiert. Bei Logout oder Benutzerwechsel werden alle Stores mittels \texttt{clearData()} zurückgesetzt, wodurch Persistenzdaten und Zustand explizit gelöscht werden. Das explizite Löschen ist auch über die Benutzereinstellung möglich.
+
+\subsection{Datenfluss nach dem Flux-Prinzip}
+
+Die Applikation folgt in ihrer Zustandslogik dem Flux-Prinzip, das ursprünglich von Facebook zur Beherrschung komplexer UI-Zustände vorgeschlagen wurde. Charakteristisch für dieses Architekturmodell ist ein strikt unidirektionaler Datenfluss: Interaktionen in der Benutzeroberfläche führen zu sogenannten Actions, die logische Operationen wie API-Aufrufe oder Validierungen auslösen. Die dabei gewonnenen Daten werden im zentralen State-Container gespeichert, welcher wiederum die View reaktiv aktualisiert. Dieser Ablauf lässt sich als Kette beschreiben: \texttt{UI $\rightarrow$ Action $\rightarrow$ Backend $\rightarrow$ Store $\rightarrow$ UI} \cite{Flux, facebook_flux}.
+
+Die Trennung der Zuständigkeiten – insbesondere zwischen Anzeige, Logik und Datenhaltung – begünstigt eine konsistente und vorhersehbare Datenverwaltung. Da alle Zustandsveränderungen über dedizierte Actions verlaufen und sich zentral nachverfolgen lassen, verbessert das Modell sowohl die Testbarkeit als auch die Wartbarkeit der Anwendung \cite{Flux}. In Kombination mit Pinia, das als modernes, modulbasiertes State-Management-Tool agiert, ergibt sich eine Architektur, die eng an Flux angelehnt ist, dabei jedoch die Komplexität traditioneller Implementierungen (z.\,B. Redux) vermeidet.
+
+ \subsection{Fazit}
+ Die vorliegende Frontend-Architektur basiert auf einem robusten Zusammenspiel modularer Komponenten, zentralisiertem State-Management mit Pinia und asynchroner Datenkommunikation. Die Trennung von Zustandslogik und Darstellung, kombiniert mit der Persistenz und Synchronisationsstrategie, gewährleistet eine wartbare und benutzerfreundliche Applikation.
+ 
+ 

@@ -1,0 +1,24 @@
+\section{Internationalisierung der Anwendung in Vue.js}
+\label{sec:i18n}
+
+Die Internationalisierung (i18n) ist ein zentrales Gestaltungsprinzip moderner Webanwendungen, das es erlaubt, Benutzeroberflächen an verschiedene Sprachen, Kulturräume und regionale Konventionen anzupassen. Sie leistet einen essenziellen Beitrag zur globalen Zugänglichkeit und Nutzerzufriedenheit, indem sie Inhalte sprachlich und kontextuell an die Erwartungen der NutzerInnen anpasst \cite{Stallmann2015}.
+
+\subsection{Motivation und Bedeutung}
+Internationale NutzerInnen erwarten digitale Produkte in ihrer Muttersprache und kulturell vertrauten Darstellung. Studien und Marktanalysen belegen, dass eine Lokalisierung von Inhalten die Nutzungsbereitschaft sowie die Conversion Rates deutlich erhöht. Zudem werden Missverständnisse vermieden, die sich aus abweichenden Symbolsystemen, Farbcodes oder Datums- und Zahlenformaten ergeben können \cite{Stallmann2015}.
+
+Auch aus Sicht der Systemarchitektur trägt Internationalisierung zur Skalierbarkeit und Nachhaltigkeit digitaler Anwendungen bei. Internationale Standards wie Unicode und Locale-Formate ermöglichen eine konsistente Darstellung über verschiedene Plattformen hinweg. Die konsequente Trennung von Quellcode und Textressourcen gilt dabei als Best Practice \cite{vuei18nDocs2024}.
+
+\subsection{Technologiewahl: vue-i18n}
+Zur Umsetzung der sprachlichen und regionalen Anpassung wurde in der vorliegenden Vue.js-Anwendung das etablierte Plugin \texttt{vue-i18n} eingesetzt. Es ist der De-facto-Standard im Vue-\"Okosystem zur Internationalisierung und bietet eine modulare Integration für Komponenten, Routing und State Management \cite{vuei18nDocs2024}. Das Plugin erlaubt unter anderem:
+
+\begin{itemize}
+	\item Sprachumschaltung zur Laufzeit mit Reaktivität.
+	\item Einbindung sprachspezifischer JSON-Ressourcen.
+	\item Nutzung der \texttt{Intl}-API zur Formatierung von Datum, Uhrzeit und Zahlen.
+	\item Unterstützung von Platzhaltern, Mehrzahlformen und dynamischen Textkomponenten \cite{Krukowski2024}.
+\end{itemize}
+
+\subsection{Fazit}
+Die Nutzung von \texttt{vue-i18n} erwies sich im Projektkontext als leistungsfähig, flexibel und zukunftssicher. Durch die Verbindung mit nativen JavaScript-Standards (\texttt{Intl}) sowie die einfache Einbindung in die Vue-Komponentenarchitektur konnten sprachliche Anforderungen effizient umgesetzt werden. Die gewählte Lösung orientiert sich an etablierten Best Practices und stellt eine skalierbare Grundlage für weitere Internationalisierungsschritte dar.
+
+

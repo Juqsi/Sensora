@@ -1,0 +1,32 @@
+\section{Theoretischer Vergleich: Webanwendungen versus native Apps}
+\label{sec:vergleich-webapp-native}
+
+Die Auswahl einer geeigneten Plattformstrategie stellt eine zentrale Entscheidung im Rahmen der Softwarearchitektur dar. Dabei stehen insbesondere Webanwendungen, native Applikationen sowie hybride Entwicklungsansätze zur Debatte. Diese Sektion beleuchtet die theoretischen Grundlagen und vergleicht insbesondere Webanwendungen mit nativen Android-Apps hinsichtlich Architektur, Entwicklungskosten, Plattformunabhängigkeit, Performance und User Experience (UX).
+
+\subsection{Architekturmodelle mobiler und Webanwendungen}
+
+Grundsätzlich lassen sich vier Hauptkategorien unterscheiden:
+\begin{enumerate}
+	\item \textbf{Native Apps}: Sie werden spezifisch für ein Betriebssystem wie Android (in Kotlin/Java) oder iOS (in Swift/Objective-C) entwickelt. Sie bieten vollen Zugriff auf Systemfunktionen und gelten als performanteste Option \cite{Charland2011}.
+	\item \textbf{Webanwendungen}: Sie laufen in einem Browser, basieren auf HTML, CSS und JavaScript und sind betriebssystemunabhängig. Sie müssen nicht installiert werden und sind über URLs zugänglich.
+	\item \textbf{Hybride Apps}: Diese kombinieren Webtechnologien mit nativen Container-Komponenten (z.\,B. Cordova oder Capacitor). Sie werden einmal entwickelt und können in mehreren App Stores publiziert werden \cite{Charland2011}.
+	\item \textbf{Cross-Platform-Apps}: Hierbei wird der Quellcode in einer plattformübergreifenden Sprache geschrieben (z.\,B. Dart bei Flutter oder JavaScript bei React Native) und nativ kompiliert. Ziel ist ein natives Look-and-Feel bei reduzierter Entwicklungszeit \cite{Mahendra2021}.
+\end{enumerate}
+
+\subsection{Vergleich von Webanwendungen und nativen Android-Apps}
+
+\paragraph{Plattformbindung und Zugänglichkeit} Webanwendungen sind geräteunabhängig und benötigen lediglich einen Browser, was ihre Zugänglichkeit und Reichweite maximiert. Native Android-Apps hingegen müssen über den Play Store installiert werden und sind an die Android-Plattform gebunden \cite{Charland2011}.
+
+\paragraph{Performance und Systemintegration} Native Apps bieten bessere Performance, da sie direkt auf Systexm-APIs zugreifen und hardwarenah ausgeführt werden. Dies ist vorteilhaft für grafikintensive oder hardwareabhängige Anwendungen. Webanwendungen sind dagegen durch die Browserumgebung limitiert, können aber durch moderne Web-APIs zunehmend auf Sensorik und Offline-Funktionen zugreifen (z.\,B. via Progressive Web Apps) \cite{Mahendra2021}.
+
+\paragraph{Entwicklungs- und Wartungskosten} Webanwendungen bieten durch einheitlichen Code für alle Plattformen eine höhere Wartungseffizienz und geringere Kosten. Native Android-Apps erfordern separate Entwicklungsprozesse für Android und ggf. weitere Plattformen, was zeit- und ressourcenintensiv ist \cite{Mahendra2021}.
+
+\paragraph{UX und Benutzerbindung} Native Apps ermöglichen eine tiefere Integration in das \ac{UX}-Paradigma des Betriebssystems (z.\,B. Gesten, native Navigation, Push-Notifications). Webanwendungen sind hier limitiert, bieten aber durch Responsive Design und Progressive Enhancement eine übergreifende Benutzererfahrung \cite{Charland2011}.
+
+\subsection{Kombinationsstrategien}
+
+Angesichts der Vor- und Nachteile einzelner Plattformen existieren Bestrebungen, Synergien zu nutzen. Ein Ansatz ist die Entwicklung einer Webanwendung als Basis, die bei Bedarf über Frameworks wie Capacitor oder Cordova in native Apps umgewandelt wird. Dadurch lassen sich Web-Technologien mit gerätespezifischer Distribution kombinieren. Alternativ können Cross-Plattform-Frameworks wie Flutter oder React Native eingesetzt werden, um native App-Erlebnisse bei einmaliger Codebasis zu realisieren \cite{Mahendra2021}.
+
+\bigskip
+Abschließend lässt sich festhalten, dass die Entscheidung für Webanwendung oder native App stets kontextabhängig ist. Kriterien wie Funktionsumfang, Zielgruppe, Budget und langfristige Wartbarkeit sind dabei zentral.
+

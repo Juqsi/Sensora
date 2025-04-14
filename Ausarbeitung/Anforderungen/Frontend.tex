@@ -1,0 +1,19 @@
+\section{Anforderungsdefinition für das Frontend}
+\label{sec:anforderungen-frontend}
+
+Die im Rahmen dieses Projekts entwickelte Anwendung zielt auf eine benutzerfreundliche, responsive und funktionale Weboberfläche zur Verwaltung von Pflanzen, Sensoren und Benutzergruppen in einem smarten Bewässerungssystem ab. Die folgenden Anforderungen leiten sich aus der konzeptionellen Planung sowie grundlegenden Prinzipien des nutzerzentrierten Designs ab.
+
+Zentrales Ziel der Frontend-Architektur ist die Bereitstellung eines klar strukturierten Interfaces, das eine intuitive Navigation und konsistente Interaktion ermöglicht. Die geplante Startansicht bietet einen Überblick über Räume und zugeordnete Pflanzen. Eine hierarchische Strukturierung in Wohnung, Raum und Pflanze unterstützt das mentale Modell der NutzerInnen und erlaubt eine modulare Skalierung der Anwendung. Die einzelnen Pflanzenkarten sollen aggregierte Umweltdaten anzeigen, welche über Sensoren erfasst werden. Eine Detailansicht ermöglicht zukünftig die Auswertung dieser Daten in Form von Diagrammen.
+
+Eine essentielle Anforderung ist die datengetriebene Darstellung der Messwerte auf Basis einer API-Kommunikation. Das Interface muss dabei sowohl aktuelle Sensorwerte anzeigen als auch historische Veränderungen visuell aufbereiten. Die Komponenten sollen als modulare Einheiten konzipiert werden und einen reaktiven Datenfluss mit dem zentralen State-Management der Applikation unterstützen.
+
+Das Design ist für eine vollständig responsive Darstellung ausgelegt, die sich an unterschiedliche Displaygrößen und Endgeräte anpasst. Für die Oberfläche wird eine Bottom-Navigation vorgesehen, die den Zugriff auf zentrale Bereiche wie Dashboard, Gruppenverwaltung und Profil auch bei begrenztem Platzangebot ermöglicht. Die Anwendung unterstützt sowohl einen Dark Mode als auch einen Light Mode, die dynamisch aktiviert werden können. Diese Darstellung soll auf Systemebene automatisch adaptiert werden. Die Applikation ist darüber hinaus vollständig mehrsprachig gestaltet. Alle Oberflächentexte müssen zur Laufzeit lokalisierbar sein, um eine internationale Nutzbarkeit zu ermöglichen.
+
+Ein zentrales Funktionsmodul ist die Verwaltung der Pflanzen. Hierzu zählen das Hinzufügen neuer Pflanzen über ein Formular, die Auswahl eines Sensors, die Angabe von Zielwerten sowie eine textuelle Beschreibung der Pflanze. Eine komponentenbasierte Ansicht zur Pflege von Gruppen und Wohnungen soll es mehreren BenutzerInnen ermöglichen, gemeinsam auf bestimmte Räume zuzugreifen. Die Rollen- und Rechtevergabe erfolgt im Backend, die Anzeige jedoch im Frontend.
+
+Zur Authentifizierung und Autorisierung wird ein modulares Login-System mit passwortgeschütztem Zugang benötigt. Die Registrierung erfolgt über einen mehrstufigen Account-Creation-Stepper, der BenutzerInnen schrittweise durch den Registrierungsprozess führt. Dabei werden u.\,a. Benutzername, E-Mail und Initialkonfigurationen für eine Gruppe abgefragt.
+
+Darüber hinaus soll die Anwendung ein Einstellungsmodul enthalten, das NutzerInnen erlaubt, etwa Sprache oder Accountinformationen zu bearbeiten. Datenschutzoptionen oder das Löschen des App-Caches. 
+
+Zusätzlich wurde die Idee einer automatischen Pflanzenerkennung über eine bildbasierte \ac{KI}-Komponente konzipiert und eine Android-App erstellt. Diese ist jedoch nicht Bestandteil der Kernanforderungen, sondern stellt eine potenzielle Erweiterung dar, die zukünftig in den Entwicklungsprozess aufgenommen werden kann.
+

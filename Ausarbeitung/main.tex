@@ -59,6 +59,8 @@ hidelinks %Links nicht einrahmen
 
 
 \newcommand{\source}[1]{\vspace{1ex}\noindent{\small \textit{Quelle: #1}}}
+\newcommand{\file}[1]{\texttt{#1}}
+\DeclareUnicodeCharacter{202F}{\%}
 
 \newcommand{\initializeBibliography}{
 	\ihead{}
@@ -170,32 +172,59 @@ hidelinks %Links nicht einrahmen
 	\input{Theoretische Grundlagen/TG_APIs}
 	\input{Theoretische Grundlagen/TG_Designprinzipien}
 	%\input{Theroretische Grundlagen/TG_example}
+	\input{Theoretische Grundlagen/SPAs}
+	\input{Theoretische Grundlagen/MobileApps}
+	\input{Theoretische Grundlagen/UIUX}
+    \input{Theoretische Grundlagen/Testing}
+
 	\newpage
+	
 	\chapter{Anforderungen}
+	\input{Anforderungen/Frontend}
     Für das Projekt Sensora gelten hohe Anforderungen an Zuverlässigkeit, Sicherheit, Erweiterbarkeit und Datenintegrität. In diesem Kapitel werden die formellen Anforderungen an das Backend sowie an die zugrunde liegende Datenbankarchitektur getrennt voneinander dargestellt. Ziel ist es, eine tragfähige Grundlage für die technische Umsetzung zu schaffen.
   \input{Anforderungen/AnforderungenAnSchnittstellenServices}
   \input{Anforderungen/Anf_Backend}
 	%\input{Anforderungen/Anforderungen_example}
+	
 	\newpage
+	
 	\chapter{Auswahl der Technologien}
+	\input{Auswahl der Technologien/Vue}
+	\input{Auswahl der Technologien/Pinia}
+	\input{Auswahl der Technologien/CSS}
+	\input{Auswahl der Technologien/Capacitor}
+	\input{Auswahl der Technologien/I18n}
   \input{Auswahl der Technologien/AuswahlDerTechnologienSchnittstellenservices}
 	\input{Auswahl der Technologien/AdT_Programmiersprache_BFF}
 	\input{Auswahl der Technologien/AdT_Datenbankentscheidung}
 	%\input{Auswahl der Technologien/AdT_example}
+	
 	\newpage
+	
 	\chapter{Umsetzung}
   \input{Umsetzung/UmsetzungSchnittstellenservices}
 	\input{Umsetzung/Ums_Datenmodellierung und Datenfluss}
 	%\input{Umsetzung/Umsetzung_example}
+	\input{Umsetzung/Frontend-Architektur}
+	\input{Umsetzung/UIUX}
+	\input{Umsetzung/KI-Erkennung}
+	\input{Umsetzung/Spezifische_Komponenten_Frontend}
+	
 	\newpage
+
 	
 	% ------------- Ende Hautpteil -------------
 	
 	\chapter{Kritische Reflexion}
+	\input{Kritische Reflexion/Frontend}
 	%\input{Kritische Reflexion/Kritische_Reflexion_example}
+	
 	\newpage 
+	
 	\chapter{Ausblick}
+	\input{Ausblick/Frontend}
 	%\input{Ausblick/Ausblick_example}
+	
 	\newpage
 	
 	%------------- Literaturverzeichnis -------------

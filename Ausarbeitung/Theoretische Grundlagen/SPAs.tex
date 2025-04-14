@@ -1,0 +1,32 @@
+\section{\aclp{SPA} und Frameworks}
+\label{sec:spa-frameworks}
+
+Moderne Webentwicklung ist zunehmend durch \ac{SPA} geprägt, die im Vergleich zu klassischen Multi-Page Applications (MPAs) durch ein dynamischeres Nutzererlebnis überzeugen. \acp{SPA} laden nach dem initialen Seitenaufruf keine vollständigen HTML-Dokumente vom Server nach, sondern aktualisieren Inhalte durch JavaScript-Logik auf der Client-Seite \cite{Basumallick2022}.
+
+\subsection{Entstehung und Motivation von \acp{SPA}}
+Das Konzept der SPA entstand im Kontext steigender Nutzererwartungen an reaktionsschnelle Webanwendungen. Während frühere Webarchitekturen bei jeder Nutzerinteraktion eine komplette neue HTML-Seite vom Server luden, ermöglichen \acs{SPA} eine unterbrechungsfreie Interaktion, indem Inhalte dynamisch aktualisiert werden. Technologisch wurde diese Entwicklung durch die Verfügbarkeit von AJAX, JavaScript-Frameworks sowie Browser APIs wie dem History-API begünstigt \cite{Basumallick2022}.
+
+\subsection{Architektur, Vorteile und Herausforderungen von \acp{SPA}}
+\acp{SPA} kommunizieren typischerweise über \ac{REST}- oder GraphQL-APIs mit einem Backend und verwalten Zustände lokal im Browser. Durch client-seitiges Routing, etwa mit Bibliotheken wie React Router oder Vue Router, wird eine app-ähnliche Navigation ermöglicht.
+
+\paragraph{Vorteile:}
+\begin{itemize}
+	\item \textbf{Verbessertes Nutzererlebnis:} Durch den Wegfall von Seitenreloads werden Ladezeiten reduziert, was zu einer flüssigeren Interaktion führt.
+	\item \textbf{Geringere Serverlast:} Da nur Daten, nicht aber komplette Seiten geladen werden, reduziert sich die Serverauslastung.
+	\item \textbf{Bessere Trennung von Frontend und Backend:} Die API-Zentrierung fördert modulare Systemarchitekturen und erleichtert die Wiederverwendung von Backend-Ressourcen.
+\end{itemize}
+
+\paragraph{Nachteile:}
+\begin{itemize}
+	\item \textbf{Schwächere:} Ohne \ac{SSR} sind Inhalte für Suchmaschinen schlechter zugänglich.
+	\item \textbf{Erhöhte Komplexität:} Zustandsverwaltung, Routing und Sicherheitsaspekte müssen client-seitig implementiert werden.
+	\item \textbf{Initiale Ladezeit:} Die gesamte Anwendung (inkl. JavaScript) muss initial geladen werden, was den ersten Ladevorgang verzögern kann \cite{Bacancy2023}.
+\end{itemize}
+
+\subsection{Vergleich von React, Angular und Vue}
+
+\paragraph{React} ist eine von Facebook entwickelte Bibliothek zur Erstellung von Benutzeroberflächen. Es folgt einem funktionalen, komponentenbasierten Paradigma und nutzt die virtuelle \ac{DOM} für Performanceoptimierungen. React ist minimalistisch und erfordert oft ergänzende Bibliotheken für Routing oder State-Management wie Redux oder React Router \cite{ReactDoc2025}.
+
+\paragraph{Angular} ist ein umfassendes Framework von Google, das auf TypeScript basiert. Es bietet eine vollständige Lösung inklusive Dependency Injection, Routing, Formularverwaltung und mehr. Angular eignet sich besonders für große Enterprise-Anwendungen, bringt jedoch eine steilere Lernkurve mit sich \cite{AngularDocs2025}.
+
+\paragraph{Vue} hingegen ist ein progressives Framework, das sich zwischen React und Angular positioniert. Es ist leichtgewichtig und modular, bietet jedoch mit seinem offiziellen Ökosystem (Vue Router, Vuex/Pinia) eine vollständige Entwicklungsumgebung \cite{VueCoreTeam2016}. Die Reaktivierung erfolgt über ein Proxy-basiertes System, das automatische DOM-Updates bei Datenänderungen ermöglicht \cite{VueReactivity2016}.
