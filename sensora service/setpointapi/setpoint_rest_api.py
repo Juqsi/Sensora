@@ -55,6 +55,9 @@ def post_sollwert():
         schema:
           type: object
           properties:
+            controller_id:
+              type: string
+              example: "controller123"
             sensor_id:
               type: string
               example: "sensor123"
@@ -68,24 +71,26 @@ def post_sollwert():
         description: Fehlerhafte Anfrage
     """
     data = request.get_json()
+    controller_id = data.get("controller_id")
     sensor_id = data.get("sensor_id")
     sollwert = data.get("sollwert")
 
-    if not sensor_id or sollwert is None:
-        return jsonify({"error": "sensor_id und sollwert erforderlich"}), 400
+    if not sensor_id or sollwert is None or controller_id is None:
+        return jsonify({"error": "sensor_id, controller_id und sollwert erforderlich"}), 400
 
     payload = json.dumps({
         "targetValues": [
         {
+        "did": controller_id,
         "sid": sensor_id,
         "value": sollwert
     }]})
     
 
-    topic = Topic.of(f"sensora/v1/receive/{sensor_id}/targetValues") # ändern zu: sensora/v1/receive/<id>/targetValues (id ist controller id muss durch sql)
+    topic = Topic.of(f"sensora/v1/receive/{controller_id}/targetValues") # ändern zu: sensora/v1/receive/<id>/targetValues (id ist controller id muss durch sql)
     publisher.publish(messaging_service.message_builder().build(payload), topic)
 
-    print(f"✅ Sollwert gesendet -> Sensor: {sensor_id}, Sollwert: {sollwert}")
+    print(f"✅ Sollwert gesendet -> Controler: {controller_id} Sensor: {sensor_id}, Sollwert: {sollwert}")
     return jsonify({"status": "success"}), 200
 
 if __name__ == '__main__':

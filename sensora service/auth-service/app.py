@@ -192,7 +192,7 @@ def create_solace_user(controller_id, model=None):
         logger.info(f"✅ [Solace] User {username} created successfully.")
 
         # Get broker URL from environment variables
-        broker_url = os.getenv('SOLACE_PUBLIC_URL', 'solace')  # Default to 'solace' if not set
+        broker_url = os.getenv('SOLACE_PUBLIC_URL', 'maxtar.de')  # Default to 'solace' if not set
         broker_port = int(os.getenv('SOLACE_PUBLIC_PORT', 1883))
         use_ssl = os.getenv('SOLACE_USE_SSL', 'false').lower() == 'true'
 
@@ -376,7 +376,7 @@ def verify_auth():
         session_key,
         hashlib.sha256
     ).hexdigest()
-    
+    logger.info(f"Debug: session_key: {session_key.decode()} encrypted_credentials: {encrypted_credentials.decode()} credential_key: {credential_key}")
     return jsonify({
         'session_key': session_key.decode(),
         'credential_key': credential_key,
