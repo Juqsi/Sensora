@@ -276,7 +276,6 @@ const createPlant = async () => {
             </Select>
           </div>
         </div>
-<p>{{isControllerOwner}}</p>
         <div class="w-full">
           <div class="flex items-center justify-between w-full gap-5">
             <div class="flex items-center space-x-1">
