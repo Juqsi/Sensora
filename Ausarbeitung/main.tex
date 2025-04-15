@@ -1,0 +1,251 @@
+% ============= Package Einstellungen & Sonstiges ============= 
+\documentclass[a4paper,12pt]{report}
+\usepackage[left= 2.5 cm,right = 2.5 cm, bottom = 2.5 cm]{geometry}
+\usepackage[onehalfspacing]{setspace}
+
+\usepackage[
+pdftitle={Studienarbeit},
+pdfsubject={Entwicklung einer smarten Bewässerungslösung mit Web-Anbindung},
+pdfauthor={Maximilian Schüller, Fynn Thierling, Justus Siegert, Lukas Maier, Timon Kleinknecht},
+pdfkeywords={},	
+hidelinks %Links nicht einrahmen
+]{hyperref}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+
+\usepackage{fancyhdr}
+\usepackage{color}
+\usepackage{csquotes}
+%\usepackage{cite}
+\usepackage[backend=biber, autocite=inline, style=ieee, natbib=true]{biblatex}
+\addbibresource{literatur.bib}
+\DefineBibliographyStrings{ngerman}{andothers = {{et\,al\adddot}},}
+\usepackage{url}
+
+\usepackage{graphicx} %für Einbindung von Grafiken
+\graphicspath{{img/}} %Pfad für Grafiken
+\usepackage{svg}
+\usepackage{amsmath}
+
+\usepackage{pdfpages}
+
+\usepackage{todonotes}
+
+%\usepackage[printonlyused]{acronym}
+% Akronymverzeichnis
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{supertabular}
+\usepackage{acro}
+\acsetup{make-links}
+\input{acronyms}
+
+\usepackage{minted} %für Darstellung von Code
+\usepackage{float}
+\usepackage[german]{varioref} %für schönere Referenzierung von Abbildungen
+
+\fancyhead[L]{} % Linke Kopfzeile leer lassen
+
+\usepackage{xspace}
+
+% Define a command to ensure consistent space after acronym
+%\newcommand{\acspace}{\xspace\hspace{1em}}
+
+\makeatletter
+%\renewcommand*{\aclabelfont}[1]{\textbf{\acsfont{#1}\acspace}}
+\makeatother
+
+
+\newcommand{\source}[1]{\vspace{1ex}\noindent{\small \textit{Quelle: #1}}}
+\newcommand{\file}[1]{\texttt{#1}}
+\DeclareUnicodeCharacter{202F}{\%}
+
+\newcommand{\initializeBibliography}{
+	\ihead{}
+	\printbibliography[title=\Literaturverzeichnis] 
+	\cleardoublepage
+}
+
+\usepackage{enumitem}
+\usepackage{amssymb}
+
+\usepackage{listings}
+\usepackage{listings-golang}
+\usepackage{xcolor}  % Optional, für zusätzliche Farbanpassungen
+\lstset{ 
+	language=Python,                % Programmiersprache
+	basicstyle=\ttfamily\scriptsize,     % Grundschriftart (monospace) und -größe
+	keywordstyle=\bfseries\color{blue}, % Schlüsselwörter fett und blau
+	commentstyle=\itshape\color{green!50!black}, % Kommentare kursiv und grün
+	stringstyle=\color{red},        % Strings rot
+	numbers=left,                   % Zeilennummern links anzeigen
+	numberstyle=\tiny\color{black},  % Stil der Zeilennummern (klein und grau)
+	stepnumber=1,                   % Jede Zeile nummerieren
+	numbersep=8pt,                  % Abstand der Zeilennummern zum Code
+	backgroundcolor=\color{gray!10},  % Hintergrundfarbe des Codes (weiß)
+	frame=single,                   % Rahmen um den Code
+	rulecolor=\color{black},        % Rahmenfarbe
+	captionpos=b,                   % Position des Titels (unten)
+	breaklines=true,                % Zeilen umbrechen, wenn sie zu lang sind
+	breakatwhitespace=true,         % Zeilenumbrüche nur an Leerzeichen
+	showstringspaces=false,         % Leerzeichen in Strings nicht anzeigen
+	tabsize=4,                      % Breite eines Tabs
+	%escapeinside={(*@}{@*)},        % LaTeX-Befehle innerhalb des Codes
+	morekeywords={print,def,class}, % Zusätzliche Schlüsselwörter für Python
+	extendedchars=true,             % Unterstützt erweiterte Zeichen (z. B. Umlaute)
+}
+% Label für Listings ändern
+\renewcommand{\lstlistingname}{Beispiel}
+\newcommand{\code}[1]{\colorbox{gray!20}{\consola #1}}
+
+\usepackage{titlesec}
+\titleformat{\chapter}[hang]
+  {\normalfont\huge\bfseries}
+  {\thechapter\quad}
+  {0pt}
+  {} 
+
+
+% ============= Dokumentbeginn =============
+\begin{document}
+	
+	%Titelseite
+	\input{./Präamble/titel}
+	
+	\cleardoublepage
+	\pagenumbering{roman}
+	
+	%------------- Erklärung der Eigenleistung-----------
+
+	\input{Präamble/Eigenleistung.tex}
+	\newpage
+
+	%------------- Abstract -------------
+	\input{./Präamble/abstract}
+	\newpage
+	
+	%------------- Inhaltsverzeichnis -------------
+	\tableofcontents
+	
+	%------------- Abkürzungsverzeichnis -------------
+	%\include{./Präamble/acronyms}
+	\printacronyms[template=supertabular]
+    \addcontentsline{toc}{chapter}{Abkürzungen}
+    \newpage
+	
+	%------------- Abbildungsverzeichnis -------------
+	\section*{Abbildungsverzeichnis}
+	\addcontentsline{toc}{section}{Abbildungsverzeichnis}
+	\renewcommand{\listfigurename}{} % Verhindert doppelten großen Titel
+	\newpage
+
+	
+	%------------- Tabellenverzeichnis -------------
+	\section*{\listtablename}
+	\addcontentsline{toc}{section}{\listtablename}
+	\renewcommand{\listtablename}{} % Verhindert doppelten großen Titel
+	\newpage
+
+	
+	% pagestyle für restliches Dokument aktivieren
+	\pagestyle{fancy}
+	\pagenumbering{arabic}
+	
+
+
+	%------------- Einleitung -------------
+	\chapter{Einleitung}
+	\input{./Einleitung/Motivation}
+	\newpage
+	\input{./Einleitung/Zielsetzung}
+	\newpage
+	\input{./Einleitung/Ziel der Arbeit}
+	\newpage
+	
+	% ------------- Hauptteil -------------
+
+	\chapter{Theoretische Grundlagen}
+	\input{Theoretische Grundlagen/TG_Scrum}
+	\input{Theoretische Grundlagen/TG_APIs}
+	\input{Theoretische Grundlagen/TG_Designprinzipien}
+	\input{Theoretische Grundlagen/TheoretischeGrundlagenSchnittstellen}
+	\input{Theoretische Grundlagen/SPAs}
+	\input{Theoretische Grundlagen/UIUX}
+	\input{Theoretische Grundlagen/MobileApps}
+    \input{Theoretische Grundlagen/Testing}
+
+	\newpage
+	
+	\chapter{Anforderungen}
+    Für das Projekt Sensora gelten hohe Anforderungen an Zuverlässigkeit, Sicherheit, Erweiterbarkeit und Datenintegrität. In diesem Kapitel werden die formellen Anforderungen an das Backend sowie an die zugrunde liegende Datenbankarchitektur getrennt voneinander dargestellt. Ziel ist es, eine tragfähige Grundlage für die technische Umsetzung zu schaffen.
+  \input{Anforderungen/AnforderungenAnSchnittstellenServices}
+  \input{Anforderungen/Anf_Backend}
+	\input{Anforderungen/Frontend}
+	
+	\newpage
+	
+	\chapter{Auswahl der Technologien}
+	\input{Auswahl der Technologien/AdT_Programmiersprache_BFF}
+	\input{Auswahl der Technologien/AdT_Datenbankentscheidung}
+  \input{Auswahl der Technologien/AuswahlDerTechnologienSchnittstellenservices}
+	\input{Auswahl der Technologien/Capacitor}
+	\input{Auswahl der Technologien/Vue}
+	\input{Auswahl der Technologien/CSS}
+	\input{Auswahl der Technologien/I18n}
+	\input{Auswahl der Technologien/Pinia}
+	
+	\newpage
+	
+	\chapter{Umsetzung}
+	\input{Umsetzung/Ums_Datenmodellierung und Datenfluss}
+  \input{Umsetzung/UmsetzungSchnittstellenservices}
+	%\input{Umsetzung/Umsetzung_example}
+	\input{Umsetzung/Frontend-Architektur}
+	\input{Umsetzung/KI-Erkennung}
+	\input{Umsetzung/Spezifische_Komponenten_Frontend}
+	\input{Umsetzung/UIUX}
+	
+	\newpage
+
+	
+	% ------------- Ende Hautpteil -------------
+	
+	\chapter{Kritische Reflexion}
+	\input{Kritische Reflexion/Frontend}
+	%\input{Kritische Reflexion/Kritische_Reflexion_example}
+	
+	\newpage 
+	
+	\chapter{Ausblick}
+	\input{Ausblick/Frontend}
+	%\input{Ausblick/Ausblick_example}
+	
+	\newpage
+	
+	%------------- Literaturverzeichnis -------------
+	\newpage
+	\pagestyle{fancy}
+	\fancyhead[R]{LITERATUR}
+
+	%\chapter*{Literaturverzeichnis}
+	\addcontentsline{toc}{chapter}{Literaturverzeichnis}
+	\printbibliography
+	\newpage
+
+	%------------- Anhang -------------
+	\cleardoublepage
+	%\fancyhead[R]{ANHANG}
+
+	%\chapter*{Anhang}
+	%\addcontentsline{toc}{chapter}{Anhang}
+
+	% Hier Anhänge einfügen:
+	%\input{./Anhang/sensorwerte}
+	%\input{./Anhang/schaltplan}
+
+\newpage
+
+	
+\end{document}

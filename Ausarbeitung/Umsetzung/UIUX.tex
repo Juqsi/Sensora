@@ -1,0 +1,73 @@
+\section{Benutzerzentriertes Design und UI/UX im Frontend}
+
+Im Bezug auf die theoretische Erläuterung zentraler Konzepte wie \ac{UCD} und den Usability-Heuristiken nach Nielsen sowie dem \ac{UX}-Leitbild des Responsive Designs, wird in diesem Abschnitt die konkrete Umsetzung dieser Prinzipien im Rahmen der Vue.js-basierten Anwendung dargestellt. Ziel ist es, die Überführung theoretischer Vorgaben in praktische Gestaltungslösungen nachvollziehbar zu machen und zu zeigen, wie benutzerzentrierte Entwicklung zur Verbesserung der \ac{UI}-Qualität beiträgt.
+
+\subsection{Anwendung von UCD im smarten Bewässerungssystem}
+
+Die Nutzerforschung erfolgte durch halbstrukturierte Interviews mit VertreterInnen der Zielgruppe (z.\,B. HobbygärtnerInnen, technikaffine Personen). Daraus wurden mehrere Personas abgeleitet, die unterschiedliche Nutzungsmotive wie einfache Bedienung, Transparenz von Sensordaten und Kooperation abbilden. 
+
+Darauf aufbauend wurden Wireframes auf Papier entwickelt, welche die Informationsarchitektur und zentrale Navigationsstrukturen skizzierten. Diese papierbasierten Modelle wurden iterativ angepasst und mit ausgewählten Testpersonen diskutiert. Durch diese formative Evaluation konnte bereits vor der Implementierung auf zentrale Anforderungen reagiert werden.
+
+\subsection{Verwendete Heuristiken in der Anwendung}
+
+Im Rahmen der konkreten Umsetzung wurden vier der zehn Heuristiken gezielt adressiert mit der Oberfläche:
+\begin{itemize}
+	\item \textbf{Sichtbarkeit des Systemstatus}: Ladeindikatoren und Sensorstatusanzeigen geben kontinuierliches Feedback über Systemvorgänge.
+	\item \textbf{Konsistenz und Standards}: Einheitliche Icons und Farbkonzepte gemäß Tailwind-Designprinzipien unterstützen ein kohärentes Erscheinungsbild \cite{TailwindCSS}.
+	\item \textbf{Fehlervorbeugung}: Formulare verhindern fehlerhafte Eingaben durch Validierung und Feedback in Echtzeit.
+	\item \textbf{Hilfe und Dokumentation}: Tooltips und leere Zustandsanzeigen dienen der kontextsensitiven Orientierung.
+\end{itemize}
+
+Darüber hinaus wurde auch die Heuristik \textbf{Entsprechung zwischen System und realer Welt} (Heuristik 2) durch das Objektdesign berücksichtigt. Die hierarchische Struktur der Anwendung – von der Wohnung über Zimmer bis zu einzelnen Pflanzen – entspricht einem mentalen Modell aus dem Alltagskontext. Dadurch wird die Orientierung erleichtert und eine intuitive Navigation gefördert.
+
+Die übrigen Heuristiken wurden entweder implizit adressiert (z.\,B. minimalistisches Design durch Tailwind) oder aufgrund von Priorisierungen im Projektverlauf nicht explizit umgesetzt. Beispielsweise wurde auf Heuristik 9 verzichtet, da es sich nur um ein \ac{POC} handelt und somit keine fortgeschrittenen User hat.
+
+\subsection{Responsive Design}
+
+Die Anwendung wurde im Hinblick auf verschiedene Gerätegrößen konzipiert. Dabei kamen insbesondere die Tailwind-Breakpoints \texttt{sm}, \texttt{md}, \texttt{lg} und \texttt{xl} zum Einsatz \cite{TailwindCSS}. Für mobile Endgeräte wurde eine Bottom-Navigation eingeführt. Horizontales Scrollen auf der Startseite dient der kompakten Darstellung mehrerer Informationskarten.
+
+\subsection{User Stories und funktionale Umsetzung}
+
+Zur nutzerzentrierten Anforderungsdefinition wurden User Stories eingesetzt, etwa:
+\begin{itemize}
+	\item \enquote{Als Benutzer möchte ich ein Pflanzenbild hochladen, damit die Pflanze automatisch erkannt wird.}
+	\item \enquote{Als Gruppenmitglied möchte ich einem Raum beitreten, um gemeinsam mit anderen NutzerInnen Pflanzen zu pflegen.}
+\end{itemize}
+Diese flossen in die Entwicklung dedizierter Komponenten ein (z.\,B. UploadPhotoView, GroupsView) und sicherten eine nutzergeleitete Gestaltung.
+
+\section{Erweiterte Frontend-Techniken}
+\label{sec:frontend-erweitert}
+
+Im Folgenden werden ausgewählte Techniken vorgestellt, die in modernen Frontend-Architekturen zum Einsatz kommen. Einige dieser Methoden, wie Lazy Loading und Performance-Audits, wurden im Rahmen dieser Arbeit bereits angewendet. Andere Techniken, wie automatisierte Tests, werden exemplarisch vorgestellt, jedoch im Rahmen dieses \ac{POC} nicht implementiert.
+
+\subsection{Lazy Loading in der Anwendung}
+
+Zur Optimierung der initialen Ladezeit wurde in der entwickelten \ac{SPA} aktiv \emph{Lazy Loading} eingesetzt. Durch die dynamische Einbindung von Komponenten beim Navigieren zwischen Routen konnte die Bundle-Größe signifikant reduziert und die Interaktivität der Anwendung beschleunigt werden. 
+
+Ein Beispiel für Lazy Loading stellt die dynamisch eingebundene Route zur Detailansicht einer Pflanze dar. Die zugehörige View \texttt{SinglePlantView.vue} wird erst bei tatsächlichem Aufruf geladen:
+
+\begin{lstlisting}[caption=Lazy Loading per Route in Vue Router]
+	routes: [
+		{
+			path: '/plant/:id',
+			name: 'plantX',
+			component: () => import('../views/SinglePlantView.vue'),
+			meta: { requiresAuth: true, title: 'title.plant' },
+		}
+	]
+\end{lstlisting}
+
+Dieses Prinzip wurde konsistent auf alle Unterseiten angewendet. Der verwendete Build-Tool \emph{Vite} unterstützt dabei automatisch Code-Splitting und Tree Shaking, wodurch überflüssiger Code im Produktionsbuild entfernt wird \cite{ViteDocs2024,RollupDocs2024}.
+
+\subsection{Frontend-Messung mit Lighthouse}
+
+Zur Bewertung der Qualität der entwickelten Anwendung wurden regelmäßig \emph{Lighthouse-Audits} durchgeführt. Diese wurden in den Chrome Developer Tools erzeugt und analysierten zentrale Metriken wie \cite{GoogleLighthouse2024}:
+
+\begin{itemize}
+	\item \textbf{Performance:} First Contentful Paint, Time to Interactive, Speed Index
+	\item \textbf{Accessibility:} Farbkontraste, semantische Struktur, ARIA-Rollen
+	\item \textbf{Best Practices:} Ressourcennutzung, HTTPS
+	\item  \textbf{SEO:}  Meta-Tags
+\end{itemize}
+
+Diese Angaben, wurden genutzt um stetig die Anwendung zu verbessern, gleich auch wenn bei einem \ac{POC} nicht der Schwerpunkt auf \ac{SEO} oder Accessability liegt. Die Performance wird auf den verschieden Seiten teilweise sehr unterschiedlich bewertet worden, da aber keine starken Verzögerungen, bei der Bedienung, identifiziert werden konnten wurde noch keine Optimierung durchgeführt.

@@ -1,0 +1,36 @@
+\section{Einsatz von Tailwind CSS und Shadcn-Vue}
+
+Moderne Webentwicklung nutzt zunehmend Utility-First-CSS-Frameworks wie Tailwind CSS und komponentenbasierte UI-Bibliotheken wie Shadcn-Vue zur effizienten Erstellung ansprechender Benutzeroberflächen. Diese Werkzeuge bieten im Kontext von Vue.js signifikante Vorteile hinsichtlich Geschwindigkeit, Wartbarkeit und Designkonsistenz \cite{TailwindCSS}, \cite{ShadcnVue2023}.
+
+\subsection{Tailwind CSS: Utility-First-Ansatz}
+Tailwind CSS ist ein Utility-First-CSS-Framework, das es Entwicklern erlaubt, direkt im HTML Code Styling zu betreiben, anstatt klassische CSS-Klassen zu definieren. Dies erleichtert die Wiederverwendbarkeit und reduziert übermäßige Stylesheet-Komplexität \cite{TailwindCSS}.
+
+\paragraph{Vorteile:}
+\begin{itemize}
+	\item \textbf{Performance:} Tailwind eliminiert ungenutztes CSS im Produktionsbuild.
+	\item \textbf{Responsives Design:} Vordefinierte Breakpoints erleichtern die Anpassung an verschiedene Bildschirmgrößen.
+	\item \textbf{Designkonsistenz:} Einheitliche Farben, Abstände und Größen durch Konfiguration.
+\end{itemize}
+
+\paragraph{Integration in Vue.js}
+Durch vordefinierte Klassen lässt sich Tailwind optimal in Vue-Komponenten einbetten. Der Code bleibt deklarativ und wartbar. Mit Tailwind können komplexe Layouts wie Grid-basierte Dashboards oder mobile Navigationsleisten ohne zusätzliche CSS-Dateien umgesetzt werden.
+
+\subsection{Shadcn-Vue: Komponentenbibliothek f\"ur Vue 3}
+Shadcn-Vue ist ein Community-getriebener Port der beliebten React-Bibliothek Shadcn/UI f\"ur Vue 3. Sie basiert auf Radix UI und Tailwind CSS, womit sie eine hohe Anpassbarkeit bei gleichzeitiger Konsistenz gew\"ahrleistet \cite{ShadcnVue2023}.
+
+\paragraph{Modularer Aufbau}
+Im Gegensatz zu anderen UI-Bibliotheken installiert Shadcn-Vue Komponenten selektiv. Dies f\"uhrt zu einer schlankeren Anwendung und erh\"oht die Kontrolle \"uber das Styling.
+
+\paragraph{Beispiele aus dem Projekt}
+Die Anwendung verwendet u.a. folgende Shadcn-Komponenten:
+\begin{itemize}
+	\item \texttt{Tabs}, \texttt{Cards}, \texttt{DropdownMenus} in der Pflanzen- und Sensordarstellung
+	\item \texttt{Switches} und \texttt{Tooltips} in der Detailansicht und den Einstellungen
+	\item \texttt{AlertDialogs} f\"ur Benutzerbest\"atigungsprozesse
+\end{itemize}
+
+\subsection{Kombination beider Technologien im Frontend-Projekt}
+Tailwind CSS dient als stilistisches Fundament, w\"ahrend Shadcn-Vue darauf aufbaut und vorgefertigte interaktive Komponenten zur Verf\"ugung stellt. Das Ergebnis ist eine moderne, performante und barrierearme Benutzeroberfl\"ache, die sowohl f\"ur Desktop als auch f\"ur mobile Endger\"ate optimiert ist.
+
+\paragraph{Fazit}
+Die Kombination von Tailwind CSS und Shadcn-Vue stellt eine moderne und leistungsf\"ahige L\"osung f\"ur das Design von Vue.js-basierten Single-Page-Anwendungen dar. Sie reduziert Entwicklungsaufwand, erh\"oht die Designkonsistenz und verbessert die Nutzererfahrung signifikant \cite{Guimaraes2021}, \cite{TailwindCSS}.

@@ -1,0 +1,39 @@
+
+\section{REST APIs: Grundlagen und Best Practices}
+\ac{rest} \ac{api} ist ein Architekturstil für verteilte Systeme, insbesondere für Webanwendungen. Er wurde erstmals im Jahr 2000 von Roy Thomas Fielding in seiner Dissertation eingeführt. \ac{rest} definiert eine Reihe von Prinzipien, die die Interaktion zwischen Clients und Servern in einem verteilten System standardisieren und vereinfachen sollen. Obwohl es keine offizielle Spezifikation wie einen \ac{rfc} oder eine ISO-Norm für \ac{rest} gibt, hat sich der Architekturansatz in der Praxis durchgesetzt und bildet die Grundlage für viele der heutigen Web-\acp{api}.
+
+\ac{rest} basiert auf dem Prinzip, dass ein Webdienst über eine standardisierte Schnittstelle (\ac{api}) ansprechbar ist, bei der die Kommunikation zwischen Client und Server zustandslos ist. Das bedeutet, dass jede Anfrage vollständig ist und keine Informationen über den vorherigen Zustand benötigt werden. Diese Eigenschaft macht \ac{rest}-\acp{api} besonders skalierbar und flexibel.
+
+\subsection{Warum REST?}
+
+\ac{rest} hat sich gegenüber anderen Architekturansätzen wie \ac{soap} aus mehreren Gründen durchgesetzt. \ac{rest}-\acp{api} sind leichter zu implementieren und zu nutzen, da sie auf den bestehenden HTTP-Standards aufbauen. \ac{rest} nutzt die standardmäßigen HTTP-Verben (GET, POST, PUT, DELETE), um \ac{crud}-Operationen auf Ressourcen durchzuführen. Diese Einfachheit und die Nutzung bewährter Webstandards machen \ac{rest}-\acp{api} besonders attraktiv für Webanwendungen und mobile Apps, wo schnelle Entwicklung und hohe Performance entscheidend sind.
+
+Ein weiterer Vorteil von \ac{rest} ist seine Flexibilität und die Möglichkeit zur Integration in eine Vielzahl von Plattformen und Programmiersprachen. Da \ac{rest}-\acp{api} auf dem HTTP-Protokoll basieren, können sie in nahezu jeder Umgebung eingesetzt werden, die HTTP unterstützt, was zu einer breiten Akzeptanz und Nutzung geführt hat.
+
+\subsection{Grundlagen einer REST API}
+
+Obwohl es kein formales Regelwerk für \ac{rest} gibt, haben sich in der Entwicklergemeinschaft einige Best Practices etabliert, die eine \ac{rest}-\ac{api} als gut definieren. Diese Best Practices sind weitgehend anerkannt und werden häufig in der Praxis angewendet:
+\begin{description}
+    \item[\ac{json} als Standardformat verwenden:] \ac{rest}-\acp{api} sollten \ac{json} als Standardformat für die Datenübertragung verwenden, da \ac{json} leichtgewichtig, gut lesbar und in den meisten Programmiersprachen nativ unterstützt wird.
+    \item[Verwendung von Substantiven in Endpunktpfaden:] Endpunktpfade sollten Substantive anstelle von Verben verwenden, um die Ressource zu definieren, auf die die Operation angewendet wird. Beispielsweise sollte der Endpunkt \code{/users} anstelle von \code{/getUsers} verwendet werden.
+    \item[Logische Verschachtelung von Endpunkten:] Endpunkte sollten logisch verschachtelt sein, um die Hierarchie der Daten widerzuspiegeln. Zum Beispiel könnte ein Endpunkt für die Bestellungen eines Benutzers \code{/users/{userId}/orders} lauten.
+    \item[Fehlerbehandlung und Standard-HTTP-Fehlercodes:] Eine gute \ac{rest}-\ac{api} sollte standardisierte HTTP-Fehlercodes verwenden, um dem Client klare Rückmeldungen über den Status der Anfrage zu geben. Beispielsweise steht der Fehlercode 404 für \glqq Nicht gefunden \grqq{} und 500 für \glqq Interner Serverfehler \grqq.
+    \item[Filtern, Sortieren und Paginierung:] \ac{rest}-\acp{api} sollten die Möglichkeit bieten, Ergebnisse zu filtern, zu sortieren und zu paginieren, um die Rückgabemenge zu steuern und die Effizienz zu erhöhen.
+    \item[Sicherheitspraktiken:] \ac{rest}-\acp{api} sollten sichere Authentifizierungs- und Autorisierungsmechanismen verwenden, wie OAuth2 oder \ac{jwt}, um sicherzustellen, dass nur berechtigte Benutzer auf die Ressourcen zugreifen können.
+    \item[Daten-Caching:] Um die Leistung zu verbessern, sollten \ac{rest}-\acp{api} Daten zwischenspeichern, wo es sinnvoll ist. Dies kann die Ladezeiten reduzieren und die Last auf dem Server verringern.
+    \item[\ac{api}-Versionierung:] Eine gute \ac{rest}-\ac{api} sollte versioniert werden, um Änderungen und Verbesserungen an der \ac{api} zu ermöglichen, ohne bestehende Clients zu beeinträchtigen.
+\end{description}
+
+Diese Best Practices bilden die Grundlage für die Entwicklung robuster und skalierbarer \ac{rest}-\acp{api}. Sie wurden von der Entwicklergemeinschaft, beispielsweise auf Plattformen wie StackOverflow \cite{JohnAuYeung2020}, breit akzeptiert und weiter verfeinert.
+
+\subsection{Vertiefende Empfehlungen und Designansätze}
+Neben diesen grundlegenden Prinzipien bietet das Buch \glqq\ac{rest} \ac{api} Design Rulebook\grqq{} von Mark Masse \cite{Masse2011} eine weitergehende Sammlung von Designregeln. Diese basieren auf den ursprünglichen Prinzipien von Fielding und wurden im Laufe der Zeit durch die praktische Erfahrung ergänzt und weiterentwickelt. Masse betont beispielsweise, dass eine \ac{rest}-\ac{api} entworfen und nicht einfach nur codiert wird. Der Entwurfsprozess sollte klar strukturierte Ressourcen und deren Beziehungen beinhalten, um eine konsistente und verständliche \ac{api} zu schaffen.
+
+Darüber hinaus wird empfohlen, eine \ac{rest}-\ac{api} grafisch zu visualisieren, um Entwicklern und Nutzern der \ac{api} eine klare Vorstellung von den verfügbaren Endpunkten und deren Beziehungen zu geben. Diese Visualisierung erleichtert das Verständnis der \ac{api} und fördert die Konsistenz in der Implementierung.
+
+\subsection{Umsetzung für Sensora}
+Da Sensora von vielen verschiedenen Softwarelösungen der Sensora-Community genutzt werden soll, ist eine gut durchdachte \ac{rest}-\ac{api} erforderlich, die den oben genannten Best Practices folgt. Die \ac{api} wird gemäß dem OpenAPI-Standard dokumentiert, was allen Entwicklern detaillierte Informationen über die Funktionsweise und Möglichkeiten bietet. Diese Standardisierung erleichtert die Implementierung und fördert die Konsistenz in der Nutzung der \ac{api}.
+
+Zur Visualisierung und Dokumentation der \ac{api} wird Swagger verwendet, ein weit verbreitetes Tool, das es ermöglicht, die API grafisch darzustellen und interaktive Dokumentationen zu erstellen. Dies stellt sicher, dass Entwickler schnell und einfach auf die notwendigen Informationen zugreifen können, um die Sensora-\ac{api} effizient in ihre Anwendungen zu integrieren.
+
+Die sorgfältige Umsetzung der \ac{rest}-Prinzipien in der Sensora-\ac{api} wird dazu beitragen, eine robuste, flexible und benutzerfreundliche Schnittstelle zu schaffen, die den Produktanforderungen gerecht wird und eine breite Akzeptanz unter den Entwicklern der Sensora-Community findet.

@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  solace:
+    image: solace/solace-pubsub-standard
+    container_name: solace
+    shm_size: 1g
+    ports:
+      - "1883:1883"     # MQTT
+      - "8080:8080"     # Web UI
+      - "8008:8008"     # REST (optional)
+      - "5672:5672"     # AMQP (optional)
+      - "9000:9000"     # Web Transport
+    environment:
+      - username_admin_globalaccesslevel=admin
+      - username_admin_password=admin
+    ulimits:
+      core: -1
+      nofile:
+        soft: 2448
+        hard: 6592
+    restart: unless-stopped
