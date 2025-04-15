@@ -40,22 +40,11 @@ const groupStore = useGroupStore()
 const roomStore = useRoomStore()
 
 const room = defineModel<Room | undefined>('room', { required: true })
-const isControllerOwner = defineModel<boolean>('isControllerOwner', { required: false, default: true })
 
 const open = ref(false)
 const showNewTeamDialog = ref(false)
 const newTeamName = ref('')
 const selectedGroup = ref('')
-
-const availableGroups = computed<Group[]>(()=>{
-  if (isControllerOwner) {
-   return groupStore.groups
-  }else{
-    console.log("hier")
-    console.log(groupStore.groups.find(g => g.gid === room.value?.groupId))
-    return [groupStore.groups.find(g => g.gid === room.value?.groupId)]
-  }
-})
 
 const selectEntity = (entity: Room) => {
   room.value = entity
@@ -92,18 +81,18 @@ const onCreateNewTeam = (event: Event) => {
         <Command>
           <CommandEmpty>{{ t('group.createRoom.NoEntity') }}</CommandEmpty>
           <CommandList>
-            <CommandGroup v-for="group in availableGroups" :key="group.gid" :heading="group.name">
+            <CommandGroup v-for="group in groupStore.groups" :key="group.gid" :heading="group.name">
               <CommandItem
-                v-for="room in group.rooms"
-                :key="room.rid"
-                :value="room.rid"
+                v-for="roomOption in group.rooms"
+                :key="roomOption.rid"
+                :value="roomOption.rid"
                 class="text-sm pl-6"
-                @select="selectEntity(room)"
+                @select="selectEntity(roomOption)"
               >
-                {{ room.name }}
+                {{ roomOption.name }}
                 <CheckIcon
                   :class="
-                    cn('ml-auto h-4 w-4', room?.rid === room.rid ? 'opacity-100' : 'opacity-0')
+                    cn('ml-auto h-4 w-4', roomOption?.rid === room?.rid ? 'opacity-100' : 'opacity-0')
                   "
                 />
               </CommandItem>
