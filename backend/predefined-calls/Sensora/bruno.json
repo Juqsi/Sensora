@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Sensora",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

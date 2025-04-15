@@ -1,0 +1,251 @@
+### login
+POST /v1/auth/login HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "Test!1234",
+  "mail": "testuser@sensora.com"
+}
+
+> {%
+    console.log(response.body.token)
+    client.global.set("token", response.body.token);
+%}
+
+### register
+POST /v1/auth/register HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "Test!1234",
+  "mail": "testuser@sensora.com",
+  "firstname": "Max"
+}
+
+### get user
+GET /v1/user HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+
+> {%
+    console.log(response.body.groupIDs)
+    if (response.body.groupIDs) {
+        client.global.set("group", response.body.groupIDs[0]);
+    }
+%}
+
+### edit user
+PATCH /v1/user HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "Test!1234",
+  "mail": "testuser@sensora.com",
+  "firstname": "Max",
+  "avatar_ref": "Peashooter"
+}
+
+### delete user
+DELETE /v1/user HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+
+### create group
+POST /v1/group HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Meine Gruppe"
+}
+
+> {%
+    console.log(response.body.gid)
+    client.global.set("group", response.body.gid);
+%}
+
+### get group
+GET /v1/group HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+
+> {%
+    console.log(response.body[0].gid)
+    client.global.set("group", response.body[0].gid);
+
+    if (response.body[0].rooms) {
+        client.global.set("room", response.body[0].rooms[0].rid);
+
+        if(response.body[0].rooms[0].plants) {
+            client.global.set("plant", response.body[0].rooms[0].plants[0].plantId);
+        }
+    }
+%}
+
+### update group
+PATCH /v1/group/{{group}} HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Meine Gruppe",
+  "avatarRef": "Marigold"
+}
+
+> {%
+    console.log(response.body.gid)
+    client.global.set("group", response.body.gid);
+%}
+
+### delete group
+DELETE /v1/group/{{group}} HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+
+### kick from group
+DELETE /v1/group/{{group}}/kick/dGVzdHVzZXIyQHRlc3R1c2VyMkBzZW5zb3JhLmNvbQ HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### leave group
+DELETE /v1/group/{{group}}/leave HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### invite to group
+GET /v1/group/{{group}}/invite HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+> {%
+    console.log(response.body.token)
+    client.global.set("invite_token", response.body.token);
+%}
+
+### join group
+GET /v1/group/join?token={{invite_token}} HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### create room
+POST /v1/room HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "groupId": "{{group}}",
+  "name": "Neuer Raum"
+}
+
+> {%
+    console.log(response.body.rid)
+    client.global.set("room", response.body.rid);
+%}
+
+### create room alone
+POST /v1/room HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Neuer Raum"
+}
+
+> {%
+    console.log(response.body.rid)
+    client.global.set("room", response.body.rid);
+%}
+
+### get room
+GET /v1/room/{{room}} HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+
+> {%
+    console.log(response.body.plants[0])
+    client.global.set("room", response.body.rid);
+%}
+
+### edit room
+PATCH /v1/room/{{room}} HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "groupId": "{{group}}",
+  "name": "Neuer Name"
+}
+
+### delete room
+DELETE /v1/room/{{room}} HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+
+
+### create plant
+POST /v1/plant HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "Pflanze1",
+    "room": "{{room}}",
+    "plantType": "Typ1",
+    "targetValues": [
+      {
+        "value": 52.5,
+        "ilk": "temperature"
+      }
+    ]
+}
+
+> {%
+    console.log(response.body.plantId)
+    client.global.set("plant", response.body.plantId);
+%}
+
+### get plant
+GET /v1/plant/{{plant}}?startTime=2024-12-01T00:00:00Z&endTime=2024-12-15T23:59:59Z HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+
+### edit plant
+PATCH /v1/plant/{{plant}} HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name": "Pflanze1",
+    "room": "{{room}}",
+    "plantType": "Typ1",
+    "targetValues": [
+      {
+        "ilk": "temperature"
+      }
+    ],
+    "assignFullDevice": ["abcd"],
+    "sensors": ["abcde"]
+}
+
+### get devices
+GET /v1/devices HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer {{token}}
