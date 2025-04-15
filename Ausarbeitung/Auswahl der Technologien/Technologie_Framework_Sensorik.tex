@@ -1,0 +1,176 @@
+\section{Systemtechnologische Entscheidungen für das ESP32-basierte Bewässerungssystem}
+
+\subsection{Entwicklungsframework}
+
+Die Wahl des passenden Entwicklungsframeworks ist entscheidend f"ur die Stabilit"at, Wartbarkeit und Echtzeitf"ahigkeit eingebetteter Systeme. Im Kontext dieses Projekts, das auf dem ESP32-WROOM-32D basiert, wurden mehrere Optionen verglichen: das native ESP-IDF-Framework (C/C++), Arduino Core, MicroPython und PlatformIO. Die folgende Tabelle fasst die relevanten Unterschiede basierend auf den Quellen \autocite{espressif_idf,arduino_esp32,micropython_docs,platformio}. zusammen:
+\\
+\begin{table}[H]
+	\centering
+	\caption{Vergleich von Entwicklungsframeworks für den ESP32}
+	\label{tab:framework-vergleich}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{|l|l|l|l|l|}
+			\toprule
+			\textbf{Kriterium} & \textbf{ESP-IDF (C/C++)} & \textbf{Arduino Core} & \textbf{MicroPython} & \textbf{PlatformIO} \\
+			\midrule
+			Performance & Sehr hoch & Mittel & Niedrig & Abhängig vom Backend \\
+			\hline
+			Ressourcenverbrauch & Sehr gering & Höher als ESP-IDF & Hoch & Frameworkabhängig \\
+			\hline
+			Echtzeitfähigkeit & Ja (nativ mit FreeRTOS) & Begrenzt (abstrahiert) & Nein & Ja, wenn ESP-IDF genutzt \\
+			\hline
+			Debugging & JTAG, GDB & Serielle Ausgabe & Print-Debugging & Sehr gut (VSCode, GDB) \\
+			\hline
+			Bibliotheksunterstützung & Hoch, technisch fundiert & Sehr hoch (Community) & Begrenzt & Sehr hoch (kombiniert) \\
+			\hline
+			Community und Support & Aktiv, technisch orientiert & Sehr groß, einsteigerfreundlich & Wächst, aber kleiner & Sehr aktiv \\
+			\hline
+			Komplexität & Hoch & Niedrig & Niedrig & Mittel \\
+			\bottomrule
+		\end{tabular}%
+	}
+\end{table}
+\vspace{1em}
+
+\noindent Die Tabelle zeigt, dass das ESP-IDF-Framework hinsichtlich Performance, Ressourcenverbrauch und Echtzeitfähigkeit den größten Vorteil bietet. Basierend auf diesen Kriterien fällt die Entscheidung auf \textbf{ESP-IDF mit FreeRTOS}. Die native Integration von FreeRTOS erm"oglicht eine deterministische Taskplanung und Echtzeitverarbeitung. Gleichzeitig bietet das Framework direkten Zugriff auf hardwarenahe APIs, was f"ur die effiziente Umsetzung von Sensor- und Aktorlogik von Vorteil ist. Die Entscheidung basiert auf technischer Dokumentation von Espressif Systems (vgl.\autocite{espressif_idf}) sowie der offiziellen FreeRTOS-Referenz (vgl.\autocite{freertos_doc}).
+
+\subsection{Dual-Core-Architektur und Taskmodell}
+
+Der ESP32-WROOM-32D basiert auf einer Xtensa LX6 Dual-Core Architektur, die echte Parallelverarbeitung durch zwei unabh"angige Kerne erlaubt. Die Aufgabenverteilung erfolgt "uber FreeRTOS mittels \texttt{xTaskCreatePinnedToCore()}, womit Sensor-, Netzwerk- und Steuerungsfunktionen klar voneinander getrennt werden k"onnen. Das folgende Konzept wurde umgesetzt:
+\\
+\begin{itemize}
+	\item Sensorik und Aktorik werden auf einem Kern als priorisierte Tasks verarbeitet.
+	\item Netzwerkkommunikation und MQTT-Client laufen auf dem zweiten Kern.
+	\item Tasks kommunizieren "uber Queues und Event-Groups.
+\end{itemize}
+\vspace{1em}
+\noindent Dieses Vorgehen verbessert die Reaktionszeit des Systems und stellt sicher, dass kritische Vorg"ange (wie die Bew"asserung) nicht durch Netzwerkprozesse blockiert werden. Gegen"uber Single-Core-Systemen wie dem Atmega328 (Arduino Uno) stellt dies einen erheblichen Fortschritt hinsichtlich Performance und Modularit"at dar (vgl.\autocite{espressif_trm}).
+
+
+\subsection{Sensorik}
+
+Im Rahmen des Projekts werden drei Sensoren zur Umweltdatenerfassung verbaut: ein \texttt{DHT11} (Temperatur/Feuchte), ein \texttt{BH1750} (Lichtst"arke) sowie ein analoger resistiver Bodenfeuchtesensor mit \texttt{LM393}-Komparator. Die Auswahl folgt einer Bewertung nach Genauigkeit, Stromverbrauch, Robustheit und Schnittstellenkompatibilit"at.
+
+\subsubsection{Temperatur- und Luftfeuchtesensoren}
+
+Die Daten in Tabelle \vref{tab:temp-hum-sensoren} basieren auf Herstellerdatenblättern und technischen Vergleichsstudien (vgl.\autocite{adafruit_dht,bosch_bme280,DFR0067_DHT11_Datasheet}).
+\\
+
+\begin{table}[H]
+	\centering
+	\caption{Vergleich von Temperatur- und Luftfeuchtesensoren}
+	\label{tab:temp-hum-sensoren}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{|l|c|c|c|c|c|c|}
+			\toprule
+			\textbf{Sensor} & \textbf{Temp.-Genauigkeit} & \textbf{rF-Genauigkeit} & \textbf{Temp.-Bereich} & \textbf{rF-Bereich} & \textbf{Preis} & \textbf{Schnittstelle} \\
+			\midrule
+			DHT11 & ±2\,°C & ±5\,\% & 0–50 & 20–80\,\% & Sehr günstig & 1-Wire \\
+			\hline
+			DHT22 & ±0.5\,°C & ±2\,\% & –40–80 & 0–100\,\% & Mittel & 1-Wire \\
+			\hline
+			BME280 & ±0.5\,°C & ±3\,\% & –40–85 & 0–100\,\% & Mittel–hoch & I²C/SPI \\
+			\hline
+			SHT31 & ±0.3\,°C & ±2\,\% & –40–125 & 0–100\,\% & Hoch & I²C \\
+			\bottomrule
+		\end{tabular}%
+	}
+\end{table}
+\vspace{1em}
+
+\noindent Der DHT11 wurde trotz moderater Genauigkeit und eingeschränktem Temperaturbereich ausgewählt, da er eine einfache Einbindung und sehr niedrige Stromaufnahme (Standby: 60\,\textmu A, Messbetrieb: 0.3mA) bei 3.3-5V ermöglicht \autocite{DFR0067_DHT11_Datasheet}. Alternativen wie der \texttt{DHT22} oder \texttt{BME280} bieten zwar bessere Messwerte, erfordern jedoch h"oheren Energieaufwand bzw. komplexere Softwareintegration\autocite{adafruit_dht,bosch_bme280}.
+
+\subsubsection{Vergleich von Lichtsensoren}
+
+Die Spezifikationen stammen aus den jeweiligen Datenblättern und Modulbeschreibungen, insbesondere für den eingesetzten BH1750 \autocite{bh1750_handsontec}.
+\\
+
+\begin{table}[H]
+	\centering
+	\caption{Vergleich von Lichtsensoren}
+	\label{tab:lichtsensoren}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{|l|c|c|c|l|}
+			\toprule
+			\textbf{Sensor} & \textbf{Messbereich (Lux)} & \textbf{Auflösung} & \textbf{Schnittstelle} & \textbf{Bemerkung} \\
+			\midrule
+			BH1750 & 1–65.000 & 1 Lux & I²C & Einfach, direkt kalibriert \\
+			\hline
+			TSL2561 & 0.1–40.000 & 0.1 Lux & I²C & Empfindlich, komplexer \\
+			\hline
+			VEML7700 & 0.003–120.000 & bis 0.005 Lux & I²C & Sehr empfindlich, großer Bereich \\
+			\bottomrule
+		\end{tabular}%
+	}
+\end{table}
+\vspace{1em}
+
+\noindent Der BH1750 überzeugte durch seine hohe Betriebssicherheit, direkte Lux-Ausgabe ohne Kalibrieraufwand sowie die kompakte Integration über I²C. Laut Datenblatt liegt sein Stromverbrauch bei lediglich 0.12mA im aktiven Zustand bei 5V Betriebsspannung. Zudem bietet der Sensor bei sehr einfacher I\textsuperscript{2}C-Anbindung einen f"ur das Projekt ausreichenden Messbereich und eine hohe Zuverl"assigkeit. Gegen"uber dem \texttt{VEML7700} fallen hier insbesondere die niedrigeren Kosten und die einfache Library-Integration ins Gewicht (vgl.\autocite{bh1750_handsontec}).
+
+
+\subsubsection{Vergleich von Bodenfeuchtesensoren}
+
+Die Vergleichswerte basieren auf allgemeinen Moduldokumentationen sowie dem TI-Da\-ten\-blatt des LM393 Komparators (vgl.\autocite{components101_soilmoisture,lm393}).
+\\
+
+\begin{table}[H]
+	\centering
+	\caption{Vergleich von Bodenfeuchtesensoren}
+	\label{tab:feuchtesensoren}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{|l|l|l|l|l|l|l|}
+			\toprule
+			\textbf{Typ} & \textbf{Messprinzip} & \textbf{Lebensdauer} & \textbf{Genauigkeit} & \textbf{Störanfälligkeit} & \textbf{Schnittstelle} & \textbf{Preis} \\
+			\midrule
+			Resistiv (LM393) & Leitfähigkeit & Gering & Niedrig & Hoch (Korrosion, Salze) & Analog/Digital & <1\,€ \\
+			\hline
+			Kapazitiv & Dielektrische Konstante & Hoch & Mittel & Gering & Analog & ~5\,€ \\
+			\hline
+			Digital (Chirp) & Kapazitiv + Audio & Hoch & Hoch & Gering & I²C & >8\,€ \\
+			\bottomrule
+		\end{tabular}%
+	}
+\end{table}
+\vspace{1em}
+
+\noindent Trotz bekannter Nachteile (Korrosion, Interferenzen) wird ein resistiver Bodenfeuchtesensor, der den LM393-Komparator nutzt, gewählt. Dieser realisiert bei nur 200\,\textmu A Versorgung und schneller Schaltzeit (typ. 1\,\textmu s) eine einfache Feuchteerkennung (Vgl.\autocite{lm393}). Die Entscheidung basiert auf der Verf"ugbarkeit und den geringen Kosten f"ur einen Proof-of-Concept (vgl.\autocite{components101_soilmoisture}).
+
+
+\subsection{Aktorik und Energieversorgung}
+
+Die folgende Tabelle basiert auf den technischen Daten des mechanischen Relais SRD-05VDC-SL-C, ergänzt durch Informationen zu Solid-State-Relais aus dem Opto 22-Da\-ten\-blatt sowie Spezifikationen von MOSFET-Treibern, insbesondere des LM5112 von Texas Instruments (vgl.\autocite{SRD05_datasheet,opto22_ssr,wolles_mosfet}).
+\\
+
+\begin{table}[H]
+	\centering
+	\caption{Vergleich von Schaltkonzepten zur Aktorsteuerung}
+	\label{tab:aktorik-vergleich}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{|l|c|l|c|c|l|}
+			\toprule
+			\textbf{Komponente} & \textbf{Galv. Trennung} & \textbf{Schaltlast} & \textbf{Schaltfrequenz} & \textbf{Komplexität} & \textbf{Bemerkung} \\
+			\midrule
+			Mechanisches Relais & Ja & Hoch (induktiv möglich) & Niedrig & Niedrig & Bewährt, robust, laut \\
+			\hline
+			Solid-State-Relais & Ja & Begrenzt (je nach Typ) & Hoch & Mittel & Leise, verschleißfrei \\
+			\hline
+			MOSFET-Treiber & Nein & Sehr gut für PWM & Sehr hoch & Hoch & Effizient, aber nicht isoliert \\
+			\bottomrule
+		\end{tabular}%
+	}
+\end{table}
+\vspace{1em}
+
+\noindent Zur Steuerung der Wasserzufuhr wird sich dazu entschieden, eine kleine Tauchpumpe "uber ein \texttt{SRD-05VDC-SL-C} Relaismodul anzusteuern. Die Wahl eines mechanischen Relais begr"undet sich durch dessen galvanische Trennung und einfache Handhabung: die Steuerlogik wird "uber ein Netzteil gespeist, die Pumpe "uber eine Batterie. Diese Trennung erh"oht die Betriebssicherheit und vermeidet St"oreinfl"usse. F"ur Systeme mit h"aufigen Schaltzyklen k"onnten SSRs oder MOSFETs in Betracht gezogen werden. Die eingesetzte Pumpe erlaubt unabh"angigen Betrieb ohne Leitungsdruck. Das System kann damit flexibel mit einem Wasserreservoir betrieben werden. Eine zuk"unftige Erweiterung k"onnte durch Solarstrom autark erfolgen.\\
+
+\vspace{2em}
+\noindent Im Rahmen dieses Projekts wird ein funktionsfähiger Prototyp (PoC) zur automatisierten Pflanzenbewässerung realisiert, bei dem die Auswahl der eingesetzten Hard- und Softwarekomponenten vorrangig unter dem Aspekt der funktionalen Erfüllung bei gleichzeitig minimalem Kostenaufwand getroffen wurde.
+\\
+Als Entwicklungsumgebung wird das \textbf{ESP-IDF-Framework} mit FreeRTOS gewählt, da es eine hardwarenahe, echtzeitfähige und performante Steuerung erlaubt. Diese Eigenschaften sind insbesondere bei der parallelen Abarbeitung von Sensor- und Kommunikationsaufgaben essenziell. Die Dual-Core-Architektur des \texttt{ESP32-WROOM-32D} wurde hierbei gezielt zur Trennung kritischer Tasks eingesetzt.
+\\
+Zur Sensorik werden bewusst einfache und kostengünstige Module ausgewählt: der \textbf{DHT11} für Temperatur- und Luftfeuchte, der \textbf{BH1750} zur Erfassung der Lichtintensität sowie ein \textbf{resistiver Bodenfeuchtesensor} auf Basis eines \texttt{LM393}-Komparators. Obwohl diese Komponenten hinsichtlich Genauigkeit und Langzeitstabilität nicht die leistungsfähigsten auf dem Markt sind, erfüllen sie die Anforderungen eines PoC bei minimalen Kosten und geringem Integrationsaufwand.\\
+Insgesamt erfolgte die Auswahl aller Komponenten bewusst pragmatisch: Ziel war die prototypische Funktionsfähigkeit mit einfacher Einbindung und möglichst niedrigen Kosten. Damit bietet das System eine solide Basis für weiterführende Entwicklungen hin zu einer robusten, autarken und skalierbaren IoT-Lösung.
+
+
+
+

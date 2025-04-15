@@ -1,0 +1,435 @@
+\section{Vergleichsanalyse: ESP32-WROOM-32D vs. Arduino vs. Raspberry Pi}
+
+Für die Steuerung der Bewässerungs- und Sensoreinheit soll ein Mikrocontroller eingesetzt werden. Drei der sehr häufig für solche Aufgaben eingesetzte Mikrocontroller-/Computerplattformen sind: der \textbf{ESP32 von Espressi} (z.B der ESP32-WROOM-32D), der \textbf{Arduino Nano Every} mit ATmega4809 Chipsatz und der \textbf{Raspberry Pi} Modell 4 oder Zero W. Dieses Kapitel vergleicht die Plattformen wissenschaftlich fundiert hinsichtlich den Anforderungen die in \autoref{sec:Anforderungen_IoT} erarbeitet wurde. Explizit werden Vergleiche hinsichtlich Architektur, Leistung, Peripherie, Netzwerkanbindung, Speicher, Energieeffizienz, Entwicklungsökosystem, Kosten und Projektanforderungen gezogen. Ziel ist es, eine begründete Entscheidung für einen Mikrocontroller/Computerplattform zu treffen und dessen Vorteile gegenüber anderen Plattformen herauszustellen.
+
+
+\subsection{Architektur und Rechenleistung}
+
+\textbf{ESP32-WROOM-32D:} Dieser Mikrocontroller basiert auf einem \textit{32-Bit Dual-Core Tensilica LX6 Microprozessor} mit einstellbarer Taktfrequenz bis zu 240\,MHz. Der ESP32 verfügt über 520\,KB SRAM und einen 4\,MB Flash Speicher. \autocite{esp32_comparison} Zusätzlich existiert ein Ultra-Low-Power Coprozessor für einfache Aufgaben im Tiefschlafmodus. Die 32-Bit-Architektur und zwei Kerne erlauben deutlich höhere Rechenleistung als 8-Bit-Mi\-kro\-con\-trol\-ler. Tatsächlich kann der ESP32 selbst rechenintensive Aufgaben (z.\,B. DSP, verschlüsselte Kommunikation) ausführen und unterstützt Datenraten bis 150\,Mbps über WLAN. 
+\\
+Die Kombination aus hohem Takt, großzügigem RAM und Hardware-Beschleunigern (z.\,B. für Kryptografie) ermöglicht komplexe IoT-Anwendungen, wie etwa gleichzeitiges Sensor-Datenverarbeiten und Netzwerkkommunikation. \autocite{esp_datasheet}
+
+\vspace{5mm}
+
+\noindent\textbf{Arduino Nano Every (ATmega4809):} Der Arduino Nano Every nutzt einen \textit{8-Bit AVR-Mikrocontroller (ATmega4809)} mit Harvard-Architektur und bis zu 20\,MHz Taktfrequenz. Er bietet 48\,KB Flash, 6\,KB SRAM und 256\,Bytes EEPROM. \autocite{atmega_datasheet} Diese Werte liegen um Größenordnungen unter denen des ESP32 und Raspberry Pi (z.\,B. hat der klassische Arduino Uno nur 2\,KB SRAM und 32\,KB Flash). \autocite{greenhous_comparison}
+\\
+Der ATmega4809 wurde gegenüber älteren AVR-Modellen optimiert, besitzt z.\,B. einen Hardware-Multiplizierer und ein Event-System für effizientere interne Kommunikation. \autocite{atmega_datasheet}
+\\
+Dennoch ist die Rechenleistung aufgrund der 8-Bit-Architektur und begrenzten Frequenz deutlich eingeschränkt. Der Arduino eignet sich vor allem für deterministische, einfache Steuerungsaufgaben. Echtzeitnahe Reaktionen sind durch direkte Hardwaresteuerung möglich, allerdings stößt der ATmega bei großen Algorithmen oder Datenmengen schnell an Speicher- und Leistungsgrenzen. \autocite{esp32_comparison}
+
+\vspace{5mm}
+
+\noindent\textbf{Raspberry Pi (4/Zero W):} Raspberry Pis sind \textit{Single-Board-Microcomputer} mit deutlich leistungsstärkerer CPU. Der Raspberry Pi\,4 Model\,B integriert ein Broadcom \textit{BCM2711 SoC mit Quad-Core ARM Cortex-A72 @ 1{,}5\,GHz} (64-Bit ARMv8-Architektur) und je nach Modell 1–8\,GB DDR4-RAM. \autocite{raspberry_pi_datasheet}
+Selbst der kleine Raspberry Pi Zero W nutzt einen 1\,GHz Single-Core ARM11 (ARMv6) mit 512\,MB RAM \autocite{raspberry_pi_w_datasheet} – immer noch hunderte Male mehr RAM als Microcontroller bieten. \autocite{esp32_comparison}
+\\
+Diese Architektur entspricht einem vollständigen Linux-Computer. Der Pi\,4 kann somit anspruchsvolle Aufgaben wie Bildverarbeitung oder parallele Prozesse ausführen, die für Microcontroller unmöglich wären. \autocite{esp32_comparison} Allerdings ist diese hohe Leistung für eine Bewässerungssteuerung oft überdimensioniert. Zudem basiert der Pi (standardmäßig) auf einem Von-Neumann-Architektur-Prozessor mit Betriebssystem, was Vor- und Nachteile für Echtzeit- und IO-Operationen mit sich bringt.
+
+\vspace{5mm}
+
+\noindent\textbf{Zusammenfassung:} In puncto Rechenleistung liegt der Raspberry Pi\,4 mit seinem 1{,}5\,GHz Quad-Core und Gigabytes an RAM weit vorne – er erreicht PC-ähnliche Performance. \autocite{esp32_comparison} Der ESP32 hingegen stellt einen Kompromiss dar: Er ist wesentlich schneller und potenter als ein Arduino (32-Bit @240\,MHz vs. 8-Bit @20\,MHz; 520\,KB vs. 6\,KB RAM), bleibt aber ressourcenschonend genug für Embedded-Aufgaben. \autocite{greenhous_comparison} \autocite{atmega_datasheet} Der Arduino ATmega4809 ist architekturbedingt am unteren Leistungsende einzuordnen und bewältigt nur einfache, zeitkritische Steuerungsaufgaben in kleinem Maßstab zuverlässig.
+
+\subsection{Unterstützung von Multitasking / RTOS}
+
+\textbf{Arduino (ATmega4809):} Der ATmega4809 arbeitet ohne Betriebssystem. Es läuft ein einziger Main-Thread (Loop) und das Programm muss kooperativ alle Aufgaben sequentiell abarbeiten. Es gibt keine native Multitasking-Unterstützung. Echtzeitfähigkeit wird durch deterministische Ausführung und Interrupts erreicht – z.\,B. Timer-Interrupts können regelmäßige Tasks auslösen. Allerdings können nicht mehrere Tasks parallel auf dem Single-Core ausgeführt werden. 
+\\
+Ein RTOS lässt sich auf so kleinem AVR zwar theoretisch portieren, praktisch schränken aber 6\,KB RAM dies stark ein. Man ist auf einfachen kooperativen Scheduler (oder Libraries wie \texttt{Arduino Scheduler}) beschränkt. Die Stärken des Arduino liegen in der präzisen Timing-Kontrolle einzelner Tasks (z.\,B. PWM-Signalgenerierung), nicht in echter Parallelverarbeitung. \autocite{esp32_comparison} Sobald man Sensorabfrage, Pumpensteuerung und Netzwerkkommunikation gleichzeitig umsetzen möchte, gerät das Single-Thread-Konzept an Grenzen – eine Aufgabe muss warten, während die andere läuft.
+
+\vspace{5mm}
+
+\noindent\textbf{ESP32-WROOM-32D:} Der ESP32 unterstützt Multitasking out-of-the-box. Espressif setzt als Betriebsumgebung auf \textit{FreeRTOS} (eingebettet in das ESP-IDF und Arduino-Framework). \autocite{esp_datasheet} Dadurch können auf den zwei CPU-Kernen mehrere Threads/Tasks mit Prioritäten laufen. Beispielsweise kann ein Task die Sensoren lesen, während ein anderer parallel die WLAN-Verbindung und MQTT-Kommunikation handhabt – der FreeRTOS-Scheduler sorgt für zeitliches Scheduling nach Priorität. 
+\\
+Diese echte Parallelität (einschließlich \textit{Symmetric Multiprocessing} auf zwei Kernen) ist ein großer Vorteil gegenüber dem Arduino. Zudem ist FreeRTOS ein \textit{RTOS}, d.\,h. Tasks können mit definierten Fristen laufen, was für Echtzeitanforderungen relevant ist. 
+\\
+Der ESP32 kombiniert also die Echtzeitfähigkeit eines Mikrocontrollers mit einem Multithreading Betriebssystem in leichter Form. Dies ist ideal, um z.\,B. zeitkritische Sensor-Auslese-Interrupts und weniger kritische Netzwerkaufgaben sauber zu trennen. Wichtig zu erwähnen: \textit{TLS\,1.2}-Unterstützung mit Hardware-Beschleunigung ist ebenfalls im ESP32-OS verankert, \autocite{esp_datasheet} was sichere parallele Netzwerkkommunikation ermöglicht. Insgesamt ist der ESP32 für Task-Parallelisierung mit Priorisierung hervorragend geeignet – ein entscheidender Pluspunkt im komplexeren IoT-Projekt.
+
+\vspace{5mm}
+
+\noindent\textbf{Raspberry Pi (Linux):} Der Raspberry Pi betreibt standardmäßig ein vollständiges Linux (z.\,B. Raspberry Pi OS). Dieses ist ein präemptives Multitasking-Betriebssystem, das beliebig viele Prozesse/Threads verwalten kann. Für parallele Abläufe (Sensor lesen, Pumpe steuern, Daten senden) bietet Linux \textit{Multi-Threading} und \textit{Multi-Prozess}-Fähigkeiten, weit über FreeRTOS hinaus. 
+\\
+Allerdings ist Linux kein Echtzeitbetriebssystem. Die Planung der Tasks erfolgt nach Fairness und Durchsatz, nicht streng deterministisch. Echtzeitanforderungen können unter Linux zu Verzögerungen führen (z.\,B. kann ein hoher CPU-Load oder ein ungünstig terminiertes Scheduler-Zeitfenster das Auslesen eines Sensors verzögern). Zwar erlaubt Linux \texttt{nice}-Werte und RT-Prioritäten für Threads, doch ohne spezielle Patches (\texttt{PREEMPT\_RT}) erreicht es nicht die Hard-Real-Time von Mikrocontrollern. 
+\\
+Anders formuliert: Der Pi kann mehrere Aufgaben gleichzeitig ausführen, was für MQTT, Webserver etc. vorteilhaft ist, aber es besteht ein Jitter in zeitkritischen Abläufen. Für dieses Projekt (Sensorintervalle im Sekunden- oder Minutenbereich) ist das unkritisch; die Parallelität wäre sogar nützlich. Dennoch muss man beachten, dass der Pi weitere Software-Overheads hat (z.\,B. ein ganzes OS, Hintergrunddienste), was zu potenziell geringerer Zuverlässigkeit in Langzeitbetrieb führen kann (etwa, wenn ein Prozess abstürzt).
+
+\vspace{5mm}
+
+\noindent\textbf{Zusammenfassung:} Der Arduino bietet keine echte Multitasking-Unterstützung – alles läuft in einer Schleife. Der ESP32 nutzt hingegen \textit{FreeRTOS}, was echtes Multithreading mit Priorisierung ermöglicht. \autocite{esp_datasheet} Der Raspberry Pi ermöglicht durch sein Linux vielseitiges Multitasking, jedoch ohne Echtzeitgarantie. Für das Vorhaben mit gleichzeitiger Sensor-, Aktor- und Netzsteuerung bringt der ESP32 den besten Mix aus Parallelität und Echtzeitkontrolle (dedizierte Tasks für MQTT, Sensorik, Webserver etc.), während Arduino hier an eine Grenze stößt und der Pi unnötige Komplexität einführt.
+
+\subsection{Schnittstellenvielfalt und Sensoranbindung}
+
+\textbf{Arduino (ATmega4809):} Der ATmega4809 bietet 41~I/O-Pins (im 48-Pin Gehäuse), wovon auf Arduino-Boards typischerweise rund 20 als GPIO herausgeführt sind. Darunter sind 14 digitale I/O (von denen einige PWM-Ausgänge sind) und 8 analoge Eingänge (10-Bit-ADC). \autocite{atmega_datasheet}
+\\
+Schnittstellen: \textit{1\,$\times$ UART, 1\,$\times$ SPI, 1\,$\times$ I\textsuperscript{2}C (TWI)} sind hardwaremäßig vorhanden \autocite{atmega_datasheet} – auf dem Nano Every ist z.\,B. UART für USB bereits belegt, I\textsuperscript{2}C und SPI stehen am Header zur Verfügung. Analoge Sensoren können direkt an den Arduino angeschlossen werden (0–5\,V Messbereich bei 10-Bit Auflösung). PWM-Ausgänge (z.\,B. 5~Pins am Nano Every \autocite{atmega_datasheet}) erlauben die Steuerung analoger Aktoren (in diesem Fall könnte man die Pumpenleistung per PWM steuern, falls nötig). 
+\\
+Der Arduino unterstützt außerdem \textit{externe Interrupts} an allen digitalen Pins \autocite{atmega_datasheet}, was z.\,B. für das Wake-up durch einen Sensorschwellenwert nutzbar ist. Insgesamt ist die Schnittstellenvielfalt solide, aber begrenzt: Nur je eine Einheit für SPI/I\textsuperscript{2}C/UART bedeutet, dass man mehrere I\textsuperscript{2}C-Sensoren zwar am Bus teilen kann, aber z.\,B. mehrere UART-Geräte schwierig sind. Für typische Sensoren (Feuchtigkeitssensor analog, evtl. ein I\textsuperscript{2}C-Temp.-Sensor) reicht es aus.
+
+\vspace{5mm}
+
+\noindent\textbf{ESP32-WROOM-32D:} Der ESP32 integriert zahlreiche Peripherie-Schnittstellen. Insgesamt stehen bis zu 34 programmierbare GPIO-Pins zur Verfügung (abhängig vom Modul-Pinout; viele Module führen rund 25 heraus). Davon können 18 Pins als Analogeingänge (ADC) genutzt werden. \autocite{esp32_comparison} Der ADC des ESP32 ist 12-Bit, was eine feinere Auflösung als beim Arduino (10-Bit) bietet – jedoch ist die Genauigkeit in der Praxis etwas nichtlinear, was aber kalibrierbar ist. 
+\\
+Weiterhin besitzt der ESP32 2~DAC-Ausgänge (8-Bit), mit denen man analog Spannungen ausgeben kann – ein Vorteil gegenüber Arduino und Pi (keine DACs). 
+\\
+An Kommunikations-Schnittstellen bietet der ESP32 mehrfache UARTs, SPI- und I\textsuperscript{2}C-Schnittstellen (jeweils mindestens 2\,$\times$ hardwareseitig verfügbar). Dazu kommen I\textsuperscript{2}S (Audio-Daten), CAN-Bus (TwAI), kapazitive Touch-Eingänge, SD-Karten-Interface (SDIO) und PWM-fähige Timer in großer Zahl. \autocite{esp_datasheet}  
+\\
+Diese Vielfalt ist äußerst nützlich: Mehrere Sensoren lassen sich parallel ansteuern (z.\,B. ein UART für ein serielles Display, ein SPI für einen ADC-Chip etc.). Für dieses Projekt sind vor allem die Analogeingänge wichtig (Bodenfeuchtesensor), die beim ESP32 reichlich vorhanden sind. Auch digitale IOs (für Pumpensteuerung, LEDs etc.) sind mehr als genug da. Aufgrund des 3{,}3\,V-Designs des ESP32 muss man ggf. Pegelwandler nutzen, falls 5\,V-Sensoren vorhanden sind – ähnlich wie beim Raspberry Pi, während Arduino (5\,V-Version) direkt 5\,V lesen kann. Insgesamt übertrifft der ESP32 den Arduino hier deutlich in der Anzahl und Vielfalt der Schnittstellen.
+
+\vspace{5mm}
+
+\noindent\textbf{Raspberry Pi (4/Zero W):} Raspberry Pis besitzen einen \textit{40-Pin GPIO-Header} (Standard seit Pi\,B+, Pi\,4 und Zero\,W sind identisch belegt). Davon sind beim Pi\,4 rund 28 Pins als GPIO nutzbar. \autocite{raspberry_pi_datasheet} Diese GPIO können per Software als digitale Ein-/Ausgänge verwendet werden und bieten auch alternative Funktionen: Es gibt mehrere I\textsuperscript{2}C, SPI und UART Hardwarecontroller im SoC, die auf die Pins gemultiplext werden können. \autocite{raspberry_pi_datasheet} 
+\\
+In der Praxis stehen 2 I\textsuperscript{2}C-Busse, 5~UARTs (wovon einer vollwertig und oft der Bluetooth-Chip zugewiesen, einer am Pin-Header als serielle Konsole) und 2~SPI zur Verfügung – jedoch teilen sich Funktionen die Pins (man wählt per Software Pin-Funktionen). Wichtig: Der Raspberry\,Pi hat keine analogen Eingänge an Bord. Analoge Sensoren (z.\,B. ein resistiver Feuchtigkeitssensor mit analoger Spannung) benötigen einen externen ADC-Chip (oft per I\textsuperscript{2}C oder SPI, z.\,B. MCP3008). Das ist ein klarer Nachteil für Sensoranbindung, da zusätzlicher Hardware- und Programmieraufwand entsteht. 
+\\
+Für digitale Sensoren/Aktoren ist der Pi hingegen gut gerüstet: I\textsuperscript{2}C- und SPI-Sensoren (z.\,B. für Temperatur, ADC, etc.) kann man anbinden, und viele GPIO können als PWM-Ausgang genutzt werden (über dedizierte Hardware-PWM auf bestimmten Pins oder notfalls Software-PWM). Der Pi Zero W bietet dieselben GPIO-Möglichkeiten wie der Pi\,4, nur mit weniger Rechenleistung. Erweiterungs-HATs können weitere Schnittstellen hinzufügen. 
+\\
+Insgesamt ist die Schnittstellenvielfalt des Raspberry Pi moderat, mit dem Hauptmanko fehlender Analog-Eingänge. Dafür bietet der Pi aber \textit{USB-Ports} (Pi\,4: 2\,$\times$ USB3.0 + 2\,$\times$ USB2.0, \autocite{raspberry_pi_datasheet} Zero\,W: Micro-USB OTG), worüber man theoretisch auch Sensor-Devices (oder z.\,B. Arduino als Sensorinterface) anschließen könnte – was jedoch für einfache IoT-Sensorik meist Overkill ist.
+
+
+\vspace{5mm}
+
+\noindent\textbf{Zusammenfassung:} Für typische Sensor-/Aktor-Anforderungen bietet der Arduino solide Grundfunktionen (begrenzte Zahl analoger/digitaler Pins und eine Schnittstelle pro Bus). 
+\\
+Der ESP32 glänzt mit vielen ADC-Kanälen, mehreren UART/I\textsuperscript{2}C/SPI und Spezialinterfaces – ideal für komplexere Sensor-Ausstattung. Der Raspberry Pi hat ebenfalls ausreichend digitale IO und diverse Busse, aber keine eingebauten ADCs, was für analoge Feuchtesensoren ein Nachteil ist. 
+\\
+Beide, ESP32 und Pi, arbeiten mit 3{,}3\,V-Logik (Vorsicht bei 5\,V-Sensoren), während ein klassischer Arduino 5\,V I/Os bietet – in unserem Projekt sind Sensoren allerdings meist 3{,}3\,V-kompatibel oder benötigen ohnehin eigene Treiber.
+
+\subsection{Netzwerkfähigkeit}
+
+\textbf{Arduino (ATmega4809):} Netzwerkanbindung ist beim ATmega4809 nicht integriert. Weder WLAN noch Bluetooth oder Ethernet sind on-board vorhanden. Ein Arduino Nano Every verfügt lediglich über die Mikrocontroller-Schnittstellen; um Netzwerkkommunikation (z.\,B. MQTT über WLAN) zu realisieren, müsste man zusätzliche Module einsetzen – z.\,B. ein ESP8266/ESP32 als WiFi-Modul oder ein Ethernet-Shield. Das bedeutet mehr Hardware und Programmieraufwand (und i.\,d.\,R. auch höhere Stromaufnahme). 
+\\
+Der ATmega selbst hat \textit{keinen TCP/IP-Stack}, dieser müsste in Software realisiert werden (z.\,B. durch die Library des jeweiligen WiFi/Ethernet-Moduls). Das sprengt oft die Ressourcen des AVR. Bluetooth ist ebenfalls nicht vorhanden (ausgenommen separate BT-Module). Kurzum: „Standalone“ ist der Arduino ATmega4809 nicht netzwerkfähig. \autocite{esp_comparison_2} 
+\\
+Es gibt Arduino-Boards mit integrierter WLAN-Funktion (z.\,B. Arduino Nano 33 IoT mit SAMD21 + ESP32 als NINA-W102 Modul), aber diese basieren auf anderen MCUs. Im Kontext des Nano Every müsste man zugunsten von Netzwerk einen deutlichen Mehraufwand treiben, weshalb Arduino hier deutlich im Nachteil ist.
+
+
+\vspace{5mm}
+
+\noindent\textbf{ESP32-WROOM-32D:} Der ESP32 wurde für IoT-Anwendungen entwickelt und bietet daher eingebautes WLAN und Bluetooth. Konkret unterstützt das Modul \textit{2{,}4\,GHz WLAN (802.11 b/g/n)} sowie \textit{Bluetooth 4.2 + BLE (Dual Mode)}. \autocite{esp32_comparison} 
+\\
+Er implementiert einen vollständigen \textit{TCP/IP-Stack (LwIP)} auf dem Chip, \autocite{esp_datasheet} wodurch Protokolle wie TCP, UDP, HTTP und MQTT direkt laufen können. MQTT lässt sich auf dem ESP32 mittels verfügbarer Bibliotheken (z.\,B. AsyncMQTT-Client oder PubSubClient in Arduino IDE, oder native ESP-IDF MQTT) betreiben – die Unterstützung ist umfassend und praxiserprobt. 
+\\
+Wichtig für sichere IoT-Anwendungen: Der ESP32 beherrscht \textit{TLS 1.2 mit Hardware-Beschleunigung}, \cite{esp_datasheet} d.\,h. auch verschlüsselte MQTT-Verbindungen (MQTTS) oder HTTPS-Webserver sind möglich, ohne den Hauptprozessor zu überlasten. 
+\\
+Ein ESP32 könnte z.B. über WLAN ins lokale Netz eingebunden, könnte sich mit einem MQTT-Broker verbinden und Sensordaten publizieren sowie Befehle empfangen. Die Netzwerk-Performance ist für IoT Zwecke mehr als ausreichend (802.11n bis 150 Mbit/s und 20 dBm Sendeleistung für gute Reichweite). \cite{esp_datasheet} 
+\\
+Zudem kann der ESP32 auch im Access-Point-Modus betrieben werden, um z.\,B. für die Erstkonfiguration ein eigenes WLAN bereitzustellen (siehe Webinterface). Bluetooth könnte optional für eine Handy-App-Verbindung genutzt werden. Insgesamt ist die Netzwerkfähigkeit des ESP32 hervorragend und speziell auf IoT zugeschnitten – ein entscheidender Vorteil gegenüber dem Arduino.
+
+
+\vspace{5mm}
+
+\noindent\textbf{Raspberry Pi (4/Zero W):} Raspberry Pis haben bereits seit Modell~3 WLAN und Bluetooth integriert. Der Raspberry Pi~4 Model~B bietet \textit{Dual-Band WLAN (2{,}4\,GHz \& 5 GHz, 802.11ac)} sowie \textit{Bluetooth 5.0 + BLE} on-board. \autocite{raspberry_pi_datasheet} Zusätzlich hat der Pi\~4 einen \textit{Gigabit-Ethernet-Port}, \autocite{raspberry_pi_datasheet}  was in stationären Anwendungen sehr zuverlässig und performanzstark ist.
+\\
+Der Pi Zero W verfügt „nur“ über \textit{2{,}4\,GHz WLAN (802.11n)} und \textit{Bluetooth 4.1 + BLE}, \autocite{raspberry_pi_w_datasheet}  aber für unser Anwendungsszenario ist das vollkommen ausreichend. 
+\\
+Softwaretechnisch läuft auf dem Raspberry Pi ein vollwertiger \textit{Linux-Netzwerkstack} – die Möglichkeiten sind hier am umfangreichsten. MQTT kann direkt auf dem Pi z. B. mittels Python (paho-mqtt Library) implementiert werden; auch komplexe Protokolle oder sogar ein eigener Broker ließen sich betreiben. Der Pi kann gleichzeitig als \textit{MQTT-Client, Webserver, SSH-Server} etc. agieren. Für die Erstkonfiguration könnte man z. B. einen Hotspot einrichten oder per angeschlossenem Monitor konfigurieren. 
+\\
+Allerdings bringt diese Vielfalt auch mehr Angriffsfläche: Ein Linux-System muss gepflegt (Updates, Absicherung) und z. B. mit Firewall konfiguriert werden, während ein ESP32-Gerät weitgehend nur die gezielt programmierte Firmware ausführt. Dennoch ist der Raspberry Pi in puncto Netzwerk sehr leistungsfähig: Insbesondere bei hohem Datenaufkommen oder Bedarf an komplizierten Authentifizierungsmechanismen hat er genug Reserven. 
+\\
+Für unseren Anwendungsfall (WLAN, MQTT) bietet er ähnliche Funktionalität wie der ESP32, jedoch mit höherem Energieverbrauch und System-Overhead.
+
+
+\vspace{5mm}
+
+\noindent\textbf{Zusammenfassung:} Der ESP32 und Raspberry Pi verfügen beide über integrierte WLAN und Bluetooth-Fähigkeiten und eignen sich direkt für MQTT-Kommunikation. 
+\\
+Der Arduino ATmega4809 dagegen besitzt keine eingebaute Netzwerkhardware – dies wäre ein erheblicher Nachteil, da zusätzliche Module benötigt würden. 
+\\
+Der ESP32 punktet mit speziell optimiertem IoT-Stack (FreeRTOS + LwIP) und Hardware-TLS, während der Raspberry Pi durch sein Linux nahezu unbegrenzte Netzwerk Softwaremöglichkeiten hat. 
+\\
+Im Kontext des Projekts (WLAN, MQTT) erfüllen ESP32 und Raspberry Pi alle Anforderungen, wobei der ESP32 dies mit deutlich schlankerer Hardware tut.
+
+\subsection{Speicher- und Persistenzmöglichkeiten}
+
+\textbf{Arduino (ATmega4809):} Der Mikrocontroller bietet neben Flash und RAM auch einen kleinen \textit{nichtflüchtigen EEPROM-Speicher} von 256~Bytes. \autocite{atmega_datasheet} Darin können z.\,B. Kalibrierungsdaten oder Konfigurationsparameter dauerhaft gesichert werden. 256~Bytes sind allerdings sehr begrenzt – genug für ein paar Einstellungen. WLAN-Credentials z.\,B. passen dort kaum hinein, MQTT-Zugangsdaten nur kanpp wen sie in kompakter Form vorliegen. 
+\\
+Der Flash (48\,KB) ist primär für das Programm, könnte aber theoretisch zu einem Teil für Softwarereserven (Konstanten, Logs) genutzt werden – üblich ist das beim Arduino aber nicht, da das Schreiben ins Flash vom Bootloader nicht direkt unterstützt wird. 
+\\
+Externe Speicher lassen sich anbinden: Der Arduino kann über SPI eine SD-Karte ansteuern (es gibt Arduino-SD-Libraries), um z.\,B. größere Datenmengen zu loggen. Auch FRAM- oder EEPROM-Chips per I\textsuperscript{2}C wären möglich. On-board bleibt es jedoch bei sehr knappem persistentem Speicher. Für eine Bewässerungs-IoT-Anwendung bedeutet das: Einfache Werte (wie zuletzt gemessene Feuchte oder Pumpen-Laufzeit) könnte man im EEPROM halten; komplexe Datenspeicherung (z.\,B. Verlaufsdaten über Tage) erfordert externe SD-Karte oder das Senden der Daten an einen Server.
+
+
+\vspace{5mm}
+
+\noindent\textbf{ESP32-WROOM-32D:} Das ESP32-Modul enthält \textit{4\,MB externen Flash}. \autocite{esp32_comparison} Darauf liegt der Programmcode, aber typischerweise ist auch Platz für ein Dateisystem (SPIFFS oder LittleFS) sowie den \textit{Nichtflüchtigen Speicher (NVS)} vorgesehen. 
+\\
+Espressif’s NVS ist ein Schlüssel-Werte-Speicher im Flash, der vom SDK bereitgestellt wird und ähnlich wie ein EEPROM genutzt werden kann – allerdings mit deutlich größerer Kapazität (üblicherweise einige Kilobyte). Laut Entwicklerdokumentation lassen sich mehr als 2\,KB an Daten, wie z.\,B. WiFi-Zugangsdaten oder Geräteeinstellungen, dauerhaft im NVS ablegen. \autocite{esp_nvs} Dabei sorgt ein Wear-Leveling dafür, dass der Flash nicht durch häufiges Schreiben verschleißt. 
+\\Für umfangreichere Daten kann der ESP32 ein SPI-Flash-Dateisystem nutzen; man kann also z.\,B. Sensorhistorie in einer Datei speichern, wenngleich die Obergrenze der Dateigröße durch 4\,MB insgesamt festgesetzen sind. 
+\\
+Darüber hinaus unterstützt der ESP32 wie Arduino auch das Anbinden von SD-Karten (entweder im SPI-Modus oder über das SD/SDIO-Interface) – so kann man theoretisch unbegrenzten Speicher ergänzen, falls gewünscht. 
+\\Für dieses Projekt ist vorrangig wichtig, dass Konfigurationen und Zustände (etwa WLAN-Credentials, Schwellwerte für Feuchte) im Gerät gehalten werden können: Dies lässt sich im ESP32 problemlos über NVS realisieren. \autocite{esp_nvs} Der Programmspeicher (Flash) ist mit 4\,MB groß genug für unseren Code (zum Vergleich: Arduino: 48\,KB, der ESP32 \textasciitilde4096\,KB). Auch der \textit{Arbeitsspeicher (520\,KB SRAM)} erlaubt das Puffern von Daten oder Web-Seiten im Speicher, ohne sofort an Grenzen zu stoßen. Insgesamt ist der ESP32 bezüglich Speicher/Persistenz sehr flexibel. Es ist genug Speicher für Konfiguration und kleine Logs vorhanden, der bei Bedarf zusätzlich noch erweiterbar ist.
+
+
+\vspace{5mm}
+
+\noindent\textbf{Raspberry Pi:} Der Pi nutzt ein anderes Konzept: Es gibt keinen on-board Flash (außer einen kleiner EEPROM für den Bootloader,der für Nutzerdatenspeicherung irrelevant ist). Stattdessen dient eine microSD-Karte als Massenspeicher \autocite{esp32_comparison} – auf ihr liegen Betriebssystem, Programme und Daten. Diese SD-Karte kann sehr groß sein (theoretisch bis 2\,TB, praktisch üblich 8–64\,GB oder mehr).
+\\
+Damit steht dem Raspberry Pi Speicher im Gigabyte-Bereich zur Verfügung – mehr als genug für Logging, Datenbanken, Web-Content und alle Daten die Gespeichert werden müssen. Der Pi kann somit lokal sehr viel speichern (z.\,B. jahrelange Sensorhistorie). Auch Datenbanken oder CSV-Logs könnten direkt auf der SD ablegt werden. 
+\\
+Ein Problembereich ist jedoch die Zuverlässigkeit: SD-Karten können bei häufigen Schreibzugriffen oder unsauberem Herunterfahren kaputtgehen oder Daten korrumpieren. In einem 24/7-IoT-Gerät, das potentiell. hart vom Strom getrennt werden kann (z.\,B. Batterie alle), besteht ein Risiko von Dateisystemkorruption. Es gibt zwar Gegenmaßnahmen (Read-Only-System, Watchdog etc.), aber trotzdem ist die Umsetzung komplexer als bei einem Microcontroller, der kein anfälliges FS benötigt.
+\\
+An Arbeitsspeicher bringt der Pi~4 \textit{mindestens 1\,GB RAM} mit – das ist reichlich für Caches und Verarbeitung. Der Pi Zero~W hat 512\,MB RAM \autocite{raspberry_pi_w_datasheet}, immer noch in einer anderen Liga als ESP32 (0.5\,MB) oder Arduino (0.006\,MB). 
+Für den gegebenen Anwendungsfall bedeutet das: Der Pi könnte neben Konfiguration auch z.\,B. Webinterface-Dateien, Zertifikate etc. auf der SD-Karte ablegen. Persistente Einstellungen ließen sich im Dateisystem speichern (etwa in einer Textdatei oder mittels SQLite). Die Speicherbegrenzung ist faktisch kein Thema beim Raspberry Pi. Allerdings erkauft man dies mit dem genannten Verlässlichkeitsproblem und dem Umstand, dass man immer eine einfach zugängliche SD-Karte als Teil des Systems hat.
+
+
+\vspace{5mm}
+
+\noindent\textbf{Zusammenfassung:} Arduino: \textit{sehr knapper Persistenzspeicher (256\,B EEPROM)} \autocite{esp_datasheet} – gerade genug für minimale Konfigurationen, größere Daten extern speichern. 
+\\
+ESP32: \textit{integrierter Flash (4\,MB)} mit flexiblem NVS/Filesystem – ausreichend für Konfigurationsdaten und moderate Log-Daten \autocite{esp_nvs}; Erweiterung via SD möglich. 
+\\
+Raspberry Pi: Gigabyte-Speicher auf SD-Karte, quasi unbeschränkt, jedoch mit Dateisystem und dessen Vor- und Nachteilen (viel Platz, aber potenziell störanfällig bei Stromverlust). 
+\\Für dieses Projekt sind keine Massendaten vor Ort nötig (MQTT überträgt Sensordaten an einen Server), wichtiger sind robuste Speicherung der Einstellungen (WLAN, Schwellwerte). Das können ESP32 und Pi beide gut – der Arduino nur sehr eingeschränkt.
+
+\subsection{Energieverbrauch und Batterietauglichkeit}
+
+
+\vspace{5mm}
+
+\noindent\textbf{Arduino (ATmega4809):} AVR-Mikrocontroller sind für ihre niedrige Leistungsaufnahme bekannt. Der ATmega4809 im Nano Every zieht im aktiven 5V-Betrieb typischerweise rund \textit{19\,mA} \autocite{esp32_comparison} (bei 16–20\,MHz Takt), maximal um 50\,mA, falls alle Peripherien aktiv sind. 
+\\
+In Schlafmodi kann der Strom auf wenige \textit{$\upmu$A} gesenkt werden (z.\,B. Power-down mit Timer ohne BOD im Sub-10\,$\upmu$A Bereich, genaue Werte laut Datenblatt typ. <5\,$\upmu$A). \autocite{atmega_datasheet} 
+\\
+Das bedeutet, ein Arduino kann sehr effizient mit Batterien laufen, insbesondere wenn er die meiste Zeit schläft und nur periodisch aufwacht. Im gegebenen Anwendungsszenario kann ein Arduino mit geeigneter Funk-Hardware über Monate nur durch eine Batterie mit Energie Versorgt laufen. Sobald wir WLAN mit einbezogen wird, ändert sich das Bild. Ein externes WLAN-Modul (z.\,B. ESP01) benötigt beim Senden deutlich mehr Strom (ESP8266 \textasciitilde70\,mA durchschnittlich beim WiFi-Betrieb). Der Arduino selbst behält zwar seinen geringen Verbrauch, aber das Gesamtsystem mit WiFi ist dann nicht mehr so Energiesparend. 
+\\
+Ohne Netzwerkanbindung ist der Arduino trotzdem unschlagbar effizient – für rein lokale Steuerungen ideal. In Summe: Batteriebetrieb ist mit einem Arduino gut machbar, wenn die Funkkommunikation entweder selten erfolgt oder über ein ebenfalls energiesparendes Protokoll (z.\,B. LoRa) ausgelagert wird. Für Dauer-WLAN-Verbindung ist ein Arduino allein ungeeignet, da das notwendige WiFi-Modul die Batterietauglichkeit stark reduziert.
+
+
+\vspace{5mm}
+
+\noindent\textbf{ESP32-WROOM-32D:} Der ESP32 ist leistungsfähiger, benötigt im Betrieb aber mehr Strom als ein 8-Bit AVR. Laut Espressif liegt der typische Betriebsstrom bei \textasciitilde80\,mA (bei eingeschaltetem WLAN und aktiver CPU). \autocite{esp_datasheet} Peaks beim Senden können um 200–300\,mA liegen (kurzzeitig). Allerdings unterstützt der ESP32 verschiedene Schlafmodi: Im \textit{Deep Sleep} mit ULP-Koprozessor liegt der Verbrauch nur noch bei \textasciitilde10–150\,$\upmu$A (je nach Konfiguration). \autocite{esp32_sleep} \autocite{esp32_comparison} Espressif gibt an, dass der \textit{Schlafstrom <5\,$\upmu$A} betragen kann. \autocite{esp_datasheet} Praktisch sind bei Entwicklungsboards (wegen Spannungsregler, LEDs) um \textasciitilde100\,$\upmu$A erreichbar. 
+\\
+Im Modem-Sleep (WLAN verbunden aber idle) reduziert sich der ESP32-Verbrauch ebenfalls signifikant. Der aktive Verbrauch von \textasciitilde80\,mA bedeutet, dass der ESP32 im Dauerbetrieb (always on WiFi) mehr Energie benötigt als ein Arduino. Doch für Batteriebetrieb kann das Muster optimiert werden: z. B. 90\% der Zeit schlafen, nur kurz aufwachen, messen, Daten senden. 
+\\
+Ein Beispiel: textit{20{,}5\,mA aktiv und 0{,}16\,mA im Tiefschlaf} führt zu einem durchschnittlichen Strom von wenigen mA, wenn die Wachphasen kurz sind. \autocite{esp32_comparison} Damit kann ein ESP32-System oft monatelang mit einer 18650-Zelle betrieben werden. In diesem Projekt (permanente MQTT-Verbindung vs. periodische Übertragung) muss untersucht weren ob kontinuierliches MQTT-Listening gefordert ist. Dann muss das WiFi ständig an sein, was den Verbrauch erhöht. 
+
+Alternativ kann der ESP32 in einen Leichtschlaf gehen und per Beacon-Wakeup die Verbindung halten – oder nur zu Intervallen sich verbinden. Jedenfalls ist der ESP32 darauf ausgelegt, auch batteriebetrieben eingesetzt zu werden, was durch den sehr niedrigen Deep-Sleep-Strom unterstrichen wird. \autocite{esp_datasheet} 
+\\
+Viele IoT-Sensorprojekte setzen erfolgreich auf ESP32 + Batterie. Gegenüber Arduino + separatem WiFi hat der ESP32 hier sogar Vorteile, da keine zwei Chips versorgt werden müssen und das Powermanagement integriert ist.
+
+
+\vspace{5mm}
+
+\noindent\textbf{Raspberry Pi (4/Zero W):} Hier zeigt sich der größte Unterschied. Raspberry Pis sind nicht primär für den Betrieb mit eine Batterie entworfen. Ein Raspberry Pi~4 Model~B hat durch seinen leistungsstarken SoC einen \textit{Leerlauf-Strom von ca. 600\,mA (5\,V)}, entsprechend etwa 2{,}85\,W Leistungsaufnahme. \autocite{raspberry_pi_datasheet} 
+\\
+Unter Last kann er 1–2\,A ziehen (bis \textasciitilde6–7\,W), je nach Nutzung von CPU, GPU und Peripherie. Dieses Niveau ist zwei Größenordnungen höher als bei Microcontrollern. Ein Pi~4 würde einen typischen 2500\,mAh Handy-Akku in wenigen Stunden leeren. Selbst der kleinere Pi Zero~W ist im Vergleich sehr hoch im Verbrauch: Gemessene Idle-Verbräuche liegen um \textasciitilde120\,mA (0{,}6\,W bei 5\,V) , mit Peaks bis \textasciitilde170\,mA.\autocite{raspberry_pi_w_datasheet} Das ist zwar deutlich weniger als der Pi~4, aber immer noch ca. 50-mal höher als ein schlafender ESP32. Zudem gibt es keinen Tiefschlafmodus beim Raspberry Pi im üblichen Sinn – man kann ihn nicht wie einen Microcontroller in Sleep setzen und per RTC wecken. Man könnte den Pi zwar komplett herunterfahren (dann zieht er aber immer noch \textasciitilde20–30\,mA für den PMIC) \autocite{raspberry_pi_datasheet}, aber ein Aufwachen erfordert dann ein externes Signal (z.\,B. Hard-Powercycle). Für einen autarken Batteriebetrieb ist der Raspberry Pi also ungeeignet, es sei denn, man nimmt in Kauf, sehr häufig laden zu müssen oder man implementiert ein aufwändiges Power-Management (etwa ein externes Wakeup durch einen Mikrocontroller). 
+\\
+In stationären Anwendungen ist der Stromverbrauch des Pi~4 ebenfalls zu bedenken: ca. 3\,W im Leerlauf bedeutet Wärmeentwicklung und konstanten Energiebedarf. In gegebenen Bewässerungsprojekt kann der Pi nur sinnvoll eingesetzt werden, wenn er ständig an einem Netzteil angeschlossen ist oder man z.\,B. ein Solarpanel mit einem großen Akku nutzt. Das steigert aber die Komplexität. Der Pi Zero~W wäre sparsamer, aber auch hier sprechen wir von \textasciitilde0{,}6\,W Dauerverbrauch, was z.\,B. für eine kleine Solaranlage noch tragbar wäre, aber deutlich mehr als ein paar $\upmu$A in Sleep, wie es Microcontroller bieten.
+
+
+\vspace{5mm}
+
+\noindent\textbf{Zusammenfassung:} \textbf{Energieeffizienz} ist eine Domäne der Mikrocontroller. Der Arduino ATmega4809 kann mit minimalem Strom auskommen (wenige $\upmu$A in Sleep) und ist damit am besten für langen Batteriebetrieb geeignet – allerdings nur ohne WiFi. 
+\\
+Der ESP32 benötigt im aktiven WLAN-Betrieb mehr Strom (\textasciitilde50–100\,mA), kann aber durch Schlafmodi energieoptimiert werden und ist für batteriegespeiste IoT-Geräte konzipiert. 
+\\
+Der Raspberry Pi hingegen hat einen viel höheren Grundverbrauch (Pi~4 ca. 0{,}6\,A, Zero~W ca. 0{,}12\,A im Idle) und keine einfachen Sleep-Mechanismen – für Batteriebetrieb ist er die schlechteste Wahl. In der Anwendung (automatisierte Bewässerung) ist typischerweise ein Netzteil vorhanden; falls aber eine netzunabhängige Lösung gewünscht ist, wären Arduino oder ESP32 deutlich geeigneter. Der ESP32 bietet einen guten Kompromiss aus Netzwerkfähigkeit und vertretbarem Stromverbrauch, insbesondere wenn per Deep-Sleep gearbeitet wird.
+
+\subsection{Ökosystem, Entwicklungsumgebung und Community-Support}
+
+\textbf{Arduino (ATmega4809):} Die Arduino-Plattform genießt seit über einer Dekade eine riesige Community und eine einfach zu bedienende Entwicklungsumgebung (Arduino IDE). \autocite{esp32_comparison} Für den ATmega4809 wird die Programmierung typischerweise in C++ (Arduino Language) innerhalb der Arduino IDE erfolgen. 
+\\
+Die Arduino IDE abstrahiert viele Hardwaredetails, was einen leichten Einstieg ermöglicht. Es existiert sehr viele Bibliotheken für Sensoren, Aktoren und Module – viele davon ursprünglich für ATmega328 (Uno), aber kompatibel mit ATmega4809, da sich beide die AVR-Architektur teilen. Die Community hat unzählige Tutorials, Forenbeiträge und Beispielprojekte veröffentlicht. \autocite{esp32_comparison} 
+Gerade für typische Aufgaben (z.\,B. Feuchtesensor auslesen, Relais ansteuern) ist es leicht fertige Codebeispiele zu finden. Auch wenn der ATmega4809 etwas neuer ist, gilt: Arduino steht für breite Community-Unterstützung. 
+\\
+Zudem ist das Ökosystem an Hardware groß – Sensor-Shields, Module etc., oft mit Beispielcode für Arduino. Für unseren Kontext heißt das, dass viele relevante Komponenten (Feuchtigkeitssensor, MQTT-Client als PubSubClient-Library, etc.) direkt verfügbar sind. Allerdings ist zu beachten, dass Netzwerk-Libraries (MQTT, WiFi) auf einem klassischen Arduino nur mit externer Hardware funktionieren. Hier würde man ggf. Bibliotheken nutzen, die die Arbeit an ein WiFi-Modul delegieren. Die Dokumentation auf \texttt{arduino.cc} und bei Microchip (Datenblatt) deckt technische Details ab, während die Maker-Community praktische Lösungen liefert. 
+\\
+Insgesamt ist Arduino hinsichtlich Entwicklungsfreundlichkeit top – speziell für Einsteiger. Im professionellen Umfeld kann die limitierte Debugging-Möglichkeit (häufig nur Serial-Print) ein Nachteil sein, aber die Einfachheit und Stabilität der Toolchain ist ein Vorteil.
+
+
+\vspace{5mm}
+
+\noindent\textbf{ESP32-WROOM-32D:} Der ESP32 hat in den letzten \textasciitilde5 Jahren ebenfalls eine große Entwicklergemeinde aufgebaut. Es gibt zwei populäre Wege der Entwicklung: zum einen die Arduino-IDE-Unterstützung für ESP32, zum anderen das \textit{Espressif IoT Development Framework (ESP-IDF)}. \autocite{esp32_comparison} 
+\\
+Ersteres erlaubt Arduino-Nutzern, den ESP32 ähnlich wie einen Arduino zu programmieren (mit \texttt{setup()}/\texttt{loop()} und Zugriff auf viele Arduino-kompatible Libraries). Dadurch profitiert man von der bestehenden Arduino-Bibliothekslandschaft (viele Sensorlibraries wurden schon für ESP32 portiert) und behält eine einfache IDE. 
+\\
+Für tiefergehende Projekte kann man auf das ESP-IDF wechseln, welches in C/C++ umfassende APIs für FreeRTOS, WLAN, BLE, Verschlüsselung etc. bietet. Die Lernkurve ist hier steiler, aber das Potenzial größer. 
+\\
+Community-Support: Es existiert eine aktive Entwickler-Community (Foren, GitHub, Reddit), sowie ausführliche offizielle Dokumentationen und Beispiele von Espressif. \autocite{esp32_comparison} Probleme werden häufig in Foren diskutiert – z.\,B. das offizielle \texttt{esp32.com}-Forum oder auf Arduino/StackExchange. Die Tool-Unterstützung ist moderner als bei AVR: Man kann mit dem IDF eine Debugger-Schnittstelle nutzen, und es gibt Plugins für VS~Code (PlatformIO, Arduino-ESP32). 
+\\
+Zusätzlich gibt es alternative Umgebungen wie \textit{MicroPython} und \textit{Lua (NodeMCU)}, mit denen der ESP32 scriptbasiert programmiert werden kann – praktisch für schnelle Experimente. Hinsichtlich Bibliotheken: Für beinahe alle gängigen Sensoren und Protokolle gibt es ESP32-kompatible Libraries (sei es aus der Arduino-Welt oder eigens geschrieben). Spezialfeatures wie BLE, FreeRTOS, HTTPS werden in vielen Blogposts und Dokus behandelt, da ESP32 eben weit verbreitet im IoT ist. Zusammenfassend hat der ESP32 ein sehr lebendiges Ökosystem, das sowohl Maker (über Arduino-IDE) als auch professionelle Entwickler (über ESP-IDF) anspricht. \autocite{esp32_comparison} 
+\\
+Im Vergleich zum Arduino ist die Einstiegshürde leicht höher (mehr Konzepte wie WiFi-Stack, RTOS), aber die Community liefert viele Best Practices, Tutorials (z.\,B. „ESP32 plant watering“ Guides). Für dieses Projekt bedeutet das: Es gibt bereits zahlreiche Projekte und Beispiele für „ESP32 plant watering“ im Netz, an denen man sich orientieren kann.
+
+
+\vspace{5mm}
+
+\noindent\textbf{Raspberry Pi (Linux):} Der Raspberry Pi hat vielleicht die größte Community unter den drei – allerdings in etwas anderer Ausprägung. Als vollwertiger Linux-Computer stehen dem Entwickler eine Vielzahl an Programmiersprachen offen (Python ist besonders beliebt für IoT auf dem Pi, aber C/C++, Java, Node.js etc. sind alle möglich). \autocite{esp32_comparison} 
+\\
+Die Raspberry Pi Foundation stellt umfangreiche offizielle Dokumentationen bereit (z.\,B. zur GPIO-Programmierung mit Python \texttt{gpiozero} oder C \texttt{wiringPi}). \autocite{esp32_comparison} Zudem gibt es offizielle Foren und Tutorials auf \texttt{raspberrypi.com}, ein offizielles Magazin und unzählige Community-Projekte. Die Entwicklung auf dem Pi kann direkt auf dem Gerät erfolgen (z.\,B. via SSH und einem Editor, oder mit IDEs wie Thonny für Python). 
+\\
+Die Hürde zum Start ist potentiell geringer, weil viele Leute mit Linux vertraut sind oder weil Pi als Lehrplattform konzipiert wurde – man findet z.\,B. Schritt-für-Schritt Anleitungen für einen Webserver auf Pi, für MQTT mit Python etc. Allerdings bedarf es auch Kenntnissen der Linux-Umgebung (Dateisystem, Dienste), was für rein embedded-orientierte Entwickler neu sein kann. Der Pi erlaubt, dank OS, komplexe Software einzubinden – z.\,B. kann man Node-RED oder Home Assistant auf dem Pi laufen lassen, was weit über Microcontroller-Code hinausgeht. 
+\\
+Der Community-Support ist exzellent, aber oft eher auf High-Level-Fragen ausgerichtet („Wie installiere ich MQTT Broker XY“ oder „Warum funktioniert meine Python-Library nicht“). \autocite{esp32_comparison} Ein Vorteil des Pi-Ökosystems: Viele Bibliotheken sind bereits vorhanden, z.\,B. in Python existiert für nahezu jeden Sensor eine Bibliothek, oft direkt installierbar über \texttt{pip}. Die Integration ins IoT-Ökosystem (MQTT, Cloud) wird durch vorhandene Software erleichtert. Kurz gesagt, der Raspberry Pi bietet maximale Flexibilität und Unmengen an Ressourcen/Support, erfordert aber die Bereitschaft, sich mit einem vollwertigen Computer auseinanderzusetzen (Updates, Linux-Kommandos, etc.). 
+\\
+Für dieses Projekt wären z.\,B. vorhandene MQTT-Client Libraries in Python oder C++ ein Plus, ebenso Web-Frameworks (Flask, etc.) um das Webinterface schnell zu bauen – all das ist auf dem Pi einfach nutzbar. Die Community ist so groß, dass sehr viel Teilproblem schon gelöst wurde.
+
+
+\vspace{5mm}
+
+\noindent\textbf{Zusammenfassung:} Arduino punktet mit einfacher IDE und gigantischer Einsteiger-Community – ideal für schnelle Prototypen und unkomplizierte Sen\-sor/Ak\-tor-Pro\-gram\-mier\-ung. 
+\\
+ESP32 hat sich ebenfalls ein starkes Ökosystem geschaffen, mit der Besonderheit, dass er von der Arduino-Welt und gleichzeitig von der professionellen Embedded-Welt unterstützt wird. Man profitiert von vielen vorhandenen IoT-spezifischen Beispielen und offiziellen Espressif-Ressourcen. 
+\\ 
+Raspberry Pi bietet eine vollständige Linux-Umgebung mit entsprechend breitem Software-Ökosystem; die Community ist riesig, aber man bewegt sich eher im Linux-/Software-Bereich als direkt auf Bare-Metal-Ebene. 
+\\Für dieses Projekt ist wichtig: Gute MQTT- und Web-Support – hier haben ESP32 und Pi beide reichlich vorhandene Libraries und Dokus. Arduino hat in diesem Bereich die wenigsten direkten Ressourcen (weil klassischer Arduino selten für Web/MQTT ohne zusätzliche Module eingesetzt wird), aber die generelle Arduino-Community würde dennoch Hilfestellungen liefern. 
+\\
+Insgesamt ist der Support für ESP32 mittlerweile fast so einsteigerfreundlich wie Arduino, mit dem Vorteil, dass modernere IoT-Themen abgedeckt sind.
+
+\subsection{Kosten, Verfügbarkeit und Formfaktor}
+
+\textbf{Hardwarekosten:} Preislich liegen die drei Optionen recht unterschiedlich. Ein \textit{ESP32-WROOM-32D Modul} (nur das Modul, ohne Dev-Board) kostet rund \textasciitilde6\;€ im Einzelkauf. \autocite{esp_price} Gängige Entwicklungsboards (NodeMCU-32, ESP32 DevKitC) bewegen sich etwa bei 8–15\;€ je nach Anbieter. 
+\\
+Ein \textit{Arduino Nano Every} (ATmega4809) wird vom Hersteller Arduino für ca. 15\;€ angeboten (offizieller Store-Preis). \autocite{arduino_price} In Mengen oder als inoffizielle Nachbauten könnte er etwas günstiger sein, aber da der ATmega4809 noch nicht so verbreitet ist wie der klassische Uno, sind Clone-Preise begrenzt. Zum Vergleich: Ein traditioneller Arduino Uno Clone ist teils für <5\;€ zu bekommen, allerdings mit älterem ATmega328. Für das Projekt wäre vermutlich 1 Stück benötigt, daher nehmen wir \textasciitilde10–15\;€ als Arduino-Kostenpunkt an. 
+\\
+Ein \textit{Raspberry Pi 4 Model B} ist deutlich teurer: je nach RAM-Ausstattung zwischen \textasciitilde40\;€ (1\,GB) und \textasciitilde80\;€ (8\,GB). Ein mittleres 4\,GB-Modell lag bei offiziellen Resellern um \textasciitilde74\;€ (inkl. MwSt). \autocite{raspberry_pi_price} Hinzu kommen Accessoires (SD-Karte, evtl. Netzteil, Gehäuse). 
+\\
+Der \textit{Raspberry Pi Zero W} hingegen ist konzipiert als Low-Cost-Variante. Sein offizieller Preis beträgt nur \$10 (\textasciitilde10\;€). \autocite{raspberry_pi_w_price} Allerdings war bzw. ist die Verfügbarkeit limitiert (teils 1 Stück pro Kunde), weshalb in der Praxis Zero W oft für \textasciitilde15–20\;€ gehandelt werden (inkl. Zubehör/Kits). 
+\\
+Insgesamt ist die ESP32-Lösung am günstigsten für das Gebotene – man bekommt MCU + WiFi für unter 10\;€. Der Arduino liegt im ähnlichen Bereich (10–15\;€), bietet aber kein WiFi, so dass eigentlich noch ein WiFi-Modul (z.\,B. 5\;€) hinzu gerechnet werden müsste, womit Arduino-Lösung >15\;€ kommt. Der Raspberry Pi ist am teuersten, außer man nutzt einen Zero. Aber selbst dann benötigt man SD-Karte, was den effektiven Preis ebenfalls auf \textasciitilde15\;€ hebt (Zero\,W \textasciitilde10\;€, SD \textasciitilde5\;€).
+
+
+\vspace{5mm}
+
+\noindent\textbf{Verfügbarkeit:} Die letzten Jahre (2021–2023) gab es teils weltweite Chip-Lieferengpässe. Espressif ESP32 Module waren davon weniger betroffen – sie waren meist gut erhältlich über Elektronikdistributoren oder aus asiatischen Quellen.  
+\\
+Die ATmega4809-Chips stammen von Microchip, die AVR-Lieferkette war relativ stabil. Nano Every Boards sind über Arduino, Mouser, etc. meist verfügbar.
+\\
+Raspberry Pi hatte die gravierendsten Engpässe: Besonders Pi\,4 und Zero\,W waren zeitweise kaum zu kaufen, nur zu stark überteuerten Preisen oder mit langen Wartezeiten. Gegen Ende 2023 besserte sich die Lage laut Hersteller – man peilt 1 Million produzierte Einheiten pro Monat an, um den Bedarf zu decken. \autocite{raspberry_pi_availability} Dennoch kann die Verfügbarkeit eines Raspberry\,Pi ein Risikofaktor sein, insbesondere wenn das Projekt in Serie gehen soll oder zeitnah umgesetzt werden muss. Zero\,W sind oft schnell vergriffen. In Deutschland kann man Raspberry Pis bei offiziellen Partnern (RaspberryPi Direct, Reichelt, etc.) kaufen – Stand Anfang 2025 ist eine gewisse Entspannung da, aber Pi\,4 sind immer noch höherpreisig als früher. 
+\\
+ESP32-Boards dagegen sind zahlreich von verschiedenen Herstellern verfügbar (Espressif selbst, Adafruit, SparkFun, chinesische Marken), was die Versorgung sichert. Auch Arduino-Boards lassen sich über viele Distributoren beziehen, wobei offizielle Arduino-Produkte teils etwas teurer sind als Klone. Für das Einzelprojekt scheint das zwar vernachlässigbar aber falls später eine Stückzahlenproduktion erwägt werden soll, ist der ESP32 als Modul sehr attraktiv, weil er auch direkt auf eigene PCBs gelötet werden kann (Module im Großkauf teilweise <3\;€ pro Stück). Ein Raspberry Pi lässt sich nicht so einfach integrieren.
+
+\vspace{5mm}
+
+\noindent\textbf{Formfaktor:} Platz ist bei einem Sensorgerät oft wichtig. Der \textit{ESP32-WROOM-32D} ist ein kleines SMD-Modul (\textasciitilde18\,×\,25{,}5\,×\,3\,mm) \autocite{esp_datasheet}, d.\,h. sehr kompakt. Selbst auf einem Dev-Board bleibt er handlich (DevKitC etwa 50\,×\,25\,mm). 
+\\
+Der \textit{Arduino Nano Every} misst 45\,×\,18\,mm \autocite{atmega_datasheet} – wie ein breiter USB-Stick, sehr klein und leicht auf einem Steckbrett unterzubringen. 
+\\
+Ein \textit{Raspberry Pi 4B} hingegen ist 85\,×\,56\ \autocite{raspberry_pi_datasheet},mm (plus 18\,mm Höhe etwa) – also deutlich größer, in etwa Kreditkartengröße. Für ein Pflanzensensor-Gerät wäre das deutlich zu groß. 
+\\
+Der \textit{Pi Zero W} ist mit 65\,×\,30\ \autocite{raspberry_pi_w_datasheet},mm deutlich kleiner, aber immer noch flächenmäßig \textasciitilde4$\times$ größer als ein ESP32-Modul. Auch vom Gewicht sind Pis höher (eine Pi\,4 Platine \textasciitilde50\,g vs. ein ESP32-Modul wenige Gramm). 
+\\
+ESP32 oder Arduino viel einfacher an Pflanzentöpfen zu befestigen und damit hier die beste Wahl.
+
+
+\vspace{5mm}
+
+\noindent\textbf{Zusammenfassung:} \textit{Kosten/Größe} sprechen klar für den ESP32 (günstig und kompakt). Der Arduino Nano Every ist ebenfalls klein und im unteren Preisbereich, allerdings ohne inbegriffenes WiFi müsste man Zusatzkosten rechnen. Raspberry Pis sind teurer (Pi\,4) oder knapp verfügbar (Zero\,W) und nehmen mehr Platz ein. Für ein skaliertes IoT-Projekt wäre der Unterschied noch deutlicher: Der ESP32 lässt sich für geringe Kosten in Massen beschaffen und integrieren, während Raspberry Pis pro Stück ein Mehrfaches kosten und schwerer in eigene Hardware integrierbar sind. Für den Prototypenbau kann man vorhandene Raspberry Pis nutzen, aber im finalen Einsatz ist das ESP32-Modul die ökonomischere und handlichere Lösung.
+
+\subsection{Eignung der Plattformen für spezifische Projektanforderungen}
+
+Zum Abschluss betrachten wird betrachtet, wie gut jede Plattform die konkreten Anforderungen der automatisierten Bewässerungssteuerung erfüllt:
+
+
+\vspace{5mm}
+
+\noindent\textbf{Zyklische Sensorabfrage:} Alle drei Plattformen können periodisch Sensordaten erfassen. Arduino und ESP32 haben hier einen Vorteil, da sie \textit{Analogeingänge} besitzen (der Bodenfeuchtesensor liefert typischerweise eine analoge Spannung). Der Arduino kann mittels Timer-Interrupt z.\,B. alle X Minuten die Feuchte messen – seine 10-Bit ADC-Auflösung ist meist ausreichend. \autocite{atmega_datasheet} Der ESP32 kann dank 12-Bit ADC und ggf. Hardware-Timer ebenfalls präzise in Intervallen messen; er könnte sogar im Deep Sleep vom ULP geweckt werden, um Strom zu sparen. \autocite{esp_datasheet} Der Raspberry Pi hat \textit{kein analoges Input} – für die Feuchtesensorabfrage bräuchte man entweder einen \textit{ADC-Chip} (z.\,B. ADS1115 via I\textsuperscript{2}C) oder man verwendet digitale Sensoren. Das ist ein Mehraufwand und eine potenzielle Fehlerquelle. \autocite{raspberry_pi_datasheet}
+\\
+Zeitlich schaffen alle Plattformen z.\,B. eine Abfrage pro Minute ohne Probleme; der Arduino ist hierbei am nähesten an Echtzeitfähigkeit (Timer läuft unabhängig vom Hauptprogramm), während Linux beim Pi im worst-case ein paar hundert Millisekunden Off-Timing haben kann – für Feuchtemessungen aber irrelevant. Fazit: Arduino und ESP32 sind sehr gut geeignet für zyklische Abfragen (Analog direkt lesbar); bei einem Pi muss man die fehlende ADC-Fähigkeit kompensieren.
+
+
+\vspace{5mm}
+
+\noindent\textbf{Aktorsteuerung (Pumpe):} Die Pumpe (eine  6\,V-Wasserpumpe) wird über einen Transistor oder ein Relais angesteuert. Alle drei Plattformen haben \textit{GPIO-Ausgänge}, die dafür genutzt werden können. Der Arduino kann einen digitalen Pin setzen, um z.\,B. ein Transistor-Gate anzusteuern – mit bis zu 20\,mA Ausgangsstrom pro Pin \autocite{atmega_datasheet} reicht das für die meisten Treiber. Der ESP32 liefert 3{,}3\,V Logik, was aber für MOSFET-Gates oder Relaismodule (die oft 3{,}3\,V-tauglich sind) genügt. \autocite{atmega_datasheet} 
+\\
+Der Raspberry Pi hat ebenfalls 3{,}3\,V GPIO \autocite{raspberry_pi_datasheet} auch hier ist die Ansteuerung eines Relaismoduls gängig (Achtung: Pi-GPIO liefern max \textasciitilde16\,mA, i.\,d.\,R. nimmt man 2–3\,mA ins Optokoppler-Relais – passt). 
+\\
+Bei zeitkritischer Steuerung (z.\,B. PWM modulieren, um Pumpenleistung zu regeln) sind Mikrocontroller besser – Arduino und ESP32 sind bei Hardware-PWM sehr präzise. Der Pi könnte PWM per Software oder \texttt{pigpio} erzeugen, das ist weniger präzise aber machbar. Im gegebenen Fall wird die Pumpe vermutlich einfach EIN/AUS geschaltet, was trivial für alle Optionen ist.
+\\
+Fazit: Alle können die Pumpe ansteuern; keine Plattform hat hier große Vorteile, außer dass Arduino/ESP32 etwas „direkter“ und deterministischer steuern.
+
+
+\vspace{5mm}
+
+\noindent\textbf{Netzwerkkommunikation inkl. MQTT:} Hier zeigen sich deutliche Unterschiede. Der Arduino (ohne Zusatzmodul) kann keine MQTT-Kommunikation durchführen, da ihm WLAN/Netzwerk fehlt. Selbst mit einem WiFi-Shield müsste man einen großen Teil der Ressourcen dafür aufwenden und hätte möglicherweise Schwierigkeiten, ein SSL-verschlüsseltes MQTT zuverlässig umzusetzen (RAM- und CPU-Limit).\autocite{atmega_datasheet}
+\\
+ESP32 und Raspberry Pi hingegen sind von Haus aus netzwerkfähig und MQTT-tauglich. Der ESP32 kann mittels MQTT-Client-Bibliothek die Sensordaten publizieren und Befehle abonnieren – dank eingebautem TCP/IP-Stack und ausreichend RAM (520\,KB) ist auch eine verschlüsselte MQTT-Verbindung möglich. \autocite{esp_datasheet}
+\\
+Der Raspberry Pi kann dank Linux jede MQTT-Client-Software nutzen; z.\,B. wäre ein Python-Skript mit \texttt{paho-mqtt} sehr unkompliziert. Auch Lasttests (viele MQTT-Nachrichten) verkraften beide gut – der Pi hätte hier die höchste Reserve. 
+\autocite{raspberry_pi_datasheet}
+\\
+Für diese Anwendung (geringe Datenrate) sind beide problemlos geeignet. Da MQTT typischerweise eine konstante TCP-Verbindung zum Broker hält, muss das Gerät dauerhaft netzwerkverbunden sein oder sich periodisch verbinden. Der ESP32 kann das, frisst dann aber permanent \textasciitilde80\,mA (was bei Netzstrom ok ist, bei Batterie schlecht). Der Pi kann das auch, mit dem bekannten Stromhunger. In Bezug auf Implementierungsaufwand ist der ESP32 etwas spezieller (man programmiert es in Code), während man auf dem Pi auch ein fertiges Tool nehmen kann. 
+\\
+Fazit: ESP32 und Raspberry Pi erfüllen MQTT-Kommunikation voll, der Arduino ist hier weit unterlegen (ohne Zusatzhardware quasi ungeeignet).
+
+
+\vspace{5mm}
+
+\noindent\textbf{Authentifizierung:}  Arduino: Mit einem 8-Bit MCU sind moderne Authentifizierungsmethoden kaum handhabbar. Einfache Benutzer/Passwort Kombinationen können noch gespeichern und gesenden werden, aber z.\,B. TLS-Zertifikatsprüfung für MQTT übersteigt die Möglichkeiten. 
+\\
+Der ESP32 dagegen hat \textit{Hardware-Krypto und TLS 1.2} Support – er kann sich per WPA2 sicher ins WLAN einloggen und z.\,B. per Client-Zertifikat an einem MQTT-Broker anmelden. Auch ein Webinterface kann er mit Passwortschutz versehen (Basic Auth oder Form-Login). 
+\\
+Der Raspberry Pi profitiert von Linux – man kann \texttt{OpenSSL} etc. verwenden, also jede erdenkliche Authentifizierungsmethode (z.\,B. OAuth für Web, Zertifikate, Tokens) implementieren. Für dieses Projekt ist insbesondere wichtig: all drei können \textit{WPA2 WLAN Auth} – Arduino via externem WiFi-Modul und \textit{MQTT-Broker Auth} (Benutzer/Passwort ist trivial auf ESP32 und Pi, Zertifikat-basierte Auth geht auf ESP32 auch, auf Pi natürlich ebenso). Zudem könnte man einen \textit{Lokalen Web-Login} benötigen, falls das Konfigurations-Webinterface geschützt werden soll – das wäre auf dem Pi am einfachsten (man könnte auch Apache+PHP laufen lassen und ein richtiges Login-Formular nutzen). 
+Auf dem ESP32 muss so etwas selbest gecoden werden (z.\,B. Session Management). 
+\\
+Fazit: ESP32 und Raspberry Pi sind für Authentifizierungs- und Sicherheitsanforderungen deutlich besser gerüstet (ESP32 durch Hardware-TLS, Pi durch pure Rechenleistung und Linux-Security), Arduino ist hier kaum geeignet, wenn es über simple Klartext-Logins hinausgeht.
+
+
+\vspace{5mm}
+
+\noindent\textbf{Webinterface zur Erstkonfiguration:} Ein wesentliches Merkmal moderner IoT-Geräte ist die Fähigkeit zur netzwerkbasierten Erstkonfiguration, etwa durch ein lokales Webinterface oder die Bereitstellung eines Captive Portals im Access-Point-Modus. Dieses Webinterface dient typischerweise zur Eingabe von WLAN-Zugangsdaten oder sonstigen benutzerspezifischen Einstellungen.
+\\
+Die Arduino-Plattform in ihrer klassischen Ausprägung bietet keine native Netzwerkanbindung, sodass ein solches Interface ohne Zusatzhardware grundsätzlich nicht realisierbar ist. Selbst bei Verwendung eines Ethernet-Shields und eines ATmega4809-basierten Arduino-Boards wäre die Bereitstellung eines Webinterfaces stark eingeschränkt. Aufgrund des sehr begrenzten Arbeitsspeichers von lediglich 6\,KB könnten höchstens wenige Hundert Byte an HTML ausgeliefert werden, was die Darstellung moderner, benutzerfreundlicher Weboberflächen praktisch ausschließt.
+\\
+Im Gegensatz dazu verfügt der ESP32 über integriertes WLAN sowie Bluetooth und unterstützt sowohl den Access-Point- als auch den Station-Modus. Dadurch ist es möglich, dass das Gerät im Auslieferungszustand einen eigenen WLAN-Zugangspunkt eröffnet, über den ein Konfigurationsinterface aufgerufen werden kann. In der Praxis erfolgt dies häufig über ein sogenanntes Captive Portal, wie es etwa in der ESP32-Community anhand der weit verbreiteten \textit{WifiManager}-Bibliothek umgesetzt wird. Der Nutzer verbindet sich mit dem vom Gerät erzeugten WLAN und erhält Zugriff auf eine lokale Konfigurationsseite, über die sich beispielsweise SSID und Passwort des Heimnetzwerks eintragen lassen. Nach Speicherung der Daten, etwa im nichtflüchtigen NVS-Speicher, stellt der ESP32 automatisch die Verbindung zum Zielnetzwerk her.
+\\
+Durch den vorhandenen Speicher von 520\,KB SRAM ist der ESP32 in der Lage, auch komplexere HTML-Seiten zu hosten. Dennoch empfiehlt sich ein ressourcenschonendes Design, etwa durch den Verzicht auf große Grafiken oder aufwändige clientseitige Skripte. Neben der initialen Konfiguration kann das Webinterface darüber hinaus im laufenden Betrieb zur Anzeige von Sensorwerten oder zur Änderung von Parametern verwendet werden.
+\\
+Auch der Raspberry Pi ist grundsätzlich in der Lage, ein solches Interface bereitzustellen. Als vollwertiger Linux-Computer mit zahlreichen Softwarebibliotheken besteht hier die Möglichkeit, einen umfangreichen Webserver wie Apache oder Nginx zu betreiben oder auf Frameworks wie Flask oder Django zurückzugreifen. Die Funktionalität und Gestaltungsfreiheit sind dabei nahezu unbegrenzt. Der Aufwand zur Implementierung ist jedoch höher, da zusätzliche Konfigurationsmaßnahmen erforderlich sind. Der Betrieb im Access-Point-Modus ist möglich, bedarf aber systemseitiger Anpassungen. Zudem ist der Energieverbrauch deutlich höher als bei Mikrocontroller-basierten Lösungen, was insbesondere bei autarken, batteriebetriebenen Geräten nachteilig ist. In der Praxis erfolgt die Konfiguration solcher Systeme daher häufig per SSH oder über eine angeschlossene Benutzeroberfläche (HDMI, Tastatur), was die Benutzerfreundlichkeit im Vergleich zu einem eingebetteten Webinterface reduziert.
+\\
+Insgesamt ist der ESP32 für den Betrieb eines eingebetteten Webinterfaces besonders gut geeignet. Er vereint kompakte Bauform, ausreichende Ressourcen, integrierte WLAN-Funktionalität und zahlreiche etablierte Softwarelösungen für typische Anwendungsfälle. Der Raspberry Pi bietet zwar theoretisch die umfangreichsten Möglichkeiten zur Webentwicklung, bringt jedoch höheren Energieverbrauch, komplexere Konfiguration und größeren Wartungsaufwand mit sich. Die Arduino-Plattform hingegen ist für diesen Anwendungsfall aufgrund fehlender Ressourcen und Schnittstellen faktisch ungeeignet.
+
+
+
+\vspace{5mm}
+
+\noindent\textbf{Task-Parallelisierung mit Prioritätssteuerung:} Ein wesentliches Kriterium zur Beurteilung der Eignung eines Mikrocontrollers oder Mikrocomputers in eingebetteten Systemen ist die Fähigkeit zur parallelen Ausführung mehrerer Aufgaben sowie zur gezielten Steuerung ihrer Ausführungspriorität. Diese Eigenschaft ist insbesondere bei Anwendungen relevant, in denen neben zyklischen Abfragen auch asynchrone Prozesse, wie etwa Netzwerkkommunikation, zeitlich korrekt behandelt werden müssen.
+\\
+Die Arduino-Plattform auf Basis des ATmega4809 unterstützt keine echte Parallelverarbeitung. Das zugrunde liegende Architekturmodell ist rein sequenziell, d.\,h. sämtliche Aufgaben werden innerhalb einer Hauptschleife nacheinander abgearbeitet. Zwar können Interrupts genutzt werden, um zeitkritische Ereignisse wie das Auslesen eines Sensors unabhängig vom Hauptprogramm zu erfassen, eine strukturierte und dynamisch steuerbare Mehrtask-Verarbeitung ist jedoch nur durch kooperatives, manuelles Codieren umsetzbar. Eine echte Priorisierung konkurrierender Prozesse ist damit nicht möglich.
+\\
+Im Gegensatz dazu bietet der ESP32 durch das integrierte FreeRTOS eine umfassende Unterstützung für präemptives Multitasking mit Prioritätssteuerung. Mehrere Tasks lassen sich explizit definieren und mit unterschiedlichen Prioritäten ausstatten. Dadurch ist es beispielsweise möglich, die periodische Sensordatenerfassung in einem hoch priorisierten Task zu realisieren, während weniger kritische Vorgänge – etwa das Versenden von MQTT-Nachrichten – in Hintergrundtasks mit niedrigerer Priorität abgewickelt werden. Durch das duale Prozessordesign kann zudem eine Trennung von zeitkritischen Steuerungsaufgaben und netzwerkbezogenen Prozessen auf unterschiedlichen Kernen erfolgen. Dies ermöglicht eine deterministische und reaktionsschnelle Abarbeitung sicherheitsrelevanter oder latenzkritischer Funktionen selbst bei gleichzeitiger Auslastung durch andere Subsysteme.
+\\
+Auch der Raspberry Pi erlaubt unter seinem Linux-basierten Betriebssystem grundsätzlich eine Priorisierung durch Mechanismen wie \texttt{nice}, \texttt{SCHED\_RR} oder \texttt{SCHED\_FIFO}. Allerdings ist der Standard-Linux-Kernel nicht für harte Echtzeitanforderungen ausgelegt. Bestimmte Systemprozesse und Interrupts können nicht verdrängt werden, wodurch keine garantierten Latenzen erreicht werden können. In der Praxis kann eine gewisse Bevorzugung einzelner Threads erreicht werden, etwa durch die Zuweisung hoher Prioritäten oder Prozessaffinitäten. Dennoch verbleibt eine inhärente Unschärfe in der zeitlichen Steuerung, insbesondere bei gleichzeitiger Nutzung höherer Programmiersprachen wie Python, deren Laufzeitumgebungen selbst Speicherbereinigung oder Thread-Scheduling beeinflussen können. Für Aufgaben mit moderater Echtzeitanforderung ist dies tolerierbar, in strikt deterministischen Steuerungsszenarien jedoch kritisch zu bewerten.
+\\
+Insgesamt zeigt sich, dass Mikrocontroller mit integriertem RTOS, wie der ESP32, klare Vorteile hinsichtlich kontrollierter Task-Parallelisierung und Prioritätssteuerung bieten. Die Architektur erlaubt eine explizite Zuweisung von Ausführungsprioritäten und eine deterministische Verarbeitung auch bei konkurrierender Last. Der Raspberry Pi ist in der Lage, mehrere Prozesse gleichzeitig zu bearbeiten, bietet jedoch keine zuverlässige Echtzeitausführung. Der Arduino ist in diesem Kontext auf einfache sequenzielle Logik beschränkt, wodurch komplexere parallele Anwendungen ohne erhebliche Eingriffe in die Systemarchitektur nicht realisierbar sind.
+
+
+\subsection{Entscheidung: Warum ESP32-WROOM-32D?}
+
+Nach der detaillierten Gegenüberstellung wird deutlich, dass der \textbf{ESP32-WROOM-32D} für das IoT-Bewässerungsprojekt die beste Wahl ist. Der ESP32 vereint die wichtigsten Anforderungen in einer Plattform und bietet gegenüber Arduino und Raspberry Pi konkrete Vorteile:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Integriertes WLAN/Bluetooth:} Nur der ESP32 und der Pi haben WiFi on-board. Im Gegensatz zum Pi benötigt der ESP32 aber keine zusätzliche Infrastruktur (kein OS, keine SD), um eine einfache MQTT-Verbindung herzustellen. Gegenüber dem Arduino (der gar kein WiFi hat) ist dies ein entscheidender Vorteil – es entfällt zusätzliche Hardware und komplexes Zusammenspiel externer Module.
+    
+    \item \textbf{IoT-Optimierte Architektur:} Der ESP32 ist speziell für IoT konzipiert. Er bietet ausreichend Leistung (240\,MHz Dual-Core) und Speicher (520\,KB RAM) für Netzwerkprotokolle, ohne die Energieaufnahme eines Raspberry Pi. Mit FreeRTOS und LwIP ist der Netzwerkstack hochintegriert, was zuverlässige MQTT-Kommunikation und sogar sichere TLS-Verbindungen ermöglicht – etwas, das der Arduino nicht leisten kann. Gleichzeitig bleibt er energieeffizient genug, um bei Bedarf im Feld mit Akku/Solar betrieben zu werden, was beim Pi praktisch ausgeschlossen ist.
+    
+    \item \textbf{Analoge und digitale Schnittstellen in Fülle:} Für die Sensoranbindung (Feuchtigkeitssensor analog, evtl. weitere Sensoren) ist der ESP32 bestens ausgestattet – \textit{18 Analog-Inputs} bieten viel Spielraum, und dank 12-Bit ADC können Sensordaten präziser erfasst werden als mit dem 10-Bit Arduino. Gegenüber dem Raspberry Pi eliminiert der ESP32 das Problem des fehlenden Analog-Eingangs vollständig. Auch weitere I/Os (Pumpensteuerung per GPIO, ggf. I\textsuperscript{2}C-Sensoren) sind reichlich vorhanden. Das heißt, alle Hardware-Komponenten des Projekts lassen sich direkt an den ESP32 anschließen, ohne zusätzliche Wandler oder Expander.
+    
+    \item \textbf{Multitasking und Zuverlässigkeit:} Mit dem ESP32 kann die Software so gestaltet werden, dass parallele Abläufe (Sensor lesen, MQTT publizieren, Webserver bedienen) robust funktionieren. \textit{Echtzeitkritische Abläufe} (z.\,B. Abschalten der Pumpe bei bestimmten Bedingungen) können mit hoher Priorität laufen, was Betriebssicherheit gibt. Ein Raspberry Pi könnte zwar auch parallel arbeiten, birgt aber Risiken durch sein komplexes OS (ein abgestürzter Dienst könnte das ganze System beeinträchtigen, während beim ESP32 die Firmware aus einem Guss ist). Ein Arduino wiederum könnte mangels echter Parallelität ins Straucheln kommen, wenn z.\,B. eine Netzoperation länger dauert – beim ESP32 würde diese in einem getrennten Task laufen und die Sensorlogik nicht blockieren.
+    
+    \item \textbf{Einfaches Webinterface und Konfiguration:} Der ESP32 erlaubt es, benutzerfreundlich eine Konfigurations-Webseite zu hosten, etwa um initial WLAN-Zugangsdaten einzugeben. Diese Fähigkeit hat er mit dem Pi gemein, aber beim ESP32 lässt sich ein solches Portal sehr schlank implementieren (bereits viele vorhandene Arduino-Libraries dafür). Der Nutzerkomfort (AP-Mode + Handy-Webseite) ist ein großer Pluspunkt, um das Gerät in Betrieb zu nehmen. Arduino könnte das gar nicht, Pi kann es nur mit erheblich größerem Softwarepaket. Zudem kann der ESP32 bei Bedarf auch über BLE konfigurieren (denkbar wäre eine Handy-App über Bluetooth Low Energy). Diese Flexibilität in der Erstinstallation ist praktisch.
+    
+    \item \textbf{Sicherheit:} In Sachen Authentifizierung und Verschlüsselung bietet der ESP32 eine gute Balance – er kann z.\,B. MQTT über TLS mit Client-Zertifikat fahren, was ein Arduino völlig überfordern würde. Der Pi kann das zwar auch, aber beim ESP32 ist es auf Embedded-Ebene gelöst und erfordert weniger Wartung (z.\,B. kein Linux, das gepatcht werden muss). Für ein IoT-Gerät, das eventuell über das Internet kommuniziert, sind Security-Features wichtig – der ESP32 hat sie eingebaut (Hardware-RNG, AES, RSA, Secure Boot Option, etc.). Das macht ihn zukunftssicherer als einen Arduino-Ansatz, der solche Dinge nicht berücksichtigt.
+    
+    \item \textbf{Kosten und Größe:} Ein ESP32-Modul ist äußerst kostengünstig im Vergleich zu einem Raspberry Pi – man kann mit \textasciitilde5–10\,€ pro Gerät rechnen, wohingegen ein Pi ein Mehrfaches kostet. Für ein System, das vielleicht in mehreren Pflanzen eingesetzt werden soll, ist das ein erheblicher Vorteil. Auch die Kompaktheit spricht für den ESP32: Das gesamte Steuergerät kann klein genug gebaut werden, um unauffällig am Blumentopf Platz zu finden. Ein Pi\,4 bräuchte ein größeres Gehäuse und wäre überdimensioniert.
+    
+    \item \textbf{Community und vorhandene Projekte:} Speziell im Bereich „Plant watering IoT“ gibt es bereits viele Umsetzungen mit dem ESP32. Das heißt, man kann von bewährten Lösungen profitieren – sei es Code für kapazitive Feuchtesensoren, Sleep-Wake-Zyklen oder MQTT-Integration. Arduino-Projekte gibt es auch viele, aber meist ohne Netzwerkanbindung. Raspberry Pi-Projekte gibt es ebenfalls, doch oft wird dort ein vollwertiger Pi wegen einfacherem Prototyping genutzt, obwohl ein Mikrocontroller besser geeignet wäre. Der Trend in der Maker- und IoT-Community für solche Einsatzzwecke geht klar zum ESP32, was bedeutet: Unterstützung und Weiterentwicklung sind auf längere Sicht garantiert.
+\end{itemize}
+
+\noindent\textbf{Konkrete Vorteile des ESP32 gegenüber Arduino Nano Every:} Der ESP32 bietet Größenordnungen mehr Rechenleistung und Speicher, was ihn fähig macht, die Netzwerkkommunikation (MQTT, TLS) überhaupt erst zu stemmen, während der Arduino das nicht könnte. Er vereint die Funktionen von „Arduino + WiFi-Shield + evtl. Echtzeituhr + mehr ADC + Bluetooth“ in \emph{einem} Modul. Damit reduziert sich die Komplexität der Hardware drastisch. Zudem ist der ESP32 durch 32-Bit-Architektur zukunftssicherer – komplexere Sensoralgorithmen oder Berechnungen (z.\,B. Mittelwertbildung, Signalfilter) kann er ohne Mühe in Echtzeit erledigen, wo der ATmega an seine Grenzen käme.
+
+
+\vspace{5mm}
+
+\noindent\textbf{Konkrete Vorteile des ESP32 gegenüber Raspberry Pi:} Der ESP32 ist viel stromsparender, kann also notfalls autark betrieben werden oder zumindest dauerhaft ohne nennenswerte Energiekosten laufen. Er ist einfacher aufgebaut, was die Robustheit erhöht. Es gibt keine SD-Karte, kein Betriebssystem, das ausfallen könnte. Damit ist die Wahrscheinlichkeit, dass das Gerät monatelang zuverlässig arbeitet, höher (ein Pi könnte z.\,B. nach einem Stromausfall Probleme haben, während der ESP32 sofort wieder startet und seine Aufgabe fortsetzt). Außerdem eliminiert der ESP32 unnötige Features: Ein Linux-Pi kann zwar mehr (Grafik, USB, etc.), aber das wird hier nicht gebraucht. Dadurch vermeidet man Angriffsfläche (z.\,B. muss man keinen Linux-Zugang absichern) und verkürzt die Entwicklungszeit (kein OS-Management, sondern direkte Firmware-Programmierung). Und natürlich: Kostenfaktor – ein ESP32-Lösungsaufbau kostet nur einen Bruchteil eines Pi\,4, was insbesondere bei mehreren Einheiten ins Gewicht fällt.
+
+
+\vspace{5mm}
+
+\noindent\textbf{Zusammenfassend} erfüllt der ESP32-WROOM-32D alle Anforderungen des Projekts mit Bravour, wo Arduino und Raspberry Pi jeweils Schwächen zeigen:
+
+\begin{itemize}[leftmargin=*]
+    \item Er kann \textbf{Sensoren zyklisch auslesen} (Analogeingang vorhanden, Timer möglich) und die \textbf{Pumpe steuern} (GPIO/PWM) – ähnlich gut wie ein Arduino in der low-level Steuerung.
+    \item Er bietet \textbf{Netzwerkkommunikation (WLAN, MQTT)} auf Embedded-Niveau – vergleichbar mit dem Pi, aber ohne dessen Overhead.
+    \item Er unterstützt \textbf{Auth-Verfahren und Web-Konfiguration}, was Arduino nicht kann, und bei Pi mit größerem Aufwand verbunden ist.
+    \item Er ermöglicht \textbf{Parallelisierung (FreeRTOS)}, und vermeidet die Nicht-Determinismen des Linux beim Pi.
+    \item Er ist \textbf{kostengünstig, kompakt und energiesparend}, was ihn für praktische, ggf. auch batteriebetriebene IoT-Geräte prädestiniert.
+\end{itemize}
+
+\noindent Die Entscheidung zugunsten des \textbf{ESP32-WROOM-32D} ist daher klar: Diese Plattform liefert die beste Kombination aus Funktionalität, Leistung und Effizienz für eine automatisierte Pflanzenbewässerung im IoT-Kontext. Insbesondere die integrierte Netzwerkanbindung und das Echtzeit-Betriebssystem machen den ESP32 zur optimalen Lösung, um Sensorik, Aktorik und Cloud-Konnektivität zuverlässig in einem Gerät zu vereinen. Arduino würde an den IoT-Anforderungen scheitern, und Raspberry\,Pi wäre überdimensioniert und weniger robust. Der ESP32 bietet modernes IoT auf Mikrocontroller-Basis – genau das, was für das Projekt benötigt wird.

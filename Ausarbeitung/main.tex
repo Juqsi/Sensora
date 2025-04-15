@@ -14,6 +14,7 @@ hidelinks %Links nicht einrahmen
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
+\usepackage{pdfpages}
 
 \usepackage{fancyhdr}
 \usepackage{color}
@@ -25,8 +26,8 @@ hidelinks %Links nicht einrahmen
 \usepackage{url}
 
 \usepackage{graphicx} %für Einbindung von Grafiken
+\usepackage{booktabs}
 \graphicspath{{img/}} %Pfad für Grafiken
-\usepackage{svg}
 \usepackage{amsmath}
 
 \usepackage{pdfpages}
@@ -35,7 +36,6 @@ hidelinks %Links nicht einrahmen
 
 %\usepackage[printonlyused]{acronym}
 % Akronymverzeichnis
-\usepackage{hyperref}
 \usepackage{array}
 \usepackage{supertabular}
 \usepackage{acro}
@@ -60,7 +60,7 @@ hidelinks %Links nicht einrahmen
 
 \newcommand{\source}[1]{\vspace{1ex}\noindent{\small \textit{Quelle: #1}}}
 \newcommand{\file}[1]{\texttt{#1}}
-\DeclareUnicodeCharacter{202F}{\%}
+%\DeclareUnicodeCharacter{202F}{\%}
 
 \newcommand{\initializeBibliography}{
 	\ihead{}
@@ -97,9 +97,33 @@ hidelinks %Links nicht einrahmen
 	extendedchars=true,             % Unterstützt erweiterte Zeichen (z. B. Umlaute)
 }
 % Label für Listings ändern
-\renewcommand{\lstlistingname}{Beispiel}
+%\renewcommand{\lstlistingname}{Beispiel}
+\usepackage{fontspec}
+\newfontface\consola{Consola} [
+  Path=./fonts/,
+  Extension=.ttf,
+  BoldFont=*b,
+  ItalicFont=*i,
+]
 \newcommand{\code}[1]{\colorbox{gray!20}{\consola #1}}
 
+\lstdefinestyle{cstyle}{      % zusätzlicher Stil für C
+	language=C,
+	basicstyle=\ttfamily\scriptsize,
+	keywordstyle=\bfseries\color{blue},
+	commentstyle=\color{green!50!black}\itshape,
+	stringstyle=\color{red},
+	morekeywords={uint8_t, uint16_t, printf},
+	backgroundcolor=\color{gray!10},
+	frame=single,
+	numbers=left,
+	numberstyle=\tiny\color{black},
+	breaklines=true,
+	showstringspaces=false
+}
+
+\usepackage{upgreek}
+\usepackage{textcomp}
 \usepackage{titlesec}
 \titleformat{\chapter}[hang]
   {\normalfont\huge\bfseries}
@@ -107,6 +131,7 @@ hidelinks %Links nicht einrahmen
   {0pt}
   {} 
 
+\def\sectionautorefname{Kapitel}
 
 % ============= Dokumentbeginn =============
 \begin{document}
@@ -136,17 +161,24 @@ hidelinks %Links nicht einrahmen
     \newpage
 	
 	%------------- Abbildungsverzeichnis -------------
-	\section*{Abbildungsverzeichnis}
-	\addcontentsline{toc}{section}{Abbildungsverzeichnis}
-	\renewcommand{\listfigurename}{} % Verhindert doppelten großen Titel
+	%\section*{Abbildungsverzeichnis}
+	%\addcontentsline{toc}{section}{Abbildungsverzeichnis}
+	%\renewcommand{\listfigurename}{} % Verhindert doppelten großen Titel
+	%\newpage
+    \addcontentsline{toc}{chapter}{\listfigurename}
+	\listoffigures
 	\newpage
 
+    %------------- Listenverzeichnis -------------
+	\addcontentsline{toc}{chapter}{Listings}
+	\lstlistoflistings
+	\newpage
 	
 	%------------- Tabellenverzeichnis -------------
-	\section*{\listtablename}
-	\addcontentsline{toc}{section}{\listtablename}
-	\renewcommand{\listtablename}{} % Verhindert doppelten großen Titel
-	\newpage
+	%\section*{\listtablename}
+	%\addcontentsline{toc}{section}{\listtablename}
+	%\renewcommand{\listtablename}{} % Verhindert doppelten großen Titel
+	%\newpage
 
 	
 	% pagestyle für restliches Dokument aktivieren
@@ -161,71 +193,87 @@ hidelinks %Links nicht einrahmen
 	\newpage
 	\input{./Einleitung/Zielsetzung}
 	\newpage
-	\input{./Einleitung/Ziel der Arbeit}
+	\input{./Einleitung/Git}
 	\newpage
 	
 	% ------------- Hauptteil -------------
 
 	\chapter{Theoretische Grundlagen}
 	\input{Theoretische Grundlagen/TG_Scrum}
+        \input{Theoretische Grundlagen/SPAs}
+	\input{Theoretische Grundlagen/UIUX}
+	\input{Theoretische Grundlagen/MobileApps}
+        \input{Theoretische Grundlagen/Testing}
 	\input{Theoretische Grundlagen/TG_APIs}
 	\input{Theoretische Grundlagen/TG_Designprinzipien}
 	\input{Theoretische Grundlagen/TheoretischeGrundlagenSchnittstellen}
-	\input{Theoretische Grundlagen/SPAs}
-	\input{Theoretische Grundlagen/UIUX}
-	\input{Theoretische Grundlagen/MobileApps}
-    \input{Theoretische Grundlagen/Testing}
+    \input{./Theoretische Grundlagen/Microcontroller}
+	\input{./Theoretische Grundlagen/IOT}
+	\input{./Theoretische Grundlagen/Regelungstechnik}
 
 	\newpage
 	
 	\chapter{Anforderungen}
-    Für das Projekt Sensora gelten hohe Anforderungen an Zuverlässigkeit, Sicherheit, Erweiterbarkeit und Datenintegrität. In diesem Kapitel werden die formellen Anforderungen an das Backend sowie an die zugrunde liegende Datenbankarchitektur getrennt voneinander dargestellt. Ziel ist es, eine tragfähige Grundlage für die technische Umsetzung zu schaffen.
-  \input{Anforderungen/AnforderungenAnSchnittstellenServices}
-  \input{Anforderungen/Anf_Backend}
-	\input{Anforderungen/Frontend}
+        \input{Anforderungen/Frontend}
+
+        Für das Projekt Sensora gelten hohe Anforderungen an Zuverlässigkeit, Sicherheit, Erweiterbarkeit und Datenintegrität. In diesem Kapitel werden die formellen Anforderungen an das Backend sowie an die zugrunde liegende Datenbankarchitektur getrennt voneinander dargestellt. Ziel ist es, eine tragfähige Grundlage für die technische Umsetzung zu schaffen.
+        \input{Anforderungen/AnforderungenAnSchnittstellenServices}
+        \input{Anforderungen/Anf_Backend}
+        \input{Anforderungen/Anforderungen_Microcontroller}
+	    \input{Anforderungen/Anforderungen_Sensorik}
 	
 	\newpage
 	
 	\chapter{Auswahl der Technologien}
-	\input{Auswahl der Technologien/AdT_Programmiersprache_BFF}
-	\input{Auswahl der Technologien/AdT_Datenbankentscheidung}
-  \input{Auswahl der Technologien/AuswahlDerTechnologienSchnittstellenservices}
-	\input{Auswahl der Technologien/Capacitor}
-	\input{Auswahl der Technologien/Vue}
+        \input{Auswahl der Technologien/Vue}
 	\input{Auswahl der Technologien/CSS}
 	\input{Auswahl der Technologien/I18n}
 	\input{Auswahl der Technologien/Pinia}
+        \input{Auswahl der Technologien/Capacitor}
+	\input{Auswahl der Technologien/AdT_Programmiersprache_BFF}
+	\input{Auswahl der Technologien/AdT_Datenbankentscheidung}
+        \input{Auswahl der Technologien/AuswahlDerTechnologienSchnittstellenservices}
+    \input{Auswahl der Technologien/Technologie_Microcontroller}
+    \input{Auswahl der Technologien/Technologie_Framework_Sensorik}
+
 	
 	\newpage
 	
 	\chapter{Umsetzung}
-	\input{Umsetzung/Ums_Datenmodellierung und Datenfluss}
-  \input{Umsetzung/UmsetzungSchnittstellenservices}
-	%\input{Umsetzung/Umsetzung_example}
-	\input{Umsetzung/Frontend-Architektur}
-	\input{Umsetzung/KI-Erkennung}
+        \input{Umsetzung/Microservices}
+        \input{Umsetzung/Frontend-Architektur}
+        \input{Umsetzung/UIUX}
 	\input{Umsetzung/Spezifische_Komponenten_Frontend}
-	\input{Umsetzung/UIUX}
-	
+        \input{Umsetzung/KI-Erkennung}
+	\input{Umsetzung/Ums_Datenmodellierung und Datenfluss}
+        \input{Umsetzung/UmsetzungSchnittstellenservices}
+    \input{./Umsetzung/Programmierung_des_ESP}
+    \input{Umsetzung/Umsetzung_ESP_Regelbetrieb}
+	%\input{Umsetzung/Umsetzung_example}
+
 	\newpage
 
 	
 	% ------------- Ende Hautpteil -------------
 	
 	\chapter{Kritische Reflexion}
-	\input{Kritische Reflexion/Frontend}
+	\input{Kritische Reflexion/Kritische_Reflexion_Allgemein}
+    \input{Kritische Reflexion/Frontend}
 	%\input{Kritische Reflexion/Kritische_Reflexion_example}
-	
+	\input{Kritische Reflexion/Kritische_Reflexion_Microcontroller}
+	\input{Kritische Reflexion/KritischeReflexionSchnittstellenservices}
 	\newpage 
 	
 	\chapter{Ausblick}
-	\input{Ausblick/Frontend}
+	\input{Ausblick/Ausblick_allgemein}
+    \input{Ausblick/Frontend}
 	%\input{Ausblick/Ausblick_example}
+    \input{Ausblick/Ausblick_Microcontroller}
 	
 	\newpage
 	
 	%------------- Literaturverzeichnis -------------
-	\newpage
+	%\newpage
 	\pagestyle{fancy}
 	\fancyhead[R]{LITERATUR}
 
@@ -236,6 +284,7 @@ hidelinks %Links nicht einrahmen
 
 	%------------- Anhang -------------
 	\cleardoublepage
+        \includepdf[pages=-]{./img/Kapitelautorenschaft.pdf}
 	%\fancyhead[R]{ANHANG}
 
 	%\chapter*{Anhang}

@@ -1,0 +1,48 @@
+\section{Reflexion der Microcontroller-Programmierung}
+
+Die Entwicklung der Steuerungssoftware für den \texttt{ESP32-WROOM-32D} stellte einen zentralen technischen Teilaspekt dieses Projektes dar. Ziel war es, ein modulares, robustes und erweiterbares Embedded-System zu entwerfen, das Sensordaten erfassen, verarbeiten und zur Steuerung eines Bewässerungsvorgangs nutzen kann. Grundsätzlich konnten alle im Vorfeld definierten funktionalen Anforderungen erfolgreich umgesetzt werden. Dennoch zeigten sich im Verlauf der Entwicklung typische Herausforderungen, begründete Einschränkungen sowie Verbesserungspotentiale, die im Folgenden kritisch reflektiert werden.
+
+\subsection{Komplexität der Hardwareanbindung}
+
+Die Anbindung der verwendeten Sensorik – bestehend aus dem \texttt{GY-302 BH1750} Lichtsensor (I\textsuperscript{2}C), dem \texttt{DHT11} Temperatur- und Luftfeuchtigkeitssensor (digitaler GPIO) sowie dem \texttt{HiLetgo LM393} Bodenfeuchtesensor (analog, ADC) – erwies sich erwartungsgemäß als verhältnismäßig unkritisch. Alle Sensoren konnten erfolgreich über entsprechende Treiberbibliotheken initialisiert und zyklisch ausgelesen werden. Bei der I\textsuperscript{2}C-Kommunikation wurden Standardports verwendet, die durch einen \texttt{i2c\_scanner()} überprüft werden, was die Fehlersuche erleichterte. 
+\\
+Aufgrund des Proof-of-Concept-Charakters des Projektes wurde bewusst auf qualitativ hochwertige Sensoren verzichtet. Stattdessen kamen besonders kostengünstige Module zum Einsatz, was unter anderem in Bezug auf Genauigkeit, Kalibrierbarkeit und Langzeitstabilität gewisse Einschränkungen mit sich bringt. Die Kalibrierung der Bodenfeuchtesensorik erfolgte lediglich grob anhand definierter ADC-Schwellen (DRY/WET), ohne systematische Eichung mit standardisierten Feuchtewerten.
+
+\subsection{Entwicklung der Steuerungslogik}
+
+Die Steuerungslogik wurde als zyklischer Prozess in einer eigenen FreeRTOS-Task implementiert. Sensordaten werden regelmäßig gemessen, gemittelt und anschließend analysiert. Die daraus abgeleiteten Aktionsentscheidungen – konkret die Steuerung der Wasserpumpe – erfolgen auf Basis einer einfachen Regel: Nur wenn der gemessene Mittelwert der Bodenfeuchte unterhalb des Sollwertes liegt, wird ein Bewässerungsimpuls ausgelöst. Diese monokausale Logik berücksichtigt aktuell keine weiteren Umweltfaktoren wie Temperatur oder Lichtintensität, obwohl entsprechende Sensoren vorhanden sind. 
+\\
+Die Dauer des Pumpvorgangs wird anhand eines linearen Defizitmodells berechnet. Diese einfache, nachvollziehbare Methode hat sich in der Umsetzung als stabil erwiesen, könnte aber perspektivisch durch multivariate oder lernfähige Entscheidungsmodelle ersetzt werden.
+
+\subsection{Fehleranalyse und Debugging}
+
+Während der Entwicklung traten vor allem Probleme im Bereich der Synchronisierung, des Taskmanagements und der Speicherverwaltung auf. Besonders beim Einsatz mehrerer FreeRTOS-Tasks (Sensor-Task, Pumpen-Task, MQTT-Kommunikation) war auf die korrekte Priorisierung und den Stackverbrauch zu achten.\\
+Tools wie \texttt{uxTaskGetStackHighWaterMark()} wurden gezielt eingesetzt, um Stackoverflows frühzeitig zu identifizieren.
+\\
+Ein weiteres Fehlerpotenzial zeigte sich im Zusammenhang mit der WiFi-Verbindung: Wird die Verbindung unterbrochen, so können aktuell keine Sensordaten zwischengespeichert werden. Es fehlt eine clientseitige Pufferlogik, die bei Wiederherstellung der Verbindung eine Übertragung nachholt. Auch eine manuelle Auslösung einer Messung durch Nutzerinteraktion ist derzeit nicht implementiert. 
+\\
+Zudem wurde bewusst auf die Aktivierung von Flash Encryption verzichtet, um die Nachvollziehbarkeit und Nachprüfbarkeit des Programmcodes zu gewährleisten. Flash Encryption ist eine Sicherheitsfunktion, die den im Flash-Speicher abgelegten Programmspeicherinhalt verschlüsselt und somit vor unbefugtem Auslesen und Reverse Engineering schützt. Dies stellt im produktiven Einsatz ein relevantes Sicherheitsrisiko dar, jedoch bleibt damit die Möglichkeit des uneingeschränken Beschreibens für die Entwicklung erhalten.
+
+\subsection{Codequalität und Modularität}
+
+Der Code wurde in einzelne, klar strukturierte Module unterteilt (\texttt{sensor\_manager}, \\\texttt{pump\_manager}, \texttt{device\_manager} etc.), wodurch eine gute Lesbarkeit und Erweiterbarkeit gewährleistet ist. Die Verwendung von Header-Dateien sowie des \texttt{esp\_log}-Systems zur Laufzeitdiagnose trug wesentlich zur Wartbarkeit bei. Die Verwendung von Queues zur Steuerung asynchroner Ereignisse (z.\,B. Pumpenbefehl) entspricht bewährten Embedded-Designprinzipien.
+\\
+Einige geplante Features wie die Anzeige aktueller Sensordaten auf einem lokalen Display oder ein OTA-Update-Mechanismus (Over-the-Air) wurden bislang nicht umgesetzt, sind jedoch in der Systemarchitektur antizipiert und könnten in zukünftigen Erweiterungen ergänzt werden.
+
+\subsection{Lernfortschritt und technologische Erkenntnisse}
+
+Die Arbeit am Microcontroller-Modul bot wertvolle praktische Erfahrungen in der Low-Level-Programmierung, insbesondere im Bereich:
+\\
+\begin{itemize}
+	\item FreeRTOS Task-Management und Inter-Task-Kommunikation (Queues)
+	\item GPIO-Steuerung und Sensorauswertung (ADC, I\textsuperscript{2}C, Digital)
+	\item Datenverarbeitung (z.\,B. Mittelwertbildung, Fehlererkennung)
+	\item Kommunikationsprotokolle (MQTT, JSON)
+	\item Persistente Datenspeicherung über NVS
+	\item Wifi-Provisionierung
+	\item Web-Server-Hosting
+\end{itemize}
+\vspace{1em}
+
+\noindent Zudem konnte ein vertieftes Verständnis für typische Probleme und Designentscheidungen in Embedded-Systemen entwickelt werden. Besonders hervorzuheben ist das Zusammenspiel aus hardwarenaher Programmierung, Netzwerkintegration und Systemverantwortung im Gesamtkontext eines realen Anwendungsszenarios.
+

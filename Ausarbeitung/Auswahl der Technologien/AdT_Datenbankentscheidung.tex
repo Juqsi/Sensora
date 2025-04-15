@@ -19,7 +19,7 @@ Ein PostgreSQL-Server besteht aus einem sogenannten Cluster, der mehrere Datenba
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{img/PostgreSQL Aufbau.png}
-\caption{PostgreSQL Architektur. Quelle: \cite{Fröhlich2022} S. 33 Bild 4.1}
+\caption{PostgreSQL Architektur. Quelle: \cite{Froehlich2022} S. 33 Bild 4.1}
 \label{fig:Architektur}
 \end{figure}
 
@@ -38,7 +38,7 @@ PostgreSQL besteht aus einer Kombination von Speicher und Prozessen. Bei Unix-Sy
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{img/PostgreSQL Verbindungsaufbau.png}
-\caption{Verbindungsaufbau von Client zum Server. Quelle: \cite{Fröhlich2022} S. 35 Bild 4.3}
+\caption{Verbindungsaufbau von Client zum Server. Quelle: \cite{Froehlich2022} S. 35 Bild 4.3}
 \label{fig:Verbindungsaufbau}
 \end{figure}
 
@@ -50,14 +50,14 @@ Die Verwaltung von Speicher und die Optimierung der Zugriffszeiten auf Daten sin
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{img/PostgreSQL Speciheraufbau.png}
-\caption{PostgreSQL Speicherarchitektur. Quelle: \cite{Fröhlich2022} S. 37 Bild 4.4}
+\caption{PostgreSQL Speicherarchitektur. Quelle:  \cite{Froehlich2022} S. 37 Bild 4.4}
 \label{fig:Speicheraufbau}
 \end{figure}
 
 \paragraph{Geteilter Speicher (Shared Buffer)}
 Der Shared Buffer in PostgreSQL dient dazu, die Anzahl der Operationen auf der Festplatte zu reduzieren, indem er schnellen Speicher im RAM bereitstellt. Er besteht aus einer Hash-Tabelle, Hash-Elementen, einer Bufferbeschreibung und einer Buffersammlung. Die Hash-Tabelle ermöglicht ein schnelles Auffinden von Datensätzen, indem Hashwerte in Segmenten sortiert werden. Diese Segmente können sehr schnell durchsucht werden, da ihre Länge fest ist, was effiziente Speicherzugriffe ermöglicht.
 
-Die Bufferbeschreibung enthält wichtige Steuerungsvariablen, wie z.B. den \code{usage count}, der die Relevanz eines Datensatzes im Speicher angibt. Der Speicherbereinigungsprozess (Eviction Process) durchsucht regelmäßig den Buffer nach irrelevanten Blöcken. Blöcke, die als irrelevant eingestuft werden, können überschrieben werden, sobald neuer Speicherplatz benötigt wird.
+Die Bufferbeschreibung enthält wichtige Steuerungsvariablen, wie z.B. den \code{\url{usage count}}, der die Relevanz eines Datensatzes im Speicher angibt. Der Speicherbereinigungsprozess (Eviction Process) durchsucht regelmäßig den Buffer nach irrelevanten Blöcken. Blöcke, die als irrelevant eingestuft werden, können überschrieben werden, sobald neuer Speicherplatz benötigt wird.
 
 \paragraph{WAL Buffer und Checkpoints}
 Der \ac{wal} Buffer ist darauf ausgelegt, Daten effizient auf die Festplatte zu schreiben. Dadurch müssen schreibende Prozesse nicht auf die tatsächliche Schreiboperation warten, sondern können die zu schreibenden Daten in den Buffer verlagern. Der \ac{wal} Buffer wird in regelmäßigen Intervallen (Standard 200 Millisekunden) überprüft und die Daten werden im Permanentspeicher gesichert, um die Ausfallsicherheit zu gewährleisten.
@@ -74,7 +74,7 @@ Alte Datensätze, die nicht mehr benötigt werden, werden gelöscht, wodurch Lü
 
 Die Datenbanken von PostgreSQL werden im Verzeichnis \code{base} gespeichert, während der Tablespace in einem separaten Verzeichnis liegt. Tabellen und Indizes werden in Dateien von maximal einem Gigabyte Größe gespeichert; bei Überschreiten dieser Größe wird eine weitere Datei angelegt. Zusätzlich werden Dateien mit den Endungen \code{\_fsm} (Free Space Map) zur Adressierung des freien Speicherplatzes und \code{\_vm} (Visibility Map) zur Markierung von veralteten Datensätzen gepflegt.
 
-Die Datenblocksammlung (Page) enthält Pointers auf die tatsächlichen Datenblöcke (Tuples). Jeder Datenblock wird durch eine Kombination aus der Datenblocksammlungsnummer und dem Offset des Pointers identifiziert. \cite{Fröhlich2022}
+Die Datenblocksammlung (Page) enthält Pointers auf die tatsächlichen Datenblöcke (Tuples). Jeder Datenblock wird durch eine Kombination aus der Datenblocksammlungsnummer und dem Offset des Pointers identifiziert. \cite{Froehlich2022}
 
 \subsection{Exkurs: MongoDB}
 MongoDB ist eine führende dokumentenorientierte NoSQL-Datenbank, die sich durch ihre Flexibilität und Skalierbarkeit auszeichnet. Sie wurde entwickelt, um einige der Einschränkungen traditioneller relationaler Datenbanken zu überwinden und bietet eine leistungsfähige Lösung für Anwendungen, die große Mengen an unstrukturierten oder semi-strukturierten Daten verarbeiten müssen. Im Gegensatz zu relationalen Datenbanken, die auf einem festen Schema basieren, erlaubt MongoDB ein dynamisches, schemaloses Datenmodell, das sich ideal für moderne, agile Entwicklungsprozesse eignet. In diesem Exkurs werden die Architektur und die technischen Merkmale von MongoDB detailliert beleuchtet, um deren Eignung für das \ac{nomtis}-Projekt zu bewerten.

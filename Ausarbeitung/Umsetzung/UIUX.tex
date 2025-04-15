@@ -8,37 +8,57 @@ Die Nutzerforschung erfolgte durch halbstrukturierte Interviews mit VertreterInn
 
 Darauf aufbauend wurden Wireframes auf Papier entwickelt, welche die Informationsarchitektur und zentrale Navigationsstrukturen skizzierten. Diese papierbasierten Modelle wurden iterativ angepasst und mit ausgewählten Testpersonen diskutiert. Durch diese formative Evaluation konnte bereits vor der Implementierung auf zentrale Anforderungen reagiert werden.
 
+Auf Basis des Nutzerfeedbacks wurde die Darstellung der Gruppenansicht verbessert. Konkret ergaben sich folgende Anforderungen: Die NutzerInnen wünschten sich eine übersichtliche Darstellung der Gruppen sowie die Möglichkeit, auf einfache Weise die MitgliederInnen einer Gruppe einzusehen, ohne dass zu viele Informationen gleichzeitig auf dem Bildschirm erscheinen. Um diese Bedürfnisse zu erfüllen, wurde die GroupsView als Card-Layout konzipiert.
+
+Diese Card präsentiert auf den ersten Blick nur die wichtigsten Informationen einer Gruppe. Über den Titel oder dem Button können die NutzerInnen die Card bei Bedarf „ausklappen“. Wird der Button gedrückt, erweitert sich die Card dynamisch und zeigt alle zugehörigen MitgliederInnen an. Dies verbessert die Übersichtlichkeit, da nicht alle Details permanent sichtbar sind und die NutzerInnen selbst steuern können, wann sie vertiefte Informationen einsehen.
+
+Besonders benutzerfreundlich ist die neue Lösung auch darin, dass, wenn nur eine einzige Gruppe vorhanden ist, diese Card bereits automatisch ausgeklappt dargestellt wird. Auf diese Weise entfällt ein unnötiger zusätzlicher Klick und der direkte Zugriff auf die Gruppendetails wird erleichtert – ein kleines Detail, das jedoch signifikant zur Verbesserung der User Experience beiträgt.
+
+Eine weitere Optimierung ist auf der SingelPlantView gemacht worden.
+Aufgrund Nutzerfeedbacks wurde eine horizontale Linie in das Diagramm integriert, um den Sollwert des Messsatzes optisch darzustellen. Die Linie ermöglicht es den Nutzerinnen und Nutzern sofort zu erkennen, wo sich der Sollwert im Vergleich zu den aktuellen Messwerten befindet, sodass Abweichungen zwischen Soll- und Ist-Werten intuitiv nachvollziehbar werden. Dadurch wird nicht nur die Übersicht verbessert, sondern auch die Entscheidungsfindung optimiert, da eine klare visuelle Referenz bereitgestellt wird, anhand derer schneller und fundierter bestimmt werden kann, ob und in welchem Umfang eine Anpassung – beispielsweise im Bewässerungsprozess – erforderlich ist.
+
+Durch die Integration der horizontalen Linie wird die Anwendung benutzerfreundlicher und nachvollziehbarer gestaltet. Gleichzeitig fügt sich die Linie nahtlos in das bestehende Design der SinglePlantView ein, das auf eine klare und konsistente Visualisierung von Daten setzt und damit zentrale Usability-Heuristiken wie die „Sichtbarkeit des Systemstatus“ sowie „Konsistenz und Standards“ unterstützt.
+
+
 \subsection{Verwendete Heuristiken in der Anwendung}
 
-Im Rahmen der konkreten Umsetzung wurden vier der zehn Heuristiken gezielt adressiert mit der Oberfläche:
-\begin{itemize}
-	\item \textbf{Sichtbarkeit des Systemstatus}: Ladeindikatoren und Sensorstatusanzeigen geben kontinuierliches Feedback über Systemvorgänge.
-	\item \textbf{Konsistenz und Standards}: Einheitliche Icons und Farbkonzepte gemäß Tailwind-Designprinzipien unterstützen ein kohärentes Erscheinungsbild \cite{TailwindCSS}.
-	\item \textbf{Fehlervorbeugung}: Formulare verhindern fehlerhafte Eingaben durch Validierung und Feedback in Echtzeit.
-	\item \textbf{Hilfe und Dokumentation}: Tooltips und leere Zustandsanzeigen dienen der kontextsensitiven Orientierung.
-\end{itemize}
+Im Rahmen der konkreten Umsetzung wurden mehrere der zehn Usability-Heuristiken nach Nielsen gezielt berücksichtigt und systematisch in die Gestaltung der Benutzeroberfläche integriert:
 
-Darüber hinaus wurde auch die Heuristik \textbf{Entsprechung zwischen System und realer Welt} (Heuristik 2) durch das Objektdesign berücksichtigt. Die hierarchische Struktur der Anwendung – von der Wohnung über Zimmer bis zu einzelnen Pflanzen – entspricht einem mentalen Modell aus dem Alltagskontext. Dadurch wird die Orientierung erleichtert und eine intuitive Navigation gefördert.
+Die Heuristik der Sichtbarkeit des Systemstatus wird durch die Verwendung von Toast-Notifications umgesetzt. Diese erscheinen automatisch bei allen Backend-Abfragen und informieren die NutzerInnen unmittelbar über den Verlauf und das Ergebnis einer Operation. Zusätzlich zeigen Statusindikatoren den Zustand des Sensors an.
 
-Die übrigen Heuristiken wurden entweder implizit adressiert (z.\,B. minimalistisches Design durch Tailwind) oder aufgrund von Priorisierungen im Projektverlauf nicht explizit umgesetzt. Beispielsweise wurde auf Heuristik 9 verzichtet, da es sich nur um ein \ac{POC} handelt und somit keine fortgeschrittenen User hat.
+Konsistenz und Standards werden durch den Einsatz von Tailwind CSS in Verbindung mit einheitlich definierten Designvariablen gewährleistet. Farben wie \texttt{primary}, \texttt{secondary}, \texttt{destructive} oder \texttt{background} kommen konsistent in Buttons, Karten und Formularen zum Einsatz und tragen zu einem kohärenten Erscheinungsbild bei \cite{TailwindCSS}.
+
+Zur Umsetzung der Heuristik Fehlervorbeugung wurden alle Formulare mit clientseitiger Validierung ausgestattet. Eingaben werden bereits vor dem Absenden überprüft und Fehler mit Toast-Notifications angezeigt. Leere Eingabefelder enthalten stets einen Platzhalter, der die erwartete Eingabe beschreibt und so die korrekte Nutzung unterstützt.
+
+Die Heuristik Hilfe und Dokumentation wurde durch einige kontextabhängige Tooltips sowie strukturierte Leere-Zustandsanzeigen berücksichtigt. Diese informieren über die nächsten Schritte oder ermöglichen eine direkte Navigation zur entsprechenden Aktion.
+
+Ergänzend wurde auch die Heuristik Entsprechung zwischen System und realer Welt umgesetzt. Die hierarchische Struktur der Anwendung – von der Wohnung über Zimmer bis zu einzelnen Pflanzen – entspricht einem mentalen Modell aus dem Alltagskontext. Diese logische Ordnung fördert die Orientierung und trägt zu einer intuitiven Navigation bei.
+
+Weitere Heuristiken wie Ästhetisches und minimalistisches Design sind durch das reduzierte Tailwind-basierte UI implizit realisiert worden.
+
+Insgesamt zeigt sich, dass zentrale Usability-Prinzipien systematisch in das UI-Design integriert wurden, um eine benutzerfreundliche und robuste Anwendungserfahrung zu gewährleisten.
 
 \subsection{Responsive Design}
 
-Die Anwendung wurde im Hinblick auf verschiedene Gerätegrößen konzipiert. Dabei kamen insbesondere die Tailwind-Breakpoints \texttt{sm}, \texttt{md}, \texttt{lg} und \texttt{xl} zum Einsatz \cite{TailwindCSS}. Für mobile Endgeräte wurde eine Bottom-Navigation eingeführt. Horizontales Scrollen auf der Startseite dient der kompakten Darstellung mehrerer Informationskarten.
+Die Umsetzung des Responsive Designs wurde dabei so angelegt, dass die Anwendung unabhängig von der verwendeten Gerätegröße ein konsistentes und nutzerfreundliches Erlebnis bietet. Mithilfe der Tailwind-Breakpoints \texttt{sm}, \texttt{md}, \texttt{lg} und \texttt{xl} können Layout, Typografie und Abstände flexibel an kleinere, mittlere und größere Displays angepasst werden \cite{TailwindCSS}. Dies stellt sicher, dass die einzelnen Interface-Elemente, wie Buttons, Karten und Navigationsmenüs, sich dynamisch skalieren und neu anordnen, um eine optimale Lesbarkeit und Bedienbarkeit zu gewährleisten.
 
-\subsection{User Stories und funktionale Umsetzung}
+Für alle Gerätetypen wurde zudem eine Bottom-Navigation implementiert, die insbesondere auf mobilen Endgeräten eine intuitive und leicht zugängliche Navigation ermöglicht. Diese Navigation dient als zentrales Steuerelement, das es den NutzerInnen erlaubt, unkompliziert zwischen den Hauptbereichen der Anwendung zu wechseln, ohne auf aufwendige und unübersichtliche Menüstrukturen zurückgreifen zu müssen.
 
-Zur nutzerzentrierten Anforderungsdefinition wurden User Stories eingesetzt, etwa:
+Ein weiteres Gestaltungselement ist das horizontale Scrollen auf der Startseite. Dieses Feature wurde eingeführt, um mehrere Informationskarten kompakt darzustellen, ohne dass der vertikale Platz unnötig beansprucht wird. Durch diese Anordnung können NutzerInnen schnell einen Überblick über verschiedene Inhalte erhalten und bei Bedarf mittels horizontaler Gesten zusätzliche Details abrufen. Insgesamt trägt das responsive Design dazu bei, dass die Anwendung sich flexibel an die individuellen Bedürfnisse und Nutzungsszenarien der AnwenderInnen anpasst und ein nahtloses Nutzungserlebnis über alle Geräte hinweg gewährleistet.
+
+\subsection{User-Stories und funktionale Umsetzung}
+
+Zur nutzerzentrierten Anforderungsdefinition wurden User-Stories eingesetzt, etwa:
 \begin{itemize}
 	\item \enquote{Als Benutzer möchte ich ein Pflanzenbild hochladen, damit die Pflanze automatisch erkannt wird.}
-	\item \enquote{Als Gruppenmitglied möchte ich einem Raum beitreten, um gemeinsam mit anderen NutzerInnen Pflanzen zu pflegen.}
+	\item \enquote{Als Benutzer möchte ich auch Mitglied anderer Gruppeen sein, um gemeinsam mit anderen NutzerInnen Pflanzen zu pflegen.}
 \end{itemize}
 Diese flossen in die Entwicklung dedizierter Komponenten ein (z.\,B. UploadPhotoView, GroupsView) und sicherten eine nutzergeleitete Gestaltung.
 
 \section{Erweiterte Frontend-Techniken}
 \label{sec:frontend-erweitert}
 
-Im Folgenden werden ausgewählte Techniken vorgestellt, die in modernen Frontend-Architekturen zum Einsatz kommen. Einige dieser Methoden, wie Lazy Loading und Performance-Audits, wurden im Rahmen dieser Arbeit bereits angewendet. Andere Techniken, wie automatisierte Tests, werden exemplarisch vorgestellt, jedoch im Rahmen dieses \ac{POC} nicht implementiert.
+Im Folgenden werden ausgewählte Techniken vorgestellt, die in modernen Front\-end-Ar\-chi\-tek\-tur\-en zum Einsatz kommen. Einige dieser Methoden, wie Lazy Loading und Performance-Audits, wurden im Rahmen dieser Arbeit bereits angewendet. Andere Techniken, wie automatisierte Tests, werden exemplarisch vorgestellt, jedoch im Rahmen dieses \ac{POC} nicht implementiert.
 
 \subsection{Lazy Loading in der Anwendung}
 
@@ -70,4 +90,4 @@ Zur Bewertung der Qualität der entwickelten Anwendung wurden regelmäßig \emph
 	\item  \textbf{SEO:}  Meta-Tags
 \end{itemize}
 
-Diese Angaben, wurden genutzt um stetig die Anwendung zu verbessern, gleich auch wenn bei einem \ac{POC} nicht der Schwerpunkt auf \ac{SEO} oder Accessability liegt. Die Performance wird auf den verschieden Seiten teilweise sehr unterschiedlich bewertet worden, da aber keine starken Verzögerungen, bei der Bedienung, identifiziert werden konnten wurde noch keine Optimierung durchgeführt.
+Diese Angaben, wurden genutzt um stetig die Anwendung zu verbessern, gleich auch wenn bei einem \ac{POC} nicht der Schwerpunkt auf \ac{SEO} oder Accessability liegt. Die Performance wird auf den verschieden Seiten teilweise sehr unterschiedlich bewertet, da aber keine starken Verzögerungen bei der Bedienung identifiziert wurden, wurde keine allgemeine Optimierung durchgeführt.

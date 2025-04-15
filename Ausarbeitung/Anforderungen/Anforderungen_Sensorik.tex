@@ -1,0 +1,88 @@
+\section{Anforderungen an die Peripheriegeräte}
+
+\subsection{Allgemeine Anforderungen an externe Komponenten}
+
+Die externen Peripheriegeräte eines automatisierten Bewässerungssystems übernehmen zentrale Aufgaben in der Umweltdatenerfassung, der Ansteuerung von Aktoren sowie der Stromversorgung einzelner Systembestandteile. Diese Komponenten sind funktional eng mit dem IoT-Gerät gekoppelt, operieren jedoch teils auf voneinander getrennten Stromkreisen und arbeiten mit verschiedenen elektrischen Schnittstellen.
+\\
+Um einen stabilen, sicheren und skalierbaren Betrieb zu ermöglichen, müssen die eingesetzten Sensoren, Schaltelemente und Energieversorgungsbausteine eine Reihe technischer, funktionaler und physikalischer Anforderungen erfüllen. Im Folgenden werden diese Anforderungen strukturiert analysiert und spezifiziert.
+
+\subsection{Anforderungen an die Bodenfeuchtemessung}
+
+Zur Messung der Bodenfeuchtigkeit wird ein Sensor eingesetzt, der den Feuchtegehalt über die elektrische Leitfähigkeit eines Mediums bestimmt. Die daraus resultierenden Anforderungen betreffen sowohl das elektrische Verhalten als auch die Umgebungsresistenz des Sensors.
+\\
+Der Sensor muss ein elektrisches Spannungssignal ausgeben, das sich mit geeigneter Auflösung und Genauigkeit durch das Steuergerät digitalisieren und auswerten lässt. Die resultierenden Messwerte sollten eine hinreichende Differenzierung im typischen Feuchtebereich von Zimmerpflanzen (ca. 10–70\,\%) ermöglichen und dabei möglichst wenig Drift aufweisen.
+\\
+Da der Sensor dauerhaft in feuchtem Substrat eingesetzt wird, muss er gegen elektrolytische Korrosion resistent sein. Dies betrifft insbesondere die Elektrodenstruktur, welche einer langfristigen Oxidation oder Auflösung entgegenwirken muss. Zusätzlich ist sicherzustellen, dass keine nennenswerten Leckströme vom Sensorsignalpfad in das System zurückkoppeln. Eine elektrische Entkopplung – beispielsweise über Schutzwiderstände oder aktive Puffer – ist empfehlenswert.
+\\
+Zudem ist die mechanische Robustheit des Sensors zu berücksichtigen. Dieser muss für den dauerhaften Einbau in Pflanzgefäße geeignet sein und darf durch wiederholtes Einsetzen oder Herausziehen keine signifikanten Veränderungen seiner Messeigenschaften zeigen.
+
+\subsection{Anforderungen an Temperatur- und Luftfeuchtigkeitsmessung}
+
+Für die Messung von Temperatur und Luftfeuchtigkeit ist ein kombinierter Sensor vorgesehen, der seine Messwerte über eine digitale Datenleitung an den Mikrocontroller überträgt. Der Sensor verwendet ein zeitkritisches Kommunikationsprotokoll, bei dem ein stabiler Timing-Verlauf und Interruptsteuerung auf der Seite des Controllers erforderlich sind.
+\\
+Die Messgenauigkeit muss im für Zimmerpflanzen typischen Bereich ausreichend sein. Als Zielwerte gelten ±2\,°C für Temperatur und ±5\,\% relative Luftfeuchte. Die Langzeitstabilität der Messwerte sollte über mehrere Wochen gegeben sein, ohne dass eine Nachkalibrierung notwendig ist.
+\\
+Aufgrund der relativ geringen Datenrate und des unidirektionalen Kommunikationsverhaltens eignet sich diese Sensorklasse vor allem für einfache Anwendungen mit geringer Messfrequenz. Die Ausfallrate kann durch geeignete Fehlerprüfmechanismen (z.\,B. Timeout-Überwachung und Retry-Logik) reduziert werden.
+
+\subsection{Anforderungen an die Lichtstärkemessung}
+
+Zur Messung der Lichtintensität im Bereich des sichtbaren Spektrums wird ein Sensor eingesetzt, der über eine serielle Kommunikationsschnittstelle mit dem Steuergerät verbunden ist und eine lux-bezogene Beleuchtungsstärke zurückliefert.
+\\
+Die Anforderungen umfassen eine zuverlässige Kommunikation über die gewählte digitale Schnittstelle innerhalb der spezifizierten Frequenzbereiche sowie ein geeignetes Adressierungsschema, das keine Konflikte mit anderen Komponenten erzeugt. Eine notwendige Pull-up-Beschaltung auf den Datenleitungen muss systemseitig gewährleistet sein.
+\\
+Der Messbereich sollte mindestens bis 2000\,lx reichen, wobei auch niedrige Intensitäten (unter 100\,lx) differenziert erfassbar sein müssen. Die Sensorauflösung und Dynamik sollten so gewählt sein, dass auch schwache Beleuchtung durch indirektes Sonnenlicht oder künstliche Raumbeleuchtung erkannt werden kann. Eine kontinuierliche Messung bei mäßiger Abtastfrequenz (z.\,B. alle 10\,s) ist ausreichend.
+\\
+Zudem ist auf eine mechanisch und thermisch stabile Montage zu achten, da Temperaturschwankungen und Lichtabschattungen die Messwerte verfälschen können.
+
+\subsection{Anforderungen an die Schaltlogik (Relaismodul)}
+
+Zur elektrischen Trennung zwischen Mikrocontroller und Pumpe samt separater Spannungsquelle wird ein Relaismodul verwendet, das über eine digitale Steuerspannung geschaltet wird. Das Relaismodul muss mit einer niedrigen Eingangsspannung betrieben werden können und darf im inaktiven Zustand keine Lastspannung auf den Steuerkreis zurückführen.
+\\
+Wesentliche Anforderungen sind:
+
+\begin{itemize}
+	\item \textbf{Kompatibilität:} Die Relaisspule oder deren Ansteuerlogik (z.\,B. via Optokoppler) muss durch ein digitales Steuersignal mit niedrigem Spannungspegel zuverlässig aktiviert werden können, ohne zusätzliche Verstärker- oder Treiberkomponenten.
+	
+	\item \textbf{Trennfestigkeit und Kontaktbelastbarkeit:} Das Relais muss Ströme im Bereich von mindestens 1–2\,A schalten können, da elektrische Pumpen bei Inbetriebnahme kurzzeitig hohe Einschaltströme erzeugen.
+	
+	\item \textbf{Sicheres Schaltverhalten:} Das Modul darf keine Prellungen oder unkontrollierten Wiederholimpulse erzeugen. Ein definierter Einschaltimpuls über eine Tasksteuerung ist vorzusehen.
+	
+	\item \textbf{Galvanische Trennung:} Zwischen Steuer- und Lastkreis muss eine vollständige galvanische Trennung gewährleistet sein, um Rückkopplungen oder Störungen im Mikrocontroller zu vermeiden.
+\end{itemize}
+
+\subsection{Anforderungen an den Pumpen-Aktor}
+
+Die verwendete Pumpe dient zur kurzzeitigen Wasserförderung und wird in einem Intervallbetrieb aktiviert. Die Anforderungen ergeben sich vor allem aus ihrer elektrischen Belastbarkeit, Laufzeitstabilität und mechanischen Verträglichkeit.
+\\
+Die Pumpe muss mit einer Versorgungsspannung im Bereich 5–12\,V betrieben werden und über Schraub- oder Schlauchanschlüsse für kleine Wassermengen verfügen. Die Fördermenge pro Sekunde muss in einem Bereich liegen, der eine differenzierte Laufzeitsteuerung (typ. 2–10\,s) ermöglicht. Eine zu hohe Förderrate würde zu unpräzisem Wasserauftrag führen, eine zu niedrige zu langen Laufzeiten.
+\\
+Die Stromaufnahme muss innerhalb der durch das Relaismodul spezifizierten Grenzwerte bleiben. Zudem sollte die Pumpe gegen Überhitzung und Blockieren geschützt sein. Ein gewisser Geräuschpegel ist systembedingt tolerierbar, solange er keine funktionalen Einschränkungen verursacht.
+
+\subsection{Anforderungen an die externe Pumpen-Stromversorgung}
+
+Da die Pumpe nicht aus der Mikrocontroller-Stromversorgung betrieben werden kann, ist eine separate Energiequelle erforderlich. Diese muss stabile Spannungs- und Stromwerte liefern, auch bei abruptem Lastwechsel durch das Relais.
+\\
+Die Ausgangsspannung muss zur Pumpe passen und ausreichend Strom bereitstellen, um Anlauf- und Förderströme zuverlässig bedienen zu können. Dabei sind Schutzmechanismen gegen Überstrom, Verpolung und thermische Belastung vorzusehen. Eine separate Masseführung für Last- und Steuerkreis ist ratsam, um potenzielle Störungen oder Rückströme zu verhindern.
+\\
+Zur Absicherung empfiehlt sich eine Strombegrenzung über Sicherung oder elektronischen Schalter sowie eine klar getrennte Kabelführung zur Vermeidung elektromagnetischer Einstreuungen in den Mikrocontrollerbereich.
+
+\subsection{Nicht-funktionale Anforderungen an Peripheriegeräte}
+
+Neben den beschriebenen funktionalen Anforderungen ergeben sich für die verwendeten Peripheriegeräte weitere nicht-funktionale Anforderungen, welche maßgeblich zur Betriebssicherheit, Wartbarkeit und Skalierbarkeit des Systems beitragen. Diese betreffen insbesondere qualitative Eigenschaften, die nicht unmittelbar aus der Gerätespezifikation hervorgehen, jedoch für einen stabilen und langlebigen Systembetrieb essenziell sind.
+
+\begin{itemize}
+	\item \textbf{Zuverlässigkeit und Lebensdauer:} Alle eingesetzten Komponenten – insbesondere Sensoren und Pumpen – müssen für einen Dauerbetrieb unter haushaltsüblichen Bedingungen geeignet sein. Dazu gehört die Fähigkeit, über viele Zyklen hinweg mechanisch, thermisch und elektrisch stabil zu funktionieren, ohne dass Messdrift, Kontaktprobleme oder mechanischer Verschleiß zu Funktionsverlust führen.
+	
+	\item \textbf{Störfestigkeit:} Sensoren und Schnittstellen sollten gegenüber elektromagnetischen Störungen, Leitungslängen oder Spannungsschwankungen möglichst unempfindlich sein. Dies betrifft insbesondere analoge Signale und I²C-Verbindungen, bei denen Pull-up-Widerstände und EMV-gerechtes Routing von besonderer Bedeutung sind.
+	
+	\item \textbf{Installationsfreundlichkeit:} Die Peripheriegeräte sollen einfach installierbar und ersetzbar sein. Dies betrifft etwa die Länge und Robustheit von Anschlussleitungen, die Montagemöglichkeiten für Sensoren (z.\,B. in Blumentöpfen) sowie die Standardisierung von Steckverbindungen oder Lötpads.
+	
+	\item \textbf{Wartungsarmut:} Die Komponenten sollen möglichst wenig Pflege bedürfen. Beispielsweise darf die Pumpe keine regelmäßige Entlüftung oder Reinigung erfordern, Sensoren sollen nicht durch Bodenkontakt oder Feuchtigkeit ausfallen. Korrosionsbeständige Materialien und versiegelte Gehäuse sind bevorzugt.
+	
+	\item \textbf{Kompatibilität und Austauschbarkeit:} Die eingesetzten Bauteile sollten möglichst marktüblich und standardisiert sein. So kann bei einem Defekt ein Austausch mit minimalem Anpassungsaufwand erfolgen. Dies betrifft sowohl mechanische Bauformen (z.\,B. Sensorlänge, Schlauchdurchmesser) als auch elektrische Schnittstellen.
+	
+	\item \textbf{Verfügbarkeit und Kostenbewusstsein:} Die Peripheriekomponenten sollen auch in Kleinserien oder Einzelstückzahlen gut verfügbar sein. Sie dürfen keine proprietären oder schwer beschaffbaren Spezialbauteile enthalten, die Ersatz oder Erweiterung behindern würden.
+\end{itemize}
+
+\vspace{1em}
+\noindent Die externen Peripheriegeräte eines Bewässerungssystems müssen funktional und elektrisch auf das zentrale Steuergerät abgestimmt sein. Ihre Auswahl und Integration basieren auf definierten Anforderungen hinsichtlich Signaltyp, Schnittstelle, Stromversorgung, mechanischer Verträglichkeit sowie elektrischer Trennung. Insbesondere die Kombination aus analoger und digitaler Sensorik, gepulster Aktorik über Relais sowie externer Versorgung erfordert eine systematische Auslegung und Absicherung der Komponenten. Die in diesem Kapitel formulierten Anforderungen stellen sicher, dass die Peripherie langfristig stabil, präzise und betriebssicher in das Gesamtsystem eingebunden werden kann.
