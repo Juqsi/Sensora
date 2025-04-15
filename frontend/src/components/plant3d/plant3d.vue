@@ -2,102 +2,148 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { defineProps, onMounted, ref } from 'vue'
+import { defineProps, onMounted, ref, watch } from 'vue'
 import { useColorMode } from '@vueuse/core'
 
-// Definiere Props für den Modelltyp, beide optional
 const props = defineProps({
   modelType: {
     type: Array as () => string[],
     required: false,
     default: () => [],
   },
-  plantModelPath: { type: String, required: true }, // Pfad zum Pflanzenmodell
+  plantModelPath: { type: String, required: true },
 })
 
-// Hole die Farbeinstellung des Modus
 const mode = useColorMode()
-
-// Ref für das DOM-Element, in dem die Szene gerendert wird
 const threeContainer = ref<HTMLElement | null>(null)
+
+// Deklaration von Variablen, damit sie auch im Watcher zugänglich sind
+let scene: THREE.Scene
+let camera: THREE.PerspectiveCamera
+let renderer: THREE.WebGLRenderer
+let controls: OrbitControls
+const loader = new GLTFLoader()
+// Variable für das aktuell geladene Pflanzenmodell
+let currentPlantModel: THREE.Object3D | null = null
+
+/**
+ * Skaliert und zentriert ein Modell anhand seiner BoundingBox.
+ * @param model - Das zu skalierende Modell (THREE.Object3D)
+ * @param desiredSize - Gewünschte maximale Dimension; hier standardmäßig auf 5 gesetzt
+ * @returns Das skalierte Modell
+ */
+const scaleAndCenterModel = (model: THREE.Object3D, desiredSize = 5) => {
+  const box = new THREE.Box3().setFromObject(model)
+  const size = box.getSize(new THREE.Vector3())
+  const maxDimension = Math.max(size.x, size.y, size.z)
+
+  const scaleFactor = desiredSize / maxDimension
+  model.scale.set(scaleFactor, scaleFactor, scaleFactor)
+
+  // Nach Skalierung die Box und deren Mittelpunkt erneut berechnen
+  const boxScaled = new THREE.Box3().setFromObject(model)
+  const center = boxScaled.getCenter(new THREE.Vector3())
+  model.position.sub(center)
+
+  return model
+}
+
+/**
+ * Lädt das Pflanzenmodell anhand eines Pfades.
+ * Falls bereits ein Modell geladen wurde, wird dieses entfernt.
+ * @param path - Pfad zur GLB-Datei
+ */
+const loadPlantModel = (path: string) => {
+  loader.load(path, (gltf) => {
+    // Entferne vorhandenes Modell, falls vorhanden
+    if (currentPlantModel) {
+      scene.remove(currentPlantModel)
+    }
+    currentPlantModel = gltf.scene
+    scaleAndCenterModel(currentPlantModel, 5)
+    // Setze das Modell an die gewünschte Position
+    currentPlantModel.position.set(0, 0, 0)
+    scene.add(currentPlantModel)
+
+    // Setze das OrbitControls-Ziel (hier bspw. etwas oberhalb der Pflanze)
+    const targetPosition = new THREE.Vector3(0, 4, 0)
+    controls.target.copy(targetPosition)
+    controls.update()
+  })
+}
 
 onMounted(() => {
   const container = threeContainer.value
   if (!container) return
 
   // Szene erstellen
-  const scene = new THREE.Scene()
+  scene = new THREE.Scene()
   scene.background = new THREE.Color(mode.value === 'dark' ? 0x000000 : 0xffffff)
 
   // Kamera erstellen
-  const camera = new THREE.PerspectiveCamera(
+  camera = new THREE.PerspectiveCamera(
     75,
     container.offsetWidth / container.offsetHeight,
     0.1,
-    1000,
+    1000
   )
-  camera.position.set(0, 5, 3) // Stelle die Kamera so, dass sie alle Objekte sehen kann
+  camera.position.set(0, 4.5, 0)
 
   // Renderer erstellen
-  const renderer = new THREE.WebGLRenderer({ antialias: true })
+  renderer = new THREE.WebGLRenderer({ antialias: true })
   renderer.setSize(container.offsetWidth, container.offsetHeight)
   container.appendChild(renderer.domElement)
 
-  // Licht hinzufügen
+  // Ambient Light hinzufügen
   scene.add(new THREE.AmbientLight(0xffffff, 0.8))
 
-  // OrbitControls (Zoom und Pan deaktivieren, nur horizontale Drehung erlauben)
-  const controls = new OrbitControls(camera, renderer.domElement)
+  // OrbitControls erstellen (nur horizontale Drehung, Zoom und Pan deaktiviert)
+  controls = new OrbitControls(camera, renderer.domElement)
   controls.enableZoom = false
   controls.enablePan = false
   controls.minPolarAngle = Math.PI / 2
   controls.maxPolarAngle = Math.PI / 2
 
-  // Modell der Pflanze laden (immer geladen)
-  const loader = new GLTFLoader()
-  loader.load(props.plantModelPath, (gltf) => {
-    // Position der Pflanze festlegen
-    const plant = gltf.scene
-    plant.position.set(0, 0, 0) // Pflanze in der Mitte platzieren
-    scene.add(plant)
+  // Initiales Laden des Pflanzenmodells
+  loadPlantModel(props.plantModelPath)
 
-    // Zielpunkt explizit setzen, damit die Kamera auf die Pflanze schaut
-    const targetPosition = new THREE.Vector3(0, 4, 0) // Zielpunkt auf der Pflanze
-    controls.target.copy(targetPosition)
-    controls.update()
-  })
-
-  // Modell basierend auf `modelType` laden
-  const loadAdditionalModel = (modelType: string, modelPath: string, position: THREE.Vector3) => {
+  /**
+   * Lädt ein zusätzliches Modell, skaliert und positioniert es.
+   * @param modelType - Typ des Modells (z.B. 'sun' oder 'cloud')
+   * @param modelPath - Pfad zur GLB-Datei
+   * @param desiredPosition - Gewünschte Position im Raum
+   * @param desiredSize - Gewünschte maximale Größe (standardmäßig auf 5 gesetzt)
+   */
+  const loadAdditionalModel = (
+    modelType: string,
+    modelPath: string,
+    desiredPosition: THREE.Vector3,
+    desiredSize = 5,
+  ) => {
     loader.load(modelPath, (gltf) => {
       const model = gltf.scene
-      model.position.set(position.x, position.y, position.z) // Setzt die Position des Modells
+      scaleAndCenterModel(model, desiredSize)
+      model.position.add(desiredPosition)
       scene.add(model)
-
-      // Zielpunkt explizit setzen, damit die Kamera auch auf die Sonne oder Wolke schaut
-      //controls.target.copy(position)
       controls.update()
     })
   }
 
-  // Lade Modelle, falls sie in `modelType` übergeben wurden
+  // Zusätzliche Modelle basierend auf den modelType-Props laden
   if (props.modelType.includes('sun')) {
-    loadAdditionalModel('sun', '/models3d/cloud.glb', new THREE.Vector3(0, 6, 0)) // Sonne 10 Einheiten nach oben
+    loadAdditionalModel('sun', '/models3d/cloud.glb', new THREE.Vector3(0, 6, 0), 5)
   }
-
   if (props.modelType.includes('cloud')) {
-    loadAdditionalModel('cloud', '/models3d/cloud.glb', new THREE.Vector3(0, 1, 0)) // Wolke 5 Einheiten nach oben und 5 Einheiten nach hinten
+    loadAdditionalModel('cloud', '/models3d/cloud.glb', new THREE.Vector3(0, 1, 0), 5)
   }
 
-  // Rendering-Schleife
   const animate = () => {
     requestAnimationFrame(animate)
-    controls.update() // Steuerung aktualisieren
+    controls.update()
     renderer.render(scene, camera)
   }
   animate()
 
-  // Fenstergröße ändern
   window.addEventListener('resize', () => {
     if (container) {
       camera.aspect = container.offsetWidth / container.offsetHeight
@@ -106,6 +152,16 @@ onMounted(() => {
     }
   })
 })
+
+// Watcher: Bei einer Änderung im plantModelPath wird das Pflanzenmodell neu geladen
+watch(
+  () => props.plantModelPath,
+  (newPath, oldPath) => {
+    if (newPath !== oldPath) {
+      loadPlantModel(newPath)
+    }
+  }
+)
 </script>
 
 <template>

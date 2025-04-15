@@ -1,10 +1,30 @@
 export const plantAvatars = [
   {
-    label: 'plant.settings.Group1',
-    value: 'uuid-1-der-gruppe',
+    label:"Plant 1",
+    value: 'plant.glb',
   },
   {
-    label: 'plant.settings.Group2',
-    value: 'uuid-2-der-gruppe',
+    label:"Plant 2",
+    value: 'hand_painted_plant.glb',
+  },
+  {
+    label:"Plant 3",
+    value: 'plant_pot.glb',
+  },
+  {
+    label:"Lupinen",
+    value: 'lupine_plant.glb',
+  },
+  {
+    label:"Palme",
+    value: 'palm_plant.glb',
+  },
+  {
+    label:"Efeu",
+    value: 'pothos_plant.glb',
+  },
+  {
+    label:"Cannabis",
+    value: 'cannabis_plant.glb',
   },
 ]

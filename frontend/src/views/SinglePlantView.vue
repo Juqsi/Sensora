@@ -25,6 +25,9 @@ const roomStore = useRoomStore()
 const plant = ref<Plant>()
 const room = ref<Room | undefined>()
 
+const plantavatar = ref('')
+
+
 const {searchPlant} = useSearch()
 
 const measuredTiles = ref<InstanceType<typeof MeasuredTiles> | null>(null)
@@ -40,7 +43,7 @@ onMounted(async () => {
         router.push('/plants');
       });
     }
-
+    plantavatar.value = "/models3d/" + (plant.value?.avatarId ?? "plant.glb")
     await Promise.all([
       (async () => {
         values = await plantStore.getCombinedSensorData(plant.value?.plantId ?? '', yesterday, today);
@@ -130,7 +133,7 @@ usePullToRefresh(async () => {
       </RouterLink>
     </template>
   </NavCard>
-  <Plant3d plant-model-path="/models3d/plant.glb" />
+  <Plant3d :plant-model-path="plantavatar" />
   <Tabs class="w-full" default-value="values">
     <TabsList class="grid w-full grid-cols-2">
       <TabsTrigger value="values">{{t('plant.Values')}}</TabsTrigger>
