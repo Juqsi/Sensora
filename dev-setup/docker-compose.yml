@@ -1,0 +1,28 @@
+services:
+  #frontend:
+  #  build:
+  #    context: ../frontend
+  #    dockerfile: Dockerfile
+  #  ports:
+  #    - "80:80"
+  #  depends_on:
+  #    - db
+
+  backend:
+    image: comtols/sensora-frontend-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://postgres:mysecretpassword@db:5432/sensora
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"

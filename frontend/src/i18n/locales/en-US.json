@@ -1,0 +1,589 @@
+{
+  "404view": {
+    "subtitle": "The requested page does not exist.",
+    "title": "404 - Page Not Found"
+  },
+  "AI": {
+    "Subtitle": "Take a picture to recognize your plant or simply search for it.",
+    "Title": "Plant AI"
+  },
+  "Account": {
+    "Account": "Account",
+    "AccountDescription": " Make changes to your account here.",
+    "CurrentPassword": "Current Password",
+    "Email": "Mail",
+    "FirstName": "Firstname",
+    "FistName": "First name",
+    "NewPassword": "New Password",
+    "Password": "Password",
+    "PasswordDescription": "Change your Password",
+    "SaveChanges": "Save Changes",
+    "SavePassword": "Save Password",
+    "SurName": "Surname",
+    "Surname": "Surname",
+    "Username": "Username"
+  },
+  "Camera": {
+    "Capture": "Capture",
+    "CapturePhoto": "Capture Photo",
+    "CapturePhotoDescription": "Take a picture of your plant, to recognize the planttype with AI",
+    "ErrorCamera": "Camera issues, check settings",
+    "ErrorMaxSize": "One or more images exceed the maximum file size",
+    "ErrorResponse": "Upload or response error ",
+    "Exit": "Exit",
+    "NoImage": "Select an image first!",
+    "SelectImages": "Select Images",
+    "SelectedImages": "Selected images",
+    "StartCamera": "Start Camera",
+    "Upload": "Upload",
+    "UploadDone": "Upload successfully completed",
+    "UploadError": "Upload error",
+    "UploadFinished": "Upload successful",
+    "Uploading": "Upload image...",
+    "errorAccess": "Access to the camera is forbitten or not possible",
+    "errorCanvas": "Camera or Canvas not available.",
+    "errorCanvasContext": "Can't create canvas context.",
+    "isUpload": "Upload..."
+  },
+  "Group": {
+    "Rooms": "Rooms"
+  },
+  "Hom": "Home",
+  "Home": {
+    "Hints": "Hints"
+  },
+  "PlantInformation": {
+    "CareLevel": "Care Level",
+    "Cycle": "Cycle",
+    "GrowthRate": "Growth Rate",
+    "HardinessZone": "Hardiness Zone",
+    "Leaf": "Leaf",
+    "MoreInformation": "more information",
+    "Sun": "Sun",
+    "Use": "Use",
+    "Watering": "Watering"
+  },
+  "PlantList": {
+    "AddPlant": "Add Plant",
+    "Cancel": "Cancel",
+    "Delete": "Delete",
+    "DeletePlantWarningDescription": "This action cannot be undone. This will permanently delete your plant and remove all related data from our servers",
+    "DeletePlantWarningTitle": "Are you absolutely sure?",
+    "ErrorFilter": "You have to select at least one item.",
+    "Ext": "(ext)",
+    "Filter": "Filter",
+    "FilterBy": "Filter by",
+    "Group": "Apartment",
+    "ID": "ID",
+    "LastCall": "Last call",
+    "Model": "Model",
+    "Name": "Name",
+    "Plant": "Plant",
+    "Plants": "Plants",
+    "PlantsDescription": "Manage your Plants",
+    "Room": "Room",
+    "Sensor": "Sensor",
+    "Sensors": "Sensors",
+    "SensorsDescription": "Manage your Sensors",
+    "Showing": "Showing",
+    "Status": "Status"
+  },
+  "PlantSearch": {
+    "Search": "Search plant",
+    "SearchError": "Search failed:",
+    "Success": "Search successful!",
+    "isSearching": "Collect plant information ... ",
+    "noResults": "No plant found",
+    "searchButton": "Search"
+  },
+  "Profile": {
+    "ProfilePicture": "Profilepicture"
+  },
+  "SensorViewRow": {
+    "Actions": "Actions",
+    "Delete": "Delete",
+    "Edit": "Edit"
+  },
+  "Settings": {
+    "AccountData": "Account data",
+    "AccountDataDescription": "Name, Username and Mail",
+    "Appearance": "Appearance",
+    "AppearanceDescription": "Change the appearance of the app",
+    "Language": "Language",
+    "LanguageDescription": "Change the app language",
+    "Picture": "Profil Picture",
+    "PictureDescription": "Choos your favorit profile picture "
+  },
+  "ShareLink": {
+    "Copied": "Copied",
+    "ErrorCopy": "Error during copying",
+    "Generate": "Generate"
+  },
+  "SinglePlant": {
+    "EnterInvalidName": "The plant wants a name.",
+    "EnterValidRoom": "Please enter a valid room"
+  },
+  "about": {
+    "description": "We are a team of students working on our final project to create a smart irrigation system. The goal is to automate and optimize plant watering for households, making plant care easier and more efficient.",
+    "featuresList": [
+      "Automated watering system based on sensor data",
+      "Flexible configuration of watering times and amounts",
+      "Logging of past watering actions",
+      "Remote access via web interface",
+      "Sensor integration for soil moisture, temperature, humidity, and brightness",
+      "Notification system (Email) for watering and system errors"
+    ],
+    "featuresTitle": "Key Features:",
+    "githubLink": "https://github.com/Juqsi/Sensora",
+    "outcomeDescription": "By the end of the project, we will have a fully functional prototype of the smart irrigation system, capable of controlling watering remotely, logging watering actions, and providing detailed sensor readings.",
+    "outcomeTitle": "Project Outcome",
+    "projectGoalDescription": "The goal of this project is to develop a smart irrigation system that allows efficient and automated watering of plants. The system should be flexible and allow users to configure watering times, amounts, and have remote access via a web interface.",
+    "projectGoalTitle": "Project Goal",
+    "teamMembers": [
+      "Max",
+      "Lukas",
+      "Fynn",
+      "Timon",
+      "Justus"
+    ],
+    "teamTitle": "Our Team",
+    "technologiesList": [
+      "Frontend: Vue.js with TypeScript, Tailwind CSS",
+      "Backend: Rust (BFF), Python microservices for sensor data and email validation",
+      "Microcontrollers: ESP32 with the ESP-IDF framework with sensors (temperature, humidity, soil moisture, brightness), pump",
+      "Communication: Solace messaging between microcontrollers and microservices"
+    ],
+    "technologiesTitle": "Technologies We Use",
+    "title": "About Us"
+  },
+  "account": {
+    "AccountCreated": "Account successful created!",
+    "CreateHome": "Create your Home",
+    "CreateHomeDescription": "Create your Home and manage the access",
+    "Login": "Account Login",
+    "LoginDescription": "Enter your email and password to proceed",
+    "forename": "Firstname",
+    "surname": "Surname"
+  },
+  "active": "Active",
+  "addController": {
+    "ErrorUser": "Username or email is incorrect.",
+    "ErrorWlan": "SSID or password is incorrect.",
+    "MailLabel": "Mail",
+    "configError": "Error sending configuration",
+    "configErrorConnection": "Connection error to the controller.",
+    "configErrorGeneric": "An unknown error occurred.",
+    "configSuccess": "Configuration sent successfully!",
+    "confirmWifi": "I am connected to the \"Sensora\" Wi-Fi",
+    "description": "Follow these steps to add a new controller to your account.",
+    "formErrors": {
+      "connection": "Failed to connect to the device.",
+      "mailRequired": "Please enter your email address.",
+      "passwordRequired": "Please enter the Wi-Fi password.",
+      "server": "Request failed",
+      "ssidRequired": "Please enter a Wi-Fi network (SSID).",
+      "unknown": "An unknown error occurred.",
+      "usernameRequired": "Please enter your username."
+    },
+    "formSuccess": {
+      "sent": "Connection successfully submitted."
+    },
+    "important": "Important:",
+    "mailPlaceholder": "Your mail",
+    "openConfig": "Open Configuration Page (192.168.4.1)",
+    "refreshPlants": "Refresh Plants Overview",
+    "ssidLabel": "Wi-Fi Name (SSID)",
+    "ssidPlaceholder": "Your Wi-Fi network name",
+    "step1Description": "Connect the new controller to a power source. Ensure it is turned on.",
+    "step1Title": "Step 1: Power Up",
+    "step2Description": "On your device (smartphone, tablet, laptop), open the Wi-Fi settings and look for a network named:",
+    "step2Title": "Step 2: Connect to Wi-Fi",
+    "step3DescriptionForm": "Enter your home network's Wi-Fi details and your user account name here.",
+    "step3Title": "Step 3: Open Web Server",
+    "step3TitleForm": "Step 3: Enter Wi-Fi Details and Username",
+    "step4SuccessDescription": "The controller is now trying to connect to your Wi-Fi and our server. This may take a few moments.",
+    "step4SuccessTitle": "Step 4: Connecting...",
+    "step5Description": "Once the connection is established, you should see the new controller in your app. You may need to refresh the plants overview once.",
+    "step5Title": "Step 5: Verify Controller in App",
+    "submitConfig": "Submit Configuration",
+    "submitting": "Submitting...",
+    "title": "Add New Controller",
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "Your app username",
+    "wifiConnected": "Connected to \"Sensora\" Wi-Fi",
+    "wifiName": "Sensora",
+    "wifiPassword": "No password is required for this Wi-Fi network. Simply select it to connect.",
+    "wifiPasswordLabel": "Wi-Fi Password",
+    "wifiPasswordPlaceholder": "Your Wi-Fi password"
+  },
+  "appearance": {
+    "Dark": "Dark",
+    "Description": "Customize the appearance of the app.",
+    "Light": "Light",
+    "OSPreference": "Device",
+    "SetToOS": "Appearance set to OS preference",
+    "SwitchToDarkMode": "Appearance switched to Dark Mode",
+    "SwitchToLightMode": "Appearance switched to Light Mode",
+    "ThemeDescription": "Select the theme for the App.",
+    "ThemeLabel": "Theme",
+    "Title": "Appearance",
+    "UpdatePreferences": "Update preferences"
+  },
+  "brightness": "Brightness",
+  "error": "Error",
+  "errors": {
+    "E000": "Unable to parse query.",
+    "E100": "Authorization header required: use 'Authorization: Bearer <token>'.",
+    "E101": "Unable to parse authorization header string: check encoding.",
+    "E102": "Authorization header must be of type Bearer.",
+    "E103": "The token has expired or is invalid. Log in again.",
+    "E104": "Your email address is not yet validated. Check your emails.",
+    "E200": "Request does not match the required format. Check the documentation for more information.",
+    "E201": "Unable to find user by its username. Check spelling.",
+    "E202": "Unable to find user by its mail. Check spelling.",
+    "E204": "Password is incorrect. Check spelling.",
+    "E205": "Unable to save user. Username or mail already in use.",
+    "E300": "ID is incorrect. The resource may no longer exist.",
+    "E301": "You do not have permission to access this user.",
+    "E400": "Unable to save Apartment. Contact admin for more information.",
+    "E405": "The apartment does not exist. Check your spelling.",
+    "E406": "The invitation token has expired or is incorrect.",
+    "E500": "The room does not exist. Check your spelling.",
+    "E601": "The plant ID in the path is required. Check the documentation.",
+    "E603": "You don't have permission to do this. Ask a Apartment member or the room owner.",
+    "badRequest": "Invalid request!",
+    "forbidden": "Access denied!",
+    "loading": "Loading...",
+    "networkError": "Network error! Please check your internet connection.",
+    "notFound": "Resource not found!",
+    "requestCompleted": "Successful",
+    "serverError": "Internal server error! Please try again later.",
+    "sessionExpired": "Unauthorized!",
+    "unauthorized": "Session expired! Please log in again.",
+    "unknownError": "Unknown error!"
+  },
+  "faq": {
+    "q1": {
+      "answer": "This app helps home gardeners efficiently water their plants. Using sensors (soil moisture, temperature, humidity, and brightness) and an integrated pump, irrigation can be automated.",
+      "question": "What does this app do?"
+    },
+    "q2": {
+      "answer": "Plants belong to a room, which is part of an apartment. An apartment can have multiple members. You can invite others using an invite link valid for 7 days.",
+      "question": "How is the system organized?"
+    },
+    "q3": {
+      "answer": "No. You can add plants without a sensor, but sensors provide additional data for automation.",
+      "question": "Does every plant need a sensor?"
+    },
+    "q4": {
+      "answer": "Yes, using an invite link. It's valid for 7 days. Invited users can view and edit all plants in the apartment.",
+      "question": "Can I invite other people?"
+    },
+    "q5": {
+      "answer": "You can configure watering times and amounts, or enable automation. The system uses sensor data and/or weather forecasts for intelligent control.",
+      "question": "How does the irrigation work?"
+    },
+    "q6": {
+      "answer": "Yes, there's a log showing when and how much water each plant received – ideal for monitoring and optimization.",
+      "question": "Can I view past watering events?"
+    },
+    "q7": {
+      "answer": "Yes! The app is web-based and works on any internet-enabled device – phone, tablet, or laptop.",
+      "question": "Can I control the system remotely?"
+    },
+    "q8": {
+      "answer": "You can enable notifications – e.g., when watering is complete or if there are system errors.",
+      "question": "Are there notifications?"
+    },
+    "title": "FAQ – Smart Irrigation System"
+  },
+  "formErrors": {
+    "emailRequired": "Please enter your email address.",
+    "firstnameRequired": "Please enter your first name.",
+    "usernameRequired": "Please enter your username."
+  },
+  "group": {
+    "NameEmpty": "Your Apartemnts needs a name",
+    "ShareTitle": "Share invite link",
+    "alert": {
+      "cancel": "Cancel",
+      "confirm": "Delete",
+      "description": "Do you really want to remove {name} from the Apartment? This action cannot be undone.",
+      "title": "Are you sure?"
+    },
+    "create": {
+      "RoomEntity": "Kitchen",
+      "cancel": "Cancel",
+      "create": "Create apartment",
+      "description": "Create a apartment to create plants and manage them together",
+      "groupName": "Apartment name",
+      "namePlaceholder": "Apartment Mannheim",
+      "roomName": "Rooms",
+      "roomPlaceholder": "create your rooms",
+      "save": "Save",
+      "title": "Edit apartment"
+    },
+    "createRoom": {
+      "Entity": "Room",
+      "EntityPlaceholder": "Living room",
+      "NewEntity": "Add a room in an apartment",
+      "NewEntityCancel": "Cancel",
+      "NewEntitySelectionGroup": "Apartment",
+      "NewEntitySelectionGroupPlaceholder": "Select",
+      "NewEntitySubtitle": "Create a room in your existing apartments for a plant",
+      "NewEntityTitle": "Add Room",
+      "NoEntity": " No room available in apartment",
+      "SelectPlaceholder": "Select room"
+    },
+    "created": "Apartment created",
+    "deleted": "Apartment successfully deleted",
+    "emptyGroupSubtitle": "Start by creating your first apartment to get started.",
+    "emptyGroupTitle": "Create Your First Apartment",
+    "generateInviteToken": "Generate invite link...",
+    "generateInviteTokenFinished": "Created initation.",
+    "joined": "Successfully joined the Apartment",
+    "left": "Successfully left the Apartment",
+    "room": {
+      "alert": {
+        "cancel": "Cancel",
+        "confirm": "Remove",
+        "description": "Are you sure you want to remove the room \"{groupName}\" from the Apartment?",
+        "title": "Remove Room"
+      }
+    },
+    "update": {
+      "create": "Create Apartment",
+      "description": "Modify apartment name and the rooms",
+      "save": "Save",
+      "title": "Edit apartment"
+    },
+    "updated": "Apartment updated",
+    "userRemoved": "User was removed"
+  },
+  "groups": {
+    "ShareDescription": "Anyone who has this link will be able to join this Apartment.",
+    "myGroups": "Apartments"
+  },
+  "hints": {
+    "addSensorDescription": "Add a sensor to automatically track soil moisture and environmental data.",
+    "addSensorTitle": "Add a sensor",
+    "createGroupDescription": "Create an apartment to organize rooms and plants. The first step to a smarter green home!",
+    "createGroupTitle": "Start with your apartment",
+    "createPlantDescription": "Create a plant to begin. Sensors are optional!",
+    "createPlantTitle": "Add your first plant",
+    "reportBugDescription": "Open a GitHub issue to report problems and help improve the project.",
+    "reportBugTitle": "Found a bug or issue?",
+    "starProjectDescription": "If you like this project, consider leaving a ⭐ on GitHub!",
+    "starProjectTitle": "Support us on GitHub"
+  },
+  "home": {
+    "emptyRoomsSubtitle": "Start by creating your first room and add a plant to get started.",
+    "emptyRoomsTitle": "Create Your First Room",
+    "subtitle": "Overview of all rooms",
+    "welcome": "Hello {name}!"
+  },
+  "humidity": "Humidity",
+  "inactive": "Inactive",
+  "language": {
+    "English": "English",
+    "German": "German",
+    "LanguageDescription": "Select a language.",
+    "LanguageLabel": "Language",
+    "LanguageSelectionDescription": "Please choose your preferred language.",
+    "LanguageSelectionTitle": "Select Your Language",
+    "SetToEnglish": "Language set to English.",
+    "SetToGerman": "Language set to German.",
+    "UpdateLanguage": "Update Language"
+  },
+  "login": {
+    "AlreadyHaveAccount": "Already have an account?",
+    "CreateAccount": "Create Account",
+    "DontHaveAccount": "Don't have an account?",
+    "Email": "Email",
+    "Error": "Wrong username or password",
+    "FirstName": "First name",
+    "ForgotPassword": "Forgot your password?",
+    "LastName": "Last name",
+    "Loading": "Login...",
+    "Or": "or",
+    "Password": "Password",
+    "SignIn": "Sign In",
+    "SignInInfo": "Enter your email below to login to your account",
+    "SignInWithA": "Sign in with A",
+    "SignUp": "Sign Up",
+    "SignUpInfo": "Enter your information to create an account",
+    "SignUpWithA": "Sign up with A",
+    "Success": "Login successful",
+    "username": "Username"
+  },
+  "photo": {
+    "uploadImages": "Upload photos"
+  },
+  "plant": {
+    "Info": "Information",
+    "NoInformationSubtitle": "Sadly, we have currently no data about this plant in our datebase.",
+    "NoInformationTitle": "No Data available",
+    "Values": "Values",
+    "external": "external",
+    "settings": {
+      "Avatar": "Avatar",
+      "Avatar1": "Avatar 1",
+      "Avatar2": "Avatar 2",
+      "AvatarPlaceholder": "Select an avatar for the plant",
+      "Avatars": "Avatars",
+      "Cancel": "Cancel",
+      "Description": "Description",
+      "DescriptionPlaceholder": "Private notes",
+      "Group1": "Group 1",
+      "Group2": "Group 2",
+      "NameOfPlant": "Name of Plant",
+      "NamePlaceholder": "Enter the name of the plant",
+      "PlantType": "Plant Type",
+      "PlantTypeInfo": "Enter the plant type or genus. Based on this, relevant recommendations and plant information will be loaded. Please use the English name (e.g. 'basil', 'lavender').",
+      "PlantTypePlaceholder": "Enter the plant type",
+      "Room": "Room",
+      "Room1": "Room 1",
+      "Room2": "Room 2",
+      "Room3": "Room 3",
+      "Room4": "Room 4",
+      "SelectRoom": "Select Room",
+      "SelectSensor": "Select",
+      "SelectSensorPlaceholder": "Select a sensor",
+      "Sensor1": "Sensor 1",
+      "Sensor2": "Sensor 2",
+      "Sensors": "Sensors",
+      "SubTitle": "Manage your plant information",
+      "Submit": "Submit",
+      "Title": "Plant Settings",
+      "targetValues": "Target values",
+      "targetValuesInfo": "When enabled, you can define target values for temperature, brightness, humidity, and soil moisture. The pump will be activated automatically if the soil moisture falls below your defined threshold."
+    }
+  },
+  "plantList": {
+    "emptyPlantSubtitle": "Create a plant so you can start collecting data with Sensora.",
+    "emptyPlantTitle": "Create Your First Plant"
+  },
+  "privacy": {
+    "access": {
+      "text": "Only members of your group (apartment) can access shared plants and sensors. Your data is never shared with third parties.",
+      "title": "Who can access my data?"
+    },
+    "contact": {
+      "text": "If you have any questions regarding privacy, feel free to contact your project team at any time.",
+      "title": "Contact for questions"
+    },
+    "dataCollected": {
+      "plantData": "Plant details (name, room, apartment)",
+      "sensorData": "Sensor readings such as soil moisture, temperature, brightness, humidity",
+      "title": "What data is stored?",
+      "usageData": "Usage data (e.g., watering activity logs)",
+      "username": "Username and group memberships"
+    },
+    "intro": "Protecting your data is important to us. This app only collects the necessary information to ensure the proper functioning of the smart irrigation system.",
+    "security": {
+      "text": "The app uses modern security practices and does not store any sensitive data (like passwords) in plain text.",
+      "title": "How is my data protected?"
+    },
+    "title": "Privacy Policy",
+    "usage": {
+      "text": "Data is only used for operating the system — automating irrigation, displaying plant info, and showing past activity.",
+      "title": "How is the data used?"
+    }
+  },
+  "profile": {
+    "AboutUs": "About Us",
+    "AddDevice": "Add Device",
+    "ClearCache": "Clear Cache",
+    "FAQ": "FAQ",
+    "Group": "Apartments",
+    "Logout": "Logout",
+    "Privacy": "Privacy",
+    "Sensora": "Sensora",
+    "Support": "Support",
+    "project": "Project",
+    "reportError": "Report error"
+  },
+  "register": {
+    "Continue": "Save",
+    "MinLength": "The password must be at least 8 characters long.",
+    "SpecialCharRequired": "The password must contain at least one special character (!\"#$%&'()*+,-./:;<=>?[]^_{}|~).",
+    "UppercaseRequired": "The password must contain at least one capital letter.",
+    "profilePicture": {
+      "Description": "Choose your profile avatar.",
+      "Title": "User Information"
+    }
+  },
+  "sensorList": {
+    "emptySensorSubtitle": "Add a sensor through your profile to start using it.",
+    "emptySensorTitle": "Add Your First Sensor"
+  },
+  "settings": {
+    "back": "Back to Settings",
+    "views": {
+      "ACCOUNT": "Account Settings",
+      "APPEARANCE": "Appearance",
+      "LANGUAGE": "Language Settings",
+      "MAIN": "Settings",
+      "PICTURE": "Profile picture"
+    }
+  },
+  "setupAccountStepper": {
+    "1": {
+      "description": "Set up your account to get started",
+      "title": "Account Creation"
+    },
+    "2": {
+      "description": "Enter your first name and last name",
+      "title": "Personal Information"
+    },
+    "3": {
+      "description": "Choose a profile picture to represent yourself",
+      "title": "Profile Picture"
+    },
+    "4": {
+      "description": "Begin creating your apartment and setting up your space",
+      "title": "Create Apartment"
+    }
+  },
+  "shareLink": {
+    "close": "Close",
+    "copy": "Copy"
+  },
+  "soilMoisture": "Soil Moisture",
+  "success": {
+    "requestCompleted": "Load successful."
+  },
+  "targetValue": "Target Value",
+  "temperature": "Temperature",
+  "title": {
+    "FAQ": "FAQ",
+    "aboutUs": "About Us",
+    "addDevice": "Add Device",
+    "createPlant": "Create Plant",
+    "groups": "Apartments",
+    "home": "Dashboard",
+    "login": "Login",
+    "notFound": "Page Not Found",
+    "plant": "Plant Details",
+    "plantSettings": "Edit Plant",
+    "plants": "My Plants",
+    "privacyPolicy": "Privacy Policy",
+    "profile": "Profile",
+    "register": "Register",
+    "sensor": "Sensor Details",
+    "sensors": "Sensors",
+    "settings": "Settings",
+    "setupAccount": "Complete Your Account",
+    "uploadPlant": "Recognize Plant"
+  },
+  "unknown": "Unknown",
+  "upload": {
+    "capture": "Capture",
+    "search": "Search",
+    "upload": "Upload"
+  },
+  "user": {
+    "deleted": "User successfully deleted!",
+    "updated": "User successfully updated!"
+  }
+}

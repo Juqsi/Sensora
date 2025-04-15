@@ -1,0 +1,1602 @@
+openapi: 3.0.0
+info:
+  title: Sensora Frontend-API
+  description: >
+    Die Sensora Bewässerungs-API ermöglicht das Steuern und Abrufen der
+    Bewässerungsanlage von Sensoras smartem Gartenmanagementsystem. Ziel ist es,
+    Hobbygärtnern und Smart-Home-Enthusiasten eine einfache Möglichkeit zu
+    bieten, ihre Pflanzen optimal zu bewässern, die Licht- und
+    Temperatursteuerung zu regulieren und die Sensorwerte im Blick zu
+    behalten.<br><br>
+
+    **Zweck der API**: Verhindert das Austrocknen von Pflanzen durch eine
+    automatisierte Bewässerung sowie Licht- und Temperatursteuerung. Damit
+    werden optimale Bedingungen für die Pflanzen geschaffen.<br><br>
+
+    **Zielgruppe**: Die API richtet sich insbesondere an Hobbygärtner und
+    Smart-Home-Interessierte, die ihre Gartenpflege effizienter gestalten oder
+    ihre Sensora-Bewässerungsanlage in bestehende Systeme integrieren
+    möchten.<br><br>
+
+    **Hauptfunktionen**:<br>  - Anmelden und Authentifizieren<br> - Sensordaten
+    abrufen (aktuell und historisch)<br> - Sollwerte für Temperatur, Licht und
+    Bewässerung einstellen<br><br>
+
+    **Szenarien**:<br> - Erstellung einer maßgeschneiderten
+    Benutzeroberfläche<br> - Integration in bestehende IoT- und
+    Smart-Home-Systeme<br><br>
+
+    **Technische Details**:<br> - Standards: REST-basierte API mit JSON als
+    Datenformat<br> - Einschränkungen: Keine Rate Limits oder andere
+    Einschränkungen in der aktuellen Version<br><br>
+
+    **Version und Wartung**:<br> - Aktuelle Version: Entwicklungsphase, Version
+    0.1<br> - Kontinuierliche Weiterentwicklung, Änderungen an bestehenden
+    Funktionen und Endpunkten können auftreten. Langzeitkompatibilität wird
+    später mit LTS-Versionen eingeführt.<br><br>
+
+    **Test-Credentials für Staging-Umgebung**:<br> - Benutzername: testuser<br>
+    - Passwort: Test!1234
+  version: '0.1'
+  contact:
+    name: Sensora Support
+    email: support@sensora.com
+servers:
+  - url: https://api.maxtar.de/v1
+    description: Haupt-API-Server
+  - url: https://staging.maxtar.de/v1
+    description: Staging-Umgebung
+tags:
+  - name: Authentifizierung
+    description: Endpunkte für Benutzeranmeldung und Authentifizierung
+  - name: Benutzerverwaltung
+    description: Endpunkt zum abfragen, bearbeiten und entfernen von Benutzerkonten
+  - name: Gruppenverwaltung
+    description: Endpunkt zum erstellen, bearbeiten und löschen von Gruppen
+  - name: Raumverwaltung
+    description: Hier können Räume für Gruppen konfiguriert werden
+  - name: Pflanzenverwaltung
+    description: Hier können die Pflanzen verwaltet werden und Sensoren zugewiesen werden
+  - name: Geräteverwaltung
+    description: Geräte können abgerufen werden.
+  - name: Statisch
+    description: Stellt statische Dateien zur Verfügung
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Authentifizierung
+      summary: Benutzeranmeldung
+      description: |
+        Authentifiziert einen Benutzer und gibt ein Token zurück.
+
+        **Test-Credentials für Staging**:
+        - Benutzername: testuser@sensora.com
+        - Passwort: Test!1234
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/User'
+                - type: object
+                  properties:
+                    uid:
+                      readOnly: true
+                    firstname:
+                      readOnly: true
+                    lastname:
+                      readOnly: true
+                    avatarRef:
+                      readOnly: true
+                  required:
+                    - password
+        description: Es muss mindestens `username` oder `mail` vorhanden sein.
+      responses:
+        '200':
+          description: Erfolgreiche Anmeldung
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/User'
+                  - type: object
+                    properties:
+                      token:
+                        type: string
+                    required:
+                      - token
+                      - username
+                      - mail
+                      - uid
+                      - firstname
+                      - avatarRef
+        '400':
+          description: Die Request ist falsch aufgebaut oder kann nicht gelesen werden.
+        '401':
+          description: Ungültiges Passwort
+        '404':
+          description: >-
+            Der Benutzer konnte anhand von `username` oder `mail` nicht gefunden
+            werden.
+        '500':
+          description: >-
+            Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
+            auftreten, kann dieser [gemeldet
+            werden.](https://github.com/Juqsi/Sensora/issues)
+  /auth/register:
+    post:
+      tags:
+        - Authentifizierung
+      summary: Benutzererstellung
+      description: >-
+        Erstellt einen Benutzer. Die angegebene E-Mail muss bestätigt werden.
+        Danach ist ein anmelden über `/auth/login` möglich. In der
+        Staging-Umgebung wird die verifikation der E-Mail übersprungen. Es ist
+        ein anmelden direkt nach dem registrieren möglich.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/User'
+                - type: object
+                  properties:
+                    uid:
+                      readOnly: true
+                  required:
+                    - mail
+                    - username
+                    - password
+                    - firstname
+      responses:
+        '200':
+          description: Benutzer erfolgreich erstellt
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/User'
+                  - type: object
+                    required:
+                      - username
+                      - mail
+                      - uid
+                      - firstname
+                      - avatarRef
+        '400':
+          description: Die Request ist falsch aufgebaut oder kann nicht gelesen werden.
+        '409':
+          description: >-
+            Ein Benutzer mit diesem Benutzernamen oder mit dieser E-Mail
+            existiert bereits
+        '500':
+          description: >-
+            Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
+            auftreten, kann dieser [gemeldet
+            werden.](https://github.com/Juqsi/Sensora/issues)
+  /user/{userId}:
+    get:
+      tags:
+        - Benutzerverwaltung
+      summary: Benutzerinformationen abrufen
+      description: >
+        Ruft die Informationen eines Benutzers ab. Wenn keine Benutzer-ID
+        angegeben wird, werden die Informationen des authentifizierten Benutzers
+        abgerufen. Wenn eine Benutzer-ID angegeben wird, werden die
+        Informationen des angegebenen Benutzers abgerufen.
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: userId
+          in: path
+          required: false
+          description: >-
+            Die ID des Benutzers, dessen Informationen abgerufen werden sollen.
+            Wenn nicht angegeben, werden die Informationen des authentifizierten
+            Benutzers abgerufen.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Erfolgreiches Abrufen der Benutzerinformationen
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/User'
+                  - type: object
+                    required:
+                      - username
+                      - mail
+                      - uid
+                      - firstname
+                      - avatarRef
+        '400':
+          description: Die Request ist falsch aufgebaut oder kann nicht gelesen werden.
+        '401':
+          description: >-
+            Das Auth-Token ist nicht gültig oder der authentifizierte Benutzer
+            hat keine Berechtigung auf den angeforderten Benutzer zuzugreifen.
+        '404':
+          description: >-
+            Benutzer mit der angegebenen ID nicht gefunden (falls `id` angegeben
+            wurde) oder kein Zugriff.
+        '500':
+          description: >
+            Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
+            auftreten, kann dieser [gemeldet
+            werden.](https://github.com/Juqsi/Sensora/issues)
+  /user:
+    patch:
+      tags:
+        - Benutzerverwaltung
+      summary: Benutzer bearbeiten
+      description: >-
+        Bearbeitet einen bereits existierenden Benutzeraccount. Alle gesetzten
+        Felder werden überschrieben. Der Benutzeraccount wird anhand des
+        Auth-Tokens identifiziert. Beim Verändern des Benutzernamens oder der
+        E-Mail, erlischt die Gültigkeit des Auth-Tokens. Das ändern des
+        Passworts ist hier nicht möglich. Wenn die E-Mail geändert wird, muss diese erneut bestätigt werden, bevor der Account weiter benutzt werden kann.
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/User'
+                - type: object
+                  properties:
+                    password:
+                      readOnly: true
+                    avatarRef:
+                      description: Wenn nicht angegeben, wird mit `Peashooter` ersetzt.
+                    mail:
+                      description: >-
+                        Eindeutige E-Mail Adresse, kann nicht doppelt vergeben
+                        werden. Wenn die E-Mail hier geändert wird, muss sie
+                        erneut bestätigt werden, bevor der Benutzeraccount
+                        weiter verwendet werden kann. In der Staging-Umgebung
+                        wird dieser Prozess übersprungen.
+      responses:
+        '200':
+          description: >-
+            Der Benutzer wurde erfolgreich bearbeitet, alle Einträge wurden
+            übernommen.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/User'
+        '400':
+          description: Die Request ist falsch aufgebaut oder kann nicht gelesen werden.
+        '401':
+          description: Das Auth-Token ist nicht gültig.
+        '500':
+          description: >-
+            Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
+            auftreten, kann dieser [gemeldet
+            werden.](https://github.com/Juqsi/Sensora/issues)
+    delete:
+      tags:
+        - Benutzerverwaltung
+      summary: Benutzer löschen
+      description: >-
+        Löscht einen Benutzer und alle seine zugehörigen Daten. Dies kann nicht
+        rückgängig gemacht werden. Das Auth-Token verliert seine Gültigkeit.
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '204':
+          description: Benutzerdaten wurden erfolgreich gelöscht.
+        '401':
+          description: Das Auth-Token ist nicht gültig.
+        '500':
+          description: >-
+            Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
+            auftreten, kann dieser [gemeldet
+            werden.](https://github.com/Juqsi/Sensora/issues)
+  /group:
+    get:
+      tags:
+        - Gruppenverwaltung
+      summary: Alle Gruppen des Benutzers anzeigen
+      description: >-
+        Gibt eine Liste der Gruppen zurück, zu denen der aktuell
+        authentifizierte Benutzer gehört. Dies ermöglicht dem Benutzer, alle
+        Gruppen zu sehen, an denen er teilnimmt, einschließlich der zugeordneten
+        Räume und Pflanzen.
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '200':
+          description: >-
+            Eine Liste der Gruppen, in denen der Benutzer Mitglied ist,
+            einschließlich der Räume und Pflanzen.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/Group'
+                    - type: object
+                      properties:
+                        members:
+                          type: array
+                          items:
+                            type: object
+                            required:
+                              - username
+                              - mail
+                              - uid
+                        rooms:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              owner:
+                                type: object
+                                required:
+                                  - username
+                                  - mail
+                                  - uid
+                              plants:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    controllers:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          sensors:
+                                            type: array
+                                            items:
+                                              type: object
+                                              required:
+                                                - sid
+                                                - lastCall
+                                                - controller
+                                                - ilk
+                                        required:
+                                          - did
+                                          - owner
+                                    targetValues:
+                                      type: array
+                                      items:
+                                        type: object
+                                        required:
+                                          - value
+                                          - ilk
+                                  required:
+                                    - plantId
+                                    - groupName
+                                    - room
+                            required:
+                              - rid
+                              - groupName
+                              - owner
+                      required:
+                        - groupName
+                        - gid
+                        - avatarRef
+        '401':
+          description: Das Auth-Token ist nicht gültig.
+        '500':
+          description: >-
+            Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
+            auftreten, kann dieser [gemeldet
+            werden.](https://github.com/Juqsi/Sensora/issues)
+    post:
+      tags:
+        - Gruppenverwaltung
+      summary: Gruppe erstelen
+      description: Erstellt eine Gruppe und fügt den aktuellen Benutzer hinzu.
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Group'
+                - type: object
+                  properties:
+                    gid:
+                      readOnly: true
+                    rooms:
+                      readOnly: true
+                    members:
+                      type: array
+                      items:
+                        allOf:
+                          - $ref: '#/components/schemas/User'
+                          - type: object
+                            properties:
+                              password:
+                                readOnly: true
+                            description: >-
+                              Es muss mindestens eines der folgenden Felder
+                              angegeben sein: `username`, `mail`, `uid`
+                  required:
+                    - groupName
+      responses:
+        '200':
+          description: Die Gruppe wurde erfolgreich angelegt.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Group'
+                  - type: object
+                    properties:
+                      rooms:
+                        writeOnly: true
+                      members:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            groupIds:
+                              writeOnly: true
+                          required:
+                            - username
+                    required:
+                      - groupName
+                      - gid
+                      - avatarRef
+                      - members
+        '401':
+          description: Das Auth-Token ist nicht gültig.
+        '500':
+          description: >-
+            Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
+            auftreten, kann dieser [gemeldet
+            werden.](https://github.com/Juqsi/Sensora/issues)
+  /group/{groupId}:
+    patch:
+      tags:
+        - Gruppenverwaltung
+      summary: Gruppe bearbeiten
+      description: Überarbeitet eine Gruppe
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: Die ID der zu bearbeitenden Gruppe.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Group'
+                - type: object
+                  properties:
+                    members:
+                      readOnly: true
+                    rooms:
+                      readOnly: true
+      responses:
+        '200':
+          description: >-
+            Die Gruppe wurde erfolgreich bearbeitet, alle Einträge wurden
+            übernommen.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Group'
+                  - type: object
+                    properties:
+                      rooms:
+                        writeOnly: true
+                      members:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                            - username
+                            - mail
+                            - uid
+                    required:
+                      - groupName
+                      - gid
+                      - avatarRef
+        '401':
+          description: Das Auth-Token ist nicht gültig.
+        '500':
+          description: >-
+            Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
+            auftreten, kann dieser [gemeldet
+            werden.](https://github.com/Juqsi/Sensora/issues)
+    delete:
+      tags:
+        - Gruppenverwaltung
+      summary: Gruppe löschen
+      description: >-
+        Beim Löschen einer Gruppe werden alle Benutzer aus der Gruppe entfernt
+        und alle Daten über die Gruppe werden gelöscht. Die geteilten Ressourcen
+        sind nur noch den Benutzern zugänglich, die als Besitzer eingetragen
+        sind. Diese Aktion kann nicht rückgängig gemacht werden.
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: Die ID der zu löschenden Gruppe.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Die Gruppe wurde erfolgreich gelöscht.
+        '401':
+          description: Das Auth-Token ist nicht gültig.
+        '404':
+          description: Die angegebene Gruppe wurde nicht gefunden.
+        '500':
+          description: >-
+            Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
+            auftreten, kann dieser [gemeldet
+            werden.](https://github.com/Juqsi/Sensora/issues)
+  /group/join:
+    patch:
+      tags:
+        - Gruppenverwaltung
+      summary: Gruppenbeitritt mit Einladungstoken
+      description: >-
+        Ermöglicht es einem Benutzer, einer Gruppe beizutreten, wenn er ein
+        gültiges Einladungstoken besitzt. Das Token enthält die notwendige
+        Gruppen-ID und weitere Informationen, um den Beitritt durchzuführen. Der
+        Benutzer wird als Mitglied der Gruppe eingetragen und erhält Zugang zu
+        den geteilten Ressourcen.
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: token
+          required: true
+          in: query
+          description: Das Einladungstoken, das dem Benutzer zugeteilt wurde.
+          example: 7aa91e15-ba7f-4afb-8b56-f1f8c15642c6
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Der Benutzer wurde erfolgreich der Gruppe hinzugefügt.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Group'
+                  - type: object
+                    properties:
+                      members:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                            - username
+                            - mail
+                            - uid
+                      rooms:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            owner:
+                              type: object
+                              required:
+                                - username
+                                - mail
+                                - uid
+                            plants:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  sensors:
+                                    type: array
+                                    items:
+                                      type: object
+                                      required:
+                                        - sid
+                                        - lastCall
+                                        - controller
+                                        - ilk
+                                  targetValues:
+                                    type: array
+                                    items:
+                                      type: object
+                                      required:
+                                        - value
+                                        - ilk
+                                required:
+                                  - plantId
+                                  - groupName
+                                  - room
+                          required:
+                            - rid
+                            - groupName
+                            - owner
+                    required:
+                      - groupName
+                      - gid
+                      - avatarRef
+        '400':
+          description: >-
+            Ungültiges Einladungstoken oder der Benutzer hat bereits die Gruppe
+            beigetreten.
+        '401':
+          description: >-
+            Der Benutzer ist nicht authentifiziert oder das Auth-Token ist
+            ungültig.
+        '403':
+          description: Der Benutzer hat keine Berechtigung, dieser Gruppe beizutreten.
+        '404':
+          description: Das Einladungstoken ist ungültig oder abgelaufen.
+        '500':
+          description: Unerwarteter Fehler im Ablauf des Programms.
+  /group/{groupId}/kick/{userId}:
+    delete:
+      tags:
+        - Gruppenverwaltung
+      summary: Gruppenmitglied entfernen
+      description: >-
+        Beim Entfernen eines Gruppenmitglieds wird der Zugriff auf alle
+        geteilten Ressourcen der Gruppe entfernt. Der entfernte Benutzer behält
+        jedoch Zugriff auf Ressourcen, bei denen er als Eigentümer eingetragen
+        ist. Diese Aktion kann nur von Gruppenadministratoren oder
+        Gruppenbesitzern durchgeführt werden.
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: Die ID der zu löschenden Gruppe.
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          description: Die ID des Benutzers, der entfernt werden soll.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Das Gruppenmitglied wurde erfolgreich aus der Gruppe entfernt.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Group'
+                  - type: object
+                    properties:
+                      rooms:
+                        writeOnly: true
+                    required:
+                      - groupName
+                      - gid
+                      - avatarRef
+        '401':
+          description: Das Auth-Token ist nicht gültig.
+        '403':
+          description: Der Benutzer hat keine Berechtigung, Mitglieder zu entfernen.
+        '404':
+          description: Die angegebene Gruppe oder der Benutzer wurde nicht gefunden.
+        '500':
+          description: >-
+            Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
+            auftreten, kann dieser [gemeldet
+            werden.](https://github.com/Juqsi/Sensora/issues)
+  /group/{groupId}/leave:
+    delete:
+      tags:
+        - Gruppenverwaltung
+      summary: Gruppe verlassen
+      description: >-
+        Ermöglicht es dem aktuellen Benutzer, die Gruppe freiwillig zu
+        verlassen. Der Benutzer verliert den Zugriff auf alle geteilten
+        Ressourcen der Gruppe, behält jedoch den Zugriff auf Ressourcen, bei
+        denen er als Eigentümer eingetragen ist. Sollte der Benutzer das einzige
+        Mitglied der Gruppe sein, wird die Gruppe unwiderruflich gelöscht.
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: Die ID der zu löschenden Gruppe.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Der Benutzer hat die Gruppe erfolgreich verlassen.
+        '401':
+          description: Das Auth-Token ist nicht gültig.
+        '404':
+          description: Die angegebene Gruppe wurde nicht gefunden.
+        '500':
+          description: >-
+            Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
+            auftreten, kann dieser [gemeldet
+            werden.](https://github.com/Juqsi/Sensora/issues)
+  /room:
+    post:
+      tags:
+        - Raumverwaltung
+      summary: Raum erstellen
+      description: Erstellt einen Raum und fügt ihn einer Gruppe zu.
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                groupId:
+                  type: string
+                  example: 7aa91e15-ba7f-4afb-8b56-f1f8c15642c6
+                name:
+                  type: string
+                  example: Wohnzimmer
+              required:
+                - groupId
+                - name
+      responses:
+        '200':
+          description: Der Raum wurde erfolgreich erstellt.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Room'
+                  - type: object
+                    properties:
+                      plants:
+                        writeOnly: true
+                      owner:
+                        type: object
+                        required:
+                          - username
+                          - mail
+                          - uid
+                    required:
+                      - rid
+                      - griupId
+                      - groupName
+                      - owner
+        '400':
+          description: Ungültige Anforderungsdaten.
+        '401':
+          description: Das Auth-Token ist ungültig.
+        '500':
+          description: Unerwarteter Fehler.
+  /room/{roomId}:
+    get:
+      tags:
+        - Raumverwaltung
+      summary: Raum abfragen
+      description: Ruft die Informationen zu einem spezifischen Raum ab.
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: roomId
+          in: path
+          required: true
+          description: Die ID des Raums, den du abfragen möchtest.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Erfolgreich die Raumdaten abgerufen.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Room'
+                  - type: object
+                    properties:
+                      owner:
+                        type: object
+                        required:
+                          - username
+                          - mail
+                          - uid
+                      plants:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            controllers:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  sensors:
+                                    type: array
+                                    items:
+                                      type: object
+                                      required:
+                                        - sid
+                                        - lastCall
+                                        - controller
+                                        - ilk
+                                required:
+                                  - did
+                                  - owner
+                            targetValues:
+                              type: array
+                              items:
+                                type: object
+                                required:
+                                  - value
+                                  - ilk
+                          required:
+                            - plantId
+                            - groupName
+                            - room
+                    required:
+                      - rid
+                      - groupName
+                      - owner
+        '401':
+          description: Das Auth-Token ist ungültig.
+        '404':
+          description: Der Raum wurde nicht gefunden.
+    patch:
+      tags:
+        - Raumverwaltung
+      summary: Raum aktualisieren
+      description: Ermöglicht das Aktualisieren der Raumdetails.
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: roomId
+          in: path
+          required: true
+          description: Die ID des zu aktualisierenden Raums.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Room'
+                - type: object
+                  properties:
+                    plants:
+                      readOnly: true
+                    owner:
+                      readOnly: true
+                  description: Der Raum kann nur vom Besitzer einer neuen Gruppe oder einem neuen Besitzer zugewiesen werden.
+      responses:
+        '200':
+          description: Der Raum wurde erfolgreich aktualisiert.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Room'
+                  - type: object
+                    properties:
+                      owner:
+                        type: object
+                        required:
+                          - username
+                          - mail
+                          - uid
+                      plants:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            controllers:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  sensors:
+                                    type: array
+                                    items:
+                                      type: object
+                                      required:
+                                        - sid
+                                        - lastCall
+                                        - controller
+                                        - ilk
+                                required:
+                                  - did
+                                  - owner
+                            targetValues:
+                              type: array
+                              items:
+                                type: object
+                                required:
+                                  - value
+                                  - ilk
+                          required:
+                            - plantId
+                            - groupName
+                            - room
+                    required:
+                      - rid
+                      - groupName
+                      - owner
+        '401':
+          description: Das Auth-Token ist ungültig.
+        '404':
+          description: Der Raum wurde nicht gefunden.
+    delete:
+      tags:
+        - Raumverwaltung
+      summary: Raum löschen
+      description: Löscht einen Raum aus dem System.
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: roomId
+          in: path
+          required: true
+          description: Die ID des zu löschenden Raums.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Der Raum wurde erfolgreich gelöscht.
+        '401':
+          description: Das Auth-Token ist ungültig.
+        '404':
+          description: Der Raum wurde nicht gefunden.
+  /plant:
+    post:
+      tags:
+        - Pflanzenverwaltung
+      summary: Pflanze erstellen
+      description: >-
+        Erstellt eine neue Pflanze und verknüpft sie mit einem Raum und einem
+        Sensor.
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Plant'
+                - type: object
+                  properties:
+                    plantId:
+                      readOnly: true
+                    controllers:
+                      readOnly: true
+                    targetValues:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                          - value
+                          - ilk
+                  required:
+                    - groupName
+                    - room
+      responses:
+        '200':
+          description: Die Pflanze wurde erfolgreich erstellt.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Plant'
+                  - type: object
+                    properties:
+                      controllers:
+                        writeOnly: true
+                      targetValues:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                            - value
+                            - ilk
+                    required:
+                      - plantId
+                      - groupName
+                      - room
+        '400':
+          description: Ungültige Anforderungsdaten.
+        '401':
+          description: Das Auth-Token ist ungültig.
+        '500':
+          description: Unerwarteter Fehler.
+  /plant/{plantId}:
+    get:
+      tags:
+        - Pflanzenverwaltung
+      summary: Pflanze abfragen
+      description: >-
+        Ruft die Pflanzendaten sowie die Sensordaten ab, die im angegebenen
+        Zeitraum liegen.
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: plantId
+          in: path
+          required: true
+          description: Die ID der Pflanze, die abgefragt werden soll.
+          schema:
+            type: string
+        - name: startTime
+          in: query
+          required: false
+          description: >-
+            Der Startzeitpunkt des Zeitraums, für den die Sensordaten abgerufen
+            werden sollen. Wenn nicht angegeben von vor 24 Stunden.
+          schema:
+            type: string
+            format: date-time
+            example: '2024-12-01T00:00:00Z'
+        - name: endTime
+          in: query
+          required: false
+          description: >-
+            Der Endzeitpunkt des Zeitraums, für den die Sensordaten abgerufen
+            werden sollen. Wenn nicht angegen bis zum aktuellen Zeitpunkt.
+          schema:
+            type: string
+            format: date-time
+            example: '2024-12-15T23:59:59Z'
+      responses:
+        '200':
+          description: Erfolgreich die Pflanzendaten abgerufen.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Plant'
+                  - type: object
+                    properties:
+                      controllers:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            sensors:
+                              type: array
+                              items:
+                                type: object
+                                required:
+                                  - sid
+                                  - lastCall
+                                  - controller
+                                  - ilk
+                          required:
+                            - did
+                            - owner
+                      targetValues:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                            - value
+                            - ilk
+                    required:
+                      - plantId
+                      - groupName
+                      - room
+        '401':
+          description: Das Auth-Token ist ungültig.
+        '404':
+          description: Die Pflanze wurde nicht gefunden.
+    patch:
+      tags:
+        - Pflanzenverwaltung
+      summary: Pflanze aktualisieren
+      description: Ermöglicht das Aktualisieren von Pflanzendaten.
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: plantId
+          in: path
+          required: true
+          description: Die ID der zu aktualisierenden Pflanze.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Plant'
+                - type: object
+                  properties:
+                    plantId:
+                      readOnly: true
+                    sensors:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          lastCall:
+                            readOnly: true
+                          controller:
+                            readOnly: true
+                          values:
+                            readOnly: true
+                          ilk:
+                            readOnly: true
+                          unit:
+                            readOnly: true
+                          status:
+                            readOnly: true
+                    assignFullDevice:
+                      type: array
+                      items:
+                        type: string
+                      description: >-
+                        Liste von Geräten, die vollständig zugewiesen werden.
+                        Alle angeschlossenen Sensoren werden der Pflanze
+                        zugeordnet.
+                    targetValues:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                          - value
+                          - ilk
+      responses:
+        '200':
+          description: Die Pflanze wurde erfolgreich aktualisiert.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Plant'
+                  - type: object
+                    properties:
+                      controllers:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            sensors:
+                              type: array
+                              items:
+                                type: object
+                                required:
+                                  - sid
+                                  - lastCall
+                                  - controller
+                                  - ilk
+                          required:
+                            - did
+                            - owner
+                      targetValues:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                            - value
+                            - ilk
+                    required:
+                      - plantId
+                      - groupName
+                      - room
+        '401':
+          description: Das Auth-Token ist ungültig.
+        '404':
+          description: Die Pflanze wurde nicht gefunden.
+    delete:
+      tags:
+        - Pflanzenverwaltung
+      summary: Pflanze löschen
+      description: Löscht eine Pflanze aus dem System.
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: plantId
+          in: path
+          required: true
+          description: Die ID der zu löschenden Pflanze.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Die Pflanze wurde erfolgreich gelöscht.
+        '401':
+          description: Das Auth-Token ist ungültig.
+        '404':
+          description: Die Pflanze wurde nicht gefunden.
+  /devices:
+    get:
+      tags:
+        - Geräteverwaltung
+      summary: Alle verfügbaren Geräte anzeigen
+      description: >-
+        Gibt eine Liste aller verfügbaren Geräte zurück, ohne dass eine
+        Geräte-ID angegeben werden muss. Dies ermöglicht es, alle Sensoren des
+        Systems abzurufen, die zur Überwachung von verschiedenen Geräten 
+        verwendet werden.
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '200':
+          description: Erfolgreich alle Geräte abgerufen.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/Controller'
+                    - type: object
+                      properties:
+                        owner:
+                          type: object
+                          required:
+                            - username
+                            - mail
+                            - uid
+                        sensors:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              values:
+                                type: array
+                                items:
+                                  type: object
+                                  required:
+                                    - timestamp
+                                    - value
+                            required:
+                              - sid
+                              - lastCall
+                              - controller
+                              - ilk
+                              - status
+                      required:
+                        - did
+                        - owner
+        '401':
+          description: Das Auth-Token des Geräts ist ungültig.
+        '500':
+          description: >-
+            Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
+            auftreten, kann dieser [gemeldet
+            werden.](https://github.com/Juqsi/Sensora/issues)
+  /device/{deviceId}:
+    get:
+      tags:
+        - Geräteverwaltung
+      summary: Gerät abfragen
+      description: >-
+        Gibt die Informationen über ein Gerät zurück, einschließlich der
+        zugehörigen Sensoren und deren Daten.
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          description: Die ID des abzufragenden Geräts
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Erfolgreich die Geräteinformationen abgerufen.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Controller'
+                  - type: object
+                    properties:
+                      owner:
+                        type: object
+                        required:
+                          - username
+                          - mail
+                          - uid
+                      sensors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            values:
+                              type: array
+                              items:
+                                type: object
+                                required:
+                                  - timestamp
+                                  - value
+                          required:
+                            - sid
+                            - lastCall
+                            - controller
+                            - ilk
+                            - status
+                    required:
+                      - did
+                      - owner
+        '401':
+          description: Das Auth-Token des Geräts ist ungültig.
+        '404':
+          description: Das angeforderte Gerät wurde nicht gefunden.
+        '500':
+          description: >-
+            Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
+            auftreten, kann dieser [gemeldet
+            werden.](https://github.com/Juqsi/Sensora/issues)
+  /statics/{resource}:
+    get:
+      tags:
+        - Statisch
+      summary: Statische Resourcen abrufen
+      description: Kann statische Resourcen abrufen, die im Fileserver gespeichert werden.
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: resource
+          in: path
+          required: true
+          description: Der vollständige Name der Resource
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >-
+            Die Resource wurde erfolgreich abgerufen. Der Response-Type kann
+            variieren.
+        '401':
+          description: Keine Berechtigung auf die Ressource zuzugreifen.
+        '404':
+          description: Die Ressource existiert nicht.
+        '500':
+          description: >-
+            Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
+            auftreten, kann dieser [gemeldet
+            werden.](https://github.com/Juqsi/Sensora/issues)
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          example: testuser
+          description: Eindeutiger Benutzername, kann nicht doppelt vergeben werden
+        password:
+          type: string
+          format: password
+          example: Test!1234
+          writeOnly: true
+          description: |-
+            Muss den Passwortrichtlinien entsprechen: 
+              Min. 8 Zeichen,
+              Max. 100 Zeichen,
+              Min. 1 Sonderzeichen,
+              Min. 1 Ziffer,
+              Min. 1 Großbuchstabe,
+              Min. 1 Kleinbuchstabe,
+              Unerlaubte Zeichen: @
+        mail:
+          type: string
+          format: email
+          example: testuser@sensora.com
+          description: Eindeutige E-Mail, kann nicht doppelt vergeben werden
+        uid:
+          type: string
+          example: 7aa91e15-ba7f-4afb-8b56-f1f8c15642c6
+          readOnly: true
+          description: >-
+            Eindeutige ID. Verändert sich, wenn `username` oder `mail` geändert
+            wird.
+        groupIds:
+          type: array
+          readOnly: true
+          description: Liste der Gruppen, denen der User angehört/angehören wird.
+          items:
+            type: string
+            example: 7aa91e15-ba7f-4afb-8b56-f1f8c15642c6
+        firstname:
+          type: string
+          example: Max
+        lastname:
+          type: string
+          example: Mustermann
+        avatarRef:
+          type: string
+          enum:
+            - Peashooter
+            - Sunflower
+            - Cherry Bomb
+            - Wall-nut
+            - Potato Mine
+            - Snow Pea
+            - Chomper
+            - Repeater
+          example: Peashooter
+    Group:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Home
+        gid:
+          type: string
+          example: 7aa91e15-ba7f-4afb-8b56-f1f8c15642c6
+          description: Eindeutige ID der Gruppe, unveränderlich
+        avatarRef:
+          type: string
+          enum:
+            - Peashooter
+            - Sunflower
+            - Cherry Bomb
+            - Wall-nut
+            - Potato Mine
+            - Snow Pea
+            - Chomper
+            - Repeater
+          example: Peashooter
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+          description: Liste der Mitglieder
+        rooms:
+          type: array
+          items:
+            $ref: '#/components/schemas/Room'
+          description: Liste der zugeordneten Räume
+    Room:
+      type: object
+      properties:
+        groupId:
+          type: string
+          example: 55197b05-56e7-4923-acb5-3cc1f1ea1fe5
+          description: Die Gruppe, der der Raum zugeordnet ist. Kann leer sein.
+        name:
+          type: string
+          example: Neuer Raum
+        rid:
+          type: string
+          example: 55197b05-56e7-4923-acb5-3cc1f1ea1fe5
+          description: Eindeutige ID des Raums, unveränderlich
+        owner:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/User'
+          description: Der Besitzer des Raums.
+        plants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Plant'
+          description: Liste der zugeordneten Pflanzen
+    Plant:
+      type: object
+      properties:
+        plantId:
+          type: string
+          example: 55197b05-56e7-4923-acb5-3cc1f1ea1fe5
+          description: Eindeutige ID der Pfalnze, unveränderlich
+        name:
+          type: string
+          example: Tomatenpflanze
+        room:
+          type: string
+          example: 55197b05-56e7-4923-acb5-3cc1f1ea1fe5
+          description: ID des Raumes, dem die Pflanze zugeordnet ist
+        plantType:
+          type: string
+          example: Tomate
+        note:
+          type: string
+          example: Meine beste Pflanze
+        avatarId:
+          type: string
+          example: 7aa91e15-ba7f-4afb-8b56-f1f8c15642c6
+        controllers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Controller'
+          description: Liste der Sensoren, die dieser Pflanze zugeordnet sind.
+        targetValues:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: number
+                example: 33.4
+                description: Zielwert
+              ilk:
+                type: string
+                example: temperature
+                description: Art des Zielwerts
+    Controller:
+      type: object
+      properties:
+        did:
+          type: string
+          example: 55197b05-56e7-4923-acb5-3cc1f1ea1fe5
+          description: Eindeutige ID des Controllers, unveränderlich
+        model:
+          type: string
+          example: FullControll-4-Sensors
+          description: Modellbezeichnung
+        sensors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Sensor'
+        owner:
+          $ref: '#/components/schemas/User'
+    Sensor:
+      type: object
+      properties:
+        sid:
+          type: string
+          example: 55197b05-56e7-4923-acb5-3cc1f1ea1fe5
+          description: Eindeutige ID des Sensors, unveränderlich
+        lastCall:
+          type: string
+          example: '2024-12-16T12:00:00Z'
+          description: Zeitpunkt, an dem sich der Sensor zuletzt gemeldet hat
+        controller:
+          type: string
+          example: 55197b05-56e7-4923-acb5-3cc1f1ea1fe5
+          description: ID des Controllers, dem der Sensor zugeordnet ist
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/Value'
+        ilk:
+          type: string
+          example: temperature
+          description: Art des Messwerts
+        unit:
+          type: string
+          example: °C
+          description: Maßeinheit
+        status:
+          type: string
+          enum:
+            - error
+            - inactive
+            - active
+            - unknown
+          example: active
+    Value:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          example: '2024-12-16T12:00:00Z'
+          description: Zeitpunkt, an dem der Wert gemessen wurde
+        value:
+          type: number
+          example: 5.3
+          description: Wert
