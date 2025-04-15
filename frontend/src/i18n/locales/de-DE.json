@@ -420,8 +420,10 @@
     "uploadImages": "Fotos hochladen"
   },
   "plant": {
+    "Info": "Infos",
     "NoInformationSubtitle": "In unserer Datenbank sind leider keine Daten zu der Pflanze enthalten.",
     "NoInformationTitle": "Keine Daten verfügbar",
+    "Values": "Werte",
     "external": "extern",
     "settings": {
       "Avatar": "Avatar",

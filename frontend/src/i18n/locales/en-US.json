@@ -420,8 +420,10 @@
     "uploadImages": "Upload photos"
   },
   "plant": {
+    "Info": "Information",
     "NoInformationSubtitle": "Sadly, we have currently no data about this plant in our datebase.",
     "NoInformationTitle": "No Data available",
+    "Values": "Values",
     "external": "external",
     "settings": {
       "Avatar": "Avatar",

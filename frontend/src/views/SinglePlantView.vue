@@ -133,8 +133,9 @@ usePullToRefresh(async () => {
   <Plant3d plant-model-path="/models3d/plant.glb" />
   <Tabs class="w-full" default-value="values">
     <TabsList class="grid w-full grid-cols-2">
-      <TabsTrigger value="values"> Values</TabsTrigger>
-      <TabsTrigger value="infos"> Infos</TabsTrigger>
+      <TabsTrigger value="values">{{t('plant.Values')}}</TabsTrigger>
+      <TabsTrigger value="infos">{{t('plant.Info')}}</TabsTrigger>
+
     </TabsList>
     <TabsContent value="values">
       <MeasuredTiles ref="measuredTiles" :plant="plant" @updateActiveKey="updateActiveKey" />
