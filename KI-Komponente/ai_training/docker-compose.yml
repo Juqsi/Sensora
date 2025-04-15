@@ -1,0 +1,17 @@
+services:
+  pytorch_container:
+    build: ..
+    container_name: pytorch_container1
+    stdin_open: true
+    tty: true
+    shm_size: 20G
+    privileged: true
+    devices:
+      - "/dev/kfd"
+      - "/dev/dri"
+    group_add:
+      - video
+    ipc: host
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
