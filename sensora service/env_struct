@@ -1,0 +1,23 @@
+# PostgreSQL Hier müssen die tatsächlichen credentials und params der datenbank eingetragen werden!
+DB_NAME=sensora
+DB_USER=postgres
+DB_PASS=secure_password_here
+DB_HOST=postgres_container
+DB_PORT=5432
+
+# SMTP (E-Mail-Versand)
+SMTP_USER=SensoraMailVerify@gmail.com
+SMTP_PASS=secure_smtp_password_here
+
+# Mailservice
+DATABASE_URL=postgresql://postgres:secure_password_here@postgres_container/sensora
+SERVER_HOST=https://fynnsmailservice.maxtar.de
+
+# Solace
+SOLACE_HOST=tcp://solace:55555
+Solcae_Host_SEMP=http://solace:8080
+SOLACE_VPN=default
+SOLACE_USER=controller_user
+SOLACE_PASS=secure_controller_password_here
+SOLACE_ADMIN_USER=admin
+SOLACE_ADMIN_PASS=secure_admin_password_here

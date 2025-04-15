@@ -1,0 +1,49 @@
+{
+    "queues": [
+      {
+        "queueName": "sensor_data",
+        "ingressEnabled": true,
+        "egressEnabled": true,
+        "accessType": "exclusive",
+        "permission": "consume",
+        "subscriptions": [
+          {
+            "subscriptionTopic": "sensor/data"
+
+          },
+          {
+            "subscriptionTopic": "sensor/status",
+            "subscriptionTopicSyntax": "mqtt"
+          },
+          {
+            "subscriptionTopic": "sensor/data/>",
+            "subscriptionTopicSyntax": "mqtt"
+          },
+          {
+            "subscriptionTopic": "sensor/status"
+          },
+          {
+            "subscriptionTopic": "sensora/v1/send/>",
+            "subscriptionTopicSyntax": "mqtt"
+          },
+          {
+            "subscriptionTopic": "sensora/v1/send/#"
+          }
+
+        ]
+      },
+      {
+        "queueName": "sensora_v1_receive",
+        "ingressEnabled": true,
+        "egressEnabled": true,
+        "accessType": "exclusive",
+        "permission": "consume",
+        "subscriptions": [
+          {
+            "subscriptionTopic": "sensora/v1/receive/>",
+            "subscriptionTopicSyntax": "mqtt"
+          }
+        ]
+      }
+    ]
+  }
