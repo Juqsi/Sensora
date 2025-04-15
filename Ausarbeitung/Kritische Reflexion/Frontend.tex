@@ -6,19 +6,22 @@ Besonders hervorzuheben ist das moderne, einheitliche und visuell ansprechende D
 
 Ein wesentlicher Aspekt der Frontend-Gestaltung war die Gewährleistung eines flüssigen Nutzererlebnisses durch intuitive Navigation und konsistente Layouts. Die modular aufgebaute Komponentenstruktur ermöglicht eine gute Wartbarkeit und einfache Erweiterbarkeit der Anwendung.
 
-\subsection*{Verbesserungspotential}
+\subsection{Verbesserungspotential}
 
 Trotz der grundsätzlich hohen Qualität bestehen einige Optimierungsmöglichkeiten. Zum einen könnten Performance-Verbesserungen vorgenommen werden, um die Ladezeiten insbesondere bei datenintensiven Ansichten zu verringern. Zum anderen wurden einige Zusatzfunktionen aus zeitlichen Gründen nicht realisiert, die in einer späteren Entwicklungsphase ergänzt werden können.
 
-Darüber hinaus sind zwei kleinere Bugs bekannt, die zum aktuellen Stand noch nicht behoben wurden:
+Darüber hinaus sind drei kleinere Bugs bekannt, die zum aktuellen Stand noch nicht behoben wurden:
 
 \begin{itemize}
-	\item Auf Geräten mit Android API Version 35 kann es bei aktivierter Drei-Punkte-Navigationsleiste zu einer Überlappung mit der App-eigenen Navigationsleiste kommen.
+	\item Auf Geräten ab der Android API Version 35 kann es bei aktivierter Drei-Punkte-Navigationsleiste zu einer Überlappung mit der App-eigenen Navigationsleiste kommen.
 	\item Nach der Erstellung einer neuen Gruppe werden die darin enthaltenen Räume in der Bearbeitungsansicht nicht sofort angezeigt, sofern kein Seitenwechsel oder manueller Refresh erfolgt.
+    \item Man bekommt einen Fehler, wenn man eine Pflanze bearbeitet, die einen fremden Controller hat, weil im Backend diese Änderungen nicht angenommen werde.
 \end{itemize}
 
 Diese Einschränkungen haben jedoch keinen kritischen Einfluss auf die Hauptfunktionen und Nutzbarkeit der Anwendung.
 
-\subsection*{Fazit}
+Bei einer Weiter Entwicklung des Frontends und damit auch bei einer realen Nutzung sollten Frontend-Test in Verbindung mit E2E-Tests durchgeführt werden. Dadurch können Funktionen überprüft und Bugs vermieden werden. 
+
+\subsection{Fazit}
 
 Die in der Konzeption formulierten Anforderungen an das Frontend wurden weitestgehend erfolgreich umgesetzt. Die Anwendung bietet ein modernes, benutzerfreundliches Interface mit internationaler Ausrichtung und ansprechendem Design. Funktionalität, Nutzerfluss und Wartbarkeit konnten auf hohem Niveau realisiert werden. Die identifizierten Verbesserungspunkte bieten darüber hinaus eine wertvolle Grundlage für zukünftige Weiterentwicklungen.

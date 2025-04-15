@@ -1,0 +1,71 @@
+\section{Grundlagen des Internet of Things (IoT) und Smart Home}
+
+\subsection{Vernetzte Systeme und Sensorintegration}
+Das \emph{Internet of Things} (IoT) bezeichnet ein Netzwerk von physischen Objekten („Dingen“), die mit Sensoren, Software und Konnektivität ausgestattet sind, um Daten zu erfassen und auszutauschen. Im Smart-Home-Kontext bedeutet dies, dass Haushaltsgeräte, Sensoren und Aktoren untereinander sowie mit dem Internet vernetzt sind.
+\\
+Vernetzte Systeme in der Heimautomatisierung integrieren häufig zahlreiche Sensoren (z.\,B. Temperatur, Bewegung, Luftqualität, Licht, Feuchtigkeit) an verschiedenen Orten des Hauses. Diese übermitteln ihre Daten an zentrale Steuerungen oder Cloud-Dienste. Die Sensorintegration kann sowohl \textbf{lokal} – etwa über ein Heimnetzwerk (WLAN, ZigBee, Z-Wave etc.) an eine Home-Automation-Zentrale – als auch \textbf{cloud-basiert} erfolgen, wobei Sensoren direkt über Internetprotokolle kommunizieren.
+\\
+Entscheidend ist, dass heterogene Geräte \textbf{interoperabel} kommunizieren können. Smart-Home-Plattformen (z.\,B. Apple HomeKit, Google Home) definieren dazu gemeinsame Protokolle, die eine systemübergreifende Verarbeitung und Steuerung ermöglichen. Neben der Kommunikation ist auch eine lokale \textbf{Datenvorverarbeitung} erforderlich – etwa zum Filtern von Sensorrauschen oder zur Aggregation von Messwerten – um Datenvolumen und Energieverbrauch zu reduzieren.
+\\
+Die Vernetzung schafft die Grundlage für \textbf{kontextsensitive Entscheidungen} im Smart Home. So kann etwa ein Temperatur- und Feuchtigkeitssensor gemeinsam mit Wetterdaten zur effizienten Heizungsregelung genutzt werden. Insgesamt entsteht ein verteiltes System aus eingebetteten Einheiten, das auf Umweltbedingungen flexibel reagiert. \autocite{IoT}
+\\
+\subsection{Kommunikationsprotokolle (MQTT, CoAP, HTTP)}
+Für die Kommunikation zwischen IoT-Geräten und Diensten haben sich verschiedene spezialisierte Protokolle etabliert:
+\\
+\paragraph{HTTP (HyperText Transfer Protocol)} 
+Das klassische Webprotokoll kommt auch im IoT zum Einsatz – insbesondere bei Geräten, die RESTful-Webservices anbieten. HTTP basiert auf TCP und ist textbasiert, was zu vergleichsweise hohem Overhead führt. Es eignet sich vor allem für leistungsfähige WLAN-Geräte, die direkt mit Cloud-APIs kommunizieren. Vorteile sind die weitverbreitete Infrastruktur und Kompatibilität. Nachteilig sind höhere Latenzen und Energiebedarf. \autocite{IoT_http}
+\\
+\paragraph{MQTT (Message Queuing Telemetry Transport)} 
+MQTT ist ein leichtgewichtiges \textbf{Publish-Subscribe}-Protokoll, das speziell für ressourcenbeschränkte Systeme und instabile Netzwerke entwickelt wurde. Es verwendet TCP als Transportprotokoll und benötigt einen zentralen Broker, der Nachrichten zwischen \emph{Publishern} (z.\,B. Sensoren) und \emph{Subscribern} (z.\,B. Servern oder Aktoren) vermittelt. MQTT zeichnet sich durch minimalen Overhead und Unterstützung für verschiedene \emph{Quality-of-Service}-Stufen aus. Es eignet sich hervorragend für bidirektionale Kommunikation in Echtzeit, z.\,B. zur Steuerung von Lampen oder zur Übermittlung von Messwerten an einen lokalen Broker (z.\,B. Raspberry Pi). \autocite{IoT_mqtt}
+\\
+\paragraph{CoAP (Constrained Application Protocol)} 
+CoAP ist ein binäres, auf UDP basierendes Protokoll für RESTful-Kommunikation unter extrem ressourcenarmen Bedingungen (z.\,B. 6LoWPAN). Es nutzt komprimierte Header, unterstützt optional zuverlässige Übertragungen über Confirmable Messages und erlaubt \textbf{Multicast}. Im Gegensatz zu MQTT ist CoAP stärker auf direkte Client-Server-Interaktionen ausgerichtet und wird häufig in sensornahen IPv6-Netzwerken oder zwischen IoT-Geräten und lokalen Gateways eingesetzt. \autocite{IoT_mqtt}
+\\
+\paragraph{Zusammenfassung} 
+\begin{itemize}[noitemsep]
+  \item HTTP: weit verbreitet, aber overheadintensiv – geeignet für leistungsfähige Geräte.
+  \item MQTT: effizient für zentrale Nachrichtenvermittlung bei geringen Ressourcen.
+  \item CoAP: ideal für direkte, lokale Kommunikation mit geringem Energiebedarf.
+\end{itemize}
+
+\noindent Die Protokollwahl beeinflusst maßgeblich Energieeffizienz, Reaktionszeit und Zuverlässigkeit. In modernen Smart-Home-Systemen ist häufig eine Kombination mehrerer Protokolle im Einsatz.
+\\
+\subsection{Architekturmodelle (Edge, Cloud, Fog)}
+Zur effizienten Verteilung von Rechenlast, Speicherbedarf und Steuerlogik im IoT haben sich drei Architekturebenen etabliert:
+\\
+\paragraph{Edge Computing} 
+bezeichnet die Datenverarbeitung direkt am Endgerät, etwa im Mikrocontroller eines Sensors oder Aktors. Vorteilhaft sind minimale Latenz, Ausfallsicherheit bei Verbindungsproblemen und hohe Energieeffizienz. Beispiele sind das lokale Filtern von Sensorwerten oder einfache Steuerentscheidungen (z.\,B. Schwellenwertüberschreitung).
+\\
+\paragraph{Fog Computing} 
+stellt eine mittlere Verarbeitungsebene dar, häufig in Form eines Gateways oder Home-Servers im lokalen Netzwerk. Hier können mehrere Datenströme aggregiert, komplexere Algorithmen ausgeführt oder lokale Regelungen umgesetzt werden. Ein Beispiel ist die Raumtemperaturregelung anhand mehrerer Sensordaten, ohne Cloud-Beteiligung.
+\\
+\paragraph{Cloud Computing} 
+findet in entfernten Rechenzentren statt und bietet skalierbare Ressourcen für Speicherung, Analyse und KI-basierte Optimierung. Typische Aufgaben sind Nutzerverhaltenserkennung, Fernzugriff, Sprachsteuerung, Updates oder Backup-Dienste. Die Cloud erhöht die Funktionalität, ist jedoch auf stabile Internetverbindung angewiesen und bringt höhere Latenzen mit sich.
+\\
+\paragraph{Hybride Umsetzung} 
+In der Praxis arbeiten alle drei Ebenen zusammen: Ein \emph{Edge-Gerät} erkennt z.\,B. eine Türöffnung, der \emph{Fog-Knoten} analysiert das Ereignis und entscheidet über eine Alarmmeldung, während die \emph{Cloud} die Benachrichtigung an das Smartphone des Nutzers übernimmt. Durch diese verteilte Architektur entsteht ein robustes, skalierbares und effizient arbeitendes System. Moderne IoT-Plattformen wie \emph{MEC} (Multi-access Edge Computing) gehen noch einen Schritt weiter, indem sie Cloud-Funktionalitäten näher an das Edge-Gerät verlagern – etwa in den Router oder das Gateway.
+\\
+\paragraph{Fazit} 
+Ein klug verteiltes Architekturmodell erhöht Ausfallsicherheit, reduziert Latenzen und erlaubt eine flexible Skalierung je nach Anwendung und Sicherheitsanforderung. \autocite{edge_fog_cloud} 
+\\
+\subsection*{Sicherheitsaspekte (Authentifizierung, Datenschutz, Angriffsszenarien)}
+Mit zunehmender Vernetzung im Smart Home wachsen die Herausforderungen der IT-Sicherheit und des Datenschutzes. IoT-Geräte sind häufig Ziel von Angriffen, weil sie oft weniger geschützt sind als PCs oder Smartphones. Wichtige Sicherheitsaspekte sind:
+\\
+\paragraph{Authentifizierung}
+Sicherstellen, dass nur berechtigte Benutzer und Geräte Zugriff auf das Smart-Home-System haben. Viele IoT-Geräte werden ab Werk mit Standard-Kennwörtern ausgeliefert, die vom Nutzer selten geändert werden. Dieses bekannte Problem ermöglicht einfache Angriffe: „Viele IoT-Geräte werden mit Standard-Benutzernamen und -Kennwörtern ausgeliefert ... Angreifer kennen diese Standard-Anmeldedaten sehr gut.“ Starke Passwörter oder besser zertifikatsbasierte Authentifizierung sind daher essenziell. Auch Geräte untereinander sollten sich authentisieren (z.\,B. ein Sensor gegenüber dem Gateway), um Spoofing-Angriffe zu verhindern. In modernen Smart-Home-Plattformen kommen oft Public-Key-Verfahren zum Einsatz, bei denen jedes Gerät ein eigenes Schlüsselpaar hat. Fehlende oder schwache Authentifizierung kann dazu führen, dass Angreifer unbefugt Befehle senden (etwa Türöffnung). \autocite{cloudflare}
+\\
+\paragraph{Datenschutz und Verschlüsselung}
+Sensoren im Haus sammeln teils sehr persönliche Daten (Bewegungsprofile, Kameraaufnahmen, Gesundheitsdaten von Wearables etc.). Datenschutz erfordert, dass diese Daten nur zweckgebunden verwendet und angemessen geschützt werden. In der Übertragung ist Verschlüsselung obligatorisch: IoT-Geräte, die unverschlüsselt kommunizieren, ermöglichen Man-in-the-Middle-Angriffe, bei denen ein Angreifer die Daten abfängt und Einblick in das Privatleben erhält. Tatsächlich sind viele IoT-Kommunikationen anfällig, da standardmäßig oft keine Transportverschlüsselung aktiviert ist. Durchgehende Ende-zu-Ende-Verschlüsselung (etwa TLS/DTLS für IP-basierte Protokolle) sollte umgesetzt werden. Zudem müssen in Cloud-Plattformen die Daten gemäß Datenschutzrichtlinien (wie DSGVO) verarbeitet werden – etwa Minimierung der Speicherung personenbeziehbarer Daten oder Anonymisierung von Sensordaten, wo immer möglich. \autocite{cloudflare}
+\\
+\paragraph{Angriffsszenarien}
+IoT-Geräte können auf verschiedene Weise angegriffen werden. Neben Passwort-Angriffen (Brute-Force bekannter Standard-Passwörter) und Abhören unverschlüsselter Verbindungen sind Software-Schwachstellen ein Einfallstor. Viele Smart-Home-Geräte haben unsichere Web-Interfaces oder veraltete Firmware mit bekannten Lücken. Wenn Hersteller keine regelmäßigen Updates/Patches bereitstellen, bleiben diese Lücken offen. Angreifer können so die Kontrolle über Geräte übernehmen und z.\,B. Kameras ausspähen oder das Gerät Teil eines Botnetzes werden lassen.
+\\
+Ein berühmtes Beispiel ist das \emph{Mirai-Botnet}: eine Malware durchsuchte automatisiert das Internet nach IoT-Geräten mit Standard-Login und infizierte hunderttausende Geräte (vor allem Kameras, Recorder), um daraus ein Botnetz für Distributed-Denial-of-Service (DDoS)-Attacken zu formen. \autocite{proofpoint} „Mirai zielt auf IoT-Geräte ab, bei denen das Standardpasswort noch aktiv ist ... und macht sie zu einem Teil eines Botnets, das dann für einen DDoS-Angriff verwendet wird.“ Dieses Angriffsszenario zeigte eindrücklich, dass auch vermeintlich harmlose Geräte (wie eine vernetzte Kamera) in großer Zahl massive Schäden im Internet anrichten können. \autocite{proofpoint}
+\\
+\paragraph{Physische Sicherheit}
+In Smart Homes stehen IoT-Geräte auch physisch zugänglich in der Wohnung oder sogar außerhalb (Außensensoren, Türklingeln). Ein Angreifer mit physischem Zugriff kann Geräte manipulieren, zurücksetzen oder austauschen. Daher sollten sicherheitskritische Komponenten manipulationsgeschützt installiert werden (z.\,B. Alarm-Zentrale versteckt und sabotagesicher). Zudem sollten Sicherheitschips (Secure Elements) verwendet werden, die kritische Schlüssel speichern, um Hardware-Angriffe zu erschweren.
+\\
+\paragraph{Angriffsabwehr und Best Practices}
+Um das Risiko zu senken, müssen in IoT-Systemen Mechanismen wie Zugriffskontrolle (z.\,B. rollenbasierte Rechte für Nutzer), Sicherheitsprotokolle (z.\,B. regelmäßig wechselnde Tokens, Timeouts für Sessions) und Monitoring (Erkennung ungewöhnlicher Geräteaktivitäten) implementiert werden. Auch im Heimnetz empfiehlt sich Netzwerksegmentierung: IoT-Geräte sollten in ein separates VLAN, um im Falle einer Kompromittierung das Ausbreiten zu verhindern. Nutzeraufklärung spielt ebenfalls eine Rolle – z.\,B. sollte der Bewohner wissen, wie er Geräte sicher einbindet, Updates durchführt und starke Passwörter setzt. 
+\\
+Sicherheit und Datenschutz sind in der Heimautomatisierung kritische Grundlagen, da die Verletzung dieser Aspekte nicht nur abstrakte IT-Schäden bedeutet, sondern direkt die Privatsphäre und Sicherheit der Bewohner betrifft. Anerkannte Standards und Frameworks (wie \emph{OWASP IoT Top 10} für Gerätesicherheit oder \emph{IEC~62443} für industrielle IoT-Sicherheit) bieten Leitlinien, die zunehmend auch im Consumer-IoT Beachtung finden. Durch \emph{Security by Design} – also Berücksichtigung von Sicherheitsmaßnahmen von der ersten Entwicklungsphase an – sollen zukünftige Smart-Home-Geräte robuste Abwehrmechanismen aufweisen, um das Vertrauen der Nutzer in die Technik zu stärken.

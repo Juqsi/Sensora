@@ -1,0 +1,39 @@
+\section{Ausblick Microcontroller}
+
+Die erfolgreiche Realisierung des funktionalen Prototyps bildet eine solide Grundlage für zukünftige Erweiterungen und Verbesserungen. Auf technischer wie funktionaler Ebene bestehen vielfältige Ansatzpunkte zur Weiterentwicklung des Systems, die im Folgenden skizziert werden.
+
+\subsection{Erweiterung der Steuerungslogik}
+
+Derzeit basiert die Bewässerungsentscheidung ausschließlich auf dem gemessenen Bodenfeuchtewert. Für eine genauere Bedarfsanalyse wäre die Einbeziehung zusätzlicher Umweltparameter wie Temperatur, Luftfeuchtigkeit oder Lichtintensität wünschenswert. Auch die Kombination mehrerer Sensorwerte durch gewichtete Entscheidungsmodelle oder regelbasierte Steuerungen bietet sich an. Mittel- bis langfristig wäre der Einsatz datengetriebener Modelle (z.\,B. über einfache Machine-Learning-Algorithmen) denkbar, um situationsabhängige Optimierungen der Bewässerungsstrategie zu ermöglichen.
+
+\subsection{Pufferung und Ausfallsicherheit}
+
+Ein zentrales Ziel für kommende Iterationen besteht in der Erhöhung der Robustheit bei Netzwerkausfällen. Aktuell werden Sensordaten nur live übertragen; bei Verbindungsverlust zur MQTT-Infrastruktur gehen diese Daten unwiederbringlich verloren. Eine lokale Zwischenspeicherung der Sensordaten (z.\,B. in einem Ringpuffer) und eine nachträgliche Übertragung nach Wiederherstellung der Verbindung wäre ein entscheidender Schritt zur Verbesserung der Datenintegrität und Systemverlässlichkeit.
+
+\subsection{Sicherheit und Datenschutz}
+
+Die derzeitige Entwicklungsumgebung verzichtet bewusst auf die Aktivierung von Flash-Verschlüsselung und weiteren Sicherheitsfeatures, um die Nachvollziehbarkeit des Codes für Test- und Bewertungszwecke zu ermöglichen. Im produktiven Einsatz stellt dies jedoch ein potenzielles Sicherheitsrisiko dar. Zukünftig sollte die Flash Encryption aktiviert werden, um den Schutz sensibler Daten – insbesondere Netzwerk- und Zugangsdaten – zu gewährleisten. Auch Mechanismen zur sicheren Authentifizierung, etwa über Token-Validierung und TLS-Verbindungen, sollten weiter ausgebaut werden.
+
+\subsection{Erweiterung der Nutzerinteraktion}
+
+Einige nützliche Funktionen im Bereich der Nutzerinteraktion wurden im aktuellen Prototyp noch nicht realisiert, könnten jedoch mit überschaubarem Aufwand nachgerüstet werden:
+\\
+
+\begin{itemize}
+	\item \textbf{Manuelle Auslösung von Messvorgängen:} Eine Möglichkeit zur gezielten Datenerhebung durch den Nutzer, etwa über die Web-App oder einen physischen Button, wäre für Test- und Diagnosezwecke sinnvoll.
+	\item \textbf{Anzeige der aktuellen Sensordaten:} Die Ausgabe der Messwerte auf einem kleinen Display (z.\,B. OLED, I\textsuperscript{2}C) direkt am Gerät würde die Transparenz und Nutzbarkeit im Alltag zusätzlich erhöhen.
+	\item \textbf{Userdaten-Übergabe:} Der bereits implementierte Web-Server könnte hinsichtlich seiner Funktionalität sowie dem UI-Design verbessert werden, um die Benutzerfreundlichkeit zu erhöhen.
+\end{itemize}
+
+
+\subsection{Updatefähigkeit und Wartung}
+
+Zukünftige Versionen sollten die Möglichkeit eines \textbf{Over-the-Air (OTA)}-Updates beinhalten. Dies erlaubt die Wartung und Weiterentwicklung des Systems ohne physischen Zugriff auf das Gerät. Auch ein OTA-Reset zur Wiederherstellung eines definierten Werkszustandes wäre denkbar und würde insbesondere in produktiven Szenarien die Wartbarkeit erheblich verbessern.
+
+\subsection{Sensorik und Hardwarequalität}
+
+Im Rahmen des vorliegenden Prototyps wurde auf kostengünstige Sensorik zurückgegriffen, was sich in einer begrenzten Präzision und Langzeitstabilität bemerkbar machen kann. Für eine Serien- oder Feldanwendung wäre die Evaluation alternativer höherwertiger Sensormodelle mit besserer Genauigkeit, Kalibrierfähigkeit und Schutzklasse ratsam. Zudem sollten Energieverbrauch, Witterungsbeständigkeit und elektromagnetische Verträglichkeit der eingesetzten Komponenten systematisch verbessert werden.
+
+\subsection{Systemintegration und Skalierbarkeit}
+
+Langfristig sollte die Architektur des Systems so erweitert werden, dass mehrere Bewässerungseinheiten parallel betrieben und zentral verwaltet werden können. Auch die Integration in Smart-Home-Ökosysteme (z.\,B. über Home Assistant oder Matter-Protokolle) bietet ein großes Innovationspotenzial. Zur Unterstützung einer solchen Skalierung ist eine weitere Modularisierung des Codes sowie die Nutzung standardisierter Kommunikationsschnittstellen erforderlich.

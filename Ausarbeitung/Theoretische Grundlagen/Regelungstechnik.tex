@@ -1,0 +1,56 @@
+\section{Regelungstechnik in Software}
+
+\subsection*{Steuerungs- und Regelungskonzepte (Open Loop vs. Closed Loop)}
+In eingebetteten Systemen der Heimautomatisierung kommen sowohl Steuerungen (Open-Loop-Control) als auch Regelungen (Closed-Loop-Control) zum Einsatz, je nach Anforderung. Bei einer Steuerung beeinflusst die Software die Stellgr"o\ss en (Aktoren) auf Basis von Eingangsgr"o\ss en nach festgelegter Logik, ohne dass eine R"uckmeldung der Ausgangsgr"o\ss e erfolgt. \autocite{moocit} Das System kennt also den Effekt seiner Eingriffe nicht direkt \textendash{} ein klassisches Beispiel ist eine zeitgesteuerte Gartenbew"asserung: Der Regner schaltet f"ur 10~Minuten ein (Steuerbefehl), unabh"angig davon, ob der Boden schon feucht ist oder nicht.
+\\
+Eine Regelung dagegen beinhaltet eine R"uckkopplung: Sensoren messen kontinuierlich die Ist-Gr"o\ss e und vergleichen sie mit dem Sollwert; die Software passt die Stellgr"o\ss e laufend an, um Abweichungen auszugleichen. \autocite{haustechnik} Ein Thermostat ist hierf"ur beispielhaft: Die Heizung wird auf Basis der gemessenen Temperatur ein- oder ausgeschaltet, um den Sollwert konstant zu halten. Formal gesprochen: \enquote{Bei einer Regelung wird die Ausgangsgr"o\ss e zur"uckgef"uhrt und mit der F"uhrungsgr"o\ss e (Sollwert) verglichen}, was die Grundlage bildet, um Abweichungen durch Steuerbefehle zu minimieren. \autocite{moocit}
+\\
+Der Unterschied zwischen offener und geschlossener Wirkungsweise ist wesentlich. Steuerungen (open loop) sind einfach und ben"otigen keine Sensor-R"uckmeldung \textendash{} sie k"onnen jedoch Ungenauigkeiten nicht korrigieren. Regelungen (closed loop) sind aufwendiger (erfordern Sensorik und Regleralgorithmen), bieten aber Genauigkeit und Robustheit gegen"uber St"orungen.
+\\
+In der Praxis verwendet man in Smart Homes h"aufig Regelungen "uberall dort, wo Pr"azision wichtig ist (z.,B. Temperaturregelung, Motordrehzahlregelung in Rolll"aden), w"ahrend reine Steuerungen f"ur simpler gelagerte Aufgaben oder als Sicherheitsebene eingesetzt werden. Oft gibt es auch Kombinationen: etwa eine Zeitsteuerung mit einer nachgeschalteten Regelung. Die Beherrschung dieser Konzepte setzt Kenntnisse in der Regelungstechnik voraus, also mathematische Beschreibung von Regelkreisen, Stabilit"atskriterien etc., was in die Software implementiert wird.
+\\
+\subsection*{Schwellenwertsteuerung}
+Eine einfache Form der Regelung/Steuerung ist die Schwellenwertsteuerung, oft auch Zwei-Punkt-Regelung genannt. Hierbei wird eine Aktion ausgel"ost, sobald eine Messgr"o\ss e einen definierten Schwellenwert "uber- oder unterschreitet. Das System kennt also nur zwei Zust"ande \textendash{} z.B. Heizung \textbf{EIN} vs. \textbf{AUS} abh"angig davon, ob die Temperatur unter oder "uber dem Sollwert liegt.
+\\
+Ein klassisches Beispiel ist der einfache Thermostat: F"allt die Raumtemperatur unter 20~\textdegree{}C, schaltet der Regler die Heizung an; steigt sie "uber 20~\textdegree{}C, wird die Heizung abgeschaltet. \autocite{haustechnik}
+\\
+Solche Schwellenwertsteuerungen arbeiten diskontinuierlich (die Stellgr"o\ss e springt zwischen zwei Werten) und sind leicht implementierbar (\texttt{if-then}-Logik in Software). Vorteil ist die Einfachheit und oft hohe Zuverl"assigkeit; Nachteil k"onnen Schwingungen oder st"andiges Ein/Aus-Schalten sein, wenn keine Hysterese eingebaut ist. Daher f"ugt man praktisch meist eine Hysterese hinzu \textendash{} z.B. Heizung \textbf{an} unter 19,5~\textdegree{}C und erst \textbf{aus} "uber 20,5~\textdegree{}C \textendash{} um ein zu h"aufiges Schalten zu vermeiden.
+\\
+In vielen Heimautomatisierungs-Szenarien gen"ugt eine Schwellenwertsteuerung: etwa das Einschalten des Lichts bei Unterschreiten eines Helligkeitswerts, "Offnen der Jalousie bei "Uberschreiten eines Helligkeitsgrenzwerts oder L"uften bei "Uberschreiten eines CO\textsubscript{2}-Schwel\-len\-werts. Die Implementierung erfolgt in der Software meist durch Abfragen der Sensorsignale und Setzen der Aktorausg"ange entsprechend der festgelegten Grenzwerte.
+\\
+Diese Form der Steuerung z"ahlt zu den unstetigen Reglern (bin"are Ausgangszust"ande) und kann als Sonderfall einer Regelung angesehen werden (der Istwert wird mit dem Grenzwert verglichen = R"uckf"uhrung vorhanden, aber Stellgr"o\ss e nimmt nur zwei Zust"ande an). Insbesondere in sicherheitsgerichteten Funktionen (z.,B. Gasmelder \textendash{} Gas "uber Schwelle $\Rightarrow$ Ventil zu) sind Schwellenwertmechanismen beliebt wegen ihrer Klarheit und Nachvollziehbarkeit.
+\\
+\subsection*{Einfache Regler (P, PI, PID)}
+F"ur feinere Kontrolle kontinuierlicher Gr"o\ss en werden in der Regelungstechnik h"aufig lineare Regler eingesetzt, vor allem die Familien der \textbf{P}-, \textbf{PI}-, \textbf{PD}- und \textbf{PID}-Regler. Diese sind durch die drei Grundaktionen \emph{Proportional (P)}, \emph{Integral (I)} und \emph{Differential (D)} gekennzeichnet, die auch kombiniert auftreten k"onnen.
+\\
+In eingebetteten Steuerungen eines Smart Homes findet man z.,B. in Heizungs- oder Klimaregelungen oft \textbf{PI-Regler}, um eine konstante Temperatur ohne bleibenden Fehler einzuregeln, oder \textbf{PID-Regler} in Motorsteuerungen (z.,B. f"ur L"ufter oder Pumpen), um schnelle und stabile Stellgr"o\ss enregelungen zu erreichen.
+\\
+\paragraph{P-Regler (Proportionalregler):} Die Stellgr"o\ss e wird proportional zur aktuellen Regelabweichung \[
+e(t) = \mathrm{Soll} - \mathrm{Ist}
+\]
+\\
+ ver"andert. Der P-Anteil reagiert damit sofort auf Abweichungen \textendash{} je gr"o\ss er der Fehler, desto st"arker das Stellsignal. Dadurch wird ein direktes Korrekturverhalten erzielt: Ist die Raumtemperatur 2~\textdegree{}C unter dem Sollwert, erh"oht ein P-Regler z.,B. das Ventil "uberproportional.
+ \\
+Allerdings f"uhrt ein reiner P-Regler meist zu einer bleibenden Regeldifferenz (Offset), da er bei Erreichen des Sollwerts das Stellsignal auf null reduziert, noch bevor der Istwert exakt den Sollwert erreicht.
+
+\paragraph{I-Regler (Integralregler):} Der I-Anteil integriert die vergangene Regelabweichung \textendash{} Fehler werden "uber die Zeit aufaddiert. Dies erm"oglicht es, einen bleibenden Fehler auszugleichen. \autocite{steuern_regeln} Der I-Anteil reagiert langsam, ist aber in PI/PID-Reglern essenziell, um den station"aren Fehler zu beseitigen.
+
+\paragraph{D-Regler (Differenzialregler):} Der D-Anteil ber"ucksichtigt die "Anderungsgeschwindigkeit der Regelabweichung, also $de(t)/dt$. Er wirkt d"ampfend auf schnelle "Anderungen und reduziert "Uberschwingen. \autocite{steuern_regeln} In Software wird er meist durch Differenzen zwischen zwei Abtastzeitpunkten gen"ahert.
+
+\paragraph{PI- und PID-Regler:} Kombinationen dieser Typen (PI, PID) vereinen schnelles Reagieren (P), Fehlerausgleich (I) und D"ampfung (D). Ein PID-Regler bietet geringe Einschwingzeit, keine bleibende Regelabweichung und gutes St"orverhalten. In der Software wird ein PID-Regler meist diskret realisiert, z.,B. mit:
+\begin{equation}
+u(t) = K_P \left( e(t) + \frac{1}{T_I} \int e(t) dt + T_D \frac{de(t)}{dt} \right)
+\end{equation}
+\autocite{steuern_regeln_2}
+\subsection*{Datenverarbeitung zur Entscheidungsfindung}
+Vor jeder Stellentscheidung muss das System die Rohdaten aufbereiten. Dazu z"ahlen:
+\begin{itemize}
+\item \textbf{Signalaufbereitung:} Rauschfilterung, Mittelwertbildung, Kalibrierung.
+\item \textbf{Sensorfusion:} Zusammenf"uhren mehrerer Quellen zur robusteren Entscheidungsbasis.
+\item \textbf{Zustandsautomaten:} Logiksteuerung je nach Betriebsmodus.
+\item \textbf{KI-gest"utzte Algorithmen:} Zunehmender Einsatz von Embedded AI zur Prognose und Mustererkennung.
+\item \textbf{Fehlererkennung:} Erkennen fehlerhafter oder ausgefallener Sensoren und Wechsel in Failsafe-Zust"ande.
+\end{itemize}
+
+\noindent Nach dieser Verarbeitung wird auf Basis der Sensordaten entschieden, ob eine Steuerung oder Regelung aktiviert wird. Die Datenverarbeitung bildet somit die Br"ucke zwischen physikalischer Messung und softwarebasierter Aktorik. Sie ist damit essentiell f"ur eine sichere, pr"azise und energieeffiziente Heimautomatisierung.
+

@@ -112,7 +112,7 @@ Der Database Writer nimmt eine zentrale Rolle in der persistenznahen Verarbeitun
 
 \subsubsection*{Programmiersprache: Python}
 
-Die Implementierung des Database Writers erfolgte in Python. Die Entscheidung basiert auf der Kombination aus vorhandener Expertise im Projektteam, umfangreicher Bibliotheksunterst\"utzung f\"ur JSON-Verarbeitung, Messaging-Systeme und Datenbankzugriffe sowie der leichten Wartbarkeit der Servicestruktur. In Python stehen mit Bibliotheken wie \texttt{paho-mqtt}\cite{python_mqtt}, \texttt{psycopg2} und \texttt{json} sofort einsatzf\"ahige und stabile Werkzeuge f\"ur alle Teilaufgaben zur Verf\"ugung.
+Die Implementierung des Database Writers erfolgte in Python. Die Entscheidung basiert auf der Kombination aus vorhandener Expertise im Projektteam, umfangreicher Bibliotheksunterstützung für JSON-Verarbeitung, Messaging-Systeme und Datenbankzugriffe sowie der leichten Wartbarkeit der Servicestruktur. In Python stehen mit Bibliotheken wie \texttt{paho-mqtt}\cite{python_mqtt}, \texttt{psycopg2} und \texttt{json} sofort einsatzfähige und stabile Werkzeuge für alle Teilaufgaben zur Verfügung.
 
 \paragraph*{Vergleich mit Alternativen:}
 
@@ -198,16 +198,13 @@ Die Struktur der Sollwertnachricht wurde als JSON konzipiert, um sowohl Menschen
 
 \paragraph*{Begr\"undung:}
 
-JSON bietet einen ausgezeichneten Kompromiss zwischen Standardisierung, Einfachheit und Interoperabilit\"at. Es ist gut durch Firewalls und Broker-Systeme hindurch transportierbar und in praktisch jeder Sprache verarbeitbar.
+JSON bietet einen ausgezeichneten Kompromiss zwischen Standardisierung, Einfachheit und Interoperabilität. Es ist gut durch Firewalls und Broker-Systeme hindurch transportierbar und in praktisch jeder Sprache verarbeitbar.
 
-\subsection{Technologieauswahl f\"ur den Initialisierungsskript-Dienst (Solace Init)}
-
+\subsection{Technologieauswahl für den Initialisierungsskript-Dienst (Solace Init)}
 \subsubsection*{Zielsetzung und Kontext}
-
 Der Solace Init-Dienst wurde als automatisierter Initialisierungsmechanismus konzipiert, um beim Start des Systems die f\"ur die Kommunikationsarchitektur erforderlichen Messaging-Objekte auf dem Solace Broker anzulegen. Dabei handelt es sich insbesondere um Queues mit spezifischen Topic-Subscriptions, deren Struktur die Grundlage f\"ur das ger\"ateindividuelle Messaging im gesamten Sensora-System bildet. Ziel war es, eine einmalige, reproduzierbare und konfigurierbare Initialisierung ohne manuelle Eingriffe zu erm\"oglichen.
 
 \subsubsection*{Begr\"undung der Broker-Wahl: Solace PubSub+ als Messaging-Plattform}
-
 Die Wahl des Message Brokers stellt eine der zentralen Architekturentscheidungen im Sensora-Projekt dar. Die Anforderung bestand darin, ein performantes, fehlertolerantes und hochflexibles Messaging-System zu integrieren, das sowohl klassische Publish/Subscribe-Kommunikation als auch spezifische Anforderungen an Filterung, Persistenz und Authentifizierung erf\"ullt. Nach einem Vergleich mehrerer etablierter Systeme fiel die Entscheidung auf \textbf{Solace PubSub+}.\cite{solace_overview}
 
 \paragraph*{Vergleich mit Alternativen:}

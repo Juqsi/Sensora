@@ -5,13 +5,13 @@ Ein zentraler Bestandteil moderner Frontend-Anwendungen ist das effiziente und w
 
 \subsection{Einordnung von State Management in SPAs}
 
-In Single Page Applications liegt die Verantwortung für das Daten- und UI-Management vollständig im Frontend. Daraus ergeben sich Anforderungen wie die zentrale Verwaltung globaler Zustände etwa für eingeloggte Benutzer oder verbundene Geräte, die Wiederverwendung von Daten über Komponenten hinweg, die Synchronisierung mit Backend-Endpunkten sowie die Notwendigkeit einer dauerhaften Speicherung über Seitenreloads hinaus. Pinia, als moderne und offizielle Ablösung von Vuex in der Vue-3-Welt, erfüllt diese Anforderungen durch seine modulare, typesichere und reaktive Struktur \citep{Vuex, Allotey2023}.
+In Single Page Applications liegt die Verantwortung für das Daten- und UI-Management vollständig im Frontend. Daraus ergeben sich Anforderungen wie die zentrale Verwaltung globaler Zustände etwa für eingeloggte Benutzer oder verbundene Geräte, die Wiederverwendung von Daten über Komponenten hinweg, die Synchronisierung mit Backend-Endpunkten sowie die Notwendigkeit einer dauerhaften Speicherung über Seitenreloads hinaus. Pinia, als moderne und offizielle Ablösung von Vuex in der Vue-3-Welt, erfüllt diese Anforderungen durch seine modulare, typesichere und reaktive Struktur \cite{Vuex} \cite{Allotey2023}.
 
 
 
 \subsection{Persistenz mit \texttt{pinia-plugin-persistedstate}}
 
-Ein zentrales Merkmal der Anwendung ist die Fähigkeit, den Zustand auch bei einem Seitenreload zu bewahren. Dies wird mithilfe des Plugins \texttt{pinia-plugin-persistedstate} erreicht, das es ermöglicht, ausgewählte Stores automatisch im \texttt{localStorage} des Browsers zu speichern \citep{VueMastery2023}. Jeder Store konfiguriert explizit, ob und wie persistiert wird.
+Ein zentrales Merkmal der Anwendung ist die Fähigkeit, den Zustand auch bei einem Seitenreload zu bewahren. Dies wird mithilfe des Plugins \texttt{pinia-plugin-persistedstate} erreicht, das es ermöglicht, ausgewählte Stores automatisch im \texttt{localStorage} des Browsers zu speichern \cite{VueMastery2023}. Jeder Store konfiguriert explizit, ob und wie persistiert wird.
 
 
 

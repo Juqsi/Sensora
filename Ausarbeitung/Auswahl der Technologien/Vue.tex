@@ -21,6 +21,7 @@ Vue.js unterstützt zwei zentrale Paradigmen zur Strukturierung von Komponenten:
 \paragraph{Options API}
 Die Options API stellt das klassische und lange Zeit dominante Paradigma zur Definition von Komponenten in Vue.js dar. Ihr zentraler Vorteil liegt in der klar strukturierten Gliederung der Komponentenlogik nach spezifischen Optionen wie data, methods, computed, watch und Lebenszyklus-Hooks. Diese Trennung erleichtert insbesondere Einsteigerinnen und Einsteigern den Zugang zur komponentenbasierten Entwicklung, da die Zuständigkeiten der einzelnen Blöcke unmittelbar nachvollziehbar sind. Die durchgängige Unterstützung in der offiziellen Vue.js-Dokumentation sowie in zahlreichen Community-Plugins trägt zusätzlich zur Zugänglichkeit und zur breiten Akzeptanz dieses Modells bei. Auch historisch bedingt ist die Options API weiterhin vollständig kompatibel und wird aktiv gepflegt, was ihre Relevanz in bestehenden Projekten unterstreicht \cite{VueGuide2024}.
 
+\newpage
 \begin{lstlisting}[caption=Beispiel Options API]
 export default {
 	data() {
@@ -42,7 +43,7 @@ Den Vorteilen stehen jedoch mehrere signifikante Einschränkungen gegenüber. In
 Die mit Vue 3 eingeführte Composition API bietet eine moderne und hochgradig modulare Alternative zur klassischen Options API. Sie zielt insbesondere auf eine bessere Wiederverwendbarkeit und thematische Gruppierung von Logik ab. Ein zentrales Merkmal ist, dass Zustände, Methoden und Nebenwirkungen innerhalb der \texttt{setup()}-Funktion definiert werden. Dadurch lassen sich zusammenhängende Funktionsblöcke logisch gruppieren und als sogenannte Composables wiederverwenden. Dies erhöht die Wartbarkeit bei wachsender Komponentenkomplexität erheblich \cite{CompositionAPIFAQ}.
 
 Ein weiterer Fortschritt besteht in der Einführung des sogenannten \texttt{<script setup>}-Blocks, der in Vue 3 als syntaktischer Zucker (syntactic sugar) über der Composition API liegt. Im Gegensatz zur expliziten Verwendung von \texttt{setup()} in einem klassischen \texttt{<script>}-Block vereinfacht \texttt{<script setup>} die Struktur, reduziert Boilerplate-Code und macht die Komponenten deklarativer und kompakter. Dabei werden alle im \texttt{<script setup>} definierten Variablen automatisch im Template verfügbar gemacht, ohne dass ein \texttt{return} erforderlich ist \cite{ScriptSetup}.
-
+\newpage
 \begin{lstlisting}[caption=Beispiel für die Composition API mit \texttt{<script setup>},numbers=left,label=lst:scriptsetup,language=html]
 	<script setup lang="ts"> 
 		import { ref } from 'vue' 

@@ -1,0 +1,111 @@
+\section{Anforderungen an das IoT-Gerät}
+\label{sec:Anforderungen_IoT}
+\subsection{Allgemeine Anforderungen an das IoT-Gerät}
+
+Das IoT-Gerät fungiert als zentrale Steuerkomponente innerhalb des automatisierten Bewässerungssystems. Es ist zuständig für die zyklische Erfassung und Verarbeitung von Umweltdaten, die Aktorsteuerung basierend auf festgelegten Zielparametern sowie die gesicherte Kommunikation mit externen Systemen. Neben diesen Kernfunktionen umfasst seine Verantwortung auch die Konfigurierbarkeit des Systems, die Benutzerinteraktion bei der Erstinbetriebnahme und die Ausgabe von Statusinformationen.
+\\
+Zur Erfüllung dieser Aufgaben muss das IoT-Gerät eine Vielzahl unterschiedlicher Anforderungen erfüllen, die sowohl funktionale als auch nicht-funktionale Aspekte abdecken. Diese Anforderungen werden im Folgenden detailliert analysiert.
+
+\subsection{Anforderungsanalyse für das IoT-Gerät}
+
+\subsubsection{Integration und zyklische Abfrage von Sensorik}
+
+Das System muss in der Lage sein, Umweltdaten über mehrere physikalisch unterschiedliche Sensoren zu erfassen. Dabei kommen sowohl analoge Signale (z.\,B. Bodenfeuchtesensor) als auch digitale Schnittstellen (z.\,B. I²C für Lichtsensor und GPIO für Temperatur- und Feuchtesensoren) zum Einsatz. Die Erfassung erfolgt in regelmäßigen Intervallen durch zyklische Tasks.
+\\
+Eine besondere Anforderung besteht darin, dass jeder Sensor vor seiner Nutzung initialisiert und zyklisch auf Funktionsfähigkeit überprüft wird. Das System muss erkennen, ob ein Sensor inaktiv ist – etwa durch konstanten Maximalwert oder fehlende Signale – und diesen entsprechend markieren. Dadurch wird verhindert, dass fehlerhafte Sensordaten zu Fehlentscheidungen im Steuerungssystem führen.
+
+\subsubsection{Messdatenverarbeitung, Validierung und Zeitstempelung}
+
+Die erfassten Rohdaten müssen einer mehrstufigen Verarbeitung unterzogen werden, um zuverlässige, regelbare Kenngrößen zu erhalten. Dabei sind insbesondere folgende Prozesse umzusetzen:
+
+\begin{itemize}
+	\item \textbf{Mittelwertbildung:} Zur Reduktion von Ausreißern wird über mehrere Einzelmessungen ein gleitender Mittelwert berechnet. Dies erhöht die Datenstabilität und verringert den Einfluss kurzfristiger Störungen.
+	
+	\item \textbf{Normierung und Umrechnung:} Analoge Rohdaten (z.\,B. ADC-Werte) werden durch lineare Skalierung in prozentuale Größen oder physikalische Einheiten (z.\,B. °C, \%) umgerechnet. Dies ermöglicht eine einheitliche Bewertungsgrundlage.
+	
+	\item \textbf{Plausibilitätsprüfung:} Das System validiert jeden Messwert auf physikalische und technische Plausibilität. Werte außerhalb realistischer Grenzen oder mit fehlender Varianz werden als ungültig klassifiziert.
+	
+	\item \textbf{Zeitstempelung:} Jeder Messwert wird mit einem präzisen UTC-Zeitstempel versehen. Diese Zeitmarkierungen sind essenziell für die Synchronisation mit Backend-Systemen sowie für die zeitliche Analyse und Visualisierung der Daten.
+\end{itemize}
+
+\subsubsection{Zielwertbasierte Steuerung des Aktors}
+
+Die Bodenfeuchtewerte dienen als Auslöser für die Steuerung der Wasserpumpe. Die Steuerung erfolgt nicht binär, sondern adaptiv anhand eines Regelalgorithmus, der eine Pumpdauer in Abhängigkeit der Differenz zwischen gemessenem Feuchtewert und Sollwert bestimmt.
+\\
+Zur Umsetzung dieser Steuerung sind folgende Anforderungen zu erfüllen:
+
+\begin{itemize}
+	\item \textbf{Laufzeitberechnung:} Der Pumpvorgang wird nur ausgelöst, wenn der aktuelle Messwert den definierten Zielwert unterschreitet. Die Pumpdauer ergibt sich aus der Differenz multipliziert mit einem Kalibrierfaktor.
+	
+	\item \textbf{Sicherheitsgrenzen:} Um eine Über- oder Unterbewässerung zu verhindern, ist die Pumpdauer durch Minimal- und Maximalwerte begrenzt. Liegt die berechnete Dauer unter dem Minimum, erfolgt kein Pumpvorgang.
+	
+	\item \textbf{Entkoppelte Steuerlogik:} Die Ausführung der Pumpensteuerung erfolgt in einer eigenen Task innerhalb des eingesetzten Echtzeitbetriebssystems, die über eine Queue angesteuert wird. Dadurch ist eine zeitlich entkoppelte, thread-sichere Steuerung gewährleistet.
+\end{itemize}
+
+\subsubsection{Netzwerkkommunikation und Authentifizierung}
+
+Das IoT-Gerät muss in der Lage sein, sich mit einem lokalen Netzwerk zu verbinden und darüber mittels eines publish/subscribe-basierten Kommunikationsprotokolls mit einem entfernten Server oder Message Broker zu kommunizieren. Zusätzlich ist ein sicherer Authentifizierungsmechanismus notwendig, um unautorisierte Zugriffe zu verhindern.
+
+\begin{itemize}
+	\item \textbf{Konnektivität:} Das Gerät muss Zugangsdaten speichern und beim Systemstart automatisch versuchen, eine Verbindung mit dem gespeicherten Netzwerk herzustellen.
+	
+	\item \textbf{Challenge-Response-Authentifizierung:} Zur Registrierung und Zugriffskontrolle verwendet das System ein sicheres Authentifizierungsverfahren mit symmetrischer Signaturprüfung und zeitlich begrenzten Zugriffsschlüsseln.
+	
+	\item \textbf{Strukturierte Datenübertragung:} Sensordaten werden in einem strukturierten, textbasierten Datenformat serialisiert und an den Broker gesendet. Konfigurationsänderungen können in umgekehrter Richtung empfangen, geparst und verarbeitet werden.
+\end{itemize}
+
+\subsubsection{Persistente Speicherung systemrelevanter Daten}
+
+Das System muss wichtige Konfigurationsdaten und Zielparameter dauerhaft speichern können, um nach einem Neustart autonom weiterarbeiten zu können. Diese Daten beinhalten:
+
+\begin{itemize}
+	\item Zugangsdaten zu Netzwerk und Broker
+	\item Geräte-Identifikatoren und Modellinformationen
+	\item Zielwerte für Sensorik (Feuchte, Temperatur, etc.)
+	\item Benutzername, Token und Registrierungsstatus
+\end{itemize}
+
+\subsubsection{Lokale Konfiguration über Access Point und Webinterface}
+
+Bei der Erstinbetriebnahme muss das Gerät ohne externe Tools konfigurierbar sein. Es startet in einem eigenständig betriebenen Konfigurationsmodus und stellt ein Webinterface zur Verfügung, über das der Benutzer Zugangsdaten sowie Benutzerinformationen eingeben kann.
+\\
+Nach erfolgreicher Konfiguration muss das System automatisch in den Betriebsmodus wechseln. Die Konfiguration wird gespeichert und beim nächsten Systemstart verwendet. Dieses Setup-Modell erfordert klare Zustandsübergänge und eine zuverlässige Benutzerinteraktion, auch bei Verbindungsabbrüchen oder fehlerhaften Eingaben.
+\\
+Eine besondere Anforderung besteht darin, dass das Gerät nicht nur im Access-Point-Modus betrieben werden kann, sondern zusätzlich die Fähigkeit besitzt, parallel eine Verbindung zu einem bestehenden drahtlosen Netzwerk aufzubauen. Dieser parallele Dualmodus erlaubt z.\,B. während des Setup-Prozesses eine nahtlose Rückmeldung über den Verbindungsstatus und ist für einen nutzerfreundlichen Übergang in den Betriebsmodus essenziell.
+
+\subsubsection{Systemstatusanzeige und Rücksetzung per Taster}
+
+Zur einfachen Diagnose und Nutzerinformation verfügt das Gerät über eine LED, deren Leuchtverhalten verschiedene Systemzustände anzeigt. Zusätzlich ist ein physischer Taster vorgesehen, über den ein kompletter Werksreset ausgelöst werden kann.
+
+\begin{itemize}
+	\item \textbf{LED-Rückmeldung:} Eine blinkende LED signalisiert den Setup-Modus, während ein dauerhaftes Leuchten auf eine aktive Netzwerkverbindung hinweist. Die Steuerung erfolgt über eine eigene Task und ist unabhängig von der Hauptlogik.
+	
+	\item \textbf{Reset-Taster:} Wird der Taster länger als eine definierte Dauer gedrückt gehalten (z.\,B. 5 Sekunden), so werden alle gespeicherten Konfigurationen gelöscht, das Netzwerk zurückgesetzt und das Gerät automatisch neu gestartet. Diese Funktion erhöht die Robustheit im praktischen Einsatz und bietet eine Rückfallebene bei Konfigurationsfehlern.
+\end{itemize}
+
+\subsubsection{Asynchrone, parallele Ausführung von Systemkomponenten}
+
+Die Architektur des Systems muss es ermöglichen, mehrere Aufgaben gleichzeitig und unabhängig voneinander auszuführen. Dies betrifft insbesondere die zyklische Sensorabfrage, die LED-Steuerung, die Pumpensteuerung und Netzwerkoperationen. Die Umsetzung erfolgt über ein Multitasking-fähiges Echtzeitbetriebssystem, wobei jede Hauptfunktionalität in einer eigenen Task ausgeführt wird.
+\\
+Diese Entkopplung stellt sicher, dass Verzögerungen in einem Teilbereich (z.\,B. langsame Sensorantworten) nicht den gesamten Systemfluss blockieren. Gleichzeitig ermöglicht sie eine priorisierte Abarbeitung zeitkritischer Operationen.
+\\
+Die zugrunde liegende Hardwareplattform muss hierfür die gleichzeitige Ausführung mehrerer Tasks mit Prioritätsverwaltung unterstützen. Besonders geeignet sind Systeme mit echter Dual-Core-Architektur, die eine Entlastung zeitkritischer Tasks (z.\,B. Netzwerk oder Sensorverarbeitung) durch gezielte Lastverteilung auf unterschiedliche Prozessorkerne ermöglichen. Die Unterstützung eines Multitasking-fähigen Echtzeitbetriebssystems (z.\,B. FreeRTOS) wird vorausgesetzt.
+
+\subsubsection{Nicht-funktionale Anforderungen}
+
+Ergänzend zu den funktionalen Anforderungen sind mehrere nicht-funktionale Merkmale für einen robusten Einsatz zu erfüllen:
+
+\begin{itemize}
+	\item \textbf{Dauerbetrieb und Stabilität:} Das Gerät muss kontinuierlich über lange Zeiträume hinweg funktionsfähig bleiben, auch bei Umwelteinflüssen oder Spannungsfluktuationen.
+	
+	\item \textbf{Fehlertoleranz:} Temporäre Verbindungsabbrüche, Sensorausfälle oder interne Fehler dürfen nicht zum Systemstillstand führen, sondern müssen durch Wiederholungslogik und Rückfallebenen abgefangen werden.
+	
+	\item \textbf{Modularität und Wartbarkeit:} Die Softwarearchitektur soll so gestaltet sein, dass zukünftige Erweiterungen, z.\,B. zusätzliche Sensoren oder Backend-Funktionen, mit minimalem Aufwand integrierbar sind.
+	
+	\item \textbf{Effiziente Ressourcennutzung:} Angesichts begrenzter Hardware-Ressourcen auf Mikrocontroller-Ebene sind RAM, CPU-Zeit und Energieverbrauch sparsam und zielgerichtet zu verwenden.
+	
+	\item \textbf{Datensicherheit und Integrität:} Übertragene und gespeicherte Daten – insbesondere Token und Konfigurationen – müssen gegen Manipulation und unberechtigten Zugriff geschützt sein.
+\end{itemize}
+
+\vspace{1em}
+\noindent Das IoT-Gerät bildet das Herzstück des automatisierten Bewässerungssystems und übernimmt sowohl Messung, Steuerung als auch Kommunikation. Die hier analysierten Anforderungen umfassen alle relevanten funktionalen, technischen und organisatorischen Aspekte, die notwendig sind, um einen robusten, sicheren und wartungsarmen Betrieb zu gewährleisten. Sie bilden die Grundlage für die Systemarchitektur und Implementierung, die in den nachfolgenden Abschnitten detailliert behandelt wird.

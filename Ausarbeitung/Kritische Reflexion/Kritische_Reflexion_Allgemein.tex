@@ -1,0 +1,17 @@
+Dieses Kapitel widmet sich der retrospektiven Betrachtung des gesamten Projekts. Dabei werden die Zielerreichung, die Qualität der Teamarbeit, die getroffenen technologischen Entscheidungen sowie der Projektverlauf hinsichtlich Zeitmanagement und Risikoplanung kritisch analysiert.
+
+\subsection*{Zielerreichung und Projekterfolg}
+
+Das übergeordnete Ziel, ein automatisiertes, sensorgesteuertes Bewässerungssystem auf Basis eines \texttt{ESP32}-Microcontrollers zu entwickeln, konnte vollständig erreicht werden. Der entwickelte Prototyp ist funktionstüchtig, sammelt zuverlässig Umweltdaten, wertet diese aus und steuert die Bewässerung entsprechend. Die Systemarchitektur ist modular aufgebaut und prinzipiell erweiterbar. Auch die Anbindung an das externe Backend (MQTT-Broker) sowie die Benutzerinteraktion über eine WLAN-Einrichtungsseite funktionieren wie vorgesehen. Insgesamt kann das Projekt daher als technisch erfolgreich bewertet werden.
+
+\subsection*{Zusammenarbeit und Schnittstellen}
+
+Im Verlauf des Projekts traten insbesondere in der Anfangsphase Schwierigkeiten in der teaminternen Kommunikation auf. Diese betrafen vor allem die Abstimmung der Schnittstellen zwischen den unterschiedlichen Systemkomponenten – also insbesondere zwischen dem Microcontroller, dem Backend (inkl. Authentifizierung) und der mobilen App. Unklare Verantwortlichkeiten und uneinheitlich dokumentierte Anforderungen führten wiederholt zu Redundanzen im Code und notwendigem Refactoring. Erst durch regelmäßige Absprachen und strukturiertere Koordination konnten diese Probleme im späteren Projektverlauf reduziert werden. Für zukünftige Projekte erscheint eine frühzeitige Definition der Datenschnittstellen sowie eine durchgängige Versionskontrolle unerlässlich.
+
+\subsection*{Projektmanagement und Zeitplanung}
+
+Die zeitliche Planung des Projekts erwies sich rückblickend als zu knapp bemessen. Insbesondere unvorhergesehene technische Schwierigkeiten – etwa bei der Integration der Sensordatenverarbeitung oder der Authentifizierungslogik – führten zu Verzögerungen. Ein strukturiertes Risikomanagement wurde nicht im ausreichenden Maße berücksichtigt, was sich negativ auf die Reaktionsfähigkeit bei auftretenden Problemen auswirkte. Auch die parallele Abhängigkeit von verschiedenen Software- und Hardwarekomponenten führte zu Engpässen. Die Etablierung von Meilensteinen und flexiblen Pufferzeiten hätte hier zu einem reibungsloseren Ablauf beitragen können.
+
+\subsection*{Technologische Entscheidungen}
+
+Die grundlegenden technologischen Entscheidungen wurden größtenteils fundiert und erfolgreich getroffen. Die Wahl des \texttt{ESP32}-Moduls als zentrales Steuerungselement erwies sich trotz seiner Komplexität als leistungsfähig und zukunftssicher. Die Verwendung des \texttt{esp-idf}-Frameworks ermöglichte zwar eine tiefergehende Kontrolle über das System, brachte jedoch auch einen deutlich höheren Implementierungs- und Debuggingaufwand mit sich als zunächst vermutet. Der Verzicht auf kommerzielle High-End-Sensorik wurde im Sinne des Projektbudgets bewusst in Kauf genommen. Trotz der eingeschränkten Präzision der eingesetzten Sensoren konnten stabile Messergebnisse erzielt werden, die für einen funktionalen Prototyp ausreichend sind.
