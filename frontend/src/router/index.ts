@@ -105,6 +105,12 @@ const router = createRouter({
       meta: { requiresAuth: true, title: 'title.groups' },
     },
     {
+      path: '/groups/join',
+      name: 'GroupsJoin',
+      component: () => import('../views/JoinGroupView.vue'),
+      meta: { requiresAuth: true, title: 'title.groups' },
+    },
+    {
       path: '/newplant',
       name: 'createPlant',
       component: () => import('../views/SinglePlantSettingsView.vue'),

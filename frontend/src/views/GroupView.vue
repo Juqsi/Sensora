@@ -17,10 +17,7 @@ import EmtyState from '@/components/EmtyState.vue'
 import { Settings } from 'lucide-vue-next'
 import ShareLink from '@/components/ShareLink.vue'
 import { useGenerateInviteToken } from '@/composables/useGenerateInviteToken.ts'
-import {useRoute} from 'vue-router'
 import { Capacitor } from '@capacitor/core'
-
-const route = useRoute()
 
 const groupStore = useGroupStore()
 const { t } = useI18n()
@@ -41,11 +38,7 @@ const generateInviteToken = async (groupId: string) => {
     frontendBaseUrl = `${window.location.protocol}//${window.location.hostname}${portPart}`
   }
 
-  inviteToken.value = `${frontendBaseUrl}/groups?inviteToken=${await useGenerateInviteToken().generateInviteToken(groupId)}`
-}
-
-if (route.query.inviteToken){
-  groupStore.joinGroup(route.query.inviteToken as string)
+  inviteToken.value = `${frontendBaseUrl}/groups/join?inviteToken=${await useGenerateInviteToken().generateInviteToken(groupId)}`
 }
 
 usePullToRefresh(async () => {
