@@ -18,14 +18,11 @@ CapacitorApp.addListener('backButton', ({ canGoBack }) => {
 </script>
 
 <template>
-  <div class="pb-safe-bottom pt-safe-top">
     <div class="xl:p-8 p-4 xl:max-w-6xl flex flex-col items-center mb-4 mx-auto">
       <router-view />
     </div>
     <bottom-nav-bar v-if="useAuthStore().isAuthenticated" />
     <Toaster :theme="mode === 'dark' ? 'dark' : 'light'" position="top-center" richColors />
-  </div>
-  <div class="fixed bottom-0 w-full p-[env(safe-area-inset-bottom)] bg-red-500"></div>
 </template>
 
 <style scoped></style>
