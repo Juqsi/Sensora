@@ -188,7 +188,7 @@ paths:
         abgerufen. Wenn eine Benutzer-ID angegeben wird, werden die
         Informationen des angegebenen Benutzers abgerufen.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: userId
           in: path
@@ -241,7 +241,7 @@ paths:
         E-Mail, erlischt die Gültigkeit des Auth-Tokens. Das ändern des
         Passworts ist hier nicht möglich. Wenn die E-Mail geändert wird, muss diese erneut bestätigt werden, bevor der Account weiter benutzt werden kann.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -289,7 +289,7 @@ paths:
         Löscht einen Benutzer und alle seine zugehörigen Daten. Dies kann nicht
         rückgängig gemacht werden. Das Auth-Token verliert seine Gültigkeit.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       responses:
         '204':
           description: Benutzerdaten wurden erfolgreich gelöscht.
@@ -311,7 +311,7 @@ paths:
         Gruppen zu sehen, an denen er teilnimmt, einschließlich der zugeordneten
         Räume und Pflanzen.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       responses:
         '200':
           description: >-
@@ -399,7 +399,7 @@ paths:
       summary: Gruppe erstelen
       description: Erstellt eine Gruppe und fügt den aktuellen Benutzer hinzu.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -467,7 +467,7 @@ paths:
       summary: Gruppe bearbeiten
       description: Überarbeitet eine Gruppe
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: groupId
           in: path
@@ -531,7 +531,7 @@ paths:
         sind nur noch den Benutzern zugänglich, die als Besitzer eingetragen
         sind. Diese Aktion kann nicht rückgängig gemacht werden.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: groupId
           in: path
@@ -551,8 +551,49 @@ paths:
             Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
             auftreten, kann dieser [gemeldet
             werden.](https://github.com/Juqsi/Sensora/issues)
+  /group/{groupId}/invite:
+    get:
+      tags:
+        - Gruppenverwaltung
+      summary: Einladungstoken erstellen
+      description: >-
+        Erstellt ein token, mit dem ein oder mehrere Benutzer der Gruppe beitreten können.
+        Das Token ist für beliebig viele Beitritte gültig, läuft jedoch nach 7 Tagen ab.
+        Nach ablauf ist ein Beitritt nicht mehr möglich, es muss ein neues Token von einem Mitglied ausgestellt werden.
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: groupId
+          required: true
+          description: Die Gruppen ID, für die ein Token ausgestellt werden soll. Der Nutzer muss Mitglied dieser Gruppe sein.
+          example: 7aa91e15-ba7f-4afb-8b56-f1f8c15642c6
+          schema:
+            type: string
+          in: path
+      responses:
+        '200':
+          description: Das Beitrittstoken wurde erfolgreich ausgestellt.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiIzZWZjNGZmMy00Yjg4LTQxYWYtYTQwYi1lNGVhNTk3MTQ0NTMiLCJleHAiOjE3NDQ3OTI4MDN9.bJaM2C0uvNHsklKv3A3now_loco3m18ELYF_UK_62l0
+        '401':
+          description: >-
+            Der Benutzer ist nicht authentifiziert oder das Auth-Token ist
+            ungültig.
+        '403':
+          description: Der Benutzer hat keine Berechtigung, für diese Gruppe ein Token auszustellen.
+        '500':
+          description: >-
+            Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
+            auftreten, kann dieser [gemeldet
+            werden.](https://github.com/Juqsi/Sensora/issues)
   /group/join:
-    patch:
+    get:
       tags:
         - Gruppenverwaltung
       summary: Gruppenbeitritt mit Einladungstoken
@@ -563,7 +604,7 @@ paths:
         Benutzer wird als Mitglied der Gruppe eingetragen und erhält Zugang zu
         den geteilten Ressourcen.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: token
           required: true
@@ -660,7 +701,7 @@ paths:
         ist. Diese Aktion kann nur von Gruppenadministratoren oder
         Gruppenbesitzern durchgeführt werden.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: groupId
           in: path
@@ -713,7 +754,7 @@ paths:
         denen er als Eigentümer eingetragen ist. Sollte der Benutzer das einzige
         Mitglied der Gruppe sein, wird die Gruppe unwiderruflich gelöscht.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: groupId
           in: path
@@ -740,7 +781,7 @@ paths:
       summary: Raum erstellen
       description: Erstellt einen Raum und fügt ihn einer Gruppe zu.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -835,7 +876,7 @@ paths:
       summary: Raum abfragen
       description: Ruft die Informationen zu einem spezifischen Raum ab.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: roomId
           in: path
@@ -906,7 +947,7 @@ paths:
       summary: Raum aktualisieren
       description: Ermöglicht das Aktualisieren der Raumdetails.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: roomId
           in: path
@@ -991,7 +1032,7 @@ paths:
       summary: Raum löschen
       description: Löscht einen Raum aus dem System.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: roomId
           in: path
@@ -1015,7 +1056,7 @@ paths:
         Erstellt eine neue Pflanze und verknüpft sie mit einem Raum und einem
         Sensor.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -1077,7 +1118,7 @@ paths:
         Ruft die Pflanzendaten sowie die Sensordaten ab, die im angegebenen
         Zeitraum liegen.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: plantId
           in: path
@@ -1151,9 +1192,11 @@ paths:
       tags:
         - Pflanzenverwaltung
       summary: Pflanze aktualisieren
-      description: Ermöglicht das Aktualisieren von Pflanzendaten.
+      description: >-
+        Ermöglicht das Aktualisieren von Pflanzendaten. Alle vorhandenen Daten werden mit den neuen Daten überschrieben.
+        Wenn zugeordnete Geräte und Sensoren beim Aufruf von `PATCH` nicht angegeben sind, wird die Zuordnung entfernt.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: plantId
           in: path
@@ -1170,25 +1213,13 @@ paths:
                 - $ref: '#/components/schemas/Plant'
                 - type: object
                   properties:
-                    plantId:
+                    controllers:
                       readOnly: true
                     sensors:
+                      description: Liste von IDs der Sensoren, die der Pflanze zugeordnet werden sollen.
                       type: array
                       items:
-                        type: object
-                        properties:
-                          lastCall:
-                            readOnly: true
-                          controller:
-                            readOnly: true
-                          values:
-                            readOnly: true
-                          ilk:
-                            readOnly: true
-                          unit:
-                            readOnly: true
-                          status:
-                            readOnly: true
+                        type: string
                     assignFullDevice:
                       type: array
                       items:
@@ -1252,7 +1283,7 @@ paths:
       summary: Pflanze löschen
       description: Löscht eine Pflanze aus dem System.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: plantId
           in: path
@@ -1278,7 +1309,7 @@ paths:
         Systems abzurufen, die zur Überwachung von verschiedenen Geräten 
         verwendet werden.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       responses:
         '200':
           description: Erfolgreich alle Geräte abgerufen.
@@ -1334,7 +1365,7 @@ paths:
         Gibt die Informationen über ein Gerät zurück, einschließlich der
         zugehörigen Sensoren und deren Daten.
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: deviceId
           in: path
@@ -1383,35 +1414,6 @@ paths:
           description: Das Auth-Token des Geräts ist ungültig.
         '404':
           description: Das angeforderte Gerät wurde nicht gefunden.
-        '500':
-          description: >-
-            Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
-            auftreten, kann dieser [gemeldet
-            werden.](https://github.com/Juqsi/Sensora/issues)
-  /statics/{resource}:
-    get:
-      tags:
-        - Statisch
-      summary: Statische Resourcen abrufen
-      description: Kann statische Resourcen abrufen, die im Fileserver gespeichert werden.
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: resource
-          in: path
-          required: true
-          description: Der vollständige Name der Resource
-          schema:
-            type: string
-      responses:
-        '200':
-          description: >-
-            Die Resource wurde erfolgreich abgerufen. Der Response-Type kann
-            variieren.
-        '401':
-          description: Keine Berechtigung auf die Ressource zuzugreifen.
-        '404':
-          description: Die Ressource existiert nicht.
         '500':
           description: >-
             Unerwarteter Fehler im Ablauf des Programms. Sollte dies häufiger
@@ -1571,6 +1573,10 @@ components:
           items:
             type: object
             properties:
+              tid:
+                type: string
+                example:  7aa91e15-ba7f-4afb-8b56-f1f8c15642c6
+                description: Eindeutige Identifikator
               value:
                 type: number
                 example: 33.4
