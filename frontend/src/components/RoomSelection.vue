@@ -32,18 +32,30 @@ import { cn } from '@/lib/utils'
 import { useI18n } from 'vue-i18n'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { useGroupStore, useRoomStore } from '@/stores'
-import type { Room } from '@/api'
+import type { Room, Group} from '@/api'
+import {computed} from 'vue'
 
 const { t } = useI18n()
 const groupStore = useGroupStore()
 const roomStore = useRoomStore()
 
 const room = defineModel<Room | undefined>('room', { required: true })
+const isControllerOwner = defineModel<boolean>('isControllerOwner', { required: false, default: true })
 
 const open = ref(false)
 const showNewTeamDialog = ref(false)
 const newTeamName = ref('')
 const selectedGroup = ref('')
+
+const availableGroups = computed<Group[]>(()=>{
+  if (isControllerOwner) {
+   return groupStore.groups
+  }else{
+    console.log("hier")
+    console.log(groupStore.groups.find(g => g.gid === room.value?.groupId))
+    return [groupStore.groups.find(g => g.gid === room.value?.groupId)]
+  }
+})
 
 const selectEntity = (entity: Room) => {
   room.value = entity
@@ -80,7 +92,7 @@ const onCreateNewTeam = (event: Event) => {
         <Command>
           <CommandEmpty>{{ t('group.createRoom.NoEntity') }}</CommandEmpty>
           <CommandList>
-            <CommandGroup v-for="group in groupStore.groups" :key="group.gid" :heading="group.name">
+            <CommandGroup v-for="group in availableGroups" :key="group.gid" :heading="group.name">
               <CommandItem
                 v-for="room in group.rooms"
                 :key="room.rid"

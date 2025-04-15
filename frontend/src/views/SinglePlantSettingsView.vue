@@ -8,7 +8,7 @@ import RoomSelection from '@/components/RoomSelection.vue'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import NavCard from '@/components/NavCard.vue'
-import { useDeviceStore, usePlantStore, useRoomStore } from '@/stores'
+import { useDeviceStore, usePlantStore, useRoomStore, useUserStore } from '@/stores'
 import {
   Select,
   SelectContent,
@@ -60,6 +60,8 @@ let targetValuesHumidityTid = uuid()
 const targetValuesBrightness = ref<number>(10)
 let targetValuesBrightnessTid = uuid()
 
+const isControllerOwner = ref<boolean>(true)
+
 const activateTargetValues = ref<boolean>(false)
 const activateSensor = ref<boolean>(false)
 
@@ -69,6 +71,7 @@ const loadPlantDetails = async () => {
 
     if (editPlant) {
       name.value = editPlant?.name ?? ''
+      isControllerOwner.value = editPlant?.controllers[0]?.owner.username === useUserStore().user?.username
       selectedRoom.value = (await roomStore.getRoomDetails(editPlant?.room as string)) ?? undefined
       selectedSensor.value = editPlant?.controllers[0]?.did ?? ''
       activateSensor.value = !!selectedSensor.value
@@ -179,15 +182,27 @@ const createPlant = async () => {
       console.log(error)
     }
   } else {
-    const editPlant: updatePlantBody = {
-      name: name.value,
-      room: selectedRoom.value!.rid,
-      assignFullDevice: activateSensor.value && selectedSensor.value ? [selectedSensor.value] : [],
-      plantType: plantType.value,
-      avatarId: selectedAvatar.value,
-      note: note.value,
+    let editPlant
+    if (isControllerOwner.value) {
+      editPlant = {
+        name: name.value,
+        room: selectedRoom.value!.rid,
+        assignFullDevice:
+          activateSensor.value && selectedSensor.value ? [selectedSensor.value] : [],
+        plantType: plantType.value,
+        avatarId: selectedAvatar.value,
+        note: note.value,
+      }
+    }else{
+      editPlant = {
+        name: name.value,
+        room: selectedRoom.value!.rid,
+        plantType: plantType.value,
+        avatarId: selectedAvatar.value,
+        note: note.value,
+      }
     }
-    if (activateTargetValues.value) {
+    if (activateTargetValues.value && isControllerOwner.value) {
       editPlant.targetValues = [
         {
           value: targetValuesTemperature.value,
@@ -220,7 +235,7 @@ const createPlant = async () => {
 <template>
   <NavCard :sub-title="t('plant.settings.SubTitle')" :title="t('plant.settings.Title')">
     <template #TitleRight>
-      <RouterLink :to="{ name: 'PlantUpload' }" >
+      <RouterLink :to="{ name: 'PlantUpload' }">
         <Button variant="outline" size="icon" class="cursor-pointer">
           <Sparkles class="text-blue-400" />
         </Button>
@@ -243,7 +258,7 @@ const createPlant = async () => {
               <Label for="sensor">{{ t('plant.settings.SelectSensor') }}</Label>
               <Switch id="sensorSwitch" v-model="activateSensor" />
             </div>
-            <Select v-if="activateSensor" id="sensor" v-model="selectedSensor">
+            <Select v-if="activateSensor" id="sensor" @update:modelValue="isControllerOwner = true" v-model="selectedSensor">
               <SelectTrigger>
                 <SelectValue :placeholder="t('plant.settings.SelectSensorPlaceholder')" />
               </SelectTrigger>
@@ -261,21 +276,21 @@ const createPlant = async () => {
             </Select>
           </div>
         </div>
-
+<p>{{isControllerOwner}}</p>
         <div class="w-full">
           <div class="flex items-center justify-between w-full gap-5">
             <div class="flex items-center space-x-1">
               <Label for="targetValues">{{ t('plant.settings.targetValues') }}</Label>
               <InfoTooltip :message="t('plant.settings.targetValuesInfo')" />
             </div>
-            <Switch id="temperaturSwitch" v-model="activateTargetValues" />
+            <Switch :disabled="!isControllerOwner" id="temperaturSwitch" v-model="activateTargetValues" />
           </div>
           <div
             v-if="activateTargetValues"
             id="targetValues"
             class="mx-2 grid gap-2 md:grid-cols-2 mt-2"
           >
-            <NumberField id="temperature" v-model="targetValuesTemperature" :min="0">
+            <NumberField :disabled="!isControllerOwner" id="temperature" v-model="targetValuesTemperature" :min="0">
               <Label for="temperature">
                 {{ t('temperature') }}
               </Label>
@@ -285,7 +300,7 @@ const createPlant = async () => {
                 <NumberFieldIncrement />
               </NumberFieldContent>
             </NumberField>
-            <NumberField id="soilMoisture" v-model="targetValuesSoilMoisture" :max="100" :min="0">
+            <NumberField :disabled="!isControllerOwner" id="soilMoisture" v-model="targetValuesSoilMoisture" :max="100" :min="0">
               <Label for="soilMoisture">{{ t('soilMoisture') }}</Label>
               <NumberFieldContent>
                 <NumberFieldDecrement />
@@ -293,7 +308,7 @@ const createPlant = async () => {
                 <NumberFieldIncrement />
               </NumberFieldContent>
             </NumberField>
-            <NumberField id="humidity" v-model="targetValuesHumidity" :max="100" :min="0">
+            <NumberField :disabled="!isControllerOwner" id="humidity" v-model="targetValuesHumidity" :max="100" :min="0">
               <Label for="humidity">{{ t('humidity') }}</Label>
               <NumberFieldContent>
                 <NumberFieldDecrement />
@@ -301,7 +316,7 @@ const createPlant = async () => {
                 <NumberFieldIncrement />
               </NumberFieldContent>
             </NumberField>
-            <NumberField id="brightness" v-model="targetValuesBrightness" :min="0">
+            <NumberField :disabled="!isControllerOwner" id="brightness" v-model="targetValuesBrightness" :min="0">
               <Label for="brightness">{{ t('brightness') }}</Label>
               <NumberFieldContent>
                 <NumberFieldDecrement />
