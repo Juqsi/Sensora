@@ -99,9 +99,9 @@ onMounted(() => {
           <div v-if="tip.condition" :key="tip.id" class="w-[80vw] shrink-1 xl:max-w-4xl">
             <component
               :is="tip.url.startsWith('http') ? 'a' : RouterLink"
-              :href="tip.url.startsWith('http') ? tip.url : undefined"
-              :to="!tip.url.startsWith('http') ? tip.url : undefined"
-              target="_blank"
+              :href="tip.url.startsWith('http') ?  tip.url : undefined"
+              :to="tip.url.startsWith('/') ? tip.url : undefined"
+              :target="tip.url.startsWith('/') ? '' : '_blank'"
               rel="noopener"
               class="block"
             >
