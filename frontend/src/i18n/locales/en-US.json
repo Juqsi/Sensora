@@ -457,6 +457,11 @@
       "Title": "Plant Settings",
       "targetValues": "Target values",
       "targetValuesInfo": "When enabled, you can define target values for temperature, brightness, humidity, and soil moisture. The pump will be activated automatically if the soil moisture falls below your defined threshold."
+    },
+    "upload": {
+      "NoScanDoneSubtitle": "Upload an image first to continue",
+      "NoScanDoneTitle": "No Pictures uploaded",
+      "RecognizedPlants": "Recognized Plants:"
     }
   },
   "plantList": {
