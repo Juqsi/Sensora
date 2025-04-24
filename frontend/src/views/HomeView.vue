@@ -69,9 +69,9 @@ usePullToRefresh(async () => {
   await plantStore.fetchPlants(true)
 })
 onMounted(() => {
-  plantStore.fetchPlants(true)
-  roomStore.fetchRooms(true)
-  deviceStore.fetchDevices(true)
+  plantStore.fetchPlants()
+  roomStore.fetchRooms()
+  deviceStore.fetchDevices()
   groupStore.fetchGroups()
 })
 </script>
@@ -117,7 +117,6 @@ onMounted(() => {
             </component>
           </div>
         </template>
-
       </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>

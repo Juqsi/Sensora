@@ -28,10 +28,10 @@ app.use(pinia)
 const authStore = useAuthStore()
 if (authStore.token && authStore.isAuthenticated) {
   useUserStore().fetchUser()
-  useGroupStore().fetchGroups()
-  usePlantStore().fetchPlants()
-  useDeviceStore().fetchDevices()
-  useRoomStore().fetchRooms()
+  useGroupStore().fetchGroups(true)
+  usePlantStore().fetchPlants(true)
+  useDeviceStore().fetchDevices(true)
+  useRoomStore().fetchRooms(true)
 } else {
   authStore.logout()
 }
