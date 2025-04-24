@@ -66,11 +66,12 @@ const hints: Hint[] = [
 ]
 usePullToRefresh(async () => {
   await roomStore.fetchRooms(true)
+  await plantStore.fetchPlants(true)
 })
 onMounted(() => {
-  plantStore.fetchPlants()
-  roomStore.fetchRooms()
-  deviceStore.fetchDevices()
+  plantStore.fetchPlants(true)
+  roomStore.fetchRooms(true)
+  deviceStore.fetchDevices(true)
   groupStore.fetchGroups()
 })
 </script>
