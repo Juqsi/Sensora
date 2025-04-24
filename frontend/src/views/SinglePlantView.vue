@@ -16,6 +16,7 @@ import EmtyState from '@/components/EmtyState.vue'
 import {useI18n} from 'vue-i18n'
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 import router from '@/router'
+import { Button } from '@/components/ui/button'
 
 const {t} = useI18n()
 
@@ -37,7 +38,7 @@ let values: Record<string, { timestamp: Date; value: number; unit: string }[]> |
 onMounted(async () => {
   if (route.params.id !== undefined) {
     try {
-      plant.value = await plantStore.getPlantDetails(route.params.id as string, oneHourAgo, today)
+      plant.value = await plantStore.getPlantDetails(route.params.id as string, yesterday, today)
     }catch (e){
       await nextTick(() => {
         router.push('/plants');
@@ -69,10 +70,8 @@ onMounted(async () => {
 const plantInformation = ref<Recognition>()
 
 const today = new Date()
-const oneHourAgo = new Date()
-oneHourAgo.setHours(oneHourAgo.getHours() - 5)
 const yesterday = new Date()
-yesterday.setDate(today.getDate() - 3)
+yesterday.setDate(today.getDate() - 1)
 
 const activeKey = ref<ilk>(ilk.temperature)
 
