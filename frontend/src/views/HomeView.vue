@@ -117,7 +117,6 @@ onMounted(() => {
             </component>
           </div>
         </template>
-
       </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
