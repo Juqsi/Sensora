@@ -420,6 +420,10 @@
     "uploadImages": "Upload photos"
   },
   "plant": {
+    "last24h": "1 Day",
+    "last3d": "3 Days",
+    "last7d": "1 Week",
+    "last30d": "1 Month",
     "Info": "Information",
     "NoInformationSubtitle": "Sadly, we have currently no data about this plant in our datebase.",
     "NoInformationTitle": "No Data available",

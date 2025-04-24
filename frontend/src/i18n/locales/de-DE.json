@@ -420,6 +420,10 @@
     "uploadImages": "Fotos hochladen"
   },
   "plant": {
+    "last24h": "1 Tag",
+    "last3d": "3 Tage",
+    "last7d": "1 Woche",
+    "last30d": "1 Monat",
     "Info": "Infos",
     "NoInformationSubtitle": "In unserer Datenbank sind leider keine Daten zu der Pflanze enthalten.",
     "NoInformationTitle": "Keine Daten verfügbar",
