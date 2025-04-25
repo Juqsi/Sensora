@@ -328,6 +328,7 @@
       "EntityPlaceholder": "Living room",
       "NewEntity": "Add a room in an apartment",
       "NewEntityCancel": "Cancel",
+      "NewEntityCreate": "Create",
       "NewEntitySelectionGroup": "Apartment",
       "NewEntitySelectionGroupPlaceholder": "Select",
       "NewEntitySubtitle": "Create a room in your existing apartments for a plant",
@@ -420,6 +421,7 @@
     "uploadImages": "Upload photos"
   },
   "plant": {
+    "updated": "Plant updated",
     "last24h": "1 Day",
     "last3d": "3 Days",
     "last7d": "1 Week",

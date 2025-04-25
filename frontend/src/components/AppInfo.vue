@@ -38,6 +38,11 @@ const delteData = () => {
   roomStore.clearData()
   groupStore.clearData()
   toast.success('Cache gelöscht')
+  userStore.fetchUser()
+  groupStore.fetchGroups(true)
+  deviceStore.fetchDevices(true)
+  plantStore.fetchPlants(true)
+  roomStore.fetchRooms(true)
 }
 </script>
 
