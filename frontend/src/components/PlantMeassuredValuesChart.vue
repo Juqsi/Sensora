@@ -72,13 +72,18 @@ const calculateXTicks = (data: { timestamp: number }[]): number[] => {
   const numTicks = screenWidth <= 768 ? 4 : 7
 
   const ticks: number[] = []
+
   for (let i = 0; i < numTicks; i++) {
     const fraction = i / (numTicks - 1)
     const tickTime = roundedMin + fraction * (roundedMax - roundedMin)
     ticks.push(roundToQuarterHour(tickTime, 'up')) // Immer auf die nächste Viertelstunde runden
   }
 
-  return [...new Set(ticks)] // Duplikate entfernen
+  const uniqueTicks = [...new Set(ticks)]
+
+  if (uniqueTicks.length === 2) return [minTime, maxTime]
+
+  return uniqueTicks
 }
 
 const tickValuesX = computed(() => calculateXTicks(props.data.values))
