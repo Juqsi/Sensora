@@ -461,6 +461,11 @@
       "Title": "Pflanzeneinstellungen",
       "targetValues": "Soll-Werte",
       "targetValuesInfo": "Wenn aktiviert, kannst du Zielwerte für Temperatur, Helligkeit, Luft- und Bodenfeuchtigkeit definieren. Die Pumpe wird automatisch aktiviert, sobald der Bodenfeuchtigkeitswert unter deinen angegebenen Zielwert fällt."
+    },
+    "upload": {
+      "NoScanDoneSubtitle": "Lade ein Bild hoch um fort zu fahren",
+      "NoScanDoneTitle": "Keine Fotos hochgeladen",
+      "RecognizedPlants": "Erkannte Pflanze:"
     }
   },
   "plantList": {
