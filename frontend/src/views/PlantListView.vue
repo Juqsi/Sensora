@@ -48,6 +48,7 @@ import EmtyState from '@/components/EmtyState.vue'
 import { useI18n } from 'vue-i18n'
 import type { Controller } from '@/api'
 import {useRoute} from 'vue-router'
+import { getStatus } from '@/composables/useActiveController.ts'
 
 const route = useRoute()
 
@@ -76,9 +77,7 @@ const filteredPlantList = computed(() => {
   return flatPlantList.value.filter((item) => {
     const matchesStatus =
       item.plant.controllers.some((controller) =>
-        controller.sensors.some((sensor) =>
-          sensor.currently_assigned && values.items!.includes(sensor.status)
-        )
+           values.items!.includes(getStatus(controller))
       ) ||
       (item.plant.controllers.length === 0 && values.items!.includes('inactive'))
 

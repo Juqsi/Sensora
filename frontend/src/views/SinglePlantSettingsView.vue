@@ -31,6 +31,7 @@ import { Switch } from '@/components/ui/switch'
 import { v4 as uuid } from 'uuid'
 import { Sparkles } from 'lucide-vue-next'
 import InfoTooltip from '@/components/InfoTooltip.vue'
+import { getActiveController } from '@/composables/useActiveController.ts'
 
 const router = useRouter()
 const route = useRoute()
@@ -40,9 +41,6 @@ const { t } = useI18n()
 const deviceStore = useDeviceStore()
 const roomStore = useRoomStore()
 const plantStore = usePlantStore()
-
-const tooltipTargetValuesOpen = ref(false)
-const tooltipPlantTypeOpen = ref(false)
 
 const name = ref<string>('')
 const selectedRoom = ref<Room | undefined>(undefined)
@@ -71,10 +69,11 @@ const loadPlantDetails = async () => {
 
     if (editPlant) {
       name.value = editPlant?.name ?? ''
-      isControllerOwner.value = editPlant?.controllers[0]?.owner.username === useUserStore().user?.username
+      const activeController = getActiveController(editPlant?.controllers)
+      isControllerOwner.value = activeController.length === 0 ? true : activeController[0]?.owner.username === useUserStore().user?.username
       selectedRoom.value = (await roomStore.getRoomDetails(editPlant?.room as string)) ?? undefined
-      selectedSensor.value = editPlant?.controllers[0]?.did ?? ''
-      activateSensor.value = !!selectedSensor.value
+      selectedSensor.value = activeController[0]?.did ?? ''
+      activateSensor.value = selectedSensor.value.trim().length !== 0
       plantType.value = editPlant?.plantType ?? ''
 
       const avatar = plantAvatars.find((avatar) => avatar.value === (editPlant?.avatarId ?? ''))
@@ -182,9 +181,7 @@ const createPlant = async () => {
       console.log(error)
     }
   } else {
-    let editPlant
-    if (isControllerOwner.value) {
-      editPlant = {
+    let editPlant : updatePlantBody = {
         name: name.value,
         room: selectedRoom.value!.rid,
         assignFullDevice:
@@ -193,15 +190,6 @@ const createPlant = async () => {
         avatarId: selectedAvatar.value,
         note: note.value,
       }
-    }else{
-      editPlant = {
-        name: name.value,
-        room: selectedRoom.value!.rid,
-        plantType: plantType.value,
-        avatarId: selectedAvatar.value,
-        note: note.value,
-      }
-    }
     if (activateTargetValues.value && isControllerOwner.value) {
       editPlant.targetValues = [
         {
