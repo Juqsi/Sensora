@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { nextTick, onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref,watch, computed } from 'vue'
 import MeasuredTiles from '@/components/MeasuredTiles.vue'
 import { useRoute } from 'vue-router'
 import NavCard from '@/components/NavCard.vue'
@@ -16,6 +16,8 @@ import EmtyState from '@/components/EmtyState.vue'
 import {useI18n} from 'vue-i18n'
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 import router from '@/router'
+import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 const {t} = useI18n()
 
@@ -27,6 +29,13 @@ const room = ref<Room | undefined>()
 
 const plantavatar = ref('')
 
+const rangeOptions = [
+  { label: t('plant.last24h'), value: '24h', hours: 24 },
+  { label: t('plant.last3d'), value: '3d', days: 3 },
+  { label: t('plant.last7d'), value: '7d', days: 7 },
+  { label: t('plant.last30d'), value: '30d', days: 30 },
+]
+const selectedRange = ref(rangeOptions[1].value)
 
 const {searchPlant} = useSearch()
 
@@ -36,43 +45,22 @@ let values: Record<string, { timestamp: Date; value: number; unit: string }[]> |
 
 onMounted(async () => {
   if (route.params.id !== undefined) {
-    try {
-      plant.value = await plantStore.getPlantDetails(route.params.id as string, oneHourAgo, today)
-    }catch (e){
-      await nextTick(() => {
-        router.push('/plants');
-      });
-    }
+    await loadPlant()
     plantavatar.value = "/models3d/" + (plant.value?.avatarId ?? "plant.glb")
-    await Promise.all([
-      (async () => {
-        values = await plantStore.getCombinedSensorData(plant.value?.plantId ?? '', yesterday, today);
-      })(),
-      (async () => {
-        room.value = await roomStore.getRoomDetails(plant.value?.room ?? '') ?? undefined;
-      })(),
-      (async () => {
-        const plantInfos: Recognition[] = await searchPlant(
-          plant.value?.plantType && plant.value?.plantType.length !== 0 ? plant.value?.plantType : plant.value!.name
-        ) ?? [];
-        plantInformation.value = plantInfos[0];
-      })(),
-    ]);
-
-    if (plant.value && measuredTiles.value) {
-      measuredTiles.value.initializeWithPlant(plant.value)
-    }
-    updateActiveKey(ilk.temperature, true)
   }
 })
 
 const plantInformation = ref<Recognition>()
 
-const today = new Date()
-const oneHourAgo = new Date()
-oneHourAgo.setHours(oneHourAgo.getHours() - 5)
-const yesterday = new Date()
-yesterday.setDate(today.getDate() - 3)
+const today = ref(new Date())
+const startDate = computed(() => {
+  const now = new Date()
+  const opt = rangeOptions.find(o => o.value === selectedRange.value)!
+  const d = new Date(now)
+  if (opt.hours) d.setHours(d.getHours() - opt.hours)
+  if (opt.days) d.setDate(d.getDate() - opt.days)
+  return d
+})
 
 const activeKey = ref<ilk>(ilk.temperature)
 
@@ -121,6 +109,30 @@ usePullToRefresh(async () => {
   await plantStore.fetchPlants(true);
 });
 
+watch(selectedRange, () => {
+  loadPlant()
+})
+
+async function loadPlant() {
+  if (!route.params.id) return
+  try {
+    plant.value = await plantStore.getPlantDetails(route.params.id as string, startDate.value, today.value)
+  } catch {
+    await nextTick(() => router.push('/plants'))
+  }
+  const pid = plant.value?.plantId ?? ''
+  const [sensorData, roomInfo, plantInfos] = await Promise.all([
+    plantStore.getCombinedSensorData(pid, startDate.value, today.value),
+    roomStore.getRoomDetails(plant.value?.room ?? ''),
+    searchPlant(plant.value?.plantType && plant.value.plantType.length ? plant.value.plantType : plant.value!.name)
+  ])
+  values = sensorData
+  room.value = roomInfo ?? undefined
+  plantInformation.value = (plantInfos as Recognition[])[0] ?? null
+
+  if (plant.value && measuredTiles.value) measuredTiles.value.initializeWithPlant(plant.value)
+  updateActiveKey(activeKey.value, true)
+}
 </script>
 
 <template>
@@ -142,6 +154,18 @@ usePullToRefresh(async () => {
     </TabsList>
     <TabsContent value="values">
       <MeasuredTiles ref="measuredTiles" :plant="plant" @updateActiveKey="updateActiveKey" />
+      <div class="my-4">
+        <Select id="zeitraum-select" v-model="selectedRange">
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem v-for="opt in rangeOptions" :key="opt.value" :value="opt.value">
+              {{ opt.label }}
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
       <PlantMeassuredValuesChart :data="activeData" />
     </TabsContent>
     <TabsContent value="infos" class="w-full">

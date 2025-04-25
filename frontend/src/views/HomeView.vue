@@ -66,6 +66,7 @@ const hints: Hint[] = [
 ]
 usePullToRefresh(async () => {
   await roomStore.fetchRooms(true)
+  await plantStore.fetchPlants(true)
 })
 onMounted(() => {
   plantStore.fetchPlants()
@@ -116,7 +117,6 @@ onMounted(() => {
             </component>
           </div>
         </template>
-
       </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
