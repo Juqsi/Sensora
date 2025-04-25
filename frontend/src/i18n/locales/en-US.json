@@ -400,7 +400,7 @@
     "AlreadyHaveAccount": "Already have an account?",
     "CreateAccount": "Create Account",
     "DontHaveAccount": "Don't have an account?",
-    "Email": "Email",
+    "Email": "Username",
     "Error": "Wrong username or password",
     "FirstName": "First name",
     "ForgotPassword": "Forgot your password?",
@@ -421,16 +421,15 @@
     "uploadImages": "Upload photos"
   },
   "plant": {
-    "updated": "Plant updated",
-    "last24h": "1 Day",
-    "last3d": "3 Days",
-    "last7d": "1 Week",
-    "last30d": "1 Month",
     "Info": "Information",
     "NoInformationSubtitle": "Sadly, we have currently no data about this plant in our datebase.",
     "NoInformationTitle": "No Data available",
     "Values": "Values",
     "external": "external",
+    "last24h": "1 Day",
+    "last30d": "1 Month",
+    "last3d": "3 Days",
+    "last7d": "1 Week",
     "settings": {
       "Avatar": "Avatar",
       "Avatar1": "Avatar 1",
@@ -464,6 +463,7 @@
       "targetValues": "Target values",
       "targetValuesInfo": "When enabled, you can define target values for temperature, brightness, humidity, and soil moisture. The pump will be activated automatically if the soil moisture falls below your defined threshold."
     },
+    "updated": "Plant updated",
     "upload": {
       "NoScanDoneSubtitle": "Upload an image first to continue",
       "NoScanDoneTitle": "No Pictures uploaded",
