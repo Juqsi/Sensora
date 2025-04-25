@@ -72,6 +72,11 @@ const calculateXTicks = (data: { timestamp: number }[]): number[] => {
   const numTicks = screenWidth <= 768 ? 4 : 7
 
   const ticks: number[] = []
+
+  if (timestamps.length === 2) {
+    return [minTime, maxTime];
+  }
+
   for (let i = 0; i < numTicks; i++) {
     const fraction = i / (numTicks - 1)
     const tickTime = roundedMin + fraction * (roundedMax - roundedMin)
