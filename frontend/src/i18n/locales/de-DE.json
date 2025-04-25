@@ -328,6 +328,7 @@
       "EntityPlaceholder": "Wohnzimmer",
       "NewEntity": "Raum für eine Wohnung erstellen",
       "NewEntityCancel": "Abbrechen",
+      "NewEntityCreate": "Erstellen",
       "NewEntitySelectionGroup": "Wohnung",
       "NewEntitySelectionGroupPlaceholder": "Auswählen",
       "NewEntitySubtitle": "Erstelle einen Raum in deinen bestehenden Wohnungen für eine Pflanze",
@@ -420,6 +421,7 @@
     "uploadImages": "Fotos hochladen"
   },
   "plant": {
+    "updated": "Pflanze aktualisiert",
     "last24h": "1 Tag",
     "last3d": "3 Tage",
     "last7d": "1 Woche",

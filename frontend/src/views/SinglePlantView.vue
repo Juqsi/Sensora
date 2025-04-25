@@ -106,7 +106,7 @@ const updateActiveKey = (key: ilk, force: boolean = false) => {
   }
 }
 usePullToRefresh(async () => {
-  await plantStore.fetchPlants(true);
+  await plantStore.getPlantDetails(route.params.id as string, startDate.value, today.value, true);
 });
 
 watch(selectedRange, () => {

@@ -4,7 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { TableCell, TableRow } from '@/components/ui/table'
@@ -14,6 +14,7 @@ import { computed, type PropType } from 'vue'
 import type { Group, Plant, Room } from '@/api'
 import { useI18n } from 'vue-i18n'
 import { useDeviceStore, useUserStore } from '@/stores'
+import { getActiveController } from '@/composables/useActiveController.ts'
 
 const { t } = useI18n()
 
@@ -27,29 +28,24 @@ const status = {
 const props = defineProps({
   plant: { type: Object as PropType<Plant>, required: true },
   group: { type: Object as PropType<Group>, required: true },
-  room: { type: Object as PropType<Room>, required: true },
+  room: { type: Object as PropType<Room>, required: true }
 })
 defineEmits(['delete'])
 
 const getStatus = computed(() => {
-  if (currentlyAssignedControllers.value.length !== 0) {
-    currentlyAssignedControllers.value.filter((controller) => {
-      const matchesStatus = controller.sensors.some((sensor) => ['error'].includes(sensor.status))
-      if (matchesStatus) {
-        return status.error
-      }
-    })
-    return status.active
+  if (currentlyAssignedControllers.value.length === 0) {
+    return status.inactive;
   }
-  return status.inactive
-})
+
+  const hasError = currentlyAssignedControllers.value.some(controller =>
+    controller.sensors.some(sensor => sensor.status === 'error')
+  );
+
+  return hasError ? status.error : status.active;
+});
 
 const currentlyAssignedControllers = computed(() => {
-  return (
-    props.plant.controllers?.filter((controller) =>
-      controller.sensors?.some((sensor) => sensor.currently_assigned),
-    ) ?? []
-  )
+  return getActiveController(props.plant.controllers)
 })
 
 const firstAssignedController = computed(() => currentlyAssignedControllers.value[0] ?? null)
