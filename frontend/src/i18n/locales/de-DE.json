@@ -400,7 +400,7 @@
     "AlreadyHaveAccount": "Haben Sie bereits ein Konto?",
     "CreateAccount": "Konto erstellen",
     "DontHaveAccount": "Haben Sie noch kein Konto?",
-    "Email": "E-Mail",
+    "Email": "Benutzername",
     "Error": "Benutzername oder Passwort falsch",
     "FirstName": "Vorname",
     "ForgotPassword": "Passwort vergessen?",
@@ -421,16 +421,15 @@
     "uploadImages": "Fotos hochladen"
   },
   "plant": {
-    "updated": "Pflanze aktualisiert",
-    "last24h": "1 Tag",
-    "last3d": "3 Tage",
-    "last7d": "1 Woche",
-    "last30d": "1 Monat",
     "Info": "Infos",
     "NoInformationSubtitle": "In unserer Datenbank sind leider keine Daten zu der Pflanze enthalten.",
     "NoInformationTitle": "Keine Daten verfügbar",
     "Values": "Werte",
     "external": "extern",
+    "last24h": "1 Tag",
+    "last30d": "1 Monat",
+    "last3d": "3 Tage",
+    "last7d": "1 Woche",
     "settings": {
       "Avatar": "Avatar",
       "Avatar1": "Avatar 1",
@@ -464,6 +463,7 @@
       "targetValues": "Soll-Werte",
       "targetValuesInfo": "Wenn aktiviert, kannst du Zielwerte für Temperatur, Helligkeit, Luft- und Bodenfeuchtigkeit definieren. Die Pumpe wird automatisch aktiviert, sobald der Bodenfeuchtigkeitswert unter deinen angegebenen Zielwert fällt."
     },
+    "updated": "Pflanze aktualisiert",
     "upload": {
       "NoScanDoneSubtitle": "Lade ein Bild hoch um fort zu fahren",
       "NoScanDoneTitle": "Keine Fotos hochgeladen",
