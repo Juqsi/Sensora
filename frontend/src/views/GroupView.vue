@@ -3,6 +3,7 @@ import { usePullToRefresh } from '@/composables/usePullToRefresh'
 import { useGroupStore } from '@/stores'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import {Button} from '@/components/ui/button'
 import {
   Accordion,
   AccordionContent,
@@ -83,12 +84,12 @@ usePullToRefresh(async () => {
             <h3 class="text-xl pl-3 my-2 font-medium">{{ t('Group.Rooms') }}</h3>
             <CreateGroupComponent :group="group">
               <template #desktop>
-                <Button :aria-label="t('group.addRoom')" size="icon" variant="default">
+                <Button  size="icon" variant="default">
                   <Settings class="w-4" />
                 </Button>
               </template>
               <template #mobile>
-                <Button :aria-label="t('group.addRoom')" size="icon" variant="default">
+                <Button  size="icon" variant="ghost" >
                   <Settings class="w-4" />
                 </Button>
               </template>

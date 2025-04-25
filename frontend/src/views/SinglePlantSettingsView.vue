@@ -32,6 +32,7 @@ import { v4 as uuid } from 'uuid'
 import { Sparkles } from 'lucide-vue-next'
 import InfoTooltip from '@/components/InfoTooltip.vue'
 import { getActiveController } from '@/composables/useActiveController.ts'
+import {Label} from '@/components/ui/label'
 
 const router = useRouter()
 const route = useRoute()
