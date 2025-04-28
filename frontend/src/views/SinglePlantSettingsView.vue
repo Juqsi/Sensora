@@ -160,8 +160,8 @@ const createPlant = async () => {
     const newPlant: createPlantBody = {
       name: name.value,
       room: selectedRoom.value!.rid,
-      assignFullDevice: activateSensor.value && selectedSensor.value ? [selectedSensor.value] : [],
-      plantType: plantType.value,
+      sensors:
+        activateSensor.value && selectedSensor.value ? deviceStore.devices.find(device => device.did === selectedSensor.value)?.sensors.map(sensor => sensor.sid) : [],      plantType: plantType.value,
       avatarId: selectedAvatar.value,
       note: note.value,
     }
@@ -185,8 +185,8 @@ const createPlant = async () => {
     let editPlant : updatePlantBody = {
         name: name.value,
         room: selectedRoom.value!.rid,
-        assignFullDevice:
-          activateSensor.value && selectedSensor.value ? [selectedSensor.value] : [],
+        sensors:
+          activateSensor.value && selectedSensor.value ? deviceStore.devices.find(device => device.did === selectedSensor.value)?.sensors.map(sensor => sensor.sid) : [],
         plantType: plantType.value,
         avatarId: selectedAvatar.value,
         note: note.value,
