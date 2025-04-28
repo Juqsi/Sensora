@@ -5,6 +5,7 @@ import { ilk, type Plant, type Value } from '@/api'
 import { latestSensorValue } from '@/composables/useLatestSensorValue.ts'
 import { onMounted, type PropType, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import {toLocalTime } from '@/composables/useTimeToLocal'
 
 const { locale, t } = useI18n()
 const plant = ref<Plant | undefined>()
@@ -39,7 +40,7 @@ defineExpose({
 const formatTimestamp = (timestamp?: string | number) => {
   if (!timestamp) return '--'
 
-  const date = new Date(timestamp)
+  const date = toLocalTime(timestamp)
   const today = new Date()
 
   // Prüfen, ob das Datum heute ist
@@ -60,6 +61,7 @@ const formatTimestamp = (timestamp?: string | number) => {
     )
   }
 }
+
 </script>
 
 <template>

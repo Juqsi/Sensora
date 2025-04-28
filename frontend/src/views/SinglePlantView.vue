@@ -18,6 +18,7 @@ import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
 import router from '@/router'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { toLocalTime } from '@/composables/useTimeToLocal.ts'
 
 const {t} = useI18n()
 
@@ -96,7 +97,7 @@ const updateActiveKey = (key: ilk, force: boolean = false) => {
 
     activeData.value = {
       values: rawData.map(({ timestamp, value }) => ({
-        timestamp: new Date(timestamp).getTime(),
+        timestamp: toLocalTime(new Date(timestamp).getTime()).getTime(),
         [activeKey.value]: value,
         targetValue: targetValue,
       })),

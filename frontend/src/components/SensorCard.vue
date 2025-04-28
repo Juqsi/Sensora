@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { useDeviceStore, usePlantStore } from '../stores'
 import {ref,onMounted} from 'vue'
 import { usePullToRefresh } from '@/composables/usePullToRefresh.ts'
+import { toLocalTime } from '../composables/useTimeToLocal.ts'
 
 const props = defineProps<{ sensor: Sensor }>()
 
@@ -45,7 +46,7 @@ usePullToRefresh(async () => {
         <div class="flex items-center gap-2">
           <Clock class="w-5 h-5" />
           <p class="font-medium">
-            {{ new Date(sensor.lastCall).toLocaleString() }}
+            {{ toLocalTime(sensor.lastCall).toLocaleString() }}
           </p>
         </div>
         <div class="flex items-center gap-2">
