@@ -170,7 +170,7 @@ export const usePlantStore = defineStore('plant', {
       }
 
       // Wenn der Zeitraum nicht abgedeckt ist oder die Pflanze noch nicht existiert
-      const response = await plansApiClient.get(plantId, startTime, endTime)
+      const response = await plansApiClient.get(plantId, startTime,  endTime ? new Date(endTime?.getTime() + (2 * 60 * 60 * 1000)):undefined)
       const updatedPlant = response.data
 
       // Kombiniere die neuen Sensorwerte mit den bestehenden Werten

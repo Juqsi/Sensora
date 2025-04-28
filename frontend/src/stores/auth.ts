@@ -36,6 +36,10 @@ export const useAuthStore = defineStore('auth', {
           lastname: response.data.lastname,
         }
         this.isAuthenticated = true
+        useGroupStore().fetchGroups(true)
+        usePlantStore().fetchPlants(true)
+        useDeviceStore().fetchDevices(true)
+        useRoomStore().fetchRooms(true)
       } catch (error) {}
     },
     logout() {
