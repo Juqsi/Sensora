@@ -11,7 +11,7 @@ export interface updatePlantBody extends Omit<Plant, 'plantId' | 'controllers'> 
    * @type {Array<PlantplantIdSensors>}
    * @memberof updatePlantBody
    */
-  sensors?: Array<Sensor>
+  sensors?: Array<string>
 
   /**
    * Liste von Geräten, die vollständig zugewiesen werden. Alle angeschlossenen Sensoren werden der Pflanze zugeordnet.
