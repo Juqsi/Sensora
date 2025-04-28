@@ -4,6 +4,7 @@ import CustomChartTooltip from '@/components/ui/chart-line/CustomChartTooltip.vu
 import { useI18n } from 'vue-i18n'
 import { computed, type PropType } from 'vue'
 import { ilk } from '@/api'
+import { toLocalTime } from '@/composables/useTimeToLocal.ts'
 
 const { locale, t } = useI18n()
 
